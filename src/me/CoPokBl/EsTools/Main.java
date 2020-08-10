@@ -4,8 +4,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,14 +36,15 @@ public class Main extends JavaPlugin implements Listener{
 				sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
 				return true;
 			}
-			if (!(sender.hasPermission("estools.tp"))) {
-				sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
-				return true;
-			}
+			if (checkPerm(sender, "estools.tp"))
+				return false;
+			
 			if (args.length == 1) {
-				// see if player exist
+				// get player
 				Player target = getPlayer(sender, args[0]);
-						
+				
+				if (target == null)
+					return false;
 				
 				Player p = (Player) sender;
 				Location ploc = p.getLocation();
@@ -57,14 +61,11 @@ public class Main extends JavaPlugin implements Listener{
 				sender.sendMessage(ChatColor.RED + "Usage: /changename <player> [new name]");
 				return true;
 			}
-			Player target = null;
 			
-			try {
-				target = Bukkit.getPlayer(args[0]);
-			} catch(Exception e) {
-				sender.sendMessage(ChatColor.RED + "Player " + args[0] + " does not exist");
-				return true;
-			}
+			Player target = getPlayer(sender, args[0]);
+			
+			if (target == null)
+				return false;
 			
 			target.setDisplayName(args[1]);
 			sender.sendMessage(ChatColor.GREEN + "Set " + target.getName() + "'s name to " + args[1]);
@@ -73,10 +74,9 @@ public class Main extends JavaPlugin implements Listener{
 		
 		else if (label.equalsIgnoreCase("tpall")) {
 			//perm check
-			if (!(sender.hasPermission("estools.tp"))) {
-				sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
-				return true;
-			}
+			if (checkPerm(sender, "estools.tp"))
+				return false;
+
 			if (args.length == 0) {
 				if (sender instanceof Player) {
 					// Player
@@ -95,15 +95,10 @@ public class Main extends JavaPlugin implements Listener{
 			// 1 arg
 			if (args.length == 1) {
 				
-				Player targettp = null;
+				Player targettp = getPlayer(sender, args[0]);
 				
-				try {
-					targettp = Bukkit.getPlayer(args[0]);
-				} catch (Exception e) {
-					sender.sendMessage(ChatColor.RED + "Player " + args[0] + " does not exist");
+				if (targettp == null)
 					return false;
-				}
-				//no error
 				
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					p.teleport(targettp);
@@ -128,17 +123,14 @@ public class Main extends JavaPlugin implements Listener{
 		}
 		
 		else if (label.equalsIgnoreCase("sudo")) {
-			if (!(sender.hasPermission("estools.sudo"))) {
-				sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
-				return true;
-			}
-			try {
-				Player target = Bukkit.getPlayer(args[0]);
-			} catch (Exception e) {
-				sender.sendMessage(ChatColor.RED + "Player " + args[0] + " does not exist!");
-				return true;
-			}
-			Player target = Bukkit.getPlayer(args[0]);
+			if (checkPerm(sender, "estools.sudo"))
+				return false;
+
+			Player target = getPlayer(sender, args[0]);
+			
+			if (target == null)
+				return false;
+			
 			String commandtorun = "";
 			for (int i = 1;i < args.length;i++) {
 			    commandtorun += args[i] + " ";
@@ -149,31 +141,28 @@ public class Main extends JavaPlugin implements Listener{
 		}
 		
 		else if (label.equalsIgnoreCase("smite")) {
-			if (!(sender.hasPermission("estools.smite"))) {
-				sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
-				return true;
-			}
+			if (checkPerm(sender, "estools.smite"))
+				return false;
+			
 			if (!(args.length == 1)) {
 				sender.sendMessage(ChatColor.RED + "Usage: /smite (Player)");
 				return true;
 			}
-			try {
-				Player target = Bukkit.getPlayer(args[0]);
-			} catch (Exception e) {
-				sender.sendMessage(ChatColor.RED + "Player " + args[0] + " does not exist!");
-				return true;
-			}
-			Player target = Bukkit.getPlayer(args[0]);
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "execute positioned as " + target.getName() + " run summon minecraft:lightning_bolt");
+			
+			Player target = getPlayer(sender, args[0]);
+			
+			if (target == null)
+				return false;
+			
+			target.getWorld().spawnEntity(target.getLocation(), EntityType.LIGHTNING);
 			sender.sendMessage(ChatColor.GREEN + target.getName() + " has been struck with lightning!");
 			return true;
 		}
 		
 		else if (label.equalsIgnoreCase("invsee")) {
-			if (!(sender.hasPermission("estools.invsee"))) {
-				sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
-				return true;
-			}
+			if (checkPerm(sender, "estools.invsee"))
+				return false;
+			
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
 				return true;
@@ -182,151 +171,140 @@ public class Main extends JavaPlugin implements Listener{
 	            sender.sendMessage(ChatColor.RED + "Usage: /invsee <player>");
 	            return false;
 	        }
-			try {
-				Player target = Bukkit.getPlayer(args[0]);
-			} catch (Exception e) {
-				sender.sendMessage(ChatColor.RED + "Player " + args[0] + " does not exist!");
-				return true;
-			}
-	        Player target = Bukkit.getPlayer(args[0]);
+			Player target = getPlayer(sender, args[0]);
+			
+			if (target == null)
+				return false;
+			
 	        ((Player) sender).openInventory(target.getInventory());
 	        sender.sendMessage("Opened " + target.getName() + "'s Inventory");
 	        return true;
 		}
 		
 		else if (label.equalsIgnoreCase("fly")) {
-			if (sender.hasPermission("estools.fly")) {
-				if (!(sender instanceof Player)) {
-					sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
-					return true;
-				}
-				Player p = (Player) sender;
-				if (p.getAllowFlight() == true) {
-					p.sendMessage(ChatColor.GREEN + "Disabled Flying!");
-					p.setAllowFlight(false);
-					return true;
-				}
-				p.sendMessage(ChatColor.GREEN + "Enabled Flying!");
-				p.setAllowFlight(true);
+			if (checkPerm(sender, "estools.fly"))
+				return false;
+			
+			if (!(sender instanceof Player)) {
+				sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
 				return true;
 			}
-			sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
+			Player p = (Player) sender;
+			if (p.getAllowFlight()) {
+				p.sendMessage(ChatColor.GREEN + "Disabled Flying!");
+				p.setAllowFlight(false);
+				return true;
+			}
+			p.sendMessage(ChatColor.GREEN + "Enabled Flying!");
+			p.setAllowFlight(true);
 			return true;
 		}
 		
 		else if (label.equalsIgnoreCase("sethealth")) {
-			if (sender.hasPermission("estools.health")) {
-				if (args.length == 2) {
-					try {
-						Player target = Bukkit.getPlayer(args[0]);
-					} catch (Exception e) {
-						sender.sendMessage(ChatColor.RED + "Player " + args[0] + " does not exist!");
-						return true;
-					}
-					Player target = Bukkit.getPlayer(args[0]);
-	                int healthtoset;
-	                try {
-	                    healthtoset = Integer.parseInt(args[1]);
-	                } catch(Exception e) {
-	                	sender.sendMessage("Usage: /sethealth PLAYER HEALTHTOSET");
-	    				return true;
-	                }
-	                target.setHealth(healthtoset);
-	                sender.sendMessage(ChatColor.GREEN + "Set " + target.getName() + "'s health to " + args[1]);
-	                return true;
-				}
-				sender.sendMessage("Usage: /sethealth PLAYER HEALTHTOSET");
-				return true;
+			if (checkPerm(sender, "estools.health"))
+				return false;
+			
+			if (args.length == 2) {
+				Player target = getPlayer(sender, args[0]);
+				
+				if (target == null)
+					return false;
+				
+				double healthtoset;
+                try {
+                    healthtoset = Double.parseDouble(args[1]);
+                } catch(Exception e) {
+                	sender.sendMessage("Usage: /sethealth <player> <health>");
+    				return true;
+                }
+                target.setHealth(healthtoset);
+                sender.sendMessage(ChatColor.GREEN + "Set " + target.getName() + "'s health to " + args[1]);
+                return true;
 			}
-			sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
+			sender.sendMessage("Usage: /sethealth <player> <health>");
 			return true;
 		}
 		
 		else if (label.equalsIgnoreCase("setmaxhealth")) {
-			if (sender.hasPermission("estools.health")) {
-				if (args.length == 2) {
-					try {
-						Player target = Bukkit.getPlayer(args[0]);
-					} catch (Exception e) {
-						sender.sendMessage(ChatColor.RED + "Player " + args[0] + " does not exist!");
-						return true;
-					}
-					Player target = Bukkit.getPlayer(args[0]);
-	                int healthtoset;
-	                try {
-	                    healthtoset = Integer.parseInt(args[1]);
-	                } catch(Exception e) {
-	                	sender.sendMessage("Usage: /setmaxhealth PLAYER HEALTHTOSET");
-	    				return true;
-	                }
-	                target.setMaxHealth(healthtoset);
-	                sender.sendMessage(ChatColor.GREEN + "Set " + target.getName() + "'s max health to " + args[1]);
-	                return true;
-				}
-				sender.sendMessage("Usage: /setmaxhealth PLAYER HEALTHTOSET");
-				return true;
+			if (checkPerm(sender, "estools.health"))
+				return false;
+			if (args.length == 2) {
+				Player target = getPlayer(sender, args[0]);
+				
+				if (target == null)
+					return false;
+				
+                double healthtoset;
+                try {
+                    healthtoset = Double.parseDouble(args[1]);
+                } catch(Exception e) {
+                	sender.sendMessage("Usage: /setmaxhealth <player> <health>");
+    				return true;
+                }
+                
+                // set max health
+                AttributeInstance attribute = target.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+                attribute.setBaseValue(healthtoset);
+                
+                sender.sendMessage(ChatColor.GREEN + "Set " + target.getName() + "'s max health to " + args[1]);
+                return true;
 			}
-			sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
+			sender.sendMessage("Usage: /setmaxhealth <player> <health>");
 			return true;
 		}
 		
 		else if (label.equalsIgnoreCase("gmc") || label.equalsIgnoreCase("creative")) {
-			if (sender.hasPermission("estools.gm")) {
-				if (!(sender instanceof Player)) {
-					sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
-					return true;
-				}
-				Player p = (Player) sender;
-				p.setGameMode(GameMode.CREATIVE);
-				p.sendMessage(ChatColor.GREEN + "Your Gamemode Has Been Set To Creative!");
+			if (checkPerm(sender, "estools.gm"))
+				return false;
+			if (!(sender instanceof Player)) {
+				sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
 				return true;
 			}
-			sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
+			Player p = (Player) sender;
+			p.setGameMode(GameMode.CREATIVE);
+			p.sendMessage(ChatColor.GREEN + "Your Gamemode Has Been Set To Creative!");
 			return true;
 		}
 		
 		else if (label.equalsIgnoreCase("gms") || label.equalsIgnoreCase("survival")) {
-			if (sender.hasPermission("estools.gm")) {
-				if (!(sender instanceof Player)) {
-					sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
-					return true;
-				}
-				Player p = (Player) sender;
-				p.setGameMode(GameMode.SURVIVAL);
-				p.sendMessage(ChatColor.GREEN + "Your Gamemode Has Been Set To Survival!");
+			if (checkPerm(sender, "estools.gm"))
+				return false;
+			
+			if (!(sender instanceof Player)) {
+				sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
 				return true;
 			}
-			sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
+			Player p = (Player) sender;
+			p.setGameMode(GameMode.SURVIVAL);
+			p.sendMessage(ChatColor.GREEN + "Your Gamemode Has Been Set To Survival!");
 			return true;
 		}
 		
 		else if (label.equalsIgnoreCase("gma") || label.equalsIgnoreCase("adventure")) {
-			if (sender.hasPermission("estools.gm")) {
-				if (!(sender instanceof Player)) {
-					sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
-					return true;
-				}
-				Player p = (Player) sender;
-				p.setGameMode(GameMode.ADVENTURE);
-				p.sendMessage(ChatColor.GREEN + "Your Gamemode Has Been Set To Adventure!");
+			if (checkPerm(sender, "estools.tp"))
+				return false;
+			
+			if (!(sender instanceof Player)) {
+				sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
 				return true;
 			}
-			sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
+			Player p = (Player) sender;
+			p.setGameMode(GameMode.ADVENTURE);
+			p.sendMessage(ChatColor.GREEN + "Your Gamemode Has Been Set To Adventure!");
 			return true;
 		}
 		
 		else if (label.equalsIgnoreCase("spec") || label.equalsIgnoreCase("sp")) {
-			if (sender.hasPermission("estools.gm")) {
-				if (!(sender instanceof Player)) {
-					sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
-					return true;
-				}
-				Player p = (Player) sender;
-				p.setGameMode(GameMode.SPECTATOR);
-				p.sendMessage(ChatColor.GREEN + "Your Gamemode Has Been Set To Spectator!");
+			if (checkPerm(sender, "estools.tp"))
+				return false;
+			
+			if (!(sender instanceof Player)) {
+				sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
 				return true;
 			}
-			sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
+			Player p = (Player) sender;
+			p.setGameMode(GameMode.SPECTATOR);
+			p.sendMessage(ChatColor.GREEN + "Your Gamemode Has Been Set To Spectator!");
 			return true;
 		}
 		
@@ -336,13 +314,24 @@ public class Main extends JavaPlugin implements Listener{
 		return true;
 	}
 	
-	public Player getPlayer(CommandSender sender, String playerName)
-	{
+	public Player getPlayer(CommandSender sender, String playerName) {
 		try {
 			return Bukkit.getPlayer(playerName);
 		} catch (Exception e) {
 			sender.sendMessage(ChatColor.RED + "Player " + playerName + " does not exist!");
 			return null;
+		}
+	}
+	
+	// returns true and says if it doesnt have permission
+	// returns true to avoid 50 million not gates
+	public Boolean checkPerm(CommandSender sender, String perm) {
+		if (sender.hasPermission(perm)) {
+			return false;
+		}
+		else {
+			sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
+			return true;
 		}
 	}
 
