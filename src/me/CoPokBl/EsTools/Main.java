@@ -14,21 +14,16 @@ public class Main extends JavaPlugin implements Listener{
 	// hi adam
 	
 	@Override
-	public void onEnable() {
-		// On startup code
-	}
+	public void onEnable() {}
 	
 	@Override
-	public void onDisable() {
-		// when plugin stops
-	}
-	
+	public void onDisable() {}
 	
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
 		if (label.equalsIgnoreCase("estools")) {
-			sender.sendMessage(ChatColor.BLUE + "EsTools v1.3 By CoPokBl");
+			sender.sendMessage(ChatColor.BLUE + "EsTools v1.5 By CoPokBl");
 			return true;
 		}
 		
@@ -44,14 +39,9 @@ public class Main extends JavaPlugin implements Listener{
 			}
 			if (args.length == 1) {
 				// see if player exist
-				try {
-					Player target = Bukkit.getPlayer(args[0]);
-				} catch(Exception e) {
-					sender.sendMessage(ChatColor.RED + "Player " + args[0] + " does not exist");
-					return true;
-				}
-				// no error
-				Player target = Bukkit.getPlayer(args[0]);
+				Player target = getPlayer(sender, args[0]);
+						
+				
 				Player p = (Player) sender;
 				Location ploc = p.getLocation();
 				target.teleport(ploc);
@@ -62,26 +52,26 @@ public class Main extends JavaPlugin implements Listener{
 			return true;
 		}
 		
-		if (label.equalsIgnoreCase("changename")) {
+		else if (label.equalsIgnoreCase("changename")) {
 			if (!(args.length == 2)) {
 				sender.sendMessage(ChatColor.RED + "Usage: /changename <player> [new name]");
 				return true;
 			}
-			// see if player exist
+			Player target = null;
+			
 			try {
-				Player target = Bukkit.getPlayer(args[0]);
+				target = Bukkit.getPlayer(args[0]);
 			} catch(Exception e) {
 				sender.sendMessage(ChatColor.RED + "Player " + args[0] + " does not exist");
 				return true;
 			}
-			// no error
-			Player target = Bukkit.getPlayer(args[0]);
+			
 			target.setDisplayName(args[1]);
 			sender.sendMessage(ChatColor.GREEN + "Set " + target.getName() + "'s name to " + args[1]);
 			return true;
 		}
 		
-		if (label.equalsIgnoreCase("tpall")) {
+		else if (label.equalsIgnoreCase("tpall")) {
 			//perm check
 			if (!(sender.hasPermission("estools.tp"))) {
 				sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
@@ -104,13 +94,17 @@ public class Main extends JavaPlugin implements Listener{
 			
 			// 1 arg
 			if (args.length == 1) {
+				
+				Player targettp = null;
+				
 				try {
-					Player p = Bukkit.getPlayer(args[0]);
+					targettp = Bukkit.getPlayer(args[0]);
 				} catch (Exception e) {
 					sender.sendMessage(ChatColor.RED + "Player " + args[0] + " does not exist");
+					return false;
 				}
 				//no error
-				Player targettp = Bukkit.getPlayer(args[0]);
+				
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					p.teleport(targettp);
 				}
@@ -123,7 +117,7 @@ public class Main extends JavaPlugin implements Listener{
 		}
 		
 		
-		if (label.equalsIgnoreCase("suicide")) {
+		else if (label.equalsIgnoreCase("suicide")) {
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
 				return true;
@@ -133,7 +127,7 @@ public class Main extends JavaPlugin implements Listener{
 			return true;
 		}
 		
-		if (label.equalsIgnoreCase("sudo")) {
+		else if (label.equalsIgnoreCase("sudo")) {
 			if (!(sender.hasPermission("estools.sudo"))) {
 				sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
 				return true;
@@ -154,7 +148,7 @@ public class Main extends JavaPlugin implements Listener{
 			return true;
 		}
 		
-		if (label.equalsIgnoreCase("smite")) {
+		else if (label.equalsIgnoreCase("smite")) {
 			if (!(sender.hasPermission("estools.smite"))) {
 				sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
 				return true;
@@ -175,7 +169,7 @@ public class Main extends JavaPlugin implements Listener{
 			return true;
 		}
 		
-		if (label.equalsIgnoreCase("invsee")) {
+		else if (label.equalsIgnoreCase("invsee")) {
 			if (!(sender.hasPermission("estools.invsee"))) {
 				sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
 				return true;
@@ -200,7 +194,7 @@ public class Main extends JavaPlugin implements Listener{
 	        return true;
 		}
 		
-		if (label.equalsIgnoreCase("fly")) {
+		else if (label.equalsIgnoreCase("fly")) {
 			if (sender.hasPermission("estools.fly")) {
 				if (!(sender instanceof Player)) {
 					sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
@@ -220,7 +214,7 @@ public class Main extends JavaPlugin implements Listener{
 			return true;
 		}
 		
-		if (label.equalsIgnoreCase("sethealth")) {
+		else if (label.equalsIgnoreCase("sethealth")) {
 			if (sender.hasPermission("estools.health")) {
 				if (args.length == 2) {
 					try {
@@ -248,7 +242,7 @@ public class Main extends JavaPlugin implements Listener{
 			return true;
 		}
 		
-		if (label.equalsIgnoreCase("setmaxhealth")) {
+		else if (label.equalsIgnoreCase("setmaxhealth")) {
 			if (sender.hasPermission("estools.health")) {
 				if (args.length == 2) {
 					try {
@@ -276,7 +270,7 @@ public class Main extends JavaPlugin implements Listener{
 			return true;
 		}
 		
-		if (label.equalsIgnoreCase("gmc") || label.equalsIgnoreCase("creative")) {
+		else if (label.equalsIgnoreCase("gmc") || label.equalsIgnoreCase("creative")) {
 			if (sender.hasPermission("estools.gm")) {
 				if (!(sender instanceof Player)) {
 					sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
@@ -291,7 +285,7 @@ public class Main extends JavaPlugin implements Listener{
 			return true;
 		}
 		
-		if (label.equalsIgnoreCase("gms") || label.equalsIgnoreCase("survival")) {
+		else if (label.equalsIgnoreCase("gms") || label.equalsIgnoreCase("survival")) {
 			if (sender.hasPermission("estools.gm")) {
 				if (!(sender instanceof Player)) {
 					sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
@@ -306,7 +300,7 @@ public class Main extends JavaPlugin implements Listener{
 			return true;
 		}
 		
-		if (label.equalsIgnoreCase("gma") || label.equalsIgnoreCase("adventure")) {
+		else if (label.equalsIgnoreCase("gma") || label.equalsIgnoreCase("adventure")) {
 			if (sender.hasPermission("estools.gm")) {
 				if (!(sender instanceof Player)) {
 					sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
@@ -321,7 +315,7 @@ public class Main extends JavaPlugin implements Listener{
 			return true;
 		}
 		
-		if (label.equalsIgnoreCase("spec") || label.equalsIgnoreCase("sp")) {
+		else if (label.equalsIgnoreCase("spec") || label.equalsIgnoreCase("sp")) {
 			if (sender.hasPermission("estools.gm")) {
 				if (!(sender instanceof Player)) {
 					sender.sendMessage(ChatColor.RED + "You must be a player to run this command!");
@@ -340,6 +334,16 @@ public class Main extends JavaPlugin implements Listener{
 		
 		
 		return true;
+	}
+	
+	public Player getPlayer(CommandSender sender, String playerName)
+	{
+		try {
+			return Bukkit.getPlayer(playerName);
+		} catch (Exception e) {
+			sender.sendMessage(ChatColor.RED + "Player " + playerName + " does not exist!");
+			return null;
+		}
 	}
 
 }
