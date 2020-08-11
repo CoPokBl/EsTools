@@ -26,17 +26,6 @@ commands:
   changename: 
   
 permissions:
-  estools.*
-    description: Gives access to all estools commands
-    children:
-      estools.tp: true
-      estools.sudo: true
-      estools.smite: true
-      estools.invsee: true
-      estools.fly: true
-      estools.health: true
-      estools.gm: true
-
   estools.tp:
     description: Lets people teleport themselves and others
     default: op
