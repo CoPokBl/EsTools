@@ -1,6 +1,6 @@
 main: me.CoPokBl.EsTools.Main
 name: EsTools
-version: 1.5
+version: 1.7
 author: CoPokBl
 api-version: 1.13
 
@@ -24,6 +24,8 @@ commands:
   tphere: 
   tpall: 
   changename: 
+  feed: 
+  heal: 
   
 permissions:
   estools.tp:
@@ -52,4 +54,12 @@ permissions:
     
   estools.gm:
     description: lets people change thier gamemode
+    default: op
+    
+  estools.feed:
+    description: Set a players hunger to full
+    default: op
+    
+  estools.heal:
+    description: Set a players health to full
     default: op

@@ -13,7 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener{
-	// hi adam
 	
 	@Override
 	public void onEnable() {}
@@ -25,7 +24,7 @@ public class Main extends JavaPlugin implements Listener{
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
 		if (label.equalsIgnoreCase("estools")) {
-			sender.sendMessage(ChatColor.BLUE + "EsTools v1.5 By CoPokBl");
+			sender.sendMessage(ChatColor.BLUE + "EsTools v1.7 By CoPokBl");
 			return true;
 		}
 		
@@ -304,6 +303,44 @@ public class Main extends JavaPlugin implements Listener{
 			Player p = (Player) sender;
 			p.setGameMode(GameMode.SPECTATOR);
 			p.sendMessage(ChatColor.GREEN + "Your Gamemode Has Been Set To Spectator!");
+			return true;
+		}
+		else if (label.equalsIgnoreCase("heal")) {
+			if (checkPerm(sender, "estools.heal"))
+				return false;
+			if (args.length == 0) {
+				if (!(sender instanceof Player)) {
+					sender.sendMessage(ChatColor.RED + "Usage: /heal <player>");
+					return false;
+				}
+				Player p = (Player) sender;
+				p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+				p.sendMessage(ChatColor.GREEN + "You Have Been Healed!");
+				return true;
+			}
+			Player p = getPlayer(sender, args[0]);
+			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+			p.sendMessage(ChatColor.GREEN + "You Have Been Healed!");
+			sender.sendMessage("You Have Healed " + p.getName() + "!");
+			return true;
+		}
+		else if (label.equalsIgnoreCase("feed")) {
+			if (checkPerm(sender, "estools.feed"))
+				return false;
+			if (args.length == 0) {
+				if (!(sender instanceof Player)) {
+					sender.sendMessage(ChatColor.RED + "Usage: /feed <player>");
+					return false;
+				}
+				Player p = (Player) sender;
+				p.setFoodLevel(20);
+				p.sendMessage(ChatColor.GREEN + "You Have Been Fed!");
+				return true;
+			}
+			Player p = getPlayer(sender, args[0]);
+			p.setFoodLevel(20);
+			p.sendMessage(ChatColor.GREEN + "You Have Been Fed!");
+			sender.sendMessage("You Have Fed " + p.getName() + "!");
 			return true;
 		}
 		
