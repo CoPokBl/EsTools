@@ -24,3 +24,43 @@ commands:
   tphere: 
   tpall: 
   changename: 
+  
+permissions:
+  estools.*
+    description: Gives access to all estools commands
+    children:
+      estools.tp: true
+      estools.sudo: true
+      estools.smite: true
+      estools.invsee: true
+      estools.fly: true
+      estools.health: true
+      estools.gm: true
+
+  estools.tp:
+    description: Lets people teleport themselves and others
+    default: op
+    
+  estools.sudo:
+    description: Lets people force other people to execute commands
+    default: op
+    
+  estools.smite:
+    description: gives people the power of zeus
+    default: op
+    
+  estools.invsee:
+    description: lets people view and change inventories of other people 
+    default: op
+    
+  estools.fly:
+    description: lets people fly with /fly
+    default: op
+    
+  estools.health:
+    description: lets people change other peoples health and maxhealth
+    default: op
+    
+  estools.gm:
+    description: lets people change thier gamemode
+    default: op

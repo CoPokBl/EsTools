@@ -281,7 +281,7 @@ public class Main extends JavaPlugin implements Listener{
 		}
 		
 		else if (label.equalsIgnoreCase("gma") || label.equalsIgnoreCase("adventure")) {
-			if (checkPerm(sender, "estools.tp"))
+			if (checkPerm(sender, "estools.gm"))
 				return false;
 			
 			if (!(sender instanceof Player)) {
@@ -295,7 +295,7 @@ public class Main extends JavaPlugin implements Listener{
 		}
 		
 		else if (label.equalsIgnoreCase("spec") || label.equalsIgnoreCase("sp")) {
-			if (checkPerm(sender, "estools.tp"))
+			if (checkPerm(sender, "estools.gm"))
 				return false;
 			
 			if (!(sender instanceof Player)) {
