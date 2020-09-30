@@ -4,12 +4,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener{
@@ -308,20 +310,23 @@ public class Main extends JavaPlugin implements Listener{
 		else if (label.equalsIgnoreCase("heal")) {
 			if (checkPerm(sender, "estools.heal"))
 				return false;
+			
+			Player p;
+			
 			if (args.length == 0) {
 				if (!(sender instanceof Player)) {
 					sender.sendMessage(ChatColor.RED + "Usage: /heal <player>");
 					return false;
 				}
-				Player p = (Player) sender;
-				p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
-				p.sendMessage(ChatColor.GREEN + "You Have Been Healed!");
-				return true;
+				
+				p = (Player) sender;
+			} else {
+				p = getPlayer(sender, args[0]);
+				sender.sendMessage("You Have Healed " + p.getName() + "!");
 			}
-			Player p = getPlayer(sender, args[0]);
-			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+
+			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 			p.sendMessage(ChatColor.GREEN + "You Have Been Healed!");
-			sender.sendMessage("You Have Healed " + p.getName() + "!");
 			return true;
 		}
 		else if (label.equalsIgnoreCase("feed")) {
@@ -339,14 +344,69 @@ public class Main extends JavaPlugin implements Listener{
 			}
 			Player p = getPlayer(sender, args[0]);
 			p.setFoodLevel(20);
+			p.setSaturation(15);
 			p.sendMessage(ChatColor.GREEN + "You Have Been Fed!");
 			sender.sendMessage("You Have Fed " + p.getName() + "!");
 			return true;
 		}
-		
-		
-		
-		
+		else if (label.equalsIgnoreCase("i")) {
+			if (checkPerm(sender, "estools.give"))
+				return false;
+			
+			if (!(sender instanceof Player)) {
+				s(sender, "&4You must be a player to run this command!");
+			}
+			
+			if (args.length == 0) {
+				s(sender, "&4Usage: /i <Item> [Amount]");
+			}
+			
+			Player p = (Player) sender;
+			
+			int amount = 1;
+			
+			if (args.length > 1) {
+				amount = Integer.valueOf(args[1]);
+			}
+			
+			Material mat = Material.getMaterial(args[0].toUpperCase());
+			
+			if (mat != null) {
+				p.getInventory().addItem(new ItemStack(mat, amount));
+			} else {
+				s(sender, "&4That item doesn't exist!");
+			}
+			return true;
+		}
+		else if (label.equalsIgnoreCase("h")) {
+			if (checkPerm(sender, "estools.give"))
+				return false;
+			
+			if (!(sender instanceof Player)) {
+				s(sender, "&4You must be a player to run this command!");
+			}
+			
+			if (args.length == 0) {
+				s(sender, "&4Usage: /h <Item> [Amount]");
+			}
+			
+			Player p = (Player) sender;
+			
+			int amount = 1;
+			
+			if (args.length > 1) {
+				amount = Integer.valueOf(args[1]);
+			}
+			
+			Material mat = Material.getMaterial(args[0].toUpperCase());
+			
+			if (mat != null) {
+				p.getInventory().setItemInMainHand(new ItemStack(mat, amount));
+			} else {
+				s(sender, "&4That item doesn't exist!");
+			}
+			return true;
+		}
 		return true;
 	}
 	
@@ -369,6 +429,10 @@ public class Main extends JavaPlugin implements Listener{
 			sender.sendMessage(ChatColor.RED + "You Do Not Have Permission To Do That!");
 			return true;
 		}
+	}
+	
+	public void s(CommandSender sender, String msg) {
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', msg));
 	}
 
 }

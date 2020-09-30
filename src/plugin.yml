@@ -26,6 +26,8 @@ commands:
   changename: 
   feed: 
   heal: 
+  i:
+  h:
   
 permissions:
   estools.tp:
@@ -62,4 +64,8 @@ permissions:
     
   estools.heal:
     description: Set a players health to full
+    default: op
+    
+  estools.give:
+    description: Allows players to give themselves items
     default: op
