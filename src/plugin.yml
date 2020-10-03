@@ -26,6 +26,7 @@ commands:
   ench:
   fix:
   gethealth:
+  editsign:
  
 permissions:
   estools.tp:
@@ -90,5 +91,9 @@ permissions:
     
   estools.fix:
     description: Lets people enchant items (sharp 2 billion allowed)
+    default: op
+    
+  estools.editsign:
+    description: Lets people edit signs
     default: op
     

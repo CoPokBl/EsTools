@@ -41,6 +41,7 @@ public class Main extends JavaPlugin implements TabCompleter{
 		getCommand("ench").setExecutor(new Ench());
 		getCommand("fix").setExecutor(new Fix());
 		getCommand("gethealth").setExecutor(new GetHealth());
+		getCommand("editsign").setExecutor(new EditSign());
 		
 		
 		// Tab Complete

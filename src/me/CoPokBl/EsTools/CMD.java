@@ -55,4 +55,14 @@ public abstract class CMD {
 			
 		return p;
 	}
+	
+	public static boolean equalsOr(Object orig, Object... items) {
+		for (Object item : items) {
+			if (orig.equals(item)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
