@@ -1,5 +1,8 @@
 package me.CoPokBl.EsTools.Commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -21,10 +24,27 @@ public class EsTools extends CMD {
 			if (checkPerms(sender, "reload"))
 				return false;
 			
+			s(sender, "&aReloading...");
+			
 			Give.init();
+			
+			s(sender, "&aReloaded!");
+		} else {
+			s(sender, "&aEsTools v" + Main.current.getDescription().getVersion());
 		}
 		
 		return true;
 	}
 
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		List<String> tab = new ArrayList<String>();
+		
+		if (args.length == 1) {
+			tab.add("reload");
+			tab.add("version");
+		}
+		
+		return tab;
+	}
 }

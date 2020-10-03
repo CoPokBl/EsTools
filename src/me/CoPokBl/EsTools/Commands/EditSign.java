@@ -1,5 +1,8 @@
 package me.CoPokBl.EsTools.Commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -29,7 +32,7 @@ public class EditSign extends CMD {
 		
 		Block signB = p.getTargetBlockExact(5);
 		
-		if (!(signB.getState() instanceof Sign)) {
+		if (signB == null || !(signB.getState() instanceof Sign)) {
 			s(sender, "&4You must be looking at a sign!");
 			return false;
 		}
@@ -66,4 +69,16 @@ public class EditSign extends CMD {
 		return true;
 	}
 
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		List<String> tab = new ArrayList<String>();
+		
+		switch (args.length) {
+			case 1:
+				tab.add("1"); tab.add("2"); tab.add("3"); tab.add("4");
+				break;
+		}
+		
+		return tab;
+	}
 }
