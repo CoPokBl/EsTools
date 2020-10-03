@@ -27,6 +27,7 @@ commands:
   fix:
   gethealth:
   editsign:
+  god:
  
 permissions:
   estools.tp:
@@ -94,6 +95,10 @@ permissions:
     default: op
     
   estools.editsign:
+    description: Lets people edit signs
+    default: op
+    
+  estools.god:
     description: Lets people edit signs
     default: op
     
