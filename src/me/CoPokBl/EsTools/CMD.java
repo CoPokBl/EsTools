@@ -1,7 +1,5 @@
 package me.CoPokBl.EsTools;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -52,9 +50,7 @@ public abstract class CMD {
 		Player p = Bukkit.getPlayer(name);
 		
 		if (p == null) {
-			p = Bukkit.getPlayer(UUID.fromString(name));
-			if (p == null)
-				s(sender, "&4Player not found.");
+			s(sender, "&4Player not found.");
 		}
 			
 		return p;
