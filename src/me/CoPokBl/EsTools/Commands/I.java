@@ -1,7 +1,6 @@
 package me.CoPokBl.EsTools.Commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -9,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import me.CoPokBl.EsTools.CMD;
 import me.CoPokBl.EsTools.Give;
 
-public class I extends CMD implements CommandExecutor {
+public class I extends CMD {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

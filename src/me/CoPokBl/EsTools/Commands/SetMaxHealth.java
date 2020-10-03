@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import me.CoPokBl.EsTools.CMD;
 
-public class SetMaxHealth extends CMD implements CommandExecutor {
+public class SetMaxHealth extends CMD {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

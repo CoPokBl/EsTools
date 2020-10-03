@@ -1,18 +1,10 @@
 package me.CoPokBl.EsTools;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.CoPokBl.EsTools.Commands.*;
 
-public class Main extends JavaPlugin implements TabCompleter{
+public class Main extends JavaPlugin {
 	
 	public static Main current;
 	
@@ -43,14 +35,7 @@ public class Main extends JavaPlugin implements TabCompleter{
 		getCommand("gethealth").setExecutor(new GetHealth());
 		getCommand("editsign").setExecutor(new EditSign());
 		getCommand("god").setExecutor(new God());
-		
-		
-		// Tab Complete
-		
-		getCommand("i").setTabCompleter(new Give());
-		getCommand("h").setTabCompleter(new Give());
-		
-		
+
 		// Other
 		
 		current = this;
@@ -60,18 +45,6 @@ public class Main extends JavaPlugin implements TabCompleter{
 	@Override
 	public void onDisable() {
 		Give.disable();
-	}
-	
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		List<String> tab = new ArrayList<String>();
-		
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			tab.add(p.getName());
-		}
-		
-		tab.add("Zane");
-		
-		return tab;
 	}
 }
 

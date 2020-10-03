@@ -2,13 +2,12 @@ package me.CoPokBl.EsTools.Commands;
 
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.CoPokBl.EsTools.CMD;
 
-public class GM extends CMD implements CommandExecutor {
+public class GM extends CMD {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

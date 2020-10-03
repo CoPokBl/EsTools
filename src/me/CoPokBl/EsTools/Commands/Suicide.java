@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import me.CoPokBl.EsTools.CMD;
 
-public class Suicide extends CMD implements CommandExecutor {
+public class Suicide extends CMD {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
