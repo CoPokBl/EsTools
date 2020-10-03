@@ -35,8 +35,12 @@ public class Main extends JavaPlugin {
 		getCommand("gethealth").setExecutor(new GetHealth());
 		getCommand("editsign").setExecutor(new EditSign());
 		getCommand("god").setExecutor(new God());
+		getCommand("music").setExecutor(new Music());
 
 		// Other
+		
+		getCommand("i").setTabCompleter(new Give());
+		getCommand("h").setTabCompleter(new Give());
 		
 		current = this;
 		Give.init();

@@ -28,6 +28,7 @@ commands:
   gethealth:
   editsign:
   god:
+  music:
  
 permissions:
   estools.tp:
@@ -100,5 +101,9 @@ permissions:
     
   estools.god:
     description: Lets people edit signs
+    default: op
+    
+  estools.music:
+    description: Lets people play music to themselves
     default: op
     
