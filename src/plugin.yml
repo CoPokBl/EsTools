@@ -1,71 +1,84 @@
 main: me.CoPokBl.EsTools.Main
-name: EsTools
-version: 1.7
-author: CoPokBl
+name: estools
+version: 2.0
+author: Calcilator
 api-version: 1.13
 
 commands:
-  gmc: 
-    aliases: creative
-  gms: 
-    aliases: survival
-  gma: 
-    aliases: adventure
-  spec: 
-    aliases: sp
-  estools: 
-  suicide: 
-  smite: 
-  fly: 
-  sudo: 
-  sethealth: 
-  setmaxhealth: 
-  invsee: 
-  tphere: 
-  tpall: 
-  changename: 
-  feed: 
-  heal: 
+  estools:
+  gms:
+  gmc:
+  gma:
+  gmsp:
+  tphere:
+  tpall:
+  feed:
+  heal:
+  sudo:
+  fly:
+  suicide:
+  smite:
+  sethealth:
+  setmaxhealth:
+  invsee:
   i:
   h:
-  
+  ench:
+ 
 permissions:
   estools.tp:
     description: Lets people teleport themselves and others
     default: op
     
-  estools.sudo:
-    description: Lets people force other people to execute commands
-    default: op
-    
-  estools.smite:
-    description: gives people the power of zeus
-    default: op
-    
-  estools.invsee:
-    description: lets people view and change inventories of other people 
-    default: op
-    
-  estools.fly:
-    description: lets people fly with /fly
-    default: op
-    
-  estools.health:
-    description: lets people change other peoples health and maxhealth
-    default: op
-    
   estools.gm:
-    description: lets people change thier gamemode
+    description: Lets people change the gamemode of themselves and others
     default: op
     
   estools.feed:
-    description: Set a players hunger to full
+    description: Lets people feed themselves and others
     default: op
     
   estools.heal:
-    description: Set a players health to full
+    description: Lets people heal themselves and others
+    default: op
+    
+  estools.sudo:
+    description: Lets people run commands as other players
+    default: op
+    
+  estools.fly:
+    description: Lets people toggle flight for themselves and others
+    default: op
+    
+  estools.suicide:
+    description: Lets people kill themselves
+    default: true
+    
+  estools.smite:
+    description: Lets people strike lightning on people
+    default: op
+    
+  estools.sethealth:
+    description: Lets people set the health for themselves and others
+    default: op
+    
+  estools.setmaxhealth:
+    description: Lets people set the max health for themselves and others
+    default: op
+    
+  estools.invsee:
+    description: Lets people see and edit other peoples inventories
     default: op
     
   estools.give:
-    description: Allows players to give themselves items
+    description: Lets people give themselves items
     default: op
+    
+  estools.give:
+    description: Lets people reload config files
+    default: op
+    
+  estools.ench:
+    description: Lets people enchant items (sharp 2 billion allowed)
+    default: op
+    
