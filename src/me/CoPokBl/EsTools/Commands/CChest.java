@@ -1,6 +1,5 @@
 package me.CoPokBl.EsTools.Commands;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -81,7 +80,6 @@ public class CChest extends CMD implements Listener {
 										InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_SOME)) {
 
 				heldItem.put(puid, cItem.clone());
-				Bukkit.broadcastMessage("pInv" + heldItem.get(puid).getType().toString());
 			}
 			
 			if (e.getAction().equals(InventoryAction.COLLECT_TO_CURSOR)) {
@@ -108,7 +106,6 @@ public class CChest extends CMD implements Listener {
 						new BukkitRunnable() {
 							@Override
 							public void run() {
-								Bukkit.broadcastMessage(heldItem.get(puid).getType().toString());
 								e.getInventory().setItem(e.getRawSlot(), heldItem.get(puid));
 							}
 						}.runTaskLater(Main.current, 0);
@@ -131,7 +128,6 @@ public class CChest extends CMD implements Listener {
 						InventoryAction.PLACE_SOME)) {
 
 					heldItem.remove(puid);
-					Bukkit.broadcastMessage("ok");
 				}
 			}
 		}
@@ -152,7 +148,7 @@ public class CChest extends CMD implements Listener {
 	public static void loadPlayer(Player p) {		
 		UUID puid = p.getUniqueId();
 		
-		FileConfiguration f = ConfigManager.load("cchests" + File.pathSeparator + puid.toString() + ".yml");
+		FileConfiguration f = ConfigManager.load("cchests/" + puid.toString() + ".yml");
 		
 		if (f.contains("items")) {
 			@SuppressWarnings("unchecked")
@@ -177,7 +173,7 @@ public class CChest extends CMD implements Listener {
 
 		f.set("items", cchests.get(puid).getContents());
 		
-		ConfigManager.save("cchests" + File.pathSeparator + puid.toString() + ".yml", f);
+		ConfigManager.save("cchests/" + puid.toString() + ".yml", f);
 		
 		cchests.remove(p.getUniqueId());
 	}
