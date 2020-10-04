@@ -1,0 +1,17 @@
+items:
+  boat: oak_boat
+  pearl: ender_pearl
+  sign: oak_sign
+  button: stone_button
+  fence: oak_fence
+  sapling: oak_sapling
+  log: oak_log
+  door: oak_door
+  fence: oak_fence
+  fence_gate: oak_fence_gate
+  leaves: oak_leaves
+  planks: oak_planks
+  pressure_plate: stone_pressure_plate
+  trapdoor: oak_trapdoor
+  
+  

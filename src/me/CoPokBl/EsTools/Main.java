@@ -9,7 +9,7 @@ public class Main extends JavaPlugin {
 	
 	public static Main current;
 	
-	// Things to add: /fix <armour/hand>, /infinite (makes things not get consumed when you use), default give.yml
+	// Things to add: /infinite (makes things not get consumed when you use)
 	
 	@Override
 	public void onEnable() {		
@@ -53,7 +53,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getServer().getPluginManager().registerEvents(new Back(), this);
 		
 		current = this;
-		Give.init();
+		Give.enable();
 	}
 	
 	@Override

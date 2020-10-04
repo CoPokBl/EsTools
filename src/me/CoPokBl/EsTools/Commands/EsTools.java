@@ -28,7 +28,7 @@ public class EsTools extends CMD {
 			
 			s(sender, "&aReloading...");
 			
-			Give.init();
+			Give.enable();
 			
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				CChest.savePlayer(p);

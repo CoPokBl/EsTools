@@ -1,5 +1,10 @@
 package me.CoPokBl.EsTools;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -53,10 +58,26 @@ public class Give implements TabCompleter {
 		return tab;
 	}
 	
-	public static void init() {		
+	public static void enable() {		
+		HashMap<String, String> ms = load(new File(Main.current.getDataFolder(), "give.yml"));
+		
+		if (ms == null || ms.isEmpty()) {		
+			
+			try {
+				copyDefaultGiveYML();
+				ms = load(new File(Main.current.getDataFolder(), "give.yml"));
+			} catch (Exception e) {}
+		}
+		
+		for (Entry<String, String> s : ms.entrySet()) {
+			mats.put(s.getKey().toUpperCase(), Material.getMaterial(s.getValue().toUpperCase()));
+		}
+	}
+	
+	private static HashMap<String, String> load(File file) {
 		HashMap<String, String> ms = new HashMap<String, String>();
 		
-		FileConfiguration f = ConfigManager.load("give.yml");
+		FileConfiguration f = ConfigManager.load(file);
 		
 		if (f.contains("items")) {
 			f.getConfigurationSection("items").getKeys(false).forEach(key -> {
@@ -66,11 +87,7 @@ public class Give implements TabCompleter {
 			});
 		}
 		
-		//ms.remove("example_alias");
-		
-		for (Entry<String, String> s : ms.entrySet()) {
-			mats.put(s.getKey().toUpperCase(), Material.getMaterial(s.getValue().toUpperCase()));
-		}
+		return ms;
 	}
 	
 	public static void disable() {
@@ -90,4 +107,26 @@ public class Give implements TabCompleter {
 		
 		ConfigManager.save("give.yml", f);
 	}
+	
+	private static void copyDefaultGiveYML() throws IOException {
+
+        // The class loader that loaded the class
+        ClassLoader classLoader = Give.class.getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream("give.yml");
+
+        // the stream holding the file content
+        if (inputStream == null) {
+            return;
+        }
+        
+    	byte[] buffer = new byte[inputStream.available()];
+		inputStream.read(buffer);
+		
+		File targetFile = new File(Main.current.getDataFolder(), "give.yml");
+	    OutputStream outStream = new FileOutputStream(targetFile);
+	    outStream.write(buffer);
+	    
+	    inputStream.close();
+	    outStream.close();  
+    }
 }

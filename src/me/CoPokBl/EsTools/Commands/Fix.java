@@ -62,7 +62,12 @@ public class Fix extends PlayerCommand {
 			}
 		}
 		
+		
+		
 		ItemMeta im = is.getItemMeta();
+		
+		if (im == null) return true;
+		
 		((Damageable) im).setDamage(0);
 		
 		is.setItemMeta(im);
