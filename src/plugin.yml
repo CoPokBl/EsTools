@@ -29,6 +29,7 @@ commands:
   editsign:
   god:
   music:
+  cchest:
  
 permissions:
   estools.tp:
@@ -105,5 +106,13 @@ permissions:
     
   estools.music:
     description: Lets people play music to themselves
+    default: op
+    
+  estools.cchest.creative:
+    description: Lets people have chests where they can store and use items anywhere
+    default: true
+    
+  estools.cchest.survival:
+    description: Lets people use cchests regardless of gamemode
     default: op
     

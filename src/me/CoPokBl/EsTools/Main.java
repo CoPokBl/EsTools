@@ -1,5 +1,6 @@
 package me.CoPokBl.EsTools;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.CoPokBl.EsTools.Commands.*;
@@ -7,6 +8,8 @@ import me.CoPokBl.EsTools.Commands.*;
 public class Main extends JavaPlugin {
 	
 	public static Main current;
+	
+	// Things to add: /back, /rename
 	
 	@Override
 	public void onEnable() {		
@@ -36,11 +39,14 @@ public class Main extends JavaPlugin {
 		getCommand("editsign").setExecutor(new EditSign());
 		getCommand("god").setExecutor(new God());
 		getCommand("music").setExecutor(new Music());
+		getCommand("cchest").setExecutor(new CChest());
 
 		// Other
 		
 		getCommand("i").setTabCompleter(new Give());
 		getCommand("h").setTabCompleter(new Give());
+		
+		Bukkit.getServer().getPluginManager().registerEvents(new CChest(), this);
 		
 		current = this;
 		Give.init();

@@ -3,8 +3,10 @@ package me.CoPokBl.EsTools.Commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import me.CoPokBl.EsTools.CMD;
 import me.CoPokBl.EsTools.Give;
@@ -27,6 +29,14 @@ public class EsTools extends CMD {
 			s(sender, "&aReloading...");
 			
 			Give.init();
+			
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				CChest.savePlayer(p);
+			}
+			
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				CChest.loadPlayer(p);
+			}
 			
 			s(sender, "&aReloaded!");
 		} else if (args[0].equalsIgnoreCase("help")) {
