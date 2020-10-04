@@ -9,7 +9,7 @@ public class Main extends JavaPlugin {
 	
 	public static Main current;
 	
-	// Things to add: /fix <armour/hand>, /setstack, /infinite (makes things not get consumed when you use)
+	// Things to add: /fix <armour/hand>, /infinite (makes things not get consumed when you use)
 	
 	@Override
 	public void onEnable() {		
@@ -42,6 +42,7 @@ public class Main extends JavaPlugin {
 		getCommand("cchest").setExecutor(new CChest());
 		getCommand("rename").setExecutor(new Rename());
 		getCommand("back").setExecutor(new Back());
+		getCommand("setstack").setExecutor(new SetStack());
 
 		// Other
 		

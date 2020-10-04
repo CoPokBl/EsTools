@@ -32,6 +32,8 @@ commands:
   cchest:
   rename:
   back:
+  setstack:
+    aliases: stack
  
 permissions:
   estools.tp:
@@ -123,5 +125,9 @@ permissions:
     default: op
     
   estools.back:
-    description: Lets people rename items
+    description: Lets people go back to nearest death location
+    default: op
+    
+  estools.setstack:
+    description: Lets people set the amount of itens in a stack
     default: op
