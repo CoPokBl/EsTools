@@ -15,13 +15,7 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		List<String> tab = new ArrayList<String>();
-		
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			tab.add(p.getName());
-		}
-		
-		return tab;
+		return new ArrayList<String>();
 	}
 	
 	public static void s(CommandSender s, String m, Object... a) {

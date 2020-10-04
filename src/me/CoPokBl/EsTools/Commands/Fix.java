@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.CoPokBl.EsTools.CMD;
+import me.CoPokBl.EsTools.PlayerCommand;
 
-public class Fix extends CMD {
+public class Fix extends PlayerCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

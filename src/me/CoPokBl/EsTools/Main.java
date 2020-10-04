@@ -9,7 +9,7 @@ public class Main extends JavaPlugin {
 	
 	public static Main current;
 	
-	// Things to add: /back, /rename
+	// Things to add: /back, /fix <armour/hand>, /infinite (makes things not get consumed when you use)
 	
 	@Override
 	public void onEnable() {		
@@ -40,6 +40,7 @@ public class Main extends JavaPlugin {
 		getCommand("god").setExecutor(new God());
 		getCommand("music").setExecutor(new Music());
 		getCommand("cchest").setExecutor(new CChest());
+		getCommand("rename").setExecutor(new Rename());
 
 		// Other
 		

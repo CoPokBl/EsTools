@@ -4,9 +4,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.CoPokBl.EsTools.CMD;
+import me.CoPokBl.EsTools.PlayerCommand;
 
-public class Fly extends CMD {
+public class Fly extends PlayerCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

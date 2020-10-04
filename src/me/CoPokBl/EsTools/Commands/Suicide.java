@@ -4,9 +4,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 
-import me.CoPokBl.EsTools.CMD;
+import me.CoPokBl.EsTools.PlayerCommand;
 
-public class Suicide extends CMD {
+public class Suicide extends PlayerCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

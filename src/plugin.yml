@@ -1,6 +1,6 @@
 main: me.CoPokBl.EsTools.Main
 name: estools
-version: 2.2
+version: 2.3
 author: Calcilator
 api-version: 1.13
 
@@ -30,6 +30,7 @@ commands:
   god:
   music:
   cchest:
+  rename:
  
 permissions:
   estools.tp:
@@ -114,5 +115,9 @@ permissions:
     
   estools.cchest.survival:
     description: Lets people use cchests regardless of gamemode
+    default: op
+    
+  estools.rename:
+    description: Lets people rename items
     default: op
     
