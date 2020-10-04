@@ -2,11 +2,11 @@ package me.CoPokBl.EsTools.Commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 
-import me.CoPokBl.EsTools.CMD;
+import me.CoPokBl.EsTools.EntityCommand;
 
-public class God extends CMD {
+public class God extends EntityCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -14,15 +14,15 @@ public class God extends CMD {
 		if (checkPerms(sender, "god"))
 			return false;
 		
-		Player p;
+		LivingEntity p;
 		
 		if (args.length == 0) {
-			if (isNotPlayer(sender, genUsage("/god <player>")))
+			if (isNotEntity(sender, genUsage("/god <entity>")))
 				return false;
 			
-			p = (Player) sender;
+			p = (LivingEntity) sender;
 		} else {
-			p = getPlayer(sender, args[0]);
+			p = getEntity(sender, args[0]);
 			
 			if (p == null)
 				return false;

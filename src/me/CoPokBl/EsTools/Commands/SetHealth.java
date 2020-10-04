@@ -3,11 +3,11 @@ package me.CoPokBl.EsTools.Commands;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 
-import me.CoPokBl.EsTools.CMD;
+import me.CoPokBl.EsTools.EntityCommand;
 
-public class SetHealth extends CMD {
+public class SetHealth extends EntityCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -16,28 +16,28 @@ public class SetHealth extends CMD {
 			return false;
 		
 		if (args.length == 0) {
-			s(sender, genUsage("/sethealth <amount> [player]"));
+			s(sender, genUsage("/sethealth <amount> [entity]"));
 		}
 		
-		Player p;
+		LivingEntity p;
 		double health;
 		
 		if (args.length > 1) {
-			p = getPlayer(sender, args[1]);
+			p = getEntity(sender, args[1]);
 			
 			if (p == null)
 				return false;
 		} else {
-			if (isNotPlayer(sender))
+			if (isNotEntity(sender))
 				return false;
 			
-			p = (Player) sender;
+			p = (LivingEntity) sender;
 		}
 		
 		try {
 			health = Double.valueOf(args[0]);
 		} catch (Exception e) {
-			s(sender, genUsage("/sethealth <amount> [player]"));
+			s(sender, genUsage("/sethealth <amount> [entity]"));
 			return false;
 		}
 		
@@ -50,9 +50,9 @@ public class SetHealth extends CMD {
 			p.setHealth(health);
 			
 			if (args.length > 1)
-				s(sender, "&aSet health for %s to %s", p.getName(), String.valueOf(health));
+				s(sender, "&aSet health for &6%s&a to &6%s", p.getName(), String.valueOf(health));
 			else
-				s(sender, "&aSet health to %s", String.valueOf(health));
+				s(sender, "&aSet health to &6%s", String.valueOf(health));
 		}
 		else
 			s(sender, "&4Cannot set health to less than 0");

@@ -2,7 +2,7 @@ package me.CoPokBl.EsTools.Commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 
 import me.CoPokBl.EsTools.CMD;
 
@@ -17,7 +17,7 @@ public class Suicide extends CMD {
 		if (isNotPlayer(sender))
 			return false;
 		
-		Player p = (Player) sender;
+		LivingEntity p = (LivingEntity) sender;
 
 		p.setHealth(0);
 		return true;

@@ -3,11 +3,11 @@ package me.CoPokBl.EsTools.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 
-import me.CoPokBl.EsTools.CMD;
+import me.CoPokBl.EsTools.EntityCommand;
 
-public class TP extends CMD {	
+public class TP extends EntityCommand {	
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -15,22 +15,22 @@ public class TP extends CMD {
 		if (checkPerms(sender, "tp"))
 			return false;
 		
-		Player p;
+		LivingEntity p;
 		
 		String ll = label.toLowerCase();
 		
 		if (ll.endsWith("tphere")) {
-			if (isNotPlayer(sender))
+			if (isNotEntity(sender))
 				return false;
 			
 			if (args.length == 0) {
-				s(sender, genUsage("/tphere <Player1> [Player2] [Player3]..."));
+				s(sender, genUsage("/tphere <entity1> [entity2] [entity3]..."));
 			}
 			
-			p = (Player) sender;
+			p = (LivingEntity) sender;
 			
 			for (String arg : args) {
-				Player t = getPlayer(sender, arg);
+				LivingEntity t = getEntity(sender, arg);
 				
 				if (t != null)
 					t.teleport(p);
@@ -39,15 +39,15 @@ public class TP extends CMD {
 
 		else if (ll.endsWith("tpall")) {
 			if (args.length == 0) {
-				p = (Player) sender;
+				p = (LivingEntity) sender;
 				
-				if (isNotPlayer(sender, genUsage("/tpall [Player]")))
+				if (isNotEntity(sender, genUsage("/tpall [entity]")))
 					return false;
 			} else {
-				p = getPlayer(sender, args[0]);
+				p = getEntity(sender, args[0]);
 			}
 			
-			for (Player t : Bukkit.getOnlinePlayers()) {
+			for (LivingEntity t : Bukkit.getOnlinePlayers()) {
 				t.teleport(p);
 			}
 		}

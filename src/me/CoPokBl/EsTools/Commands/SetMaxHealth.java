@@ -3,11 +3,11 @@ package me.CoPokBl.EsTools.Commands;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 
-import me.CoPokBl.EsTools.CMD;
+import me.CoPokBl.EsTools.EntityCommand;
 
-public class SetMaxHealth extends CMD {
+public class SetMaxHealth extends EntityCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -16,29 +16,33 @@ public class SetMaxHealth extends CMD {
 			return false;
 		
 		if (args.length == 0) {
-			s(sender, genUsage("/setmaxhealth <amount> [player]"));
+			s(sender, genUsage("/setmaxhealth <amount> [entity]"));
 		}
 		
-		Player p;
+		LivingEntity p;
 		double health;
-		
-		if (args.length > 1) {
-			p = getPlayer(sender, args[1]);
-			
-			if (p == null)
-				return false;
-		} else {
-			if (isNotPlayer(sender))
-				return false;
-			
-			p = (Player) sender;
-		}
 		
 		try {
 			health = Double.valueOf(args[0]);
 		} catch (Exception e) {
-			s(sender, genUsage("/sethealth <amount> [player]"));
+			s(sender, genUsage("/sethealth <amount> [entity]"));
 			return false;
+		}
+		
+		if (args.length > 1) {
+			p = getEntity(sender, args[1]);
+			
+			if (p == null)
+				return false;
+			
+			s(sender, "&aSet max health for &6%s&a to &6%s", p.getName(), String.valueOf(health));
+		} else {
+			if (isNotEntity(sender))
+				return false;
+			
+			p = (LivingEntity) sender;
+			
+			s(sender, "&aSet max health to &6%s", String.valueOf(health));
 		}
 		
 		p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);

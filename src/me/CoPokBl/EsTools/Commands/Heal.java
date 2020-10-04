@@ -3,11 +3,11 @@ package me.CoPokBl.EsTools.Commands;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 
-import me.CoPokBl.EsTools.CMD;
+import me.CoPokBl.EsTools.EntityCommand;
 
-public class Heal extends CMD {
+public class Heal extends EntityCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -15,18 +15,22 @@ public class Heal extends CMD {
 		if (checkPerms(sender, "heal"))
 			return false;
 		
-		Player p;
+		LivingEntity p;
 		
 		if (args.length == 0) {
-			if (isNotPlayer(sender, genUsage("/feed <Player>")))
+			if (isNotEntity(sender, genUsage("/heal <entity>")))
 				return false;
 			
-			p = (Player) sender;
+			p = (LivingEntity) sender;
+			
+			s(sender, "&aHealed!");
 		} else {
-			p = getPlayer(sender, args[0]);
+			p = getEntity(sender, args[0]);
 			
 			if (p == null)
 				return false;
+			
+			s(sender, "&aHealed &6%s", p.getName());
 		}
 		
 		p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
