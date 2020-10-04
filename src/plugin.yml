@@ -31,6 +31,7 @@ commands:
   music:
   cchest:
   rename:
+  back:
  
 permissions:
   estools.tp:
@@ -121,3 +122,6 @@ permissions:
     description: Lets people rename items
     default: op
     
+  estools.back:
+    description: Lets people rename items
+    default: op

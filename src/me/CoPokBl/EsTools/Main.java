@@ -9,7 +9,7 @@ public class Main extends JavaPlugin {
 	
 	public static Main current;
 	
-	// Things to add: /back, /fix <armour/hand>, /infinite (makes things not get consumed when you use)
+	// Things to add: /fix <armour/hand>, /setstack, /infinite (makes things not get consumed when you use)
 	
 	@Override
 	public void onEnable() {		
@@ -41,6 +41,7 @@ public class Main extends JavaPlugin {
 		getCommand("music").setExecutor(new Music());
 		getCommand("cchest").setExecutor(new CChest());
 		getCommand("rename").setExecutor(new Rename());
+		getCommand("back").setExecutor(new Back());
 
 		// Other
 		
@@ -48,6 +49,7 @@ public class Main extends JavaPlugin {
 		getCommand("h").setTabCompleter(new Give());
 		
 		Bukkit.getServer().getPluginManager().registerEvents(new CChest(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Back(), this);
 		
 		current = this;
 		Give.init();
