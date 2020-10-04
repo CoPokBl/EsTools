@@ -9,7 +9,7 @@ public class Main extends JavaPlugin {
 	
 	public static Main current;
 	
-	// Things to add: /fix <armour/hand>, /infinite (makes things not get consumed when you use)
+	// Things to add: /fix <armour/hand>, /infinite (makes things not get consumed when you use), default give.yml
 	
 	@Override
 	public void onEnable() {		
