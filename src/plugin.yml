@@ -1,7 +1,7 @@
 main: me.CoPokBl.EsTools.Main
-name: estools
-version: 2.3
-author: Calcilator
+name: EsTools
+version: 2.2
+author: CoPokBl,Calcilator
 api-version: 1.13
 
 commands:
