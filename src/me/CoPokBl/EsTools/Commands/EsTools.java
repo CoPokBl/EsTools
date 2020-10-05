@@ -39,14 +39,6 @@ public class EsTools extends CMD {
 			}
 			
 			s(sender, "&aReloaded!");
-		} else if (args[0].equalsIgnoreCase("help")) {
-			s(sender, "&aCommands are:&6\n"
-					+ "editsign\nench\nestools\n"
-					+ "feed\nfix\nfly\ngethealth\n"
-					+ "gms\ngmc\ngma\ngmsp\n"
-					+ "god\nh\nheal\ni\ninvsee\n"
-					+ "music\nsethealth\nsetmaxhealth\n"
-					+ "smite\nsudo\nsuicide\ntp");
 		} else {
 			s(sender, "&aEsTools v" + Main.current.getDescription().getVersion());
 		}
@@ -61,7 +53,6 @@ public class EsTools extends CMD {
 		if (args.length == 1) {
 			tab.add("reload");
 			tab.add("version");
-			tab.add("help");
 		}
 		
 		return tab;

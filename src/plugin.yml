@@ -10,6 +10,7 @@ commands:
   gmc:
   gma:
   gmsp:
+    aliases: spec
   tphere:
   tpall:
   feed:
