@@ -12,10 +12,15 @@ public abstract class PlayerCommand extends CMD {
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		return getTabComplete(args);
+	}
+	
+	public static List<String> getTabComplete(String[] args) {
 		List<String> tab = new ArrayList<String>();
 		
 		for (Player p : Bukkit.getOnlinePlayers()) {
-			tab.add(p.getName());
+			if (p.getName().startsWith(args[args.length - 1].toLowerCase()))
+				tab.add(p.getName());
 		}
 		
 		return tab;

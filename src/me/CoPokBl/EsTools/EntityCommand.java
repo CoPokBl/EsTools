@@ -17,9 +17,7 @@ public abstract class EntityCommand extends CMD {
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		List<String> tab = new ArrayList<String>();
 		
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			tab.add(p.getName());
-		}
+		tab.addAll(PlayerCommand.getTabComplete(args));
 		
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
@@ -28,8 +26,11 @@ public abstract class EntityCommand extends CMD {
 			
 			Entity en = getTarget(p, ens);
 			
-			if (en != null && !(en instanceof Player))
-				tab.add(en.getUniqueId().toString());
+			if (en != null && !(en instanceof Player)) {
+				String eu = en.getUniqueId().toString();
+				if (eu.startsWith(args[args.length - 1].toLowerCase()))
+					tab.add(eu);
+			}
 		}
 		
 		return tab;
