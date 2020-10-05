@@ -19,7 +19,7 @@ public abstract class PlayerCommand extends CMD {
 		List<String> tab = new ArrayList<String>();
 		
 		for (Player p : Bukkit.getOnlinePlayers()) {
-			if (p.getName().startsWith(args[args.length - 1].toLowerCase()))
+			if (p.getName().toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
 				tab.add(p.getName());
 		}
 		
