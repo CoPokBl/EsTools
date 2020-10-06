@@ -1,5 +1,6 @@
 package me.CoPokBl.EsTools.Commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,7 +28,7 @@ public class Rename extends CMD {
 		
 		Player p = (Player)sender;
 		
-		String name = t("&r" + String.join(" ", args));
+		String name = ChatColor.translateAlternateColorCodes('&', "&r" + String.join(" ", args));
 		
 		ItemStack is = p.getInventory().getItemInMainHand();
 		ItemMeta im = is.getItemMeta();
