@@ -93,6 +93,10 @@ permissions:
     description: Lets people reload config files
     default: op
     
+  estools.reset:
+    description: Lets people reset all config files
+    default: op
+    
   estools.ench:
     description: Lets people enchant items (sharp 2 billion allowed)
     default: op

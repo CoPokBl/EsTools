@@ -35,7 +35,7 @@ public class Main extends JavaPlugin {
 		sc("invsee", "invsee", new Invsee());
 		sc("i", "give", new I(), new Give());
 		sc("h", "give", new H(), new Give());
-		sc("estools", "reload", new EsTools());
+		sc("estools", new EsTools());
 		sc("ench", "ench", new Ench());
 		sc("fix", "fix", new Fix());
 		sc("gethealth", "gethealth", new GetHealth());

@@ -1,5 +1,6 @@
 package me.CoPokBl.EsTools.Commands;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,22 @@ public class EsTools extends CMD {
 			}
 			
 			s(sender, "&aReloaded!");
+		} else if (args[0].equalsIgnoreCase("reset")) {
+			if (checkPerms(sender, "reset"))
+				return false;
+			
+			if (args.length > 1 && args[1].equalsIgnoreCase("confirm")) {				
+				File f = new File(Main.current.getDataFolder(), "give.yml");
+				if (!f.delete()) {
+					s(sender, "&cFailed to delete data.");
+					return false;
+				}
+				
+				Give.enable();
+				s(sender, "&cAll data deleted!");
+				return true;
+			}
+			s(sender, "&cWarning, you will lose data, use /estools reset confirm to reset");
 		} else {
 			s(sender, "&aEsTools v" + Main.current.getDescription().getVersion());
 		}
@@ -53,6 +70,7 @@ public class EsTools extends CMD {
 		if (args.length == 1) {
 			tab.add("reload");
 			tab.add("version");
+			tab.add("reset");
 		}
 		
 		return tab;
