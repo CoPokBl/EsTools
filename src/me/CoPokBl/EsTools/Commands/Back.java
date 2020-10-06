@@ -29,7 +29,7 @@ public class Back extends CMD implements Listener {
 			p.teleport(deathLoc.get(p.getUniqueId()));
 			s(sender, "&aTeleported to last death location!");
 		} else {
-			s(sender, "&4You do not have a last death location");
+			s(sender, "&cYou do not have a last death location");
 		}
 		return true;
 	}

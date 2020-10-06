@@ -40,7 +40,7 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 	
 	public static boolean isNotPlayer(CommandSender sender) {
 		if (!(sender instanceof Player)) {
-			s(sender, "&4You must be a player to run this command!");
+			s(sender, "&cYou must be a player to run this command!");
 			return true;
 		}
 		return false;
@@ -55,14 +55,14 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 	}
 	
 	public static String genUsage(String use) {
-		return "&r&4&lUsage: &r&4" + use;
+		return "&r&c&lUsage: &r&c" + use;
 	}
 	
 	public static Player getPlayer(CommandSender sender, String name) {
 		Player p = Bukkit.getPlayer(name);
 		
 		if (p == null) {
-			s(sender, "&4Player not found.");
+			s(sender, "&cPlayer not found.");
 		}
 			
 		return p;

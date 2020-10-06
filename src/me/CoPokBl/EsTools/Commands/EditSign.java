@@ -33,7 +33,7 @@ public class EditSign extends CMD {
 		Block signB = p.getTargetBlockExact(5);
 		
 		if (signB == null || !(signB.getState() instanceof Sign)) {
-			s(sender, "&4You must be looking at a sign!");
+			s(sender, "&cYou must be looking at a sign!");
 			return false;
 		}
 		
@@ -49,7 +49,7 @@ public class EditSign extends CMD {
 		}
 		
 		if (lineNum < 1 || lineNum > 4) {
-			s(sender, "&4line number must be between 1 and 4");
+			s(sender, "&cline number must be between 1 and 4");
 			return false;
 		}
 		

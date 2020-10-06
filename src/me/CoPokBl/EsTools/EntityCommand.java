@@ -46,7 +46,7 @@ public abstract class EntityCommand extends CMD {
 			try {
 				p = (LivingEntity)Bukkit.getEntity(UUID.fromString(name));
 			} catch (Exception e){
-				s(sender, "&4Player/Entity not found.");
+				s(sender, "&cPlayer/Entity not found.");
 				return null;
 			}
 		}
@@ -87,7 +87,7 @@ public abstract class EntityCommand extends CMD {
 	
 	public static boolean isNotEntity(CommandSender sender) {
 		if (!(sender instanceof LivingEntity)) {
-			s(sender, "&4You must be a player to run this command!");
+			s(sender, "&cYou must be a player to run this command!");
 			return true;
 		}
 		return false;

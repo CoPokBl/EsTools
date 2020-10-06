@@ -42,7 +42,7 @@ public class H extends CMD {
 		if (is != null)
 			p.getInventory().setItemInMainHand(is);
 		else
-			s(sender, "&4Item &6%s&4 not found.", args[0]);
+			s(sender, "&cItem &6%s&c not found.", args[0]);
 		
 		return true;
 	}
