@@ -20,9 +20,6 @@ public class Back extends CMD implements Listener {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "back"))
-			return false;
-		
 		if (isNotPlayer(sender))
 			return false;
 		

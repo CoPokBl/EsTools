@@ -54,4 +54,7 @@ public class GM extends PlayerCommand {
 		s(p, "&aGamemode set to &6%s", gm.toString());
 	}
 	
+	public static boolean[] tComplete() {
+		return new boolean[] {true};
+	}
 }

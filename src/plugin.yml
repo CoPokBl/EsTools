@@ -89,7 +89,7 @@ permissions:
     description: Lets people give themselves items
     default: op
     
-  estools.give:
+  estools.reload:
     description: Lets people reload config files
     default: op
     

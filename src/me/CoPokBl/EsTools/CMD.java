@@ -48,7 +48,7 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 	
 	public static boolean checkPerms(CommandSender sender, String perm) {
 		if (!sender.hasPermission("estools." + perm)) {
-			s(sender, "&4You do not have permission to run this command.");
+			s(sender, "&cYou do not have permission to run this command.");
 			return true;
 		}
 		return false;
