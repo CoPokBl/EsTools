@@ -53,7 +53,15 @@ public class Ench extends CMD {
 			is = p.getInventory().getItemInMainHand();
 		}
 		
-		Enchantment ench = Enchantment.getByKey(NamespacedKey.minecraft(args[0].toLowerCase()));
+		Enchantment ench;
+		
+		try {
+			ench = Enchantment.getByKey(NamespacedKey.minecraft(args[0].toLowerCase()));
+		} catch (IllegalArgumentException e) {
+			s(sender, genUsage("/ench <enchantment> <level> <player>"));
+			return true;
+		}
+		
 		
 		if (ench != null) {
 			is.addUnsafeEnchantment(ench, level);
