@@ -36,6 +36,9 @@ commands:
   setstack:
     aliases: stack
   ci:
+  powerpick:
+    aliases: pp
+
  
 permissions:
   estools.tp:
@@ -140,4 +143,8 @@ permissions:
 
   estools.clearinv:
     description: Lets people clear inventories
+    default: op
+
+  estools.powerpick:
+    description: Lets people get an op pickaxe
     default: op

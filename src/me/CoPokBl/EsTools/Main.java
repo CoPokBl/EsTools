@@ -47,6 +47,7 @@ public class Main extends JavaPlugin {
 		sc("back", "back", new Back());
 		sc("setstack", "setstack", new SetStack());
 		sc("ci", "clearinv", new ClearInv());
+		sc("powerpick", "powerpick", new PowerPick());
 
 		// Other
 		
@@ -55,6 +56,7 @@ public class Main extends JavaPlugin {
 		
 		current = this;
 		Give.enable();
+		PowerPick.init();
 	}
 	
 	@Override
