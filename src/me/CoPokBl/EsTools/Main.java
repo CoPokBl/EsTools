@@ -46,6 +46,7 @@ public class Main extends JavaPlugin {
 		sc("rename", "rename", new Rename());
 		sc("back", "back", new Back());
 		sc("setstack", "setstack", new SetStack());
+		sc("ci", "clearinv", new ClearInv());
 
 		// Other
 		

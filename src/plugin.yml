@@ -35,6 +35,7 @@ commands:
   back:
   setstack:
     aliases: stack
+  ci:
  
 permissions:
   estools.tp:
@@ -135,4 +136,8 @@ permissions:
     
   estools.setstack:
     description: Lets people set the amount of itens in a stack
+    default: op
+
+  estools.clearinv:
+    description: Lets people clear inventories
     default: op
