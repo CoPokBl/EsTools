@@ -17,9 +17,11 @@ public abstract class PlayerCommand extends CMD {
 	
 	public static List<String> getTabComplete(String[] args) {
 		List<String> tab = new ArrayList<String>();
-		
+
+		String latestArg = args[args.length - 1].toLowerCase();
+
 		for (Player p : Bukkit.getOnlinePlayers()) {
-			if (p.getName().toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
+			if (p.getName().toLowerCase().startsWith(latestArg))
 				tab.add(p.getName());
 		}
 		

@@ -1,36 +1,36 @@
 package me.CoPokBl.EsTools.Commands;
 
-import me.CoPokBl.EsTools.CMD;
-import me.CoPokBl.EsTools.PlayerCommand;
+import me.CoPokBl.EsTools.MultiPlayerCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ClearInv extends PlayerCommand {
+import java.util.ArrayList;
+
+public class ClearInv extends MultiPlayerCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        Player p;
+        ArrayList<Player> ps = new ArrayList<Player>();
 
         if (args.length == 0) {
-            if (isNotPlayer(sender, genUsage("/ci <player>")))
+            if (isNotPlayer(sender, genUsage("/ci <player1> [player2]")))
                 return true;
 
-            p = (Player)sender;
-
-            s(sender, "&aCleared Inventory!");
+            ps.add((Player)sender);
         } else {
-            p = getPlayer(sender, args[0]);
+            ps = getPlayers(sender, args);
 
-            if (p == null)
+            if (ps.isEmpty())
                 return true;
-
-            s(sender, "&aCleared Inventory of &6%s", p.getName());
         }
 
-        p.getInventory().clear();
+        for (Player p : ps) {
+            p.getInventory().clear();
+        }
 
+        s(sender, "&aCleared Inventory!");
         return true;
     }
 }

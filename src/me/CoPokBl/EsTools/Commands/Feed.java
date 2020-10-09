@@ -1,35 +1,38 @@
 package me.CoPokBl.EsTools.Commands;
 
+import me.CoPokBl.EsTools.MultiPlayerCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.CoPokBl.EsTools.PlayerCommand;
+import java.util.ArrayList;
 
-public class Feed extends PlayerCommand {
+public class Feed extends MultiPlayerCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
 		if (checkPerms(sender, "feed"))
 			return false;
-		
-		Player p;
+
+		ArrayList<Player> ps = new ArrayList<Player>();
 		
 		if (args.length == 0) {
 			if (isNotPlayer(sender, genUsage("/feed <Player>")))
 				return false;
 			
-			p = (Player) sender;
+			ps.add((Player) sender);
 		} else {
-			p = getPlayer(sender, args[0]);
+			ps = getPlayers(sender, args);
 			
-			if (p == null)
+			if (ps.isEmpty())
 				return false;
 		}
 
-		p.setFoodLevel(20);
-		p.setSaturation(20);
+		for (Player p : ps) {
+			p.setFoodLevel(20);
+			p.setSaturation(20);
+		}
 		return true;
 	}
 

@@ -1,13 +1,15 @@
 package me.CoPokBl.EsTools.Commands;
 
+import me.CoPokBl.EsTools.MultiPlayerCommand;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 
-import me.CoPokBl.EsTools.PlayerCommand;
+import java.util.ArrayList;
 
-public class GM extends PlayerCommand {
+public class GM extends MultiPlayerCommand {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -33,28 +35,32 @@ public class GM extends PlayerCommand {
 	}
 	
 	public void setGamemode(CommandSender sender, String label, String[] args, GameMode gm) {
-		Player p;
+		ArrayList<Player> ps = new ArrayList<Player>();
 		
 		if (args.length == 0) {
 			if (isNotPlayer(sender, genUsage("/%s [player]"), label))
 				return;
 			
-			p = (Player) sender;
+			ps.add((Player) sender);
 		} else {
-			p = getPlayer(sender, args[0]);
+			ps = getPlayers(sender, args);
 			
-			if (p == null)
+			if (ps.isEmpty())
 				return;
-			
-			if (!p.getName().equals(sender.getName()))
-				s(sender, "&aGamemode set to &6%s&a for &6%s", gm.toString(), p.getName());
+
+			s(sender, "&aGamemode set to &6%s&a for &6%s", gm.toString(), argsToString(args, 0));
 		}
 
-		p.setGameMode(gm);
-		s(p, "&aGamemode set to &6%s", gm.toString());
-	}
-	
-	public static boolean[] tComplete() {
-		return new boolean[] {true};
+		Player s = null;
+
+		if (sender instanceof Player) {
+			s = (Player)sender;
+		}
+
+		for (Player p : ps) {
+			p.setGameMode(gm);
+			if (!s.equals(p))
+				s(p, "&aGamemode set to &6%s", gm.toString());
+		}
 	}
 }

@@ -59,6 +59,7 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 	}
 	
 	public static Player getPlayer(CommandSender sender, String name) {
+
 		Player p = Bukkit.getPlayer(name);
 		
 		if (p == null) {
@@ -76,5 +77,25 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 		}
 		
 		return false;
+	}
+
+	public static String[] removeArgs(String[] args, int amount) {
+		String[] outp = new String[args.length - amount];
+
+		for (int i = amount; i < args.length; i++) {
+			outp[i - amount] = args[i];
+		}
+
+		return outp;
+	}
+
+	public static String argsToString(String[] args, int amount) {
+		String outp = "";
+
+		for (int i = amount; i < args.length; i++) {
+			outp += args[i];
+		}
+
+		return outp;
 	}
 }
