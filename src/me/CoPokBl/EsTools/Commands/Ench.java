@@ -2,7 +2,10 @@ package me.CoPokBl.EsTools.Commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import me.CoPokBl.EsTools.Enchantments;
+import me.CoPokBl.EsTools.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
@@ -56,7 +59,10 @@ public class Ench extends CMD {
 		Enchantment ench;
 		
 		try {
-			ench = Enchantment.getByKey(NamespacedKey.minecraft(args[0].toLowerCase()));
+			if (Main.version > 12)
+				ench = Enchantment.getByKey(NamespacedKey.minecraft(args[0].toLowerCase()));
+			else
+				ench = Enchantments.getByName(args[0].toLowerCase());
 		} catch (IllegalArgumentException e) {
 			s(sender, genUsage("/ench <enchantment> <level> <player>"));
 			return true;
@@ -65,7 +71,7 @@ public class Ench extends CMD {
 		
 		if (ench != null) {
 			is.addUnsafeEnchantment(ench, level);
-			s(sender, "&aEnchantment &6%s&a at level &6%s&a was added!", ench.getKey().getKey(), level);
+			s(sender, "&aEnchantment &6%s&a at level &6%s&a was added!", args[0].toLowerCase(), level);
 		}
 		else {
 			s(sender, genUsage("/ench <enchantment> <level> <player>"));
@@ -79,9 +85,16 @@ public class Ench extends CMD {
 		
 		switch (args.length) {
 			case 1:
-				for (Enchantment e : Enchantment.values()) {
-					tab.add(e.getKey().getKey());
+				if (Main.version > 12) {
+					for (Enchantment e : Enchantment.values()) {
+						tab.add(e.getKey().getKey());
+					}
+				} else {
+					for (Map.Entry<String, Enchantment> e : Enchantments.entrySet()) {
+						tab.add(e.getKey());
+					}
 				}
+
 				break;
 				
 			case 3:

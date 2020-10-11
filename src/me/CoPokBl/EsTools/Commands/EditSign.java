@@ -32,7 +32,7 @@ public class EditSign extends CMD {
 		
 		Player p = (Player) sender;
 		
-		Block signB = p.getTargetBlockExact(5);
+		Block signB = getTargetBlock(p);
 
 		if (signB == null || !(signB.getState() instanceof Sign)) {
 			s(sender, "&cYou must be looking at a sign!");
@@ -77,13 +77,20 @@ public class EditSign extends CMD {
 
 		switch (args.length) {
 			case 1:
-				tab.add("1");
-				tab.add("2");
-				tab.add("3");
-				tab.add("4");
+				tab.add("1"); tab.add("2"); tab.add("3"); tab.add("4");
 				break;
 		}
 
 		return tab;
+	}
+
+	public Block getTargetBlock(Player p) {
+		Bukkit.broadcastMessage("" + Main.version);
+
+		if (Main.version > 12) {
+			return p.getTargetBlockExact(5);
+		} else {
+			return p.getTargetBlock(null, 5);
+		}
 	}
 }

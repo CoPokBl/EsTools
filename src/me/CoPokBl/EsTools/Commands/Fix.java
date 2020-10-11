@@ -3,6 +3,7 @@ package me.CoPokBl.EsTools.Commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.CoPokBl.EsTools.Main;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -62,16 +63,21 @@ public class Fix extends PlayerCommand {
 			}
 		}
 		
-		
-		
-		ItemMeta im = is.getItemMeta();
-		
-		if (im == null) return true;
-		
-		((Damageable) im).setDamage(0);
-		
-		is.setItemMeta(im);
-		
+
+		if (is == null)
+			 return true;
+
+		if (Main.version > 12) {
+			ItemMeta im = is.getItemMeta();
+
+			if (im == null) return true;
+
+			((Damageable) im).setDamage(0);
+
+			is.setItemMeta(im);
+		} else {
+			is.setDurability((short) 0);
+		}
 		return true;
 	}
 

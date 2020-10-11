@@ -13,7 +13,7 @@ public class Main extends JavaPlugin {
 	public static Main current;
 	public static int version;
 	
-	// Things to add: /infinite (makes things not get consumed when you use)
+	// TODO: /infinite (makes things not get consumed when you use), fix shift click cchest bug, /sun
 	
 	@Override
 	public void onEnable() {
@@ -50,7 +50,14 @@ public class Main extends JavaPlugin {
 		sc("setstack", "setstack", new SetStack());
 		sc("ci", "clearinv", new ClearInv());
 		sc("powerpick", "powerpick", new PowerPick());
-		sc("music", "music", new Music());
+
+		if (version > 12) {
+			sc("music", "music", new Music());
+			Music.init();
+		} else {
+			sc("music", "music", new WrongVersion());
+		}
+
 
 		// Other
 		
@@ -60,7 +67,6 @@ public class Main extends JavaPlugin {
 		current = this;
 		Give.enable();
 		PowerPick.init();
-		Music.init();
 	}
 	
 	@Override
@@ -96,7 +102,7 @@ public class Main extends JavaPlugin {
 	private void getVersion() {
 		String versionS = Bukkit.getVersion();
 
-		if (versionS.contains("1.16")) {
+		       if (versionS.contains("1.16")) {
 			version = 16;
 		} else if (versionS.contains("1.15")) {
 			version = 15;
@@ -104,9 +110,19 @@ public class Main extends JavaPlugin {
 			version = 14;
 		} else if (versionS.contains("1.13")) {
 			version = 13;
-		} else {
-
-		}
+		} else if (versionS.contains("1.12")) {
+			version = 12;
+		} else if (versionS.contains("1.11")) {
+			version = 11;
+		} else if (versionS.contains("1.10")) {
+			version = 10;
+		} else if (versionS.contains("1.9")) {
+			version = 9;
+		} else if (versionS.contains("1.8")) {
+		    version = 8;
+	    } else if (versionS.contains("1.7")) {
+	    	version = 7;
+	    }
 	}
 }
 
