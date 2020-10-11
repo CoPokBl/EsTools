@@ -119,7 +119,7 @@ permissions:
     
   estools.music:
     description: Lets people play music to themselves
-    default: op
+    default: true
     
   estools.cchest.creative:
     description: Lets people have chests where they can store and use items anywhere

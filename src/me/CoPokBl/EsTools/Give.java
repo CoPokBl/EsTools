@@ -70,7 +70,11 @@ public class Give implements TabCompleter {
 		}
 		
 		for (Entry<String, String> s : ms.entrySet()) {
-			mats.put(s.getKey().toUpperCase(), Material.getMaterial(s.getValue().toUpperCase()));
+			Material mat = Material.getMaterial(s.getValue().toUpperCase());
+
+			if (mat != null) {
+				mats.put(s.getKey().toUpperCase(), mat);
+			}
 		}
 	}
 	

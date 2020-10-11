@@ -11,11 +11,14 @@ import me.CoPokBl.EsTools.Commands.*;
 public class Main extends JavaPlugin {
 	
 	public static Main current;
+	public static int version;
 	
 	// Things to add: /infinite (makes things not get consumed when you use)
 	
 	@Override
-	public void onEnable() {		
+	public void onEnable() {
+		getVersion();
+
 		// Commands
 		
 		sc("gms", "gm", new GM());
@@ -41,13 +44,13 @@ public class Main extends JavaPlugin {
 		sc("getinfo", "getinfo", new GetInfo());
 		sc("editsign", "editsign", new EditSign());
 		sc("god", "god", new God());
-		sc("music", "music", new Music());
 		sc("cchest", new CChest());
 		sc("rename", "rename", new Rename());
 		sc("back", "back", new Back());
 		sc("setstack", "setstack", new SetStack());
 		sc("ci", "clearinv", new ClearInv());
 		sc("powerpick", "powerpick", new PowerPick());
+		sc("music", "music", new Music());
 
 		// Other
 		
@@ -88,6 +91,22 @@ public class Main extends JavaPlugin {
 		PluginCommand cmd = sc(name, perm, ce);
 		cmd.setTabCompleter(tc);
 		return cmd;
+	}
+
+	private void getVersion() {
+		String versionS = Bukkit.getVersion();
+
+		if (versionS.contains("1.16")) {
+			version = 16;
+		} else if (versionS.contains("1.15")) {
+			version = 15;
+		} else if (versionS.contains("1.14")) {
+			version = 14;
+		} else if (versionS.contains("1.13")) {
+			version = 13;
+		} else {
+
+		}
 	}
 }
 

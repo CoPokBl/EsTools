@@ -23,8 +23,8 @@ public class Music extends CMD {
 			}
 		}
 
-		musics.remove(Sound.MUSIC_DISC_11);
 		musics.remove(Sound.MUSIC_DISC_13);
+		musics.remove(Sound.MUSIC_DISC_11);
 	}
 
 	@Override
