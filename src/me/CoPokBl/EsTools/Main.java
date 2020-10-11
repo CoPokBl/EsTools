@@ -57,6 +57,7 @@ public class Main extends JavaPlugin {
 		current = this;
 		Give.enable();
 		PowerPick.init();
+		Music.init();
 	}
 	
 	@Override

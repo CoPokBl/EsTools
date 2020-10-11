@@ -3,6 +3,7 @@ package me.CoPokBl.EsTools.Commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
@@ -13,15 +14,19 @@ import me.CoPokBl.EsTools.CMD;
 
 public class Music extends CMD {
 	
-	Sound[] musics = new Sound[] {
-			Sound.MUSIC_DISC_BLOCKS, Sound.MUSIC_DISC_CAT, 
-			Sound.MUSIC_DISC_CHIRP, Sound.MUSIC_DISC_FAR, 
-			Sound.MUSIC_DISC_MALL, Sound.MUSIC_DISC_MELLOHI, 
-			Sound.MUSIC_DISC_PIGSTEP, Sound.MUSIC_DISC_STAL,
-			Sound.MUSIC_DISC_STRAD, Sound.MUSIC_DISC_WAIT,
-			Sound.MUSIC_DISC_WARD 
-		};
-	
+	public static ArrayList<Sound> musics = new ArrayList<>();
+
+	public static void init() {
+		for (Sound s : Sound.values()) {
+			if (s.toString().startsWith("MUSIC_DISC")) {
+				musics.add(s);
+			}
+		}
+
+		musics.remove(Sound.MUSIC_DISC_11);
+		musics.remove(Sound.MUSIC_DISC_13);
+	}
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
@@ -40,17 +45,17 @@ public class Music extends CMD {
 				sound = Sound.valueOf("MUSIC_DISC_" + args[0].toUpperCase());
 			} catch (Exception e) {
 				if (args[0].equalsIgnoreCase("random")) {
-					sound = musics[(int)(Math.random() * musics.length)];
+					sound = musics.get((int)(Math.random() * musics.size()));
 				} else {
 					s(sender, genUsage("/music [song]"));
 					return true;
 				}
 			}
 		} else {
-			sound = musics[(int)(Math.random() * musics.length)];
+			sound = musics.get((int)(Math.random() * musics.size()));
 		}
 		
-		p.playSound(p.getLocation(), sound, SoundCategory.RECORDS, 100, 1);
+		p.playSound(p.getLocation().add(0, 1000, 0), sound, SoundCategory.RECORDS, 100000, 1);
 		
 		String name = sound.toString().toLowerCase().substring(11);
 		name = String.valueOf(name.charAt(0)).toUpperCase() + name.substring(1);
@@ -78,5 +83,4 @@ public class Music extends CMD {
 		
 		return tab;
 	}
-
 }

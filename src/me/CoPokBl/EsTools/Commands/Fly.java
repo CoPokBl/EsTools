@@ -38,7 +38,7 @@ public class Fly extends MultiPlayerCommand {
 		for (Player p : ps) {
 			boolean isFly = p.getAllowFlight();
 
-			if (args[0] != "*") {
+			if (args.length != 0 && args[0] != "*") {
 				if (isFly)
 					s(sender, "&aFly Disabled for &6%s", p.getName());
 				else
@@ -47,12 +47,10 @@ public class Fly extends MultiPlayerCommand {
 
 			p.setAllowFlight(!isFly);
 
-			if (!s.equals(p)) {
-				if (isFly)
-					s(p, "&aFly Disabled!");
-				else
-					s(p, "&aFly Enabled!");
-			}
+			if (isFly)
+				s(p, "&aFly Disabled!");
+			else
+				s(p, "&aFly Enabled!");
 		}
 		return true;
 	}
