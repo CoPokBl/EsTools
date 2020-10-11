@@ -26,7 +26,7 @@ commands:
   h:
   ench:
   fix:
-  gethealth:
+  getinfo:
   editsign:
   god:
   music:
@@ -81,8 +81,8 @@ permissions:
     description: Lets people set the max health for themselves and others
     default: op
     
-  estools.gethealth:
-    description: Lets people set the max health for themselves and others
+  estools.getinfo:
+    description: Lets people get info about a player
     default: op
     
   estools.invsee:
@@ -106,7 +106,7 @@ permissions:
     default: op
     
   estools.fix:
-    description: Lets people enchant items (sharp 2 billion allowed)
+    description: Lets people repair items
     default: op
     
   estools.editsign:
@@ -114,7 +114,7 @@ permissions:
     default: op
     
   estools.god:
-    description: Lets people edit signs
+    description: Lets people turn invincible
     default: op
     
   estools.music:

@@ -38,7 +38,7 @@ public class Main extends JavaPlugin {
 		sc("estools", new EsTools());
 		sc("ench", "ench", new Ench());
 		sc("fix", "fix", new Fix());
-		sc("gethealth", "gethealth", new GetHealth());
+		sc("getinfo", "getinfo", new GetInfo());
 		sc("editsign", "editsign", new EditSign());
 		sc("god", "god", new God());
 		sc("music", "music", new Music());
