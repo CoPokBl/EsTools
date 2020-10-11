@@ -55,7 +55,7 @@ public class Give implements TabCompleter {
 			Collections.sort(tab);
 		}
 	
-		return tab;
+		return CMD.fixTabComplete(tab, args[args.length - 1]);
 	}
 	
 	public static void enable() {		

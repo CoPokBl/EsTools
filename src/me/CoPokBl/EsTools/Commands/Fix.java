@@ -76,7 +76,7 @@ public class Fix extends PlayerCommand {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
 		List<String> tab = new ArrayList<String>();
 		
 		if (args.length == 1) {
@@ -84,7 +84,7 @@ public class Fix extends PlayerCommand {
 			tab.add("leggings"); tab.add("boots");
 		}
 		else if (args.length == 2) {
-			return super.onTabComplete(sender, command, alias, args);
+			return super.tabComplete(sender, args, lArg);
 		}
 		
 		return tab;

@@ -15,6 +15,26 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		String lArg = args[args.length - 1];
+
+		return fixTabComplete(tabComplete(sender, args, lArg), lArg);
+	}
+
+	public static List<String> fixTabComplete(List<String> inList, String arg) {
+		arg = arg.toLowerCase();
+
+		List<String> copy = new ArrayList<>(inList);
+
+		for (int i = 0; i < copy.size(); i++) {
+			if (!copy.get(i).toLowerCase().startsWith(arg)) {
+				inList.remove(copy.get(i));
+			}
+		}
+
+		return inList;
+	}
+
+	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
 		return new ArrayList<String>();
 	}
 	

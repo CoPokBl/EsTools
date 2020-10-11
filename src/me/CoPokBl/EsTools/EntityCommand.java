@@ -26,14 +26,12 @@ public abstract class EntityCommand extends CMD {
 			
 			if (en != null && !(en instanceof Player)) {
 				String eu = en.getUniqueId().toString();
-				if (eu.startsWith(args[args.length - 1].toLowerCase()))
-					tab.add(eu);
+				tab.add(eu);
 			}
 		}
 		
 		for (Player p : Bukkit.getOnlinePlayers()) {
-			if (p.getName().toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
-				tab.add(p.getName());
+			tab.add(p.getName());
 		}
 		
 		return tab;
