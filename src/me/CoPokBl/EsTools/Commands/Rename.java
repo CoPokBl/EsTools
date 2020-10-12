@@ -30,7 +30,7 @@ public class Rename extends CMD {
 		
 		String name = ChatColor.translateAlternateColorCodes('&', "&r" + String.join(" ", args));
 		
-		ItemStack is = p.getInventory().getItemInMainHand();
+		ItemStack is = getMainHand(p);
 		ItemMeta im = is.getItemMeta();
 		im.setDisplayName(name);
 		is.setItemMeta(im);

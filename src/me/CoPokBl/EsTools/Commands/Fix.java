@@ -37,12 +37,14 @@ public class Fix extends PlayerCommand {
 		}
 		
 		PlayerInventory pInv = p.getInventory();
-		ItemStack is = pInv.getItemInMainHand();;
+		ItemStack is = getMainHand(p);
 		
 		if (args.length > 0) {
 			switch (args[0].toLowerCase()) {					
 				case "offhand":
-					is = pInv.getItemInOffHand();
+				    if (Main.version > 8) {
+                        is = pInv.getItemInOffHand();
+                    }
 					break;
 					
 				case "helmet":
@@ -86,8 +88,12 @@ public class Fix extends PlayerCommand {
 		List<String> tab = new ArrayList<String>();
 		
 		if (args.length == 1) {
-			tab.add("hand"); tab.add("offhand"); tab.add("helmet"); tab.add("chestplate");
+			tab.add("hand"); tab.add("helmet"); tab.add("chestplate");
 			tab.add("leggings"); tab.add("boots");
+
+			if (Main.version > 8) {
+                tab.add("offhand");
+            }
 		}
 		else if (args.length == 2) {
 			return super.tabComplete(sender, args, lArg);

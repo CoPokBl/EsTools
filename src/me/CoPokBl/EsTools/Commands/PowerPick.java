@@ -1,7 +1,7 @@
 package me.CoPokBl.EsTools.Commands;
 
 import me.CoPokBl.EsTools.CMD;
-import org.bukkit.Bukkit;
+import me.CoPokBl.EsTools.Main;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,9 +16,14 @@ public class PowerPick extends CMD {
 
     public static void init() {
         powerPick.addUnsafeEnchantment(Enchantment.DIG_SPEED, 32767);
-        ItemMeta im = powerPick.getItemMeta();
-        im.setUnbreakable(true);
-        powerPick.setItemMeta(im);
+
+        if (Main.version > 10) {
+            ItemMeta im = powerPick.getItemMeta();
+            im.setUnbreakable(true);
+            powerPick.setItemMeta(im);
+        } else {
+            powerPick.addUnsafeEnchantment(Enchantment.DURABILITY, 32767);
+        }
     }
 
     @Override

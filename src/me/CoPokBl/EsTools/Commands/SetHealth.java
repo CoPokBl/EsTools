@@ -42,8 +42,8 @@ public class SetHealth extends EntityCommand {
 		}
 		
 		if (health >= 0) {
-			double maxhealth = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-			
+			double maxhealth = getMaxHealth(p);
+
 			if (maxhealth < health)
 				health = maxhealth;
 			

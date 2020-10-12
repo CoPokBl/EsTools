@@ -1,5 +1,6 @@
 package me.CoPokBl.EsTools.Commands;
 
+import me.CoPokBl.EsTools.Main;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
@@ -25,9 +26,10 @@ public class GetInfo extends EntityCommand {
 
 		Location loc = p.getLocation();
 
+		String maxHealth = String.valueOf(Math.round(getMaxHealth(p)));
+
 		s(sender, "&aName: &6%s\n&aHealth: &6%s\n&aMax Health: &6%s\n&aLocation: &6%s, %s, %s\n&aUUID: &6%s",
-				p.getName(), String.valueOf(p.getHealth()),
-				String.valueOf(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()),
+				p.getName(), String.valueOf(p.getHealth()), maxHealth,
 				loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), p.getUniqueId());
 		return true;
 	}

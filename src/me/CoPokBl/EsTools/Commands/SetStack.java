@@ -11,9 +11,6 @@ public class SetStack extends CMD {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "setstack"))
-			return false;
-		
 		if (isNotPlayer(sender))
 			return true;
 		
@@ -30,8 +27,8 @@ public class SetStack extends CMD {
 			s(sender, genUsage("/setstack <amount>"));
 			return false;
 		}
-		
-		((Player)sender).getInventory().getItemInMainHand().setAmount(amount);
+
+		getMainHand(((Player)sender)).setAmount(amount);
 		
 		return true;
 	}

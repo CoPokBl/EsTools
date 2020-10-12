@@ -44,8 +44,8 @@ public class SetMaxHealth extends EntityCommand {
 			
 			s(sender, "&aSet max health to &6%s", String.valueOf(health));
 		}
-		
-		p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+
+		setMaxHealth(p, health);
 		return true;
 	}
 

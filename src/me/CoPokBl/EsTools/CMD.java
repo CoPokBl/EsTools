@@ -5,11 +5,14 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public abstract class CMD implements CommandExecutor, TabCompleter {
 	
@@ -117,5 +120,37 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 		}
 
 		return outp;
+	}
+
+	public static ItemStack getMainHand(Player p) {
+		if (Main.version > 8) {
+			return p.getInventory().getItemInMainHand();
+		} else {
+			return p.getInventory().getItemInHand();
+		}
+	}
+
+	public static void setMainHand(Player p, ItemStack is) {
+		if (Main.version > 8) {
+			p.getInventory().setItemInMainHand(is);
+		} else {
+			p.getInventory().setItemInHand(is);
+		}
+	}
+
+	public static double getMaxHealth(LivingEntity p) {
+		if (Main.version > 8) {
+			return p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+		} else {
+			return p.getMaxHealth();
+		}
+	}
+
+	public static void setMaxHealth(LivingEntity p, double value) {
+		if (Main.version > 8) {
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(value);
+		} else {
+			p.setMaxHealth(value);
+		}
 	}
 }

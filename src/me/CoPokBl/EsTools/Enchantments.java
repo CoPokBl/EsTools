@@ -42,10 +42,18 @@ public class Enchantments {
         ENCHANTMENTS.put("luck", Enchantment.LUCK);
         ENCHANTMENTS.put("lure", Enchantment.LURE);
         ENCHANTMENTS.put("depthstrider", Enchantment.DEPTH_STRIDER);
-        ENCHANTMENTS.put("frostwalker", Enchantment.FROST_WALKER);
-        ENCHANTMENTS.put("mending", Enchantment.MENDING);
-        ENCHANTMENTS.put("bindingcurse", Enchantment.BINDING_CURSE);
-        ENCHANTMENTS.put("vanishingcurse", Enchantment.VANISHING_CURSE);
-        ENCHANTMENTS.put("sweepingedge", Enchantment.SWEEPING_EDGE);
+
+        if (Main.version > 8) {
+            ENCHANTMENTS.put("frostwalker", Enchantment.FROST_WALKER);
+            ENCHANTMENTS.put("mending", Enchantment.MENDING);
+
+            if (Main.version > 10) {
+                ENCHANTMENTS.put("bindingcurse", Enchantment.BINDING_CURSE);
+                ENCHANTMENTS.put("vanishingcurse", Enchantment.VANISHING_CURSE);
+                ENCHANTMENTS.put("sweepingedge", Enchantment.SWEEPING_EDGE);
+            }
+        }
+
+
     }
 }

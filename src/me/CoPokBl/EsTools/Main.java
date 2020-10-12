@@ -43,7 +43,6 @@ public class Main extends JavaPlugin {
 		sc("fix", "fix", new Fix());
 		sc("getinfo", "getinfo", new GetInfo());
 		sc("editsign", "editsign", new EditSign());
-		sc("god", "god", new God());
 		sc("cchest", new CChest());
 		sc("rename", "rename", new Rename());
 		sc("back", "back", new Back());
@@ -51,12 +50,20 @@ public class Main extends JavaPlugin {
 		sc("ci", "clearinv", new ClearInv());
 		sc("powerpick", "powerpick", new PowerPick());
 
-		if (version > 12) {
-			sc("music", "music", new Music());
-			Music.init();
+		if (version > 8) {
+			sc("god", "god", new God());
+
+			if (version > 12) {
+				sc("music", "music", new Music());
+				Music.init();
+			} else {
+				sc("music", "music", new WrongVersion());
+			}
 		} else {
-			sc("music", "music", new WrongVersion());
+			sc("god", "god", new WrongVersion());
 		}
+
+
 
 
 		// Other
@@ -122,6 +129,23 @@ public class Main extends JavaPlugin {
 		    version = 8;
 	    } else if (versionS.contains("1.7")) {
 	    	version = 7;
+	    } else if (versionS.contains("1.6")) {
+		    version = 6;
+ 	    } else if (versionS.contains("1.5")) {
+ 		    version = 5;
+ 	    } else if (versionS.contains("1.4")) {
+ 		    version = 4;
+ 	    } else if (versionS.contains("1.3")) {
+		    version = 3;
+	    } else if (versionS.contains("1.2")) {
+	 	    version = 2;
+	    } else if (versionS.contains("1.1")) {
+		    version = 1;
+	    } else if (versionS.contains("1.0")) {
+		    version = 0;
+	    } else {
+			// idk more than supported?
+			version = 17;
 	    }
 	}
 }

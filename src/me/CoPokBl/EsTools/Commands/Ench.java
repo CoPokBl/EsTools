@@ -46,14 +46,14 @@ public class Ench extends CMD {
 			if (isNotPlayer(sender, genUsage("/ench <enchantment> <level> <player>")))
 				return false;
 			
-			is = ((Player) sender).getInventory().getItemInMainHand();
+			is = getMainHand(((Player) sender));
 		} else {
 			Player p = getPlayer(sender, args[2]);
 			
 			if (p == null)
 				return false;
 			
-			is = p.getInventory().getItemInMainHand();
+			is = getMainHand(p);
 		}
 		
 		Enchantment ench;
@@ -69,7 +69,7 @@ public class Ench extends CMD {
 		}
 		
 		
-		if (ench != null) {
+		if (ench != null && is != null) {
 			is.addUnsafeEnchantment(ench, level);
 			s(sender, "&aEnchantment &6%s&a at level &6%s&a was added!", args[0].toLowerCase(), level);
 		}

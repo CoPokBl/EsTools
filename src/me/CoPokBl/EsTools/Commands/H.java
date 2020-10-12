@@ -40,7 +40,7 @@ public class H extends CMD {
 		ItemStack is = Give.getItem(args[0], amount);
 		
 		if (is != null)
-			p.getInventory().setItemInMainHand(is);
+			setMainHand(p, is);
 		else
 			s(sender, "&cItem &6%s&c not found.", args[0]);
 		
