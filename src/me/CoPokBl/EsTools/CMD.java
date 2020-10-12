@@ -18,6 +18,10 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		if (Main.version < 7) {
+			return new ArrayList<String>();
+		}
+
 		String lArg = args[args.length - 1];
 
 		return fixTabComplete(tabComplete(sender, args, lArg), lArg);

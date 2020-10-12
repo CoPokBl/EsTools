@@ -1,5 +1,6 @@
 package me.CoPokBl.EsTools.Commands;
 
+import me.CoPokBl.EsTools.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -38,6 +39,11 @@ public class TP extends EntityCommand {
 		}
 
 		else if (ll.endsWith("tpall")) {
+			if (Main.version < 7) {
+				s(sender, "&cYou cannot do this command in version 1.%s", Main.version);
+				return true;
+			}
+
 			if (args.length == 0) {
 				p = (LivingEntity) sender;
 				

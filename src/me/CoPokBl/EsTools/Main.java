@@ -28,52 +28,73 @@ public class Main extends JavaPlugin {
 		sc("tphere", "tp", new TP());
 		sc("tpall", "tp", new TP());
 		sc("feed", "feed", new Feed());
-		sc("heal", "heal", new Heal());
-		sc("sudo", "sudo", new Sudo());
 		sc("fly", "fly", new Fly());
-		sc("suicide", "suicide", new Suicide());
 		sc("smite", "smite", new Smite());
-		sc("sethealth", "sethealth", new SetHealth());
-		sc("setmaxhealth", "setmaxhealth", new SetMaxHealth());
 		sc("invsee", "invsee", new Invsee());
 		sc("i", "give", new I(), new Give());
 		sc("h", "give", new H(), new Give());
 		sc("estools", new EsTools());
 		sc("ench", "ench", new Ench());
 		sc("fix", "fix", new Fix());
-		sc("getinfo", "getinfo", new GetInfo());
-		sc("editsign", "editsign", new EditSign());
 		sc("cchest", new CChest());
-		sc("rename", "rename", new Rename());
 		sc("back", "back", new Back());
 		sc("setstack", "setstack", new SetStack());
 		sc("ci", "clearinv", new ClearInv());
 		sc("powerpick", "powerpick", new PowerPick());
 
-		if (version > 8) {
-			sc("god", "god", new God());
+		if (version > 3) {
+			sc("rename", "rename", new Rename());
+			sc("sudo", "sudo", new Sudo());
 
-			if (version > 12) {
-				sc("music", "music", new Music());
-				Music.init();
-			} else {
-				sc("music", "music", new WrongVersion());
+			if (version > 5) {
+				sc("heal", "heal", new Heal());
+				sc("suicide", "suicide", new Suicide());
+				sc("sethealth", "sethealth", new SetHealth());
+				sc("setmaxhealth", "setmaxhealth", new SetMaxHealth());
+				sc("getinfo", "getinfo", new GetInfo());
+
+				if (version > 7) {
+					sc("editsign", "editsign", new EditSign());
+
+					if (version > 8) {
+						sc("god", "god", new God());
+
+						if (version > 12) {
+							sc("music", "music", new Music());
+							Music.init();
+						}
+					}
+				}
 			}
 		} else {
+			sc("heal", "heal", new WrongVersion());
+			sc("suicide", "suicide", new WrongVersion());
+			sc("sethealth", "sethealth", new WrongVersion());
+			sc("setmaxhealth", "setmaxhealth", new WrongVersion());
+			sc("getinfo", "getinfo", new WrongVersion());
+			sc("music", "music", new WrongVersion());
 			sc("god", "god", new WrongVersion());
+			sc("editsign", "editsign", new WrongVersion());
+			sc("rename", "rename", new WrongVersion());
+			sc("sudo", "sudo", new WrongVersion());
 		}
 
-
-
-
 		// Other
-		
-		Bukkit.getServer().getPluginManager().registerEvents(new CChest(), this);
+
+		if (version > 4) {
+			Bukkit.getServer().getPluginManager().registerEvents(new CChest(), this);
+		}
+
 		Bukkit.getServer().getPluginManager().registerEvents(new Back(), this);
 		
 		current = this;
-		Give.enable();
 		PowerPick.init();
+
+		if (Main.version < 7) {
+			Main.current.getLogger().info("Saving not supported in 1.6 or below.");
+		} else {
+			Give.enable();
+		}
 	}
 	
 	@Override

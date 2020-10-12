@@ -1,6 +1,7 @@
 package me.CoPokBl.EsTools.Commands;
 
 import me.CoPokBl.EsTools.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
@@ -8,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 
 import me.CoPokBl.EsTools.EntityCommand;
+import org.bukkit.entity.Player;
 
 public class GetInfo extends EntityCommand {
 
@@ -28,8 +30,19 @@ public class GetInfo extends EntityCommand {
 
 		String maxHealth = String.valueOf(Math.round(getMaxHealth(p)));
 
+		String name = "None";
+
+		if (Main.version > 7) {
+			name = p.getName();
+		} else {
+			if (p instanceof Player) {
+				Player pp = (Player)p;
+				name = pp.getName();
+			}
+		}
+
 		s(sender, "&aName: &6%s\n&aHealth: &6%s\n&aMax Health: &6%s\n&aLocation: &6%s, %s, %s\n&aUUID: &6%s",
-				p.getName(), String.valueOf(p.getHealth()), maxHealth,
+				name, String.valueOf(p.getHealth()), maxHealth,
 				loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), p.getUniqueId());
 		return true;
 	}

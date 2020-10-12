@@ -32,7 +32,7 @@ public class Heal extends EntityCommand {
 			
 			s(sender, "&aHealed &6%s", p.getName());
 		}
-		
+
 		p.setHealth(getMaxHealth(p));
 		return true;
 	}

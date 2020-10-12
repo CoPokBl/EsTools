@@ -58,7 +58,8 @@ public class Give implements TabCompleter {
 		return CMD.fixTabComplete(tab, args[args.length - 1]);
 	}
 	
-	public static void enable() {		
+	public static void enable() {
+
 		HashMap<String, String> ms = load(new File(Main.current.getDataFolder(), "give.yml"));
 		
 		if (ms == null || ms.isEmpty()) {		

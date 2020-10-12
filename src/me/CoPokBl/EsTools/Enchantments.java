@@ -24,7 +24,6 @@ public class Enchantments {
         ENCHANTMENTS.put("smite", Enchantment.DAMAGE_UNDEAD);
         ENCHANTMENTS.put("efficiency", Enchantment.DIG_SPEED);
         ENCHANTMENTS.put("unbreaking", Enchantment.DURABILITY);
-        ENCHANTMENTS.put("thorns", Enchantment.THORNS);
         ENCHANTMENTS.put("fireaspect", Enchantment.FIRE_ASPECT);
         ENCHANTMENTS.put("knockback", Enchantment.KNOCKBACK);
         ENCHANTMENTS.put("looting", Enchantment.LOOT_BONUS_MOBS);
@@ -39,21 +38,29 @@ public class Enchantments {
         ENCHANTMENTS.put("power", Enchantment.ARROW_DAMAGE);
         ENCHANTMENTS.put("punch", Enchantment.ARROW_KNOCKBACK);
         ENCHANTMENTS.put("infinity", Enchantment.ARROW_INFINITE);
-        ENCHANTMENTS.put("luck", Enchantment.LUCK);
-        ENCHANTMENTS.put("lure", Enchantment.LURE);
-        ENCHANTMENTS.put("depthstrider", Enchantment.DEPTH_STRIDER);
 
-        if (Main.version > 8) {
-            ENCHANTMENTS.put("frostwalker", Enchantment.FROST_WALKER);
-            ENCHANTMENTS.put("mending", Enchantment.MENDING);
+        if (Main.version > 3) {
+            ENCHANTMENTS.put("thorns", Enchantment.THORNS);
 
-            if (Main.version > 10) {
-                ENCHANTMENTS.put("bindingcurse", Enchantment.BINDING_CURSE);
-                ENCHANTMENTS.put("vanishingcurse", Enchantment.VANISHING_CURSE);
-                ENCHANTMENTS.put("sweepingedge", Enchantment.SWEEPING_EDGE);
+            if (Main.version > 6) {
+                ENCHANTMENTS.put("luck", Enchantment.LUCK);
+                ENCHANTMENTS.put("lure", Enchantment.LURE);
+
+                if (Main.version > 7) {
+                    ENCHANTMENTS.put("depthstrider", Enchantment.DEPTH_STRIDER);
+
+                    if (Main.version > 8) {
+                        ENCHANTMENTS.put("frostwalker", Enchantment.FROST_WALKER);
+                        ENCHANTMENTS.put("mending", Enchantment.MENDING);
+
+                        if (Main.version > 10) {
+                            ENCHANTMENTS.put("bindingcurse", Enchantment.BINDING_CURSE);
+                            ENCHANTMENTS.put("vanishingcurse", Enchantment.VANISHING_CURSE);
+                            ENCHANTMENTS.put("sweepingedge", Enchantment.SWEEPING_EDGE);
+                        }
+                    }
+                }
             }
         }
-
-
     }
 }

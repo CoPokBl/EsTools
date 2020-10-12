@@ -38,7 +38,11 @@ public class CChest extends CMD implements Listener {
 		
 		if (isNotPlayer(sender))
 			return true;
-		
+
+		if (Main.version < 7) {
+			s(sender, "&cWarning: CCHest doesnt work to full capacity");
+		}
+
 		Player p = (Player)sender;
 		
 		if (p.getGameMode().equals(GameMode.CREATIVE)) {

@@ -11,9 +11,6 @@ public class Suicide extends PlayerCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "suicide"))
-			return false;
-		
 		if (isNotPlayer(sender))
 			return false;
 		
