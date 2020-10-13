@@ -21,9 +21,6 @@ public class Ench extends CMD {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "ench"))
-			return false;
-		
 		if (args.length == 0) {
 			s(sender, genUsage("/ench <enchantment> <level> <player>"));
 			return false;

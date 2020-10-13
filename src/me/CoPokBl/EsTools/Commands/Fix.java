@@ -19,9 +19,6 @@ public class Fix extends PlayerCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "fix"))
-			return false;
-		
 		Player p;
 		
 		if (args.length < 2) {

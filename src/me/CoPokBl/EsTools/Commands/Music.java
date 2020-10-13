@@ -30,9 +30,6 @@ public class Music extends CMD {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "music"))
-			return false;
-		
 		if (isNotPlayer(sender))
 			return true;
 		

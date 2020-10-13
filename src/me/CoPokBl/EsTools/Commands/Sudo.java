@@ -12,9 +12,6 @@ public class Sudo extends PlayerCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "sudo"))
-			return false;
-		
 		if (args.length < 2) {
 			s(sender, genUsage("/sudo <player> <command>"));
 			return false;

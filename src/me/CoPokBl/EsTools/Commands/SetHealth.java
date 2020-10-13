@@ -12,9 +12,6 @@ public class SetHealth extends EntityCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "sethealth"))
-			return false;
-		
 		if (args.length == 0) {
 			s(sender, genUsage("/sethealth <amount> [entity]"));
 		}

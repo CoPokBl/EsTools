@@ -13,9 +13,6 @@ public class H extends CMD {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "give"))
-			return false;
-		
 		if (isNotPlayer(sender))
 			return false;
 		

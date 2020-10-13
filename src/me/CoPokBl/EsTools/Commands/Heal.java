@@ -12,9 +12,6 @@ public class Heal extends EntityCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "heal"))
-			return false;
-		
 		LivingEntity p;
 		
 		if (args.length == 0) {

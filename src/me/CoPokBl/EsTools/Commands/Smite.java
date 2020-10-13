@@ -11,9 +11,6 @@ public class Smite extends EntityCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "smite"))
-			return false;
-		
 		if (args.length == 0) {
 			s(sender, genUsage("/smite <entity1> [entity2] [entity3]..."));
 			return false;

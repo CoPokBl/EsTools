@@ -11,9 +11,6 @@ public class God extends EntityCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "god"))
-			return false;
-		
 		LivingEntity p;
 		
 		if (args.length == 0) {

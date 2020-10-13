@@ -14,9 +14,6 @@ public class GM extends MultiPlayerCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "tp"))
-			return false;
-		
 		String ll = label.toLowerCase();
 		
 		if (ll.endsWith("gms"))

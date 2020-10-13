@@ -11,9 +11,6 @@ public class Feed extends MultiPlayerCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
-		if (checkPerms(sender, "feed"))
-			return false;
 
 		ArrayList<Player> ps = new ArrayList<Player>();
 		

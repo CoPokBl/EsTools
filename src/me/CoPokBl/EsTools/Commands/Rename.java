@@ -16,9 +16,6 @@ public class Rename extends CMD {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "rename"))
-			return false;
-		
 		if (isNotPlayer(sender))
 			return true;
 		

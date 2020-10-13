@@ -11,9 +11,6 @@ public class Fly extends MultiPlayerCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
-		if (checkPerms(sender, "fly"))
-			return false;
 
 		ArrayList<Player> ps = new ArrayList<Player>();
 		

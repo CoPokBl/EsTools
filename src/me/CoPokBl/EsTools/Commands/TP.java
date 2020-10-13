@@ -13,9 +13,6 @@ public class TP extends EntityCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (checkPerms(sender, "tp"))
-			return false;
-		
 		LivingEntity p;
 		
 		String ll = label.toLowerCase();
