@@ -41,6 +41,8 @@ public class Main extends JavaPlugin {
 		sc("setstack", "setstack", new SetStack());
 		sc("ci", "clearinv", new ClearInv());
 		sc("powerpick", "powerpick", new PowerPick());
+		sc("sun", "time", new Sun());
+		sc("moon", "time", new Night());
 
 		if (version > 3) {
 			sc("rename", "rename", new Rename());

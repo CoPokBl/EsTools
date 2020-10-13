@@ -38,8 +38,11 @@ commands:
   ci:
   powerpick:
     aliases: pp
+  sun:
+    aliases: day
+  moon:
+    aliases: night
 
- 
 permissions:
   estools.tp:
     description: Lets people teleport themselves and others
@@ -147,4 +150,8 @@ permissions:
 
   estools.powerpick:
     description: Lets people get an op pickaxe
+    default: op
+
+  estools.time:
+    description: Lets people change the time
     default: op
