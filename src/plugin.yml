@@ -42,6 +42,7 @@ commands:
     aliases: day
   moon:
     aliases: night
+  walkspeed:
 
 permissions:
   estools.tp:

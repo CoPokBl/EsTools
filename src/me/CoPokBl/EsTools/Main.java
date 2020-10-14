@@ -43,6 +43,7 @@ public class Main extends JavaPlugin {
 		sc("powerpick", "powerpick", new PowerPick());
 		sc("sun", "time", new Sun());
 		sc("moon", "time", new Night());
+		sc("walkspeed", "walkspeed", new WalkSpeed());
 
 		if (version > 3) {
 			sc("rename", "rename", new Rename());
