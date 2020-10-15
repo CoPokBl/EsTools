@@ -82,8 +82,6 @@ public class EditSign extends CMD {
 	}
 
 	public Block getTargetBlock(Player p) {
-		Bukkit.broadcastMessage("" + Main.version);
-
 		if (Main.version > 12) {
 			return p.getTargetBlockExact(5);
 		} else {
