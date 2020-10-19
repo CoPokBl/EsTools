@@ -1,3 +1,7 @@
+settings:
+  addWithoutUnderscores: true
+  removeWithUnderscores: true
+
 items:
   boat: oak_boat
   pearl: ender_pearl
@@ -13,5 +17,3 @@ items:
   pressure_plate: stone_pressure_plate
   trapdoor: oak_trapdoor
   steak: cooked_beef
-  
-  

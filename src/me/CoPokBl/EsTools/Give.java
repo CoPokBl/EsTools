@@ -21,19 +21,21 @@ import org.bukkit.inventory.ItemStack;
 
 public class Give implements TabCompleter {
 	
-	private static HashMap<String, Material> mats = new HashMap<String, Material>();
+	private static HashMap<String, Material> cmats;
+	private static HashMap<String, Material> nmats;
+
+	private static boolean awu;
+	private static boolean rwu;
 	
 	public static ItemStack getItem(String name, int amount) {	
 		name = name.toUpperCase();
 		
-		Material mat = Material.getMaterial(name);
+		Material mat = cmats.get(name);
 		
 		if (mat == null) {
-			if (mats.containsKey(name)) {
-				mat = mats.get(name);
-			} else {
+			mat = nmats.get(name);
+			if (mat == null)
 				return null;
-			}
 		}
 		
 		return new ItemStack(mat, amount);
@@ -44,11 +46,11 @@ public class Give implements TabCompleter {
 		List<String> tab = new ArrayList<String>();
 		
 		if (args.length == 1) {
-			for (Material mat : Material.values()) {
-				tab.add(mat.toString().toLowerCase());
+			for (String mat : nmats.keySet()) {
+				tab.add(mat.toLowerCase());
 			}
-			
-			for (String mat : mats.keySet()) {
+
+			for (String mat : cmats.keySet()) {
 				tab.add(mat.toLowerCase());
 			}
 			
@@ -60,29 +62,70 @@ public class Give implements TabCompleter {
 	
 	public static void enable() {
 
-		HashMap<String, String> ms = load(new File(Main.current.getDataFolder(), "give.yml"));
+		// initialise hashmaps
+		cmats = new HashMap<String, Material>();
+		nmats = new HashMap<String, Material>();
+
+		// Load config
 		
-		if (ms == null || ms.isEmpty()) {		
-			
-			try {
-				copyDefaultGiveYML();
-				ms = load(new File(Main.current.getDataFolder(), "give.yml"));
-			} catch (Exception e) {}
+		FileConfiguration f = ConfigManager.load(new File(Main.current.getDataFolder(), "give.yml"));
+
+		// check if it has settings
+
+		HashMap<String, String> ms = new HashMap<>();
+		
+		if (	f.contains("settings") &&
+				f.contains("settings.addWithoutUnderscores") &&
+				f.contains("settings.removeWithUnderscores")) {  // if it has these values then load files
+
+			ms = loadItems(f);
 		}
 		
+		if (ms == null || ms.isEmpty()) { // if it hasnt loaded or if it cant load anything
+			Main.current.getLogger().info("Creating new give.yml");
+
+			try {
+				copyDefaultGiveYML();
+				f = ConfigManager.load(new File(Main.current.getDataFolder(), "give.yml"));
+				ms = loadItems(f);
+			} catch (Exception e) {
+			}
+		}
+
+		// Load normal items
+
+		awu = (boolean) f.get("settings.addWithoutUnderscores");
+		rwu = (boolean) f.get("settings.removeWithUnderscores");
+
+		for (Material mat : Material.values()) {
+			String name = mat.toString().toUpperCase();
+
+			if (name.contains("_")) {
+				if (awu) {
+					nmats.put(name.replace("_",""), mat);
+
+					if (rwu) {
+						continue;
+					}
+				}
+			}
+
+			nmats.put(name, mat);
+		}
+
+		// Load custom items:
+
 		for (Entry<String, String> s : ms.entrySet()) {
 			Material mat = Material.getMaterial(s.getValue().toUpperCase());
 
 			if (mat != null) {
-				mats.put(s.getKey().toUpperCase(), mat);
+				cmats.put(s.getKey().toUpperCase(), mat);
 			}
 		}
 	}
 	
-	private static HashMap<String, String> load(File file) {
+	private static HashMap<String, String> loadItems(FileConfiguration f) {
 		HashMap<String, String> ms = new HashMap<String, String>();
-		
-		FileConfiguration f = ConfigManager.load(file);
 		
 		if (f.contains("items")) {
 			f.getConfigurationSection("items").getKeys(false).forEach(key -> {
@@ -98,9 +141,7 @@ public class Give implements TabCompleter {
 	public static void disable() {
 		HashMap<String, String> ms = new HashMap<String, String>();
 		
-		//ms.put("example_alias", "original_item");
-		
-		for (Entry<String, Material> s : mats.entrySet()) {
+		for (Entry<String, Material> s : cmats.entrySet()) {
 			ms.put(s.getKey(), s.getValue().toString());
 		}
 		
@@ -109,8 +150,24 @@ public class Give implements TabCompleter {
 		for (Entry<String, String> m : ms.entrySet()) {
 			f.set("items." + m.getKey(), m.getValue());
 		}
+
+		f.set("settings.addWithoutUnderscores", awu);
+		f.set("settings.removeWithUnderscores", rwu);
 		
 		ConfigManager.save("give.yml", f);
+
+//		FileConfiguration f2 = new YamlConfiguration();
+//
+//		for (Material mat : Material.values()) {
+//			String name = mat.toString();
+//
+//			if (name.contains("_")) {
+//				name = name.toLowerCase().replace("_","");
+//				f2.set(name, mat.name());
+//			}
+//		}
+//
+//		ConfigManager.save("test.yml", f2);
 	}
 	
 	private static void copyDefaultGiveYML() throws IOException {
