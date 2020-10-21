@@ -12,10 +12,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import me.CoPokBl.EsTools.CMD;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class Back extends CMD implements Listener {
 
-	private static HashMap<UUID, Location> deathLoc = new HashMap<UUID, Location>();
+	private static HashMap<UUID, Location> tpLoc = new HashMap<UUID, Location>();
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -25,17 +26,24 @@ public class Back extends CMD implements Listener {
 		
 		Player p = (Player) sender;
 		
-		if (deathLoc.containsKey(p.getUniqueId())) {
-			p.teleport(deathLoc.get(p.getUniqueId()));
-			s(sender, "&aTeleported to last death location!");
+		if (tpLoc.containsKey(p.getUniqueId())) {
+			p.teleport(tpLoc.get(p.getUniqueId()));
+			s(sender, "&aTeleported to last location!");
 		} else {
-			s(sender, "&cYou do not have a last death location");
+			s(sender, "&cYou do not have a last location");
 		}
 		return true;
 	}
 
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
-		deathLoc.put(e.getEntity().getUniqueId(), e.getEntity().getLocation());
+		tpLoc.put(e.getEntity().getUniqueId(), e.getEntity().getLocation());
+	}
+
+	@EventHandler
+	public void onTeleport(PlayerTeleportEvent e) {
+		if (equalsOr(e.getCause(), PlayerTeleportEvent.TeleportCause.COMMAND, PlayerTeleportEvent.TeleportCause.PLUGIN)) {
+			tpLoc.put(e.getPlayer().getUniqueId(), e.getPlayer().getLocation());
+		}
 	}
 }

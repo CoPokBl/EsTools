@@ -13,7 +13,7 @@ public class Main extends JavaPlugin {
 	public static Main current;
 	public static int version;
 	
-	// TODO: /infinite (makes things not get consumed when you use), fix shift click cchest bug, /sun
+	// TODO: /infinite (makes things not get consumed when you use), fix shift click cchest bug, /flyspeed
 	
 	@Override
 	public void onEnable() {
