@@ -44,6 +44,8 @@ public class Main extends JavaPlugin {
 		sc("sun", "time", new Sun());
 		sc("moon", "time", new Night());
 		sc("walkspeed", "walkspeed", new WalkSpeed());
+		sc("setunbreakable", "setunbreakable", new SetUnbreakable());
+		sc("hideflags", "hideflags", new HideFlags());
 
 		if (version > 3) {
 			sc("rename", "rename", new Rename());

@@ -43,6 +43,8 @@ commands:
   moon:
     aliases: night
   walkspeed:
+  setunbreakable:
+  hideflags:
 
 permissions:
   estools.tp:
@@ -155,4 +157,12 @@ permissions:
 
   estools.time:
     description: Lets people change the time
+    default: op
+
+  estools.setunbreakable:
+    description: Lets people make tools / weapons / armour unbreakable
+    default: op
+
+  estools.hideflags:
+    description: Lets people hide flags like enchants.
     default: op
