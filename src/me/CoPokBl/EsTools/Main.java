@@ -48,6 +48,7 @@ public class Main extends JavaPlugin {
 		sc("setunbreakable", "setunbreakable", new SetUnbreakable());
 		sc("hideflags", "hideflags", new HideFlags());
 		sc("eff", "effect", new Eff());
+		sc("safetp", "safetp", new SafeTP());
 
 		sc("powerpick", "powerpick", new PowerPick());
 		sc("poweraxe", "powerpick", new PowerAxe());
@@ -99,6 +100,7 @@ public class Main extends JavaPlugin {
 		}
 
 		Bukkit.getServer().getPluginManager().registerEvents(new Back(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new SafeTP(), this);
 		
 		current = this;
 		PowerPick.initall();

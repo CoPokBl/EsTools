@@ -55,6 +55,7 @@ commands:
   setunbreakable:
   hideflags:
   eff:
+  safetp:
 
 permissions:
   estools.tp:
@@ -187,4 +188,8 @@ permissions:
 
   estools.effect:
     description: Lets players set effects for themselves and others
+    default: op
+
+  estools.safetp:
+    description: Lets players toggle if fall damage/distance should be kept when being teleported with commands
     default: op
