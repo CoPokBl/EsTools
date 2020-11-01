@@ -38,6 +38,7 @@ public class Enchantments {
         ENCHANTMENTS.put("power", Enchantment.ARROW_DAMAGE);
         ENCHANTMENTS.put("punch", Enchantment.ARROW_KNOCKBACK);
         ENCHANTMENTS.put("infinity", Enchantment.ARROW_INFINITE);
+        ENCHANTMENTS.put("fortune", Enchantment.LOOT_BONUS_BLOCKS);
 
         if (Main.version > 3) {
             ENCHANTMENTS.put("thorns", Enchantment.THORNS);
