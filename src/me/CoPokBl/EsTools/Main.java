@@ -13,7 +13,7 @@ public class Main extends JavaPlugin {
 	public static Main current;
 	public static int version;
 	
-	// TODO: /infinite (makes things not get consumed when you use), fix shift click cchest bug, /flyspeed
+	// TODO: /infinite (makes things not get consumed when you use), fix shift click cchest bug, effects, add powerpick other tools
 	
 	@Override
 	public void onEnable() {
@@ -44,6 +44,7 @@ public class Main extends JavaPlugin {
 		sc("sun", "time", new Sun());
 		sc("moon", "time", new Night());
 		sc("walkspeed", "walkspeed", new WalkSpeed());
+		sc("flyspeed", "flyspeed", new FlySpeed());
 		sc("setunbreakable", "setunbreakable", new SetUnbreakable());
 		sc("hideflags", "hideflags", new HideFlags());
 

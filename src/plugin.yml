@@ -43,6 +43,7 @@ commands:
   moon:
     aliases: night
   walkspeed:
+  flyspeed:
   setunbreakable:
   hideflags:
 
@@ -165,4 +166,12 @@ permissions:
 
   estools.hideflags:
     description: Lets people hide flags like enchants.
+    default: op
+
+  estools.walkspeed:
+    description: Lets players control walk speed
+    default: op
+
+  estools.flyspeed:
+    description: Lets players control fly speed
     default: op
