@@ -14,7 +14,7 @@ public class Main extends JavaPlugin {
 	public static Main current;
 	public static int version;
 	
-	// TODO: /infinite (makes things not get consumed when you use), fix shift click cchest bug, give "normal" effects names
+	// TODO: /infinite (makes things not get consumed when you use), "normal" effects names, safe /tp, powerpick look at
 	
 	@Override
 	public void onEnable() {

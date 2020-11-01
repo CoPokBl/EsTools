@@ -17,6 +17,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -102,8 +103,8 @@ public class CChest extends CMD implements Listener {
 					} 
 				} 
 				
-				// left click on chest
-				else if (e.getClick().equals(ClickType.LEFT)) {			
+				// left click or drop on chest
+				else if (equalsOr(e.getClick(), ClickType.LEFT, ClickType.DROP, ClickType.CONTROL_DROP)) {
 					if (e.getAction().equals(InventoryAction.PLACE_ALL)) {
 						e.setCancelled(true);
 						
@@ -124,6 +125,13 @@ public class CChest extends CMD implements Listener {
 						}.runTaskLater(Main.current, 0);
 					}
 				}
+
+				// shift click on cchest
+				else if (equalsOr(e.getClick(), ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT)) {
+					e.setCancelled(true);
+					if (cItem != null)
+						e.getWhoClicked().getInventory().addItem(cItem.clone());
+				}
 			}
 			
 			// if player inventory
@@ -139,7 +147,7 @@ public class CChest extends CMD implements Listener {
 	
 	// cancel drag if cchest
 	@EventHandler
-    public void onInventoryClick(final InventoryDragEvent e) {
+    public void onInventoryDrag(final InventoryDragEvent e) {
 		UUID puid = e.getWhoClicked().getUniqueId();
 		
 		if (cchests.containsKey(puid)) {
@@ -148,6 +156,14 @@ public class CChest extends CMD implements Listener {
 			}
 		}
     }
+
+//    // Cancel if dropping items from cchest
+//    @EventHandler
+//	public void onDrop(final PlayerDropItemEvent e) {
+//		if (e.getPlayer().getOpenInventory().getTopInventory().equals(cchests.get(e.getPlayer().getUniqueId()))) {
+//			e.setCancelled(true);
+//		}
+//	}
 	
 	public static void loadPlayer(Player p) {		
 		UUID puid = p.getUniqueId();
