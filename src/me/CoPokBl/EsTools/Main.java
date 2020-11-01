@@ -14,7 +14,7 @@ public class Main extends JavaPlugin {
 	public static Main current;
 	public static int version;
 	
-	// TODO: /infinite (makes things not get consumed when you use), fix shift click cchest bug, effects
+	// TODO: /infinite (makes things not get consumed when you use), fix shift click cchest bug, give "normal" effects names
 	
 	@Override
 	public void onEnable() {
@@ -47,6 +47,7 @@ public class Main extends JavaPlugin {
 		sc("flyspeed", "flyspeed", new FlySpeed());
 		sc("setunbreakable", "setunbreakable", new SetUnbreakable());
 		sc("hideflags", "hideflags", new HideFlags());
+		sc("eff", "effect", new Eff());
 
 		sc("powerpick", "powerpick", new PowerPick());
 		sc("poweraxe", "powerpick", new PowerAxe());

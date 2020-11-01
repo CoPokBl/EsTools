@@ -54,6 +54,7 @@ commands:
   flyspeed:
   setunbreakable:
   hideflags:
+  eff:
 
 permissions:
   estools.tp:
@@ -182,4 +183,8 @@ permissions:
 
   estools.flyspeed:
     description: Lets players control fly speed
+    default: op
+
+  estools.effect:
+    description: Lets players set effects for themselves and others
     default: op
