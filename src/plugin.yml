@@ -38,6 +38,14 @@ commands:
   ci:
   powerpick:
     aliases: pp
+  poweraxe:
+    aliases: pa
+  powersword:
+    aliases: ps
+  powershovel:
+    aliases: psh
+  powerhoe:
+    aliases: ph
   sun:
     aliases: day
   moon:

@@ -1,5 +1,6 @@
 package me.CoPokBl.EsTools;
 
+import me.CoPokBl.EsTools.Commands.PowerPick.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -13,7 +14,7 @@ public class Main extends JavaPlugin {
 	public static Main current;
 	public static int version;
 	
-	// TODO: /infinite (makes things not get consumed when you use), fix shift click cchest bug, effects, add powerpick other tools
+	// TODO: /infinite (makes things not get consumed when you use), fix shift click cchest bug, effects
 	
 	@Override
 	public void onEnable() {
@@ -40,13 +41,18 @@ public class Main extends JavaPlugin {
 		sc("back", "back", new Back());
 		sc("setstack", "setstack", new SetStack());
 		sc("ci", "clearinv", new ClearInv());
-		sc("powerpick", "powerpick", new PowerPick());
 		sc("sun", "time", new Sun());
 		sc("moon", "time", new Night());
 		sc("walkspeed", "walkspeed", new WalkSpeed());
 		sc("flyspeed", "flyspeed", new FlySpeed());
 		sc("setunbreakable", "setunbreakable", new SetUnbreakable());
 		sc("hideflags", "hideflags", new HideFlags());
+
+		sc("powerpick", "powerpick", new PowerPick());
+		sc("poweraxe", "powerpick", new PowerAxe());
+		sc("powersword", "powerpick", new PowerSword());
+		sc("powershovel", "powerpick", new PowerShovel());
+		sc("powerhoe", "powerpick", new PowerHoe());
 
 		if (version > 3) {
 			sc("rename", "rename", new Rename());
@@ -94,7 +100,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getServer().getPluginManager().registerEvents(new Back(), this);
 		
 		current = this;
-		PowerPick.init();
+		PowerPick.initall();
 
 		if (Main.version < 7) {
 			Main.current.getLogger().info("Saving not supported in 1.6 or below.");
