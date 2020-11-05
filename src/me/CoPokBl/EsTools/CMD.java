@@ -3,6 +3,7 @@ package me.CoPokBl.EsTools;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;

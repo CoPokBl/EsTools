@@ -139,6 +139,10 @@ public class Give implements TabCompleter {
 	}
 	
 	public static void disable() {
+		if (cmats == null) {
+			return;
+		}
+
 		HashMap<String, String> ms = new HashMap<String, String>();
 		
 		for (Entry<String, Material> s : cmats.entrySet()) {
