@@ -31,6 +31,7 @@ public class Heal extends EntityCommand {
 		}
 
 		p.setHealth(getMaxHealth(p));
+		p.setFireTicks(0);
 		return true;
 	}
 

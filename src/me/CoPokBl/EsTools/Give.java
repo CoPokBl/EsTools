@@ -55,6 +55,8 @@ public class Give implements TabCompleter {
 			}
 			
 			Collections.sort(tab);
+		} else if (args.length == 2) {
+			tab.add("64");
 		}
 	
 		return CMD.fixTabComplete(tab, args[args.length - 1]);
