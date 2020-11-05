@@ -17,10 +17,11 @@ public class SignMain implements Listener {
     static HashMap<String, String> signConversions = new HashMap<>();
 
     public static void init() {
-        addSign(new Disposal(), "[disposal]", CMD.t("&3[Disposal]"));
-        addSign(new Give(), "[give]", CMD.t("&3[Give]"));
-        addSign(new Heal(), "[heal]", CMD.t("&c[Heal]"));
-        addSign(new Feed(), "[feed]", CMD.t("&c[Feed]"));
+        addSign(new Disposal(), "[disposal]", CMD.t("&1[Disposal]"));
+        addSign(new Give(), "[give]", CMD.t("&1[Give]"));
+        addSign(new Heal(), "[heal]", CMD.t("&1[Heal]"));
+        addSign(new Feed(), "[feed]", CMD.t("&1[Feed]"));
+        addSign(new Balance(), "[balance]", CMD.t("&1[Balance]"));
     }
 
     public static void addSign(SignType st, String conv, String sign) {
