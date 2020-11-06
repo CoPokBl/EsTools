@@ -22,34 +22,8 @@ public class Give extends SignType {
             return;
         }
 
-        // money
-
-        double price = 0;
-
-        try {
-            String priceS = lines[3].substring(1);
-
-            if (!lines[3].startsWith("$")) {
-                CMD.s(p, "&cMoney must be formatted with \"$COST\"");
-                return;
-            }
-
-            price = Double.parseDouble(priceS);
-        } catch (Exception e) {}
-
-        if (price > 0) {
-            if (Main.econ == null) {
-                CMD.s(p, "&cVault is required for economy!");
-                return;
-            }
-
-            if (Main.econ.getBalance(p) >= price) {
-                Main.econ.withdrawPlayer(p, price);
-            } else {
-                CMD.s(p, "&cYou do not have enough money to purchase this item.");
-                return;
-            }
-        }
+        if (!payMoney(lines[3], p))
+            return;
 
         p.getInventory().addItem(is.clone());
     }
