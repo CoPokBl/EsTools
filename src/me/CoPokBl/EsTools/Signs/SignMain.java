@@ -23,6 +23,7 @@ public class SignMain implements Listener {
         addSign(new Feed(), "[feed]", CMD.t("&1[Feed]"));
         addSign(new Balance(), "[balance]", CMD.t("&1[Balance]"));
         addSign(new Repair(), "[repair]", CMD.t("&1[Repair]"));
+        addSign(new Sell(), "[sell]", CMD.t("&1[Sell]"));
     }
 
     public static void addSign(SignType st, String conv, String sign) {

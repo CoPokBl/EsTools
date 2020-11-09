@@ -11,7 +11,7 @@ public class Sell extends SignType {
         int amount = 1;
 
         try {
-            amount = Integer.parseInt(lines[1]);
+            amount = Integer.parseInt(lines[3]);
         } catch (Exception e) {}
 
         ItemStack is = me.CoPokBl.EsTools.Give.getItem(lines[1], amount);
@@ -25,7 +25,7 @@ public class Sell extends SignType {
             if (e.getType().equals(is.getType())) {
                 if (e.getAmount() >= is.getAmount()) {
                     if (payMoney(lines[2], p))
-                        e.setAmount(is.getAmount());
+                        e.setAmount(e.getAmount() - is.getAmount());
                     return;
                 }
             }
