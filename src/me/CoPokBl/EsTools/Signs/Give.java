@@ -1,7 +1,6 @@
 package me.CoPokBl.EsTools.Signs;
 
 import me.CoPokBl.EsTools.CMD;
-import me.CoPokBl.EsTools.Main;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,7 +21,7 @@ public class Give extends SignType {
             return;
         }
 
-        if (!payMoney(lines[3], p))
+        if (!takeMoney(lines[3], p))
             return;
 
         p.getInventory().addItem(is.clone());

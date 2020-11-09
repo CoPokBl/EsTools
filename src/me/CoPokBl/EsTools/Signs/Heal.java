@@ -7,7 +7,7 @@ public class Heal extends SignType {
     @Override
     public void run(Player p, String[] lines) {
 
-        if (!payMoney(lines[1], p))
+        if (!takeMoney(lines[1], p))
             return;
 
         p.setHealth(CMD.getMaxHealth(p));

@@ -3,11 +3,12 @@ package me.CoPokBl.EsTools.Signs;
 import me.CoPokBl.EsTools.CMD;
 import me.CoPokBl.EsTools.Main;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public abstract class SignType {
     public void run(Player p, String[] lines) {}
 
-    public static boolean payMoney(String line, Player p) {
+    public static double getSignMoney(String line, Player p) {
         double price = 0;
 
         try {
@@ -15,26 +16,24 @@ public abstract class SignType {
 
             if (!line.startsWith("$")) {
                 CMD.s(p, "&cMoney must be formatted with \"$COST\"");
-                return false;
+                return -1;
             }
 
             price = Double.parseDouble(priceS);
         } catch (Exception e) {}
 
-        if (price > 0) {
-            if (Main.econ == null) {
-                CMD.s(p, "&cVault is required for economy!");
-                return false;
-            }
+        return price;
+    }
 
-            if (Main.econ.getBalance(p) >= price) {
-                Main.econ.withdrawPlayer(p, price);
-            } else {
-                CMD.s(p, "&cYou do not have enough money to purchase this item.");
-                return false;
-            }
-        }
+    public static boolean hasMoney(String line, Player p) {
+        return CMD.hasMoney(getSignMoney(line, p), p);
+    }
 
-        return true;
+    public static boolean takeMoney(String line, Player p) {
+        return CMD.takeMoney(getSignMoney(line, p), p);
+    }
+
+    public static boolean payMoney(String line, Player p) {
+        return CMD.payMoney(getSignMoney(line, p), p);
     }
 }
