@@ -35,6 +35,8 @@ public class Fix extends PlayerCommand {
 		
 		PlayerInventory pInv = p.getInventory();
 		ItemStack is = getMainHand(p);
+
+		boolean all = false;
 		
 		if (args.length > 0) {
 			switch (args[0].toLowerCase()) {					
@@ -59,17 +61,41 @@ public class Fix extends PlayerCommand {
 				case "boots":
 					is = pInv.getBoots();
 					break;
+
+				case "all":
+					all = true;
+					break;
 			}
 		}
 		
 
+		if (all) {
+			ItemStack[] contents = p.getInventory().getContents();
+
+			for (ItemStack i : contents) {
+				Repair(i);
+			}
+
+			p.getInventory().setContents(contents);
+		} else {
+			ItemStack ir = Repair(is);
+//
+//			if (ir != null) {
+//				is = ir.clone();
+//			}
+		}
+
+		return true;
+	}
+
+	private ItemStack Repair(ItemStack is) {
 		if (is == null)
-			 return true;
+			return null;
 
 		if (Main.version > 12) {
 			ItemMeta im = is.getItemMeta();
 
-			if (im == null) return true;
+			if (im == null) return null;
 
 			((Damageable) im).setDamage(0);
 
@@ -77,7 +103,8 @@ public class Fix extends PlayerCommand {
 		} else {
 			is.setDurability((short) 0);
 		}
-		return true;
+
+		return is;
 	}
 
 	@Override
@@ -86,7 +113,7 @@ public class Fix extends PlayerCommand {
 		
 		if (args.length == 1) {
 			tab.add("hand"); tab.add("helmet"); tab.add("chestplate");
-			tab.add("leggings"); tab.add("boots");
+			tab.add("leggings"); tab.add("boots"); tab.add("all");
 
 			if (Main.version > 8) {
                 tab.add("offhand");
