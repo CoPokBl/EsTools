@@ -160,45 +160,4 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 			p.setMaxHealth(value);
 		}
 	}
-
-	public static boolean hasMoney(double price, Player p) {
-		if (price > 0) {
-			if (Main.econ == null) {
-				CMD.s(p, "&cVault is required for economy!");
-				return false;
-			}
-
-			return Main.econ.getBalance(p) >= price;
-		}
-
-		return true;
-	}
-
-	public static boolean takeMoney(double price, Player p) {
-		if (price > 0) {
-			if (Main.econ == null) {
-				CMD.s(p, "&cVault is required for economy!");
-				return false;
-			}
-
-			if (Main.econ.getBalance(p) >= price) {
-				Main.econ.withdrawPlayer(p, price);
-			} else {
-				CMD.s(p, "&cYou do not have enough money to purchase this item.");
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	public static boolean payMoney(double price, Player p) {
-		if (Main.econ == null) {
-			CMD.s(p, "&cVault is required for economy!");
-			return false;
-		}
-
-		EconomyResponse e = Main.econ.depositPlayer(p, price);
-		return e.transactionSuccess();
-	}
 }

@@ -2,12 +2,10 @@ package me.CoPokBl.EsTools;
 
 import me.CoPokBl.EsTools.Commands.PowerPick.*;
 import me.CoPokBl.EsTools.Signs.SignMain;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.CoPokBl.EsTools.Commands.*;
@@ -18,15 +16,22 @@ public class Main extends JavaPlugin {
 	
 	public static Main current;
 	public static int version;
-
-	public static Economy econ = null;
 	
 	// TODO: /infinite (makes things not get consumed when you use), "normal" effects names, safe /tp, powerpick look at
 	
 	@Override
 	public void onEnable() {
-		if (!setupEconomy()) {
-			Logger.getLogger("Minecraft").severe(String.format("[%s] No Vault plugin found, please install vault for economy functionality", getDescription().getName()));
+		current = this;
+
+		System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+				"         EsTools\n" +
+				"           " + getDescription().getVersion() + "\n" +
+				"-=-=-=-=-=-=-=-=-=-=-=-=-=");
+
+		try {
+			Vault.setupEconomy();
+		} catch (Exception e) {
+			getLogger().warning("No Vault plugin found, please install vault for economy functionality");
 		}
 
 		getVersion();
@@ -115,8 +120,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getServer().getPluginManager().registerEvents(new Back(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new SafeTP(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new SignMain(), this);
-		
-		current = this;
+
 		PowerPick.initall();
 
 		if (Main.version < 7) {
@@ -156,19 +160,7 @@ public class Main extends JavaPlugin {
 		return cmd;
 	}
 
-	private boolean setupEconomy() {
-		if (getServer().getPluginManager().getPlugin("Vault") == null) {
-			return false;
-		}
 
-		RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-		if (rsp == null) {
-			return false;
-		}
-
-		econ = rsp.getProvider();
-		return econ != null;
-	}
 
 	private void getVersion() {
 		String versionS = Bukkit.getVersion();

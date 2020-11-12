@@ -17,7 +17,7 @@ public class Sell extends SignType {
         ItemStack is = me.CoPokBl.EsTools.Give.getItem(lines[1], amount);
 
         if (is == null) {
-            CMD.s(p, "&cItem not found!");
+            s(p, "&cItem not found!");
             return;
         }
 
@@ -31,6 +31,6 @@ public class Sell extends SignType {
             }
         }
 
-        CMD.s(p, "&cCant find item!");
+        s(p, "&cCant find item!");
     }
 }
