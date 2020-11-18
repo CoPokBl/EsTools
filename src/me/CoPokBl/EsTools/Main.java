@@ -115,6 +115,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getServer().getPluginManager().registerEvents(new SafeTP(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new SignMain(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new Infinite(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new God(), this);
 
 		PowerPick.initall();
 
