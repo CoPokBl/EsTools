@@ -57,6 +57,7 @@ commands:
   hideflags:
   eff:
   safetp:
+  infinite:
 
 permissions:
   estools.tp:
@@ -197,4 +198,8 @@ permissions:
 
   estools.signs:
     description: Lets players make estools signs (like disposal)
+    default: op
+
+  estools.infinite:
+    description: Lets players not run out of items when placing blocks
     default: op

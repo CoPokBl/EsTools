@@ -10,8 +10,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.CoPokBl.EsTools.Commands.*;
 
-import java.util.logging.Logger;
-
 public class Main extends JavaPlugin {
 	
 	public static Main current;
@@ -22,11 +20,6 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		current = this;
-
-		System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
-				"         EsTools\n" +
-				"           " + getDescription().getVersion() + "\n" +
-				"-=-=-=-=-=-=-=-=-=-=-=-=-=");
 
 		try {
 			Vault.setupEconomy();
@@ -65,6 +58,7 @@ public class Main extends JavaPlugin {
 		sc("hideflags", "hideflags", new HideFlags());
 		sc("eff", "effect", new Eff());
 		sc("safetp", "safetp", new SafeTP());
+		sc("infinite", "infinite", new Infinite());
 
 		sc("powerpick", "powerpick", new PowerPick());
 		sc("poweraxe", "powerpick", new PowerAxe());
@@ -120,6 +114,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getServer().getPluginManager().registerEvents(new Back(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new SafeTP(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new SignMain(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Infinite(), this);
 
 		PowerPick.initall();
 
