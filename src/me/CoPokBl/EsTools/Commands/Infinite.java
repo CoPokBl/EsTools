@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -23,7 +22,15 @@ public class Infinite extends CMD implements Listener {
         if (isNotPlayer(sender))
             return true;
 
-        currentPlayers.add(((Player)sender).getUniqueId());
+        UUID pu = ((Player)sender).getUniqueId();
+
+        if (!currentPlayers.contains(pu)) {
+            currentPlayers.add(pu);
+            s(sender, "&aYou now have infinite blocks!");
+        } else {
+            currentPlayers.remove(pu);
+            s(sender, "&aYou no longer have infinite blocks");
+        }
 
         return true;
     }
