@@ -115,6 +115,9 @@ public class Give implements TabCompleter {
 			nmats.put(name, mat);
 		}
 
+		nmats.remove("water");
+		nmats.remove("lava");
+
 		// Load custom items:
 
 		for (Entry<String, String> s : ms.entrySet()) {
@@ -140,41 +143,28 @@ public class Give implements TabCompleter {
 		return ms;
 	}
 	
-	public static void disable() {
-		if (cmats == null) {
-			return;
-		}
-
-		HashMap<String, String> ms = new HashMap<String, String>();
-		
-		for (Entry<String, Material> s : cmats.entrySet()) {
-			ms.put(s.getKey(), s.getValue().toString());
-		}
-		
-		FileConfiguration f = new YamlConfiguration();
-		
-		for (Entry<String, String> m : ms.entrySet()) {
-			f.set("items." + m.getKey(), m.getValue());
-		}
-
-		f.set("settings.addWithoutUnderscores", awu);
-		f.set("settings.removeWithUnderscores", rwu);
-		
-		ConfigManager.save("give.yml", f);
-
-//		FileConfiguration f2 = new YamlConfiguration();
-//
-//		for (Material mat : Material.values()) {
-//			String name = mat.toString();
-//
-//			if (name.contains("_")) {
-//				name = name.toLowerCase().replace("_","");
-//				f2.set(name, mat.name());
-//			}
+//	public static void disable() {
+//		if (cmats == null) {
+//			return;
 //		}
 //
-//		ConfigManager.save("test.yml", f2);
-	}
+//		HashMap<String, String> ms = new HashMap<String, String>();
+//
+//		for (Entry<String, Material> s : cmats.entrySet()) {
+//			ms.put(s.getKey(), s.getValue().toString());
+//		}
+//
+//		FileConfiguration f = new YamlConfiguration();
+//
+//		for (Entry<String, String> m : ms.entrySet()) {
+//			f.set("items." + m.getKey(), m.getValue());
+//		}
+//
+//		f.set("settings.addWithoutUnderscores", awu);
+//		f.set("settings.removeWithUnderscores", rwu);
+//
+//		ConfigManager.save("give.yml", f);
+//	}
 	
 	private static void copyDefaultGiveYML() throws IOException {
 

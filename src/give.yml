@@ -1,6 +1,6 @@
 settings:
   addWithoutUnderscores: true
-  removeWithUnderscores: true
+  removeWithUnderscores: false
 
 items:
   boat: oak_boat
@@ -17,3 +17,5 @@ items:
   pressure_plate: stone_pressure_plate
   trapdoor: oak_trapdoor
   steak: cooked_beef
+  water: water_bucket
+  lava: lava_bucket
