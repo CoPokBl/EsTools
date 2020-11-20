@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Eff extends MultiPlayerCommand {
 
@@ -79,4 +80,29 @@ public class Eff extends MultiPlayerCommand {
         return true;
     }
 
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+        List<String> tab = new ArrayList<>();
+
+        switch (args.length) {
+            case 1:
+                for (PotionEffectType e : PotionEffectType.values()) {
+                    tab.add(e.getName().toLowerCase());
+                }
+                break;
+
+            case 2:
+                tab.add("1");
+                break;
+
+            case 3:
+                tab.add("60");
+                break;
+
+            case 4:
+                return super.tabComplete(sender, args, lArg);
+        }
+
+        return tab;
+    }
 }

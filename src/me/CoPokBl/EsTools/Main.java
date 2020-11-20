@@ -127,9 +127,7 @@ public class Main extends JavaPlugin {
 	}
 	
 	@Override
-	public void onDisable() {
-		Give.disable();
-	}
+	public void onDisable() {}
 	
 	public PluginCommand sc(String name, CommandExecutor ce) {
 		PluginCommand cmd = getCommand(name);

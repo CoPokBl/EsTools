@@ -31,15 +31,8 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 	}
 
 	public static List<String> fixTabComplete(List<String> inList, String arg) {
-		arg = arg.toLowerCase();
-
-		List<String> copy = new ArrayList<>(inList);
-
-		for (int i = 0; i < copy.size(); i++) {
-			if (!copy.get(i).toLowerCase().startsWith(arg)) {
-				inList.remove(copy.get(i));
-			}
-		}
+		final String argL = arg.toLowerCase();
+		inList.removeIf(n -> !n.toLowerCase().startsWith(argL));
 
 		return inList;
 	}
