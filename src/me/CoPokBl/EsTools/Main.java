@@ -1,5 +1,6 @@
 package me.CoPokBl.EsTools;
 
+import me.CoPokBl.EsTools.Commands.GameMode.*;
 import me.CoPokBl.EsTools.Commands.PowerPick.*;
 import me.CoPokBl.EsTools.Signs.SignMain;
 import org.bukkit.Bukkit;
@@ -31,10 +32,10 @@ public class Main extends JavaPlugin {
 
 		// Commands
 		
-		sc("gms", "gm", new GM());
-		sc("gmc", "gm", new GM());
-		sc("gma", "gm", new GM());
-		sc("gmsp", "gm", new GM());
+		sc("gms", "gm", new gms());
+		sc("gmc", "gm", new gmc());
+		sc("gma", "gm", new gma());
+		sc("gmsp", "gm", new gmsp());
 		sc("tphere", "tp", new TP());
 		sc("tpall", "tp", new TP());
 		sc("feed", "feed", new Feed());
