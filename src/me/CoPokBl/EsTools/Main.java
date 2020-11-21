@@ -2,6 +2,8 @@ package me.CoPokBl.EsTools;
 
 import me.CoPokBl.EsTools.Commands.GameMode.*;
 import me.CoPokBl.EsTools.Commands.PowerPick.*;
+import me.CoPokBl.EsTools.Commands.Teleport.TPAll;
+import me.CoPokBl.EsTools.Commands.Teleport.TPHere;
 import me.CoPokBl.EsTools.Signs.SignMain;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -36,8 +38,8 @@ public class Main extends JavaPlugin {
 		sc("gmc", "gm", new gmc());
 		sc("gma", "gm", new gma());
 		sc("gmsp", "gm", new gmsp());
-		sc("tphere", "tp", new TP());
-		sc("tpall", "tp", new TP());
+		sc("tphere", "tp", new TPHere());
+		sc("tpall", "tp", new TPAll());
 		sc("feed", "feed", new Feed());
 		sc("fly", "fly", new Fly());
 		sc("smite", "smite", new Smite());
