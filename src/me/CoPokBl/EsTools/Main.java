@@ -162,44 +162,11 @@ public class Main extends JavaPlugin {
 	private void getVersion() {
 		String versionS = Bukkit.getVersion();
 
-		       if (versionS.contains("1.16")) {
-			version = 16;
-		} else if (versionS.contains("1.15")) {
-			version = 15;
-		} else if (versionS.contains("1.14")) {
-			version = 14;
-		} else if (versionS.contains("1.13")) {
-			version = 13;
-		} else if (versionS.contains("1.12")) {
-			version = 12;
-		} else if (versionS.contains("1.11")) {
-			version = 11;
-		} else if (versionS.contains("1.10")) {
-			version = 10;
-		} else if (versionS.contains("1.9")) {
-			version = 9;
-		} else if (versionS.contains("1.8")) {
-		    version = 8;
-	    } else if (versionS.contains("1.7")) {
-	    	version = 7;
-	    } else if (versionS.contains("1.6")) {
-		    version = 6;
- 	    } else if (versionS.contains("1.5")) {
- 		    version = 5;
- 	    } else if (versionS.contains("1.4")) {
- 		    version = 4;
- 	    } else if (versionS.contains("1.3")) {
-		    version = 3;
-	    } else if (versionS.contains("1.2")) {
-	 	    version = 2;
-	    } else if (versionS.contains("1.1")) {
-		    version = 1;
-	    } else if (versionS.contains("1.0")) {
-		    version = 0;
-	    } else {
-			// idk more than supported?
-			version = 17;
-	    }
+		for (int i = 0; i < 99; i++) {
+			if (versionS.contains("1." + i))  version = i;
+		}
+
+	    getLogger().info("version detected as: " + version + " from: " + versionS);
 	}
 }
 

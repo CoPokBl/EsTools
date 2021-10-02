@@ -1,7 +1,6 @@
 package me.CoPokBl.EsTools.Commands.PowerPick;
 
 import me.CoPokBl.EsTools.CMD;
-import me.CoPokBl.EsTools.Commands.I;
 import me.CoPokBl.EsTools.Main;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
