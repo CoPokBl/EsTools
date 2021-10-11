@@ -58,6 +58,8 @@ commands:
   eff:
   safetp:
   infinite:
+  sethunger:
+  setsaturation:
 
 permissions:
   estools.tp:
@@ -202,4 +204,12 @@ permissions:
 
   estools.infinite:
     description: Lets players not run out of items when placing blocks
+    default: op
+
+  estools.sethunger:
+    description: Lets players set their and other peoples hunger level
+    default: op
+
+  estools.setsaturation:
+    description: Lets players set their and other peoples saturation level
     default: op

@@ -1,17 +1,16 @@
 package me.CoPokBl.EsTools.Commands;
 
-import me.CoPokBl.EsTools.CMD;
+import me.CoPokBl.EsTools.Effects;
 import me.CoPokBl.EsTools.MultiPlayerCommand;
-import org.bukkit.Effect;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Eff extends MultiPlayerCommand {
 
@@ -25,7 +24,7 @@ public class Eff extends MultiPlayerCommand {
             return true;
         }
 
-        PotionEffectType effect = PotionEffectType.getByName(args[0]);
+        PotionEffectType effect = Effects.getByName(args[0]);
 
         if (effect == null) {
             s(sender, "&cEffect not found!");
@@ -43,8 +42,6 @@ public class Eff extends MultiPlayerCommand {
             }
         }
 
-        s(sender, "A: %d", amplifier);
-
         int duration = 600;
 
         if (args.length > 2) {
@@ -55,8 +52,6 @@ public class Eff extends MultiPlayerCommand {
                 return true;
             }
         }
-
-        s(sender, "D: %d", duration);
 
         ArrayList<Player> ps = new ArrayList<>();
 
@@ -73,10 +68,11 @@ public class Eff extends MultiPlayerCommand {
         }
 
         for (Player p : ps) {
+            p.removePotionEffect(effect);
             p.addPotionEffect(new PotionEffect(effect, duration, amplifier));
         }
 
-        s(sender, "&aAdded effect &6%s&a at level &6%s&a for &6%s Seconds", effect.getName(), amplifier + 1, duration / 20);
+        s(sender, "&aAdded effect &6%s&a at level &6%s&a for &6%s Seconds", Effects.getName(effect), amplifier + 1, duration / 20);
         return true;
     }
 
@@ -86,8 +82,8 @@ public class Eff extends MultiPlayerCommand {
 
         switch (args.length) {
             case 1:
-                for (PotionEffectType e : PotionEffectType.values()) {
-                    tab.add(e.getName().toLowerCase());
+                for (Map.Entry<String, PotionEffectType> e : Effects.entrySet()) {
+                    tab.add(e.getKey().toLowerCase());
                 }
                 break;
 

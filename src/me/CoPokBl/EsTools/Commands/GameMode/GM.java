@@ -16,6 +16,8 @@ public abstract class GM extends MultiPlayerCommand {
                 return;
 
             ps.add((Player) sender);
+
+            s(sender, "&aGamemode set to &6%s", gm.toString());
         } else {
             ps = getPlayers(sender, args);
 

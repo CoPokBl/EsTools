@@ -62,6 +62,8 @@ public class Main extends JavaPlugin {
 		sc("eff", "effect", new Eff());
 		sc("safetp", "safetp", new SafeTP());
 		sc("infinite", "infinite", new Infinite());
+		sc("sethunger", "sethunger", new SetHunger());
+		sc("setsaturation", "setsaturation", new SetSaturation());
 
 		sc("powerpick", "powerpick", new PowerPick());
 		sc("poweraxe", "powerpick", new PowerAxe());
@@ -156,8 +158,6 @@ public class Main extends JavaPlugin {
 		cmd.setTabCompleter(tc);
 		return cmd;
 	}
-
-
 
 	private void getVersion() {
 		String versionS = Bukkit.getVersion();
