@@ -17,8 +17,8 @@ public class Main extends JavaPlugin {
 	
 	public static Main current;
 	public static int version;
-	
-	// TODO: "normal" effects names, MultiEntityCommand
+
+	// MultiEntityCommand
 	
 	@Override
 	public void onEnable() {

@@ -50,25 +50,23 @@ public class GetInfo extends EntityCommand {
 		}
 
 
-		if (p instanceof Player) {
-			Player pp = (Player) p;
-
+		if (p instanceof Player pp) {
 			name = pp.getName();
 
-			s(sender, "&aName: &6%s\n&aHealth: &6%s\n&aMax Health: &6%s\n&aLocation: &6%s, %s, %s\n&aUUID: &6%s" +
+			s(sender, "&aName: &6%s\n&aHealth: &6%s\n&aMax Health: &6%s\n&aLocation: &6%s, %s, %s\n&aWorld: &6%s\n&aUUID: &6%s" +
 							"\n&aPotion Effects: &6%s\n&aHunger: &6%s\n&aSaturation: &6%s\n&aCan Fly: &6%s\n&aIs Flying: &6%s",
 					name, String.valueOf(p.getHealth()), maxHealth,
-					loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), p.getUniqueId(), potionEffects.toString(),
-					pp.getFoodLevel(), pp.getSaturation(), pp.getAllowFlight(), pp.isFlying()
+					loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc.getWorld().getName(), p.getUniqueId(),
+					potionEffects.toString(), pp.getFoodLevel(), pp.getSaturation(), pp.getAllowFlight(), pp.isFlying()
 			);
 		} else {
 			if (Main.version > 7) {
 				name = p.getName();
 			}
 
-			s(sender, "&aName: &6%s\n&aHealth: &6%s\n&aMax Health: &6%s\n&aLocation: &6%s, %s, %s\n&aUUID: &6%s\n&aPotion Effects: &6%s",
+			s(sender, "&aName: &6%s\n&aHealth: &6%s\n&aMax Health: &6%s\n&aLocation: &6%s, %s, %s\n&aWorld: &6%s\n&aUUID: &6%s\n&aPotion Effects: &6%s",
 					name, String.valueOf(p.getHealth()), maxHealth, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),
-					p.getUniqueId(), potionEffects.toString()
+					loc.getWorld().getName(), p.getUniqueId(), potionEffects.toString()
 			);
 		}
 		return true;
