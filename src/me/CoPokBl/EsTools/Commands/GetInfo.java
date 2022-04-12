@@ -50,7 +50,9 @@ public class GetInfo extends EntityCommand {
 		}
 
 
-		if (p instanceof Player pp) {
+		if (p instanceof Player) {
+			Player pp = (Player) p;
+
 			name = pp.getName();
 
 			s(sender, "&aName: &6%s\n&aHealth: &6%s\n&aMax Health: &6%s\n&aLocation: &6%s, %s, %s\n&aWorld: &6%s\n&aUUID: &6%s" +
