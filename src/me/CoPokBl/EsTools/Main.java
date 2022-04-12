@@ -71,41 +71,24 @@ public class Main extends JavaPlugin {
 		sc("powershovel", "powerpick", new PowerShovel());
 		sc("powerhoe", "powerpick", new PowerHoe());
 
-		if (version > 3) {
-			sc("rename", "rename", new Rename());
-			sc("sudo", "sudo", new Sudo());
+		sc("rename", "rename", new Rename(), 4);
+		sc("sudo", "sudo", new Sudo(), 4);
 
-			if (version > 5) {
-				sc("heal", "heal", new Heal());
-				sc("suicide", "suicide", new Suicide());
-				sc("sethealth", "sethealth", new SetHealth());
-				sc("setmaxhealth", "setmaxhealth", new SetMaxHealth());
-				sc("getinfo", "getinfo", new GetInfo());
+		sc("heal", "heal", new Heal(), 6);
+		sc("suicide", "suicide", new Suicide(), 6);
+		sc("sethealth", "sethealth", new SetHealth(), 6);
+		sc("setmaxhealth", "setmaxhealth", new SetMaxHealth(), 6);
+		sc("getinfo", "getinfo", new GetInfo(), 6);
 
-				if (version > 7) {
-					sc("editsign", "editsign", new EditSign());
+		sc("editsign", "editsign", new EditSign(), 8);
 
-					if (version > 8) {
-						sc("god", "god", new God());
+		sc("god", "god", new God(), 9);
 
-						if (version > 12) {
-							sc("music", "music", new Music());
-							Music.init();
-						}
-					}
-				}
-			}
+		if (version > 12) {
+			sc("music", "music", new Music());
+			Music.init();
 		} else {
-			sc("heal", "heal", new WrongVersion());
-			sc("suicide", "suicide", new WrongVersion());
-			sc("sethealth", "sethealth", new WrongVersion());
-			sc("setmaxhealth", "setmaxhealth", new WrongVersion());
-			sc("getinfo", "getinfo", new WrongVersion());
 			sc("music", "music", new WrongVersion());
-			sc("god", "god", new WrongVersion());
-			sc("editsign", "editsign", new WrongVersion());
-			sc("rename", "rename", new WrongVersion());
-			sc("sudo", "sudo", new WrongVersion());
 		}
 
 		// Other
@@ -139,11 +122,21 @@ public class Main extends JavaPlugin {
 		cmd.setExecutor(ce);
 		return cmd;
 	}
+
+	public PluginCommand sc(String name, CommandExecutor ce, int minVer) {
+		if (Main.version >= minVer) return sc(name, ce);
+		else return sc(name, new WrongVersion());
+	}
 	
 	public PluginCommand sc(String name, CommandExecutor ce, TabCompleter tc) {
 		PluginCommand cmd = sc(name, ce);
 		cmd.setTabCompleter(tc);
 		return cmd;
+	}
+
+	public PluginCommand sc(String name, CommandExecutor ce, TabCompleter tc, int minVer) {
+		if (Main.version >= minVer) return sc(name, ce, tc);
+		else return sc(name, new WrongVersion(), new WrongVersion());
 	}
 	
 	public PluginCommand sc(String name, String perm, CommandExecutor ce) {
@@ -152,11 +145,21 @@ public class Main extends JavaPlugin {
 		cmd.setPermissionMessage(CMD.t("&cYou do not have permission to run this command."));
 		return cmd;
 	}
+
+	public PluginCommand sc(String name, String perm, CommandExecutor ce, int minVer) {
+		if (Main.version >= minVer) return sc(name, perm, ce);
+		else return sc(name, perm, new WrongVersion());
+	}
 	
 	public PluginCommand sc(String name, String perm, CommandExecutor ce, TabCompleter tc) {
 		PluginCommand cmd = sc(name, perm, ce);
 		cmd.setTabCompleter(tc);
 		return cmd;
+	}
+
+	public PluginCommand sc(String name, String perm, CommandExecutor ce, TabCompleter tc, int minVer) {
+		if (Main.version >= minVer) return sc(name, perm, ce, tc);
+		else return sc(name, perm, new WrongVersion(), new WrongVersion());
 	}
 
 	private void getVersion() {

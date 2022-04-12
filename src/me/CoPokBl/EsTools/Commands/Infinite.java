@@ -9,13 +9,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class Infinite extends CMD implements Listener {
-    private static ArrayList<UUID> currentPlayers = new ArrayList<>();
+    private static final ArrayList<UUID> currentPlayers = new ArrayList<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -38,12 +39,12 @@ public class Infinite extends CMD implements Listener {
     @EventHandler
     public void blockPlace(BlockPlaceEvent e) {
         if (currentPlayers.contains(e.getPlayer().getUniqueId())) {
-            int amount = e.getItemInHand().getAmount();
+            ItemStack item = e.getItemInHand().clone();
 
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    e.getItemInHand().setAmount(amount);
+                    setMainHand(e.getPlayer(), item);
                     e.getPlayer().updateInventory();
                 }
             }.runTask(Main.current);

@@ -17,7 +17,7 @@ public class HideFlags extends CMD {
         if (isNotPlayer(sender))
             return true;
 
-        ItemStack is = ((Player)sender).getInventory().getItemInMainHand();
+        ItemStack is = getMainHand((Player) sender);
 
         if (is == null || is.getType() == Material.AIR || is.getItemMeta() == null) {
             s(sender, "&cMust be a damageable item");
