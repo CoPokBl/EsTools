@@ -32,6 +32,8 @@ public class Main extends JavaPlugin {
 
 		getVersion();
 
+		saveDefaultConfig();
+
 		// Commands
 		
 		sc("gms", "gm", new gms());
@@ -84,12 +86,7 @@ public class Main extends JavaPlugin {
 
 		sc("god", "god", new God(), 9);
 
-		if (version > 12) {
-			sc("music", "music", new Music());
-			Music.init();
-		} else {
-			sc("music", "music", new WrongVersion());
-		}
+		sc("music", "music", new Music(), 13);
 
 		// Other
 
@@ -99,11 +96,7 @@ public class Main extends JavaPlugin {
 			Bukkit.getServer().getPluginManager().registerEvents(new CChest(), this);
 		}
 
-		Bukkit.getServer().getPluginManager().registerEvents(new Back(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new SafeTP(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new SignMain(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Infinite(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new God(), this);
 
 		PowerPick.initall();
 
@@ -117,47 +110,48 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() {}
 	
-	public PluginCommand sc(String name, CommandExecutor ce) {
+	public PluginCommand sc(String name, CMD ce) {
 		PluginCommand cmd = getCommand(name);
 		cmd.setExecutor(ce);
+		ce.onEnable();
 		return cmd;
 	}
 
-	public PluginCommand sc(String name, CommandExecutor ce, int minVer) {
+	public PluginCommand sc(String name, CMD ce, int minVer) {
 		if (Main.version >= minVer) return sc(name, ce);
 		else return sc(name, new WrongVersion());
 	}
 	
-	public PluginCommand sc(String name, CommandExecutor ce, TabCompleter tc) {
+	public PluginCommand sc(String name, CMD ce, TabCompleter tc) {
 		PluginCommand cmd = sc(name, ce);
 		cmd.setTabCompleter(tc);
 		return cmd;
 	}
 
-	public PluginCommand sc(String name, CommandExecutor ce, TabCompleter tc, int minVer) {
+	public PluginCommand sc(String name, CMD ce, TabCompleter tc, int minVer) {
 		if (Main.version >= minVer) return sc(name, ce, tc);
 		else return sc(name, new WrongVersion(), new WrongVersion());
 	}
 	
-	public PluginCommand sc(String name, String perm, CommandExecutor ce) {
+	public PluginCommand sc(String name, String perm, CMD ce) {
 		PluginCommand cmd = sc(name, ce);
 		cmd.setPermission("estools." + perm);
 		cmd.setPermissionMessage(CMD.t("&cYou do not have permission to run this command."));
 		return cmd;
 	}
 
-	public PluginCommand sc(String name, String perm, CommandExecutor ce, int minVer) {
+	public PluginCommand sc(String name, String perm, CMD ce, int minVer) {
 		if (Main.version >= minVer) return sc(name, perm, ce);
 		else return sc(name, perm, new WrongVersion());
 	}
 	
-	public PluginCommand sc(String name, String perm, CommandExecutor ce, TabCompleter tc) {
+	public PluginCommand sc(String name, String perm, CMD ce, TabCompleter tc) {
 		PluginCommand cmd = sc(name, perm, ce);
 		cmd.setTabCompleter(tc);
 		return cmd;
 	}
 
-	public PluginCommand sc(String name, String perm, CommandExecutor ce, TabCompleter tc, int minVer) {
+	public PluginCommand sc(String name, String perm, CMD ce, TabCompleter tc, int minVer) {
 		if (Main.version >= minVer) return sc(name, perm, ce, tc);
 		else return sc(name, perm, new WrongVersion(), new WrongVersion());
 	}

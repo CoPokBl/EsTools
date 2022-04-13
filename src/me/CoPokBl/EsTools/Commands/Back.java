@@ -3,6 +3,8 @@ package me.CoPokBl.EsTools.Commands;
 import java.util.HashMap;
 import java.util.UUID;
 
+import me.CoPokBl.EsTools.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -17,7 +19,12 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 public class Back extends CMD implements Listener {
 
 	private static HashMap<UUID, Location> tpLoc = new HashMap<UUID, Location>();
-	
+
+	@Override
+	public void onEnable() {
+		Bukkit.getServer().getPluginManager().registerEvents(this, Main.current);
+	}
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		

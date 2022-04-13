@@ -16,7 +16,8 @@ public class Music extends CMD {
 	
 	public static ArrayList<Sound> musics = new ArrayList<>();
 
-	public static void init() {
+	@Override
+	public void onEnable() {
 		for (Sound s : Sound.values()) {
 			if (s.toString().startsWith("MUSIC_DISC")) {
 				musics.add(s);

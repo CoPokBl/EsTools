@@ -22,6 +22,11 @@ public class God extends EntityCommand implements Listener {
 	private static final String usage = genUsage("/god <entity> <time>");
 
 	@Override
+	public void onEnable() {
+		Bukkit.getServer().getPluginManager().registerEvents(this, Main.current);
+	}
+
+	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		LivingEntity p;

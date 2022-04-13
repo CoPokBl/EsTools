@@ -18,7 +18,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class CMD implements CommandExecutor, TabCompleter {
-	
+
+	public void onEnable() {}
+
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		if (Main.version < 7) {

@@ -19,6 +19,11 @@ public class Infinite extends CMD implements Listener {
     private static final ArrayList<UUID> currentPlayers = new ArrayList<>();
 
     @Override
+    public void onEnable() {
+        Bukkit.getServer().getPluginManager().registerEvents(this, Main.current);
+    }
+
+    @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (isNotPlayer(sender))
             return true;

@@ -33,7 +33,13 @@ public class CChest extends CMD implements Listener {
 
 	public static HashMap<UUID, Inventory> cchests = new HashMap<UUID, Inventory>();
 	public static HashMap<UUID, ItemStack> heldItem = new HashMap<UUID, ItemStack>();
-	
+
+	@Override
+	public void onEnable() {
+		if (Main.version > 4)
+			Bukkit.getServer().getPluginManager().registerEvents(this, Main.current);
+	}
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
