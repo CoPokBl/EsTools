@@ -22,7 +22,7 @@ public class Ench extends CMD {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
 		if (args.length == 0) {
-			s(sender, genUsage("/ench <enchantment> <level> <player>"));
+			s(sender, genUsage("/ench <enchantment> [level] [player]"));
 			return false;
 		}
 		
@@ -34,7 +34,7 @@ public class Ench extends CMD {
 			try {
 				level = Integer.valueOf(args[1]);
 			} catch (Exception e) {
-				s(sender, genUsage("/ench <enchantment> <level> <player>"));
+				s(sender, genUsage("/ench <enchantment> [level] [player]"));
 				return false;
 			}
 		}
@@ -61,7 +61,7 @@ public class Ench extends CMD {
 			else
 				ench = Enchantments.getByName(args[0].toLowerCase());
 		} catch (IllegalArgumentException e) {
-			s(sender, genUsage("/ench <enchantment> <level> <player>"));
+			s(sender, genUsage("/ench <enchantment> [level] [player]"));
 			return true;
 		}
 		
@@ -71,7 +71,7 @@ public class Ench extends CMD {
 			s(sender, "&aEnchantment &6%s&a at level &6%s&a was added!", args[0].toLowerCase(), level);
 		}
 		else {
-			s(sender, genUsage("/ench <enchantment> <level> <player>"));
+			s(sender, genUsage("/ench <enchantment> [level] [player]"));
 		}
 		return true;
 	}

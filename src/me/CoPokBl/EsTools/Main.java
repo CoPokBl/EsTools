@@ -87,6 +87,7 @@ public class Main extends JavaPlugin {
 		sc("god", "god", new God(), 9);
 
 		sc("music", "music", new Music(), 13);
+		sc("potion", "potion", new Potion());
 
 		// Other
 

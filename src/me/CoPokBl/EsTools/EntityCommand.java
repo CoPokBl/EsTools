@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -37,21 +38,28 @@ public abstract class EntityCommand extends CMD {
 	}
 	
 	public static LivingEntity getEntity(CommandSender sender, String name) {
-		LivingEntity p = Bukkit.getPlayer(name);
-		
+		Entity entity = getNonLivingEntity(sender, name);
+		if (entity instanceof LivingEntity) return (LivingEntity) entity;
+		s(sender, "&cPlayer/Entity not found.");
+		return null;
+	}
+
+	public static Entity getNonLivingEntity(CommandSender sender, String name) {
+		Entity p = Bukkit.getPlayer(name);
+
 		if (p == null) {
 			try {
 				UUID uid = UUID.fromString(name);
 
 				if (Main.version > 9) {
-					p = (LivingEntity)Bukkit.getEntity(uid);
+					p = Bukkit.getEntity(uid);
 				} else {
 					if (sender instanceof Player) {
 						List<Entity> entities = ((Player)sender).getWorld().getEntities();
 
 						for (Entity e : entities) {
 							if (e.getUniqueId().equals(uid)) {
-								p = (LivingEntity) e;
+								p = e;
 								break;
 							}
 						}
@@ -60,11 +68,11 @@ public abstract class EntityCommand extends CMD {
 
 				if (p != null)
 					return p;
-			} catch (Exception ignored) {}
+			} catch (Exception ignored) { }
 
 			s(sender, "&cPlayer/Entity not found.");
 		}
-			
+
 		return p;
 	}
 	

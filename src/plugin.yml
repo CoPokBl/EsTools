@@ -60,6 +60,7 @@ commands:
   infinite:
   sethunger:
   setsaturation:
+  potion:
 
 permissions:
   estools.tp:
@@ -212,4 +213,8 @@ permissions:
 
   estools.setsaturation:
     description: Lets players set their and other peoples saturation level
+    default: op
+
+  estools.potion:
+    description: Lets players give themselves and others potions
     default: op

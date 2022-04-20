@@ -70,6 +70,14 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 		}
 		return false;
 	}
+
+	public static int tryParseInt(String obj, int defaultValue) {
+		try {
+			return Integer.parseInt(obj);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
 	
 	public static boolean checkPerms(CommandSender sender, String perm) {
 		if (!sender.hasPermission("estools." + perm)) {
