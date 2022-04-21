@@ -9,8 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.material.MaterialData;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -21,7 +19,7 @@ import java.util.Map;
 
 public class Potion extends EntityCommand {
 
-    private static Map<PotionType, Integer> effectsOldVersions = Map.of(
+    private static final Map<PotionType, Integer> effectsOldVersions = Map.of(
             PotionType.FIRE_RESISTANCE, 1
     );
 
@@ -83,24 +81,27 @@ public class Potion extends EntityCommand {
                     "POTION" :
                     potType.toString().toUpperCase() + "_POTION";
             pot = new ItemStack(Material.valueOf(type), amount);
+            PotionEffectType potion;
+            try {
+                potion = Effects.getByName(args[0]);
+            } catch (IllegalArgumentException e) {
+                s(sender, "&cInvalid potion type");
+                return false;
+            }
+            PotionMeta meta = (PotionMeta) pot.getItemMeta();
+            meta.addCustomEffect(new PotionEffect(potion, duration, amp-1), true);
+            pot.setItemMeta(meta);
         } else {
             pot = new ItemStack(Material.POTION, amount);
-            pot.setDurability(effectsOldVersions.get(PotionType.valueOf(args[0].toUpperCase())).shortValue());
+            PotionType type;
+            try {
+                type = PotionType.valueOf(args[0].toUpperCase());
+            } catch (IllegalArgumentException e) {
+                s(sender, "&cInvalid potion type");
+                return false;
+            }
+            pot.setDurability(effectsOldVersions.get(type).shortValue());
         }
-
-        PotionMeta meta = (PotionMeta) pot.getItemMeta();
-
-        PotionEffectType potion;
-        try {
-            potion = Effects.getByName(args[0]);
-        } catch (IllegalArgumentException e) {
-            s(sender, "&cInvalid potion type");
-            return false;
-        }
-
-
-        meta.addCustomEffect(new PotionEffect(potion, duration, amp-1), true);
-        pot.setItemMeta(meta);
 
         player.getInventory().addItem(pot);
 
