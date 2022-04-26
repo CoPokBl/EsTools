@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Enchantments {
-    private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<String, Enchantment>();
+    private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<>();
 
     public static Enchantment getByName(String name) {
         return ENCHANTMENTS.get(name.toLowerCase(Locale.ENGLISH));
@@ -18,7 +18,9 @@ public class Enchantments {
         return ENCHANTMENTS.entrySet();
     }
 
-    static {
+    static { AddEnchants(); }
+
+    private static void AddEnchants() {
         ENCHANTMENTS.put("sharpness", Enchantment.DAMAGE_ALL);
         ENCHANTMENTS.put("baneofarthropods", Enchantment.DAMAGE_ARTHROPODS);
         ENCHANTMENTS.put("smite", Enchantment.DAMAGE_UNDEAD);
@@ -40,28 +42,26 @@ public class Enchantments {
         ENCHANTMENTS.put("infinity", Enchantment.ARROW_INFINITE);
         ENCHANTMENTS.put("fortune", Enchantment.LOOT_BONUS_BLOCKS);
 
-        if (Main.version > 3) {
-            ENCHANTMENTS.put("thorns", Enchantment.THORNS);
+        if (Main.version <= 3) return;
+        ENCHANTMENTS.put("thorns", Enchantment.THORNS);
 
-            if (Main.version > 6) {
-                ENCHANTMENTS.put("luck", Enchantment.LUCK);
-                ENCHANTMENTS.put("lure", Enchantment.LURE);
+        if (Main.version <= 6) return;
+        ENCHANTMENTS.put("luck", Enchantment.LUCK);
+        ENCHANTMENTS.put("lure", Enchantment.LURE);
 
-                if (Main.version > 7) {
-                    ENCHANTMENTS.put("depthstrider", Enchantment.DEPTH_STRIDER);
+        if (Main.version <= 7) return;
+        ENCHANTMENTS.put("depthstrider", Enchantment.DEPTH_STRIDER);
 
-                    if (Main.version > 8) {
-                        ENCHANTMENTS.put("frostwalker", Enchantment.FROST_WALKER);
-                        ENCHANTMENTS.put("mending", Enchantment.MENDING);
+        if (Main.version <= 8) return;
+        ENCHANTMENTS.put("frostwalker", Enchantment.FROST_WALKER);
+        ENCHANTMENTS.put("mending", Enchantment.MENDING);
 
-                        if (Main.version > 10) {
-                            ENCHANTMENTS.put("bindingcurse", Enchantment.BINDING_CURSE);
-                            ENCHANTMENTS.put("vanishingcurse", Enchantment.VANISHING_CURSE);
-                            ENCHANTMENTS.put("sweepingedge", Enchantment.SWEEPING_EDGE);
-                        }
-                    }
-                }
-            }
-        }
+        if (Main.version <= 10) return;
+        ENCHANTMENTS.put("bindingcurse", Enchantment.BINDING_CURSE);
+        ENCHANTMENTS.put("vanishingcurse", Enchantment.VANISHING_CURSE);
+        ENCHANTMENTS.put("sweepingedge", Enchantment.SWEEPING_EDGE);
+
+        if (Main.version <= 15) return;
+        ENCHANTMENTS.put("soulspeed", Enchantment.SOUL_SPEED);
     }
 }
