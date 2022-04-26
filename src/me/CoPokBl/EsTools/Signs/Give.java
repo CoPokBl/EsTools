@@ -21,8 +21,10 @@ public class Give extends SignType {
             return;
         }
 
-        if (!takeMoney(lines[3], p))
+        if (!takeMoney(lines[3], p)) {
+            s(p, "&cYou cannot afford this!");
             return;
+        }
 
         p.getInventory().addItem(is.clone());
     }
