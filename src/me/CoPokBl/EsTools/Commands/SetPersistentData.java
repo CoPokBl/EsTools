@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 public class SetPersistentData extends CMD {
-    public static final String usage = genUsage("/setnbt <key> <value>");
+    public static final String usage = genUsage("/setoersistentdata <key> <value>");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -34,7 +34,7 @@ public class SetPersistentData extends CMD {
         tagValue.deleteCharAt(tagValue.length() - 1);
 
         setNbt(item, key, tagValue.toString());
-        s(sender, "&aSet NBT tag &e\"" + args[0].toLowerCase() + "\"&a to &e\"" + tagValue.toString() + "\"&a!");
+        s(sender, "&aSet NBT tag &e\"" + args[0].toLowerCase() + "\"&a to &e\"" + tagValue + "\"&a!");
         return true;
     }
 
