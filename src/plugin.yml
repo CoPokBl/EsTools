@@ -61,6 +61,8 @@ commands:
   sethunger:
   setsaturation:
   potion:
+  setpersistentdata:
+  getpersistentdata:
 
 permissions:
   estools.tp:
@@ -217,4 +219,12 @@ permissions:
 
   estools.potion:
     description: Lets players give themselves and others potions
+    default: op
+
+  estools.setpersistentdata:
+    description: Lets players set persistent nbt tags on items
+    default: op
+
+  estools.getpersistentdata:
+    description: Lets players get persistent nbt tags on items
     default: op

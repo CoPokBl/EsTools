@@ -6,7 +6,6 @@ import me.CoPokBl.EsTools.Commands.Teleport.TPAll;
 import me.CoPokBl.EsTools.Commands.Teleport.TPHere;
 import me.CoPokBl.EsTools.Signs.SignMain;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -88,6 +87,9 @@ public class Main extends JavaPlugin {
 
 		sc("music", "music", new Music(), 13);
 		sc("potion", "potion", new Potion());
+
+		sc("setpersistentdata", "setpersistentdata", new SetPersistentData());
+		sc("getpersistentdata", "getpersistentdata", new GetPersistentData());
 
 		// Other
 
