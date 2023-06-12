@@ -24,10 +24,10 @@ public class GetPersistentData extends CMD {
         }
 
         ItemStack item = getMainHand((Player) sender);
-        NamespacedKey key = NamespacedKey.fromString(args[0], Main.current);
+        NamespacedKey key = NamespacedKey.fromString(args[0].toLowerCase(), Main.current);
 
         String nbt = getNbt(item, key);
-        s(sender, "&aNBT tag &e\"" + args[0] + "\"&a is &e\"" + nbt + "\"&a!");
+        s(sender, "&aNBT tag &e\"" + args[0].toLowerCase() + "\"&a is &e\"" + nbt + "\"&a!");
         return true;
     }
 

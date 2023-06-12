@@ -24,7 +24,7 @@ public class SetPersistentData extends CMD {
         }
 
         ItemStack item = getMainHand((Player) sender);
-        NamespacedKey key = NamespacedKey.fromString(args[0], Main.current);
+        NamespacedKey key = NamespacedKey.fromString(args[0].toLowerCase(), Main.current);
         StringBuilder tagValue = new StringBuilder();
 
         for (int i = 1; i < args.length; i++) {
@@ -34,7 +34,7 @@ public class SetPersistentData extends CMD {
         tagValue.deleteCharAt(tagValue.length() - 1);
 
         setNbt(item, key, tagValue.toString());
-        s(sender, "&aSet NBT tag &e\"" + args[0] + "\"&a to &e\"" + tagValue.toString() + "\"&a!");
+        s(sender, "&aSet NBT tag &e\"" + args[0].toLowerCase() + "\"&a to &e\"" + tagValue.toString() + "\"&a!");
         return true;
     }
 
