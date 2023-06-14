@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 public class RemovePersistentData extends CMD {
-    public static final String usage = genUsage("/removepersistentdata <key> <value>");
+    public static final String usage = genUsage("/removepersistentdata <key>");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

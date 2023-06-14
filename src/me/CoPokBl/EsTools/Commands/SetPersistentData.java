@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SetPersistentData extends CMD {
-    public static final String usage = genUsage("/setpersistentdata <key> <value>");
+    public static final String usage = genUsage("/setpersistentdata <key> <type> <value>");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

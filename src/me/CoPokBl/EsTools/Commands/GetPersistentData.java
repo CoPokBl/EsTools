@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class GetPersistentData extends CMD {
-    public static final String usage = genUsage("/getpersistentdata <key>");
+    public static final String usage = genUsage("/getpersistentdata <key> <type>");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
