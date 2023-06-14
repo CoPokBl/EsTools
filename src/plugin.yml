@@ -63,6 +63,7 @@ commands:
   potion:
   setpersistentdata:
   getpersistentdata:
+  removepersistentdata:
 
 permissions:
   estools.tp:
@@ -227,4 +228,8 @@ permissions:
 
   estools.getpersistentdata:
     description: Lets players get persistent nbt tags on items
+    default: op
+
+  estools.removepersistentdata:
+    description: Lets players remove persistent nbt tags on items
     default: op

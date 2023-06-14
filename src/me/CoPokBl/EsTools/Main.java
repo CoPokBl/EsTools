@@ -90,6 +90,7 @@ public class Main extends JavaPlugin {
 
 		sc("setpersistentdata", "setpersistentdata", new SetPersistentData());
 		sc("getpersistentdata", "getpersistentdata", new GetPersistentData());
+		sc("removepersistentdata", "removepersistentdata", new RemovePersistentData());
 
 		// Other
 
