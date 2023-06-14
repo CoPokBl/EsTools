@@ -2,6 +2,7 @@ package me.CoPokBl.EsTools.Commands;
 
 import me.CoPokBl.EsTools.CMD;
 import me.CoPokBl.EsTools.Main;
+import net.minecraft.util.Tuple;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
@@ -47,115 +48,118 @@ public class GetPersistentData extends CMD {
 
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-        String value = getData(typeString, key, data);
-        if (value.equals("null")) {
+        Tuple<Integer, String> value = getData(typeString, key, data);
+        if (value.a() == 3) {
             s(sender, "&cNBT tag &e\"" + tagString + "\"&c does not exist!");
             return false;
         }
 
-        if (value.equals("unsupported")) {
+        if (value.a() == 1) {
             s(sender, "&cNBT tag type &e\"" + typeString + "\"&c is unsupported!");
             return false;
         }
 
-        if (value.equals("wrong")) {
+        if (value.a() == 2) {
             s(sender, "&cNBT tag &e\"" + tagString + "\"&c exists, but is not a " + typeString + "!");
             return false;
         }
 
-        s(sender, "&aNBT tag &e\"" + tagString + "\"&a is &e\"" + value + "\"&a!");
+        s(sender, "&aNBT tag &e\"" + tagString + "\"&a is &e" + value.b() + "&a!");
         return true;
     }
 
-    private static String getData(String type, NamespacedKey key, PersistentDataContainer data) {
+    private static Tuple<Integer, String> getData(String type, NamespacedKey key, PersistentDataContainer data) {
         try {
             switch (type) {
                 case "string" -> {
                     String value = data.get(key, PersistentDataType.STRING);
-                    return Objects.requireNonNullElse(value, "null");
+                    if (value == null) {
+                        return new Tuple<>(3, null);
+                    }
 
+                    return new Tuple<>(0, "\"" + value + "\"");
                 }
 
                 case "integer" -> {
                     Integer value = data.get(key, PersistentDataType.INTEGER);
                     if (value == null) {
-                        return "null";
+                        return new Tuple<>(3, null);
                     }
-                    return value.toString();
+                    return new Tuple<>(0, value.toString());
                 }
 
                 case "double" -> {
                     Double value = data.get(key, PersistentDataType.DOUBLE);
                     if (value == null) {
-                        return "null";
+                        return new Tuple<>(3, null);
                     }
-                    return value.toString();
+                    return new Tuple<>(0, value.toString());
                 }
 
                 case "float" -> {
                     Float value = data.get(key, PersistentDataType.FLOAT);
                     if (value == null) {
-                        return "null";
+                        return new Tuple<>(3, null);
                     }
-                    return value.toString();
+                    return new Tuple<>(0, value.toString());
                 }
 
                 case "long" -> {
                     Long value = data.get(key, PersistentDataType.LONG);
                     if (value == null) {
-                        return "null";
+                        return new Tuple<>(3, null);
                     }
-                    return value.toString();
+                    return new Tuple<>(0, value.toString());
                 }
 
                 case "short" -> {
                     Short value = data.get(key, PersistentDataType.SHORT);
                     if (value == null) {
-                        return "null";
+                        return new Tuple<>(3, null);
                     }
-                    return value.toString();
+                    return new Tuple<>(0, value.toString());
                 }
 
                 case "byte" -> {
                     Byte value = data.get(key, PersistentDataType.BYTE);
                     if (value == null) {
-                        return "null";
+                        return new Tuple<>(3, null);
                     }
-                    return value.toString();
+                    return new Tuple<>(0, value.toString());
                 }
 
                 case "byte_array" -> {
                     byte[] value = data.get(key, PersistentDataType.BYTE_ARRAY);
                     if (value == null) {
-                        return "null";
+                        return new Tuple<>(3, null);
                     }
 
-                    return buildString(ArrayUtils.toObject(value)).toString();
+                    return new Tuple<>(0, buildString(ArrayUtils.toObject(value)).toString());
                 }
 
                 case "int_array" -> {
                     int[] value = data.get(key, PersistentDataType.INTEGER_ARRAY);
                     if (value == null) {
-                        return "null";
+                        return new Tuple<>(3, null);
                     }
 
-                    return buildString(ArrayUtils.toObject(value)).toString();
+                    return new Tuple<>(0, buildString(ArrayUtils.toObject(value)).toString());
                 }
 
                 case "long_array" -> {
                     long[] value = data.get(key, PersistentDataType.LONG_ARRAY);
                     if (value == null) {
-                        return "null";
+                        return new Tuple<>(3, null);
                     }
 
-                    return buildString(ArrayUtils.toObject(value)).toString();
+                    return new Tuple<>(0, buildString(ArrayUtils.toObject(value)).toString());
                 }
             }
         } catch (IllegalArgumentException e) {
-            return "wrong";
+            return new Tuple<>(2, null);
         }
 
-        return "unsupported";
+        return new Tuple<>(1, null);
     }
 
     private static <T> StringBuilder buildString(T[] values) {
