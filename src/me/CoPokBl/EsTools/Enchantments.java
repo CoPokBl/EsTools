@@ -63,5 +63,8 @@ public class Enchantments {
 
         if (Main.version <= 15) return;
         ENCHANTMENTS.put("soulspeed", Enchantment.SOUL_SPEED);
+
+        if (Main.version <= 18) return;
+        ENCHANTMENTS.put("loyalty", Enchantment.LOYALTY);
     }
 }
