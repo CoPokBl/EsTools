@@ -11,18 +11,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Potion extends EntityCommand {
-
-    private static final Map<PotionType, Integer> effectsOldVersions = new HashMap<PotionType, Integer>() {{
-        put(PotionType.FIRE_RESISTANCE, 1);
-    }};
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -77,34 +71,21 @@ public class Potion extends EntityCommand {
         }
 
         ItemStack pot;
-        if (Main.version > 12) {
-            String type = potType == PotType.drink ?
-                    "POTION" :
-                    potType.toString().toUpperCase() + "_POTION";
-            pot = new ItemStack(Material.valueOf(type), amount);
-            PotionEffectType potion;
-            try {
-                potion = Effects.getByName(args[0]);
-            } catch (IllegalArgumentException e) {
-                s(sender, "&cInvalid potion type");
-                return false;
-            }
-            PotionMeta meta = (PotionMeta) pot.getItemMeta();
-            assert meta != null;
-            meta.addCustomEffect(new PotionEffect(potion, duration, amp-1), true);
-            pot.setItemMeta(meta);
-        } else {
-            pot = new ItemStack(Material.POTION, amount);
-            PotionType type;
-            try {
-                type = PotionType.valueOf(args[0].toUpperCase());
-            } catch (IllegalArgumentException e) {
-                s(sender, "&cInvalid potion type");
-                return false;
-            }
-            //noinspection deprecation (old versions)
-            pot.setDurability(effectsOldVersions.get(type).shortValue());
+        String type = potType == PotType.drink ?
+                "POTION" :
+                potType.toString().toUpperCase() + "_POTION";
+        pot = new ItemStack(Material.valueOf(type), amount);
+        PotionEffectType potion;
+        try {
+            potion = Effects.getByName(args[0]);
+        } catch (IllegalArgumentException e) {
+            s(sender, "&cInvalid potion type");
+            return false;
         }
+        PotionMeta meta = (PotionMeta) pot.getItemMeta();
+        assert meta != null;
+        meta.addCustomEffect(new PotionEffect(potion, duration, amp-1), true);
+        pot.setItemMeta(meta);
 
         player.getInventory().addItem(pot);
 
