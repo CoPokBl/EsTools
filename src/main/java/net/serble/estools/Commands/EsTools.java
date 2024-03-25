@@ -25,7 +25,7 @@ public class EsTools extends CMD {
 		
 		if (args[0].equalsIgnoreCase("reload")) {
 			if (Main.version < 7) {
-				s(sender, "&cSaving is only supoorted on 1.7 or above");
+				s(sender, "&cSaving is only supported on 1.7 or above");
 				return true;
 			}
 
@@ -47,7 +47,7 @@ public class EsTools extends CMD {
 			s(sender, "&aReloaded!");
 		} else if (args[0].equalsIgnoreCase("reset")) {
 			if (Main.version < 7) {
-				s(sender, "&cSaving is only supoorted on 1.7 or above");
+				s(sender, "&cSaving is only supported on 1.7 or above");
 				return true;
 			}
 
