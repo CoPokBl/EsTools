@@ -103,9 +103,9 @@ public class Main extends JavaPlugin {
 
 		if (Main.version < 7) {
 			Main.current.getLogger().info("Saving not supported in 1.6 or below.");
-		} else {
-			Give.enable();
 		}
+
+		Give.enable();
 	}
 	
 	@Override
