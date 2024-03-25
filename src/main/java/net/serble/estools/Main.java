@@ -88,9 +88,9 @@ public class Main extends JavaPlugin {
 		sc("music", "music", new Music(), 13);
 		sc("potion", "potion", new Potion());
 
-		sc("setpersistentdata", "setpersistentdata", new SetPersistentData());
-		sc("getpersistentdata", "getpersistentdata", new GetPersistentData());
-		sc("removepersistentdata", "removepersistentdata", new RemovePersistentData());
+		sc("setpersistentdata", "setpersistentdata", new SetPersistentData(), 14);
+		sc("getpersistentdata", "getpersistentdata", new GetPersistentData(), 14);
+		sc("removepersistentdata", "removepersistentdata", new RemovePersistentData(), 14);
 
 		// Other
 
