@@ -92,7 +92,7 @@ public class GetInfo extends EntityCommand {
 							"&aMax Health: &6%s\n" +
 							"&aPotion Effects: &6%s\n";
 			livingEntityInfo = String.format(livingEntityInfo,
-					le.getHealth(),
+					getHealth(le),
 					maxHealth,
 					potionEffects);
 			info += livingEntityInfo;

@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -152,7 +153,16 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 		if (Main.version > 8) {
 			return p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 		} else {
-			return p.getMaxHealth();
+			if (Main.version > 5) {
+				return p.getMaxHealth();
+			}
+
+			try {
+				return (double)Damageable.class.getMethod("getMaxHealth").invoke(p);
+			} catch(Exception e) {
+				Bukkit.getLogger().severe(e.toString());
+				return 20d;
+			}
 		}
 	}
 
@@ -160,7 +170,45 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 		if (Main.version > 8) {
 			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(value);
 		} else {
-			p.setMaxHealth(value);
+			if (Main.version > 5) {
+				p.setMaxHealth(value);
+				return;
+			}
+
+			try {
+				Damageable.class.getMethod("setMaxHealth", int.class).invoke(p, (int)value);
+			}
+			catch (Exception ex) {
+				Bukkit.getLogger().severe(ex.toString());
+			}
+		}
+	}
+
+	public static double getHealth(LivingEntity p) {
+		if (Main.version > 5) {
+			return p.getHealth();
+		}
+
+		try {
+			return (double)Damageable.class.getMethod("getHealth").invoke(p);
+		}
+		catch (Exception ex) {
+			Bukkit.getLogger().severe(ex.toString());
+			return 20d;
+		}
+	}
+
+	public static void setHealth(LivingEntity p, double value) {
+		if (Main.version > 5) {
+			p.setHealth(value);
+			return;
+		}
+
+		try {
+			Damageable.class.getMethod("setHealth", int.class).invoke(p, (int)value);
+		}
+		catch (Exception ex) {
+			Bukkit.getLogger().severe(ex.toString());
 		}
 	}
 

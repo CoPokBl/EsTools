@@ -16,7 +16,7 @@ public class Suicide extends PlayerCommand {
 		
 		LivingEntity p = (LivingEntity) sender;
 
-		p.setHealth(0);
+		setHealth(p, 0);
 		return true;
 	}
 

@@ -28,7 +28,7 @@ public class Heal extends EntityCommand {
 			s(sender, "&aHealed &6%s", getEntityName(p));
 		}
 
-		p.setHealth(getMaxHealth(p));
+		setHealth(p, getMaxHealth(p));
 		p.setFireTicks(0);
 		return true;
 	}

@@ -148,7 +148,7 @@ permissions:
     description: Lets people strike lightning on people
     default: op
     
-  estools.sethealth:
+  estools.`sethealth:
     description: Lets people set the health for themselves and others
     default: op
     

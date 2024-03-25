@@ -42,7 +42,7 @@ public class SetHealth extends EntityCommand {
 			if (maxhealth < health)
 				health = maxhealth;
 			
-			p.setHealth(health);
+			setHealth(p, health);
 			
 			if (args.length > 1)
 				s(sender, "&aSet health for &6%s&a to &6%s", getEntityName(p), String.valueOf(health));
