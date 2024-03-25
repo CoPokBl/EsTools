@@ -45,15 +45,21 @@ public class Effects {
             POTIONS.put("fire_resistance", PotionType.FIRE_RESISTANCE);
             POTIONS.put("poison", PotionType.POISON);
             POTIONS.put("instant_health", PotionType.INSTANT_HEAL);
-            POTIONS.put("night_vision", PotionType.NIGHT_VISION);
             POTIONS.put("weakness", PotionType.WEAKNESS);
             POTIONS.put("strength", PotionType.STRENGTH);
             POTIONS.put("slowness", PotionType.SLOWNESS);
             POTIONS.put("instant_damage", PotionType.INSTANT_DAMAGE);
-            POTIONS.put("water_breathing", PotionType.WATER);
-            POTIONS.put("invisibility", PotionType.INVISIBILITY);
 
-            if (Main.version > 7) {
+            if (Main.version >= 4 && Main.minorVersion >= 2) {  // Night vision was added in 1.4.2
+                POTIONS.put("night_vision", PotionType.NIGHT_VISION);
+                POTIONS.put("invisibility", PotionType.INVISIBILITY);
+            }
+
+            if (Main.version >= 7 && Main.minorVersion >= 2) {  // 1.7.2
+                POTIONS.put("water_breathing", PotionType.WATER);
+            }
+
+            if (Main.version >= 8) {  // 1.8
                 POTIONS.put("jump_boost", PotionType.JUMP);
             }
         }

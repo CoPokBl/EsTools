@@ -3,14 +3,11 @@ package net.serble.estools.Commands;
 import net.serble.estools.Effects;
 import net.serble.estools.EntityCommand;
 import net.serble.estools.Main;
-import org.bukkit.Material;
+import net.serble.estools.MetaHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
@@ -72,33 +69,20 @@ public class Potion extends EntityCommand {
         }
 
         ItemStack pot;
-        if (Main.version > 8) {
-            String type = potType == PotType.drink ?
-                    "POTION" :
-                    potType.toString().toUpperCase() + "_POTION";
-            pot = new ItemStack(Material.valueOf(type), amount);
-            PotionEffectType potion;
-            try {
-                potion = Effects.getByName(args[0]);
-            } catch (IllegalArgumentException e) {
-                s(sender, "&cInvalid potion type");
-                return false;
-            }
-            PotionMeta meta = (PotionMeta) pot.getItemMeta();
-            assert meta != null;
-            meta.addCustomEffect(new PotionEffect(potion, duration, amp-1), true);
-            pot.setItemMeta(meta);
-        } else {
+        if (Main.version >= 9) {
+            pot = MetaHandler.newPotHelper(sender, potType, duration, amp, amount, args[0]);
+        } else if (Main.version >= 4) {
             PotionType potionType = Effects.getPotionByName(args[0]);
             if (potionType == null) {
                 s(sender, "&cInvalid potion type");
                 return false;
             }
 
-            @SuppressWarnings("deprecation")
-            org.bukkit.potion.Potion potion = new org.bukkit.potion.Potion(potionType, amp);
-            potion.setSplash(potType == PotType.splash);
-            pot = potion.toItemStack(amount);
+            pot = MetaHandler.potHelper(potType, potionType, amp);
+            pot.setAmount(amount);
+        } else {
+            s(sender, "&cPotions are not yet supported in this version, they may be in the future.");
+            return false;
         }
 
 
@@ -107,7 +91,7 @@ public class Potion extends EntityCommand {
         return true;
     }
 
-    enum PotType {
+    public enum PotType {
         drink,
         splash,
         lingering
