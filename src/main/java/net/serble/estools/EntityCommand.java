@@ -50,7 +50,7 @@ public abstract class EntityCommand extends CMD {
 			try {
 				UUID uid = UUID.fromString(name);
 
-				if (Main.version > 9) {
+				if (Main.version > 11) {
 					p = Bukkit.getEntity(uid);
 				} else {
 					if (sender instanceof Player) {
