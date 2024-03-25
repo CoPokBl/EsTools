@@ -10,9 +10,9 @@ public class SetHunger extends PlayerCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
 		if (args.length == 0) {
 			s(sender, genUsage("/sethunger <amount> [entity]"));
+			return false;
 		}
 		
 		Player p;
