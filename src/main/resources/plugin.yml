@@ -1,0 +1,285 @@
+main: net.serble.estools.Main
+name: EsTools
+description: Simple highly compatible general purpose plugin.
+version: 3.3
+softdepend: [Vault]
+authors: [Calcilator, CoPokBl]
+api-version: 1.13
+
+commands:
+  estools:
+    description: View plugin information, including the version.
+  gms:
+    description: Change gamemode to survival.
+  gmc:
+    description: Change gamemode to creative.
+  gma:
+    description: Change gamemode to adventure.
+  gmsp:
+    description: Change gamemode to spectator.
+    aliases: spec
+  tphere:
+    description: Teleport a player to you.
+  tpall:
+    description: Teleport all players to you.
+  feed:
+    description: Fill saturation and hunger.
+  heal:
+    description: Heal a player.
+  sudo:
+    description: Run a command as another player.
+  fly:
+    description: Toggle flight.
+  suicide:
+    description: End your own life.
+  smite:
+    description: Strike player with lightning.
+  sethealth:
+    description: Set a player's health.
+  setmaxhealth:
+    description: Set a player's max health.
+  invsee:
+    description: Open the inventory of another player.
+  i:
+    description: Give yourself an item.
+  h:
+    description: Put an item in your currently selected slot.
+  ench:
+    description: Enchant your currently held item.
+  fix:
+    description: Fully repair held item.
+  getinfo:
+    description: Get information about an entity.
+  editsign:
+    description: Modify the text on a sign.
+  god:
+    description: Toggle god mode.
+  music:
+    description: Play a music disc.
+  cchest:
+    description: Open an ender chest like secondary inventory.
+  rename:
+    description: Change the name held item.
+  back:
+    description: Go to your location before you teleported/died.
+  setstack:
+    description: Change the size of the held item stack.
+    aliases: stack
+  ci:
+    description: Clear your inventory.
+  powerpick:
+    description: Give yourself an op pickaxe.
+    aliases: pp
+  poweraxe:
+    description: Give yourself an op axe.
+    aliases: pa
+  powersword:
+    description: Give yourself an op sword.
+    aliases: ps
+  powershovel:
+    description: Give yourself an op shovel.
+    aliases: psh
+  powerhoe:
+    description: Give yourself an op hoe.
+    aliases: ph
+  sun:
+    description: Set the time to day.
+    aliases: day
+  moon:
+    description: Set the time to night.
+    aliases: night
+  walkspeed:
+    description: Set your walk speed.
+  flyspeed:
+    description: Set your fly speed.
+  setunbreakable:
+    description: Toggle whether or not your held item is unbreakable.
+  hideflags:
+    description: Toggle whether or not your held item's flags are hidden.
+  eff:
+    description: Give a player a potion effect.
+  safetp:
+    description: Toggle whether or not fall damage/distance should be kept when being teleported with commands.
+  infinite:
+    description: Toggle whether or not you run out of items when placing blocks.
+  sethunger:
+    description: Set a player's hunger level.
+  setsaturation:
+    description: Set a player's saturation level.
+  potion:
+    description: Give a player a potion.
+  setpersistentdata:
+    description: Set persistent nbt tags on items.
+  getpersistentdata:
+    description: Get persistent nbt tags on items.
+  removepersistentdata:
+    description: Remove persistent nbt tags on items.
+
+permissions:
+  estools.tp:
+    description: Lets people teleport themselves and others
+    default: op
+    
+  estools.gm:
+    description: Lets people change the gamemode of themselves and others
+    default: op
+    
+  estools.feed:
+    description: Lets people feed themselves and others
+    default: op
+    
+  estools.heal:
+    description: Lets people heal themselves and others
+    default: op
+    
+  estools.sudo:
+    description: Lets people run commands as other players
+    default: op
+    
+  estools.fly:
+    description: Lets people toggle flight for themselves and others
+    default: op
+    
+  estools.suicide:
+    description: Lets people kill themselves
+    default: true
+    
+  estools.smite:
+    description: Lets people strike lightning on people
+    default: op
+    
+  estools.sethealth:
+    description: Lets people set the health for themselves and others
+    default: op
+    
+  estools.setmaxhealth:
+    description: Lets people set the max health for themselves and others
+    default: op
+    
+  estools.getinfo:
+    description: Lets people get info about a player
+    default: op
+    
+  estools.invsee:
+    description: Lets people see and edit other peoples inventories
+    default: op
+    
+  estools.give:
+    description: Lets people give themselves items
+    default: op
+    
+  estools.reload:
+    description: Lets people reload config files
+    default: op
+    
+  estools.reset:
+    description: Lets people reset all config files
+    default: op
+    
+  estools.ench:
+    description: Lets people enchant items (sharp 2 billion allowed)
+    default: op
+    
+  estools.fix:
+    description: Lets people repair items
+    default: op
+    
+  estools.editsign:
+    description: Lets people edit signs
+    default: op
+    
+  estools.god:
+    description: Lets people turn invincible
+    default: op
+    
+  estools.music:
+    description: Lets people play music to themselves
+    default: true
+    
+  estools.cchest.creative:
+    description: Lets people have chests where they can store and use items anywhere
+    default: true
+    
+  estools.cchest.survival:
+    description: Lets people use cchests regardless of gamemode
+    default: op
+    
+  estools.rename:
+    description: Lets people rename items
+    default: op
+    
+  estools.back:
+    description: Lets people go back to nearest death location
+    default: op
+    
+  estools.setstack:
+    description: Lets people set the amount of itens in a stack
+    default: op
+
+  estools.clearinv:
+    description: Lets people clear inventories
+    default: op
+
+  estools.powerpick:
+    description: Lets people get an op pickaxe
+    default: op
+
+  estools.time:
+    description: Lets people change the time
+    default: op
+
+  estools.setunbreakable:
+    description: Lets people make tools / weapons / armour unbreakable
+    default: op
+
+  estools.hideflags:
+    description: Lets people hide flags like enchants.
+    default: op
+
+  estools.walkspeed:
+    description: Lets players control walk speed
+    default: op
+
+  estools.flyspeed:
+    description: Lets players control fly speed
+    default: op
+
+  estools.effect:
+    description: Lets players set effects for themselves and others
+    default: op
+
+  estools.safetp:
+    description: Lets players toggle if fall damage/distance should be kept when being teleported with commands
+    default: op
+
+  estools.signs:
+    description: Lets players make estools signs (like disposal)
+    default: op
+
+  estools.infinite:
+    description: Lets players not run out of items when placing blocks
+    default: op
+
+  estools.sethunger:
+    description: Lets players set their and other peoples hunger level
+    default: op
+
+  estools.setsaturation:
+    description: Lets players set their and other peoples saturation level
+    default: op
+
+  estools.potion:
+    description: Lets players give themselves and others potions
+    default: op
+
+  estools.setpersistentdata:
+    description: Lets players set persistent nbt tags on items
+    default: op
+
+  estools.getpersistentdata:
+    description: Lets players get persistent nbt tags on items
+    default: op
+
+  estools.removepersistentdata:
+    description: Lets players remove persistent nbt tags on items
+    default: op
