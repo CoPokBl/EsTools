@@ -1,6 +1,7 @@
 package net.serble.estools;
 
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -9,10 +10,16 @@ import java.util.Set;
 
 public class Effects {
     private static final Map<String, PotionEffectType> EFFECTS = new HashMap<>();
+    private static final Map<String, PotionType> POTIONS = new HashMap<>();
 
     public static PotionEffectType getByName(String name) {
         return EFFECTS.get(name.toLowerCase(Locale.ENGLISH));
     }
+
+    public static PotionType getPotionByName(String name) {
+        return POTIONS.get(name.toLowerCase(Locale.ENGLISH));
+    }
+
     public static String getName(PotionEffectType effect) {
         for (Map.Entry<String, PotionEffectType> a : EFFECTS.entrySet()) {
             if (a.getValue().equals(effect)) {
@@ -27,7 +34,27 @@ public class Effects {
         return EFFECTS.entrySet();
     }
 
+    public static Set<Map.Entry<String, PotionType>> potionEntrySet() {
+        return POTIONS.entrySet();
+    }
+
     static {
+        if (Main.version <= 8) {  // 1.8 only potions be funky
+            POTIONS.put("regeneration", PotionType.REGEN);
+            POTIONS.put("speed", PotionType.SPEED);
+            POTIONS.put("fire_resistance", PotionType.FIRE_RESISTANCE);
+            POTIONS.put("poison", PotionType.POISON);
+            POTIONS.put("instant_health", PotionType.INSTANT_HEAL);
+            POTIONS.put("night_vision", PotionType.NIGHT_VISION);
+            POTIONS.put("weakness", PotionType.WEAKNESS);
+            POTIONS.put("strength", PotionType.STRENGTH);
+            POTIONS.put("slowness", PotionType.SLOWNESS);
+            POTIONS.put("jump_boost", PotionType.JUMP);
+            POTIONS.put("instant_damage", PotionType.INSTANT_DAMAGE);
+            POTIONS.put("water_breathing", PotionType.WATER);
+            POTIONS.put("invisibility", PotionType.INVISIBILITY);
+        }
+
         EFFECTS.put("blindness", PotionEffectType.BLINDNESS);
         EFFECTS.put("nausea", PotionEffectType.CONFUSION);
         EFFECTS.put("resistance", PotionEffectType.DAMAGE_RESISTANCE);

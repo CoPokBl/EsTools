@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,21 +72,29 @@ public class Potion extends EntityCommand {
         }
 
         ItemStack pot;
-        String type = potType == PotType.drink ?
-                "POTION" :
-                potType.toString().toUpperCase() + "_POTION";
-        pot = new ItemStack(Material.valueOf(type), amount);
-        PotionEffectType potion;
-        try {
-            potion = Effects.getByName(args[0]);
-        } catch (IllegalArgumentException e) {
-            s(sender, "&cInvalid potion type");
-            return false;
+        if (Main.version > 8) {
+            String type = potType == PotType.drink ?
+                    "POTION" :
+                    potType.toString().toUpperCase() + "_POTION";
+            pot = new ItemStack(Material.valueOf(type), amount);
+            PotionEffectType potion;
+            try {
+                potion = Effects.getByName(args[0]);
+            } catch (IllegalArgumentException e) {
+                s(sender, "&cInvalid potion type");
+                return false;
+            }
+            PotionMeta meta = (PotionMeta) pot.getItemMeta();
+            assert meta != null;
+            meta.addCustomEffect(new PotionEffect(potion, duration, amp-1), true);
+            pot.setItemMeta(meta);
+        } else {
+            @SuppressWarnings("deprecation")
+            org.bukkit.potion.Potion potion = new org.bukkit.potion.Potion(Effects.getPotionByName(args[0]), amp);
+            potion.setSplash(potType == PotType.splash);
+            pot = potion.toItemStack(amount);
         }
-        PotionMeta meta = (PotionMeta) pot.getItemMeta();
-        assert meta != null;
-        meta.addCustomEffect(new PotionEffect(potion, duration, amp-1), true);
-        pot.setItemMeta(meta);
+
 
         player.getInventory().addItem(pot);
 
@@ -105,7 +114,7 @@ public class Potion extends EntityCommand {
 
         switch (args.length) {
             case 1:
-                for (Map.Entry<String, PotionEffectType> e : Effects.entrySet()) {
+                for (Map.Entry<String, PotionType> e : Effects.potionEntrySet()) {
                     tab.add(e.getKey().toLowerCase());
                 }
                 break;
