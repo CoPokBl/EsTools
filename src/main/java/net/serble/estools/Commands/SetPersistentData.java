@@ -1,12 +1,11 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.CMD;
-import net.serble.estools.Main;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -42,7 +41,8 @@ public class SetPersistentData extends CMD {
         }
 
         ItemStack item = getMainHand((Player) sender);
-        NamespacedKey key = NamespacedKey.fromString(keyString, Main.current);
+        NamespacedKey key = getNamespacedKey(keyString);
+
         if (key == null) {
             s(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
             return false;

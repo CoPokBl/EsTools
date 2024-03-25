@@ -1,7 +1,6 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.CMD;
-import net.serble.estools.Main;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -25,7 +24,7 @@ public class RemovePersistentData extends CMD {
         String tagString = args[0].toLowerCase();
 
         ItemStack item = getMainHand((Player) sender);
-        NamespacedKey key = NamespacedKey.fromString(tagString, Main.current);
+        NamespacedKey key = getNamespacedKey(tagString);
         if (key == null) {
             s(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
             return false;

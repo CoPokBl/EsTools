@@ -1,7 +1,6 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.CMD;
-import net.serble.estools.Main;
 import net.serble.estools.Tuple;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.NamespacedKey;
@@ -33,7 +32,7 @@ public class GetPersistentData extends CMD {
         String typeString = args[1].toLowerCase();
 
         ItemStack item = getMainHand((Player) sender);
-        NamespacedKey key = NamespacedKey.fromString(tagString, Main.current);
+        NamespacedKey key = getNamespacedKey(tagString);
         if (key == null) {
             s(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
             return false;
