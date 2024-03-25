@@ -45,7 +45,7 @@ public class CChest extends CMD implements Listener {
 			return true;
 
 		if (Main.version < 7) {
-			s(sender, "&cWarning: CCHest doesnt work to full capacity");
+			s(sender, "&cWarning: CChest doesn't work to full capacity");
 		}
 
 		Player p = (Player)sender;
