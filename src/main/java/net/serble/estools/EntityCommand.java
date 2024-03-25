@@ -39,7 +39,9 @@ public abstract class EntityCommand extends CMD {
 	public static LivingEntity getEntity(CommandSender sender, String name) {
 		Entity entity = getNonLivingEntity(sender, name);
 		if (entity instanceof LivingEntity) return (LivingEntity) entity;
-		s(sender, "&cPlayer/Entity not found.");
+		if (entity != null) {
+			s(sender, "&cPlayer/Entity not found.");
+		}
 		return null;
 	}
 
