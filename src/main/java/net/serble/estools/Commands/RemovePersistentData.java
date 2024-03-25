@@ -24,7 +24,7 @@ public class RemovePersistentData extends CMD {
         String tagString = args[0].toLowerCase();
 
         ItemStack item = getMainHand((Player) sender);
-        NamespacedKey key = getNamespacedKey(tagString);
+        NamespacedKey key = GetPersistentData.getNamespacedKey(tagString);
         if (key == null) {
             s(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
             return false;

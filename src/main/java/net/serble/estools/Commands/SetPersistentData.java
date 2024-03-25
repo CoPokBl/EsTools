@@ -41,7 +41,7 @@ public class SetPersistentData extends CMD {
         }
 
         ItemStack item = getMainHand((Player) sender);
-        NamespacedKey key = getNamespacedKey(keyString);
+        NamespacedKey key = GetPersistentData.getNamespacedKey(keyString);
 
         if (key == null) {
             s(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");

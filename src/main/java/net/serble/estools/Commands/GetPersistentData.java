@@ -1,6 +1,7 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.CMD;
+import net.serble.estools.Main;
 import net.serble.estools.Tuple;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.NamespacedKey;
@@ -158,6 +159,24 @@ public class GetPersistentData extends CMD {
         }
 
         return new Tuple<>(1, null);
+    }
+
+    public static NamespacedKey getNamespacedKey(String keyString) {
+        if (Main.version >= 16) {
+            return NamespacedKey.fromString(keyString, Main.current);
+        }
+
+        String[] parts = keyString.split(":");
+        if (parts.length == 2) {
+            //noinspection deprecation (This is the only way to create a NamespacedKey pre 1.16)
+            return new NamespacedKey(parts[0], parts[1]);
+        } else if (parts.length == 1) {  // Incorrectly formatted key
+            String pluginName = Main.getPlugin(Main.class).getName();
+            //noinspection deprecation
+            return new NamespacedKey(pluginName, parts[0]);
+        }
+
+        return null;
     }
 
     private static <T> StringBuilder buildString(T[] values) {

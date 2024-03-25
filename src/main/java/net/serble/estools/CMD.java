@@ -2,7 +2,6 @@ package net.serble.estools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -161,23 +160,4 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 			p.setMaxHealth(value);
 		}
 	}
-
-	public static NamespacedKey getNamespacedKey(String keyString) {
-		if (Main.version >= 16) {
-			return NamespacedKey.fromString(keyString, Main.current);
-		}
-
-		String[] parts = keyString.split(":");
-		if (parts.length == 2) {
-			//noinspection deprecation (This is the only way to create a NamespacedKey pre 1.16)
-			return new NamespacedKey(parts[0], parts[1]);
-		} else if (parts.length == 1) {  // Incorrectly formatted key
-			String pluginName = Main.getPlugin(Main.class).getName();
-			//noinspection deprecation
-			return new NamespacedKey(pluginName, parts[0]);
-		}
-
-		return null;
-	}
-
 }
