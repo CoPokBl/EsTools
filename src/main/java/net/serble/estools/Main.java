@@ -96,10 +96,6 @@ public class Main extends JavaPlugin {
 
 		SignMain.init();
 
-		if (version > 4) {
-			Bukkit.getServer().getPluginManager().registerEvents(new CChest(), this);
-		}
-
 		Bukkit.getServer().getPluginManager().registerEvents(new SignMain(), this);
 
 		PowerPick.initall();
