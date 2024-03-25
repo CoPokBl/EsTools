@@ -16,6 +16,7 @@ public class Main extends JavaPlugin {
 	
 	public static Main current;
 	public static int version;
+	public static int minorVersion;
 
 	// MultiEntityCommand
 	
@@ -160,10 +161,18 @@ public class Main extends JavaPlugin {
 		String versionS = Bukkit.getVersion();
 
 		for (int i = 0; i < 99; i++) {
-			if (versionS.contains("1." + i))  version = i;
+			if (versionS.contains("1." + i)) {
+				version = i;
+			}
 		}
 
-	    getLogger().info("version detected as: " + version + " from: " + versionS);
+		for (int i = 0; i < 99; i++) {
+			if (versionS.contains("1." + version + '.' + i)) {
+				minorVersion = i;
+			}
+		}
+
+	    getLogger().info("Version detected as: " + version + '.' + minorVersion + " from: " + versionS);
 	}
 }
 
