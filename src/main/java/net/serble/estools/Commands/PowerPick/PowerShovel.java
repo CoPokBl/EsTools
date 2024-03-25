@@ -9,6 +9,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Objects;
+
 public class PowerShovel extends CMD {
     private static ItemStack powerPick;
 
@@ -19,13 +21,14 @@ public class PowerShovel extends CMD {
         } else if (Main.version > 12) {
             powerPick = new ItemStack(Material.DIAMOND_SHOVEL);
         } else {
-            powerPick = new ItemStack(Material.getMaterial("DIAMOND_SPADE"));
+            powerPick = new ItemStack(Objects.requireNonNull(Material.getMaterial("DIAMOND_SPADE")));
         }
 
         powerPick.addUnsafeEnchantment(Enchantment.DIG_SPEED, 32767);
 
         if (Main.version > 10) {
             ItemMeta im = powerPick.getItemMeta();
+            assert im != null;
             im.setUnbreakable(true);
             powerPick.setItemMeta(im);
         } else {
