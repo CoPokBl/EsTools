@@ -103,9 +103,9 @@ public class CChest extends CMD implements Listener {
 					e.setCancelled(true);
 					
 					if (cItem != null) {
-						cItem.setAmount(0);
-					} 
-				} 
+						e.getClickedInventory().setItem(e.getSlot(), null);
+					}
+				}
 				
 				// left click or drop on chest
 				else if (equalsOr(e.getClick(), ClickType.LEFT, ClickType.DROP, ClickType.CONTROL_DROP)) {
