@@ -30,7 +30,7 @@ public class SetMaxHealth extends EntityCommand {
 			if (p == null)
 				return false;
 			
-			s(sender, "&aSet max health for &6%s&a to &6%s", p.getName(), String.valueOf(health));
+			s(sender, "&aSet max health for &6%s&a to &6%s", getEntityName(p), String.valueOf(health));
 		} else {
 			if (isNotEntity(sender))
 				return false;

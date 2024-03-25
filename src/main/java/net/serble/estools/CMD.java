@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -159,5 +160,24 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 		} else {
 			p.setMaxHealth(value);
 		}
+	}
+
+	public static String getEntityName(Entity p) {
+		if (Main.version > 7) {
+			return p.getName();
+		}
+
+		if (p instanceof Player) {
+			return ((Player)p).getDisplayName();
+		}
+
+		if (p instanceof LivingEntity) {
+			String name = ((LivingEntity)p).getCustomName();
+			if (name != null) {
+				return name;
+			}
+		}
+
+		return "Entity";
 	}
 }

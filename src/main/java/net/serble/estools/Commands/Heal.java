@@ -25,7 +25,7 @@ public class Heal extends EntityCommand {
 			if (p == null)
 				return false;
 			
-			s(sender, "&aHealed &6%s", p.getName());
+			s(sender, "&aHealed &6%s", getEntityName(p));
 		}
 
 		p.setHealth(getMaxHealth(p));

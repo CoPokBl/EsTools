@@ -49,10 +49,13 @@ public class Effects {
             POTIONS.put("weakness", PotionType.WEAKNESS);
             POTIONS.put("strength", PotionType.STRENGTH);
             POTIONS.put("slowness", PotionType.SLOWNESS);
-            POTIONS.put("jump_boost", PotionType.JUMP);
             POTIONS.put("instant_damage", PotionType.INSTANT_DAMAGE);
             POTIONS.put("water_breathing", PotionType.WATER);
             POTIONS.put("invisibility", PotionType.INVISIBILITY);
+
+            if (Main.version > 7) {
+                POTIONS.put("jump_boost", PotionType.JUMP);
+            }
         }
 
         EFFECTS.put("blindness", PotionEffectType.BLINDNESS);
@@ -65,7 +68,6 @@ public class Effects {
         EFFECTS.put("hunger", PotionEffectType.HUNGER);
         EFFECTS.put("strength", PotionEffectType.INCREASE_DAMAGE);
         EFFECTS.put("invisibility", PotionEffectType.INVISIBILITY);
-        EFFECTS.put("jump_boost", PotionEffectType.JUMP);
         EFFECTS.put("night_vision", PotionEffectType.NIGHT_VISION);
         EFFECTS.put("poison", PotionEffectType.POISON);
         EFFECTS.put("regeneration", PotionEffectType.REGENERATION);
@@ -77,31 +79,34 @@ public class Effects {
 
         if (Main.version >= 5) {
             EFFECTS.put("wither", PotionEffectType.WITHER);
+        }
 
-            if (Main.version >= 7) {
-                EFFECTS.put("health_boost", PotionEffectType.HEALTH_BOOST);
-                EFFECTS.put("absorption", PotionEffectType.ABSORPTION);
-                EFFECTS.put("saturation", PotionEffectType.SATURATION);
+        if (Main.version >= 7) {
+            EFFECTS.put("health_boost", PotionEffectType.HEALTH_BOOST);
+            EFFECTS.put("absorption", PotionEffectType.ABSORPTION);
+            EFFECTS.put("saturation", PotionEffectType.SATURATION);
+        }
 
-                if (Main.version >= 9) {
-                    EFFECTS.put("levitation", PotionEffectType.LEVITATION);
-                    EFFECTS.put("glowing", PotionEffectType.GLOWING);
-                    EFFECTS.put("luck", PotionEffectType.LUCK);
-                    EFFECTS.put("unluck", PotionEffectType.UNLUCK);
+        if (Main.version >= 8) {
+            EFFECTS.put("jump_boost", PotionEffectType.JUMP);
+        }
 
+        if (Main.version >= 9) {
+            EFFECTS.put("levitation", PotionEffectType.LEVITATION);
+            EFFECTS.put("glowing", PotionEffectType.GLOWING);
+            EFFECTS.put("luck", PotionEffectType.LUCK);
+            EFFECTS.put("unluck", PotionEffectType.UNLUCK);
+        }
 
-                    if (Main.version >= 13) {
-                        EFFECTS.put("slow_falling", PotionEffectType.SLOW_FALLING);
-                        EFFECTS.put("conduit_power", PotionEffectType.CONDUIT_POWER);
-                        EFFECTS.put("dolphins_grace", PotionEffectType.DOLPHINS_GRACE);
+        if (Main.version >= 13) {
+            EFFECTS.put("slow_falling", PotionEffectType.SLOW_FALLING);
+            EFFECTS.put("conduit_power", PotionEffectType.CONDUIT_POWER);
+            EFFECTS.put("dolphins_grace", PotionEffectType.DOLPHINS_GRACE);
+        }
 
-                        if (Main.version >= 14) {
-                            EFFECTS.put("bad_omen", PotionEffectType.BAD_OMEN);
-                            EFFECTS.put("hero_of_the_village", PotionEffectType.HERO_OF_THE_VILLAGE);
-                        }
-                    }
-                }
-            }
+        if (Main.version >= 14) {
+            EFFECTS.put("bad_omen", PotionEffectType.BAD_OMEN);
+            EFFECTS.put("hero_of_the_village", PotionEffectType.HERO_OF_THE_VILLAGE);
         }
     }
 }

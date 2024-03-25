@@ -76,11 +76,11 @@ public class God extends EntityCommand implements Listener {
 			}
 
 			currentPlayers.remove(u);
-			s(sender, "&aGod mode &6disabled&a for &6%s", p.getName());
+			s(sender, "&aGod mode &6disabled&a for &6%s", getEntityName(p));
 		}
 		else {
 			currentPlayers.put(u, r);
-			s(sender, "&aGod mode &6enabled&a for &6%s&a for &6%s", p.getName(), timerStr);
+			s(sender, "&aGod mode &6enabled&a for &6%s&a for &6%s", getEntityName(p), timerStr);
 		}
 		return true;
 	}

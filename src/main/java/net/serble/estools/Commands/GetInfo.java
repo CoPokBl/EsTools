@@ -29,11 +29,7 @@ public class GetInfo extends EntityCommand {
 
 		Location loc = entity.getLocation();
 
-		String name = Main.version > 7 ?
-				entity.getName() :
-				entity instanceof Player ?
-						((Player) entity).getDisplayName() :
-						"None";
+		String name = getEntityName(entity);
 
 		// Global Values
 		String info =
@@ -57,7 +53,7 @@ public class GetInfo extends EntityCommand {
 			StringBuilder passengerText = new StringBuilder("&aPassengers: &6");
 			boolean passengersExist = false;
 			for (Entity passenger : entity.getPassengers()) {
-				passengerText.append(passenger.getName()).append(" (").append(passenger.getType()).append("), ");
+				passengerText.append(getEntityName(passenger)).append(" (").append(passenger.getType()).append("), ");
 				passengersExist = true;
 			}
 			if (passengersExist) {
