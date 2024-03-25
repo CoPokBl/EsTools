@@ -83,7 +83,7 @@ public class Main extends JavaPlugin {
 
 		sc("editsign", "editsign", new EditSign(), 8);
 
-		sc("god", "god", new God(), 9);
+		sc("god", "god", new God());
 
 		sc("music", "music", new Music(), 13);
 		sc("potion", "potion", new Potion());
