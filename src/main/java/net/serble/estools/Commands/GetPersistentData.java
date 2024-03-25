@@ -70,7 +70,7 @@ public class GetPersistentData extends CMD {
     private static Tuple<Integer, String> getData(String type, NamespacedKey key, PersistentDataContainer data) {
         try {
             switch (type) {
-                case "string" -> {
+                case "string": {
                     String value = data.get(key, PersistentDataType.STRING);
                     if (value == null) {
                         return new Tuple<>(3, null);
@@ -79,7 +79,7 @@ public class GetPersistentData extends CMD {
                     return new Tuple<>(0, "\"" + value + "\"");
                 }
 
-                case "integer" -> {
+                case "integer": {
                     Integer value = data.get(key, PersistentDataType.INTEGER);
                     if (value == null) {
                         return new Tuple<>(3, null);
@@ -87,7 +87,7 @@ public class GetPersistentData extends CMD {
                     return new Tuple<>(0, value.toString());
                 }
 
-                case "double" -> {
+                case "double": {
                     Double value = data.get(key, PersistentDataType.DOUBLE);
                     if (value == null) {
                         return new Tuple<>(3, null);
@@ -95,7 +95,7 @@ public class GetPersistentData extends CMD {
                     return new Tuple<>(0, value.toString());
                 }
 
-                case "float" -> {
+                case "float": {
                     Float value = data.get(key, PersistentDataType.FLOAT);
                     if (value == null) {
                         return new Tuple<>(3, null);
@@ -103,7 +103,7 @@ public class GetPersistentData extends CMD {
                     return new Tuple<>(0, value.toString());
                 }
 
-                case "long" -> {
+                case "long": {
                     Long value = data.get(key, PersistentDataType.LONG);
                     if (value == null) {
                         return new Tuple<>(3, null);
@@ -111,7 +111,7 @@ public class GetPersistentData extends CMD {
                     return new Tuple<>(0, value.toString());
                 }
 
-                case "short" -> {
+                case "short": {
                     Short value = data.get(key, PersistentDataType.SHORT);
                     if (value == null) {
                         return new Tuple<>(3, null);
@@ -119,7 +119,7 @@ public class GetPersistentData extends CMD {
                     return new Tuple<>(0, value.toString());
                 }
 
-                case "byte" -> {
+                case "byte": {
                     Byte value = data.get(key, PersistentDataType.BYTE);
                     if (value == null) {
                         return new Tuple<>(3, null);
@@ -127,7 +127,7 @@ public class GetPersistentData extends CMD {
                     return new Tuple<>(0, value.toString());
                 }
 
-                case "byte_array" -> {
+                case "byte_array": {
                     byte[] value = data.get(key, PersistentDataType.BYTE_ARRAY);
                     if (value == null) {
                         return new Tuple<>(3, null);
@@ -136,7 +136,7 @@ public class GetPersistentData extends CMD {
                     return new Tuple<>(0, buildString(ArrayUtils.toObject(value)).toString());
                 }
 
-                case "int_array" -> {
+                case "int_array": {
                     int[] value = data.get(key, PersistentDataType.INTEGER_ARRAY);
                     if (value == null) {
                         return new Tuple<>(3, null);
@@ -145,7 +145,7 @@ public class GetPersistentData extends CMD {
                     return new Tuple<>(0, buildString(ArrayUtils.toObject(value)).toString());
                 }
 
-                case "long_array" -> {
+                case "long_array": {
                     long[] value = data.get(key, PersistentDataType.LONG_ARRAY);
                     if (value == null) {
                         return new Tuple<>(3, null);
@@ -174,7 +174,7 @@ public class GetPersistentData extends CMD {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
-        List<String> tab = new ArrayList<String>();
+        List<String> tab = new ArrayList<>();
 
         if (args.length == 2) {
             tab.add("string");

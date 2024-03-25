@@ -76,65 +76,65 @@ public class SetPersistentData extends CMD {
     // 0 = success, 1 = unsupported, 2 = invalid value
     public static int setNbt(String type, NamespacedKey key, PersistentDataContainer data, String value) {
         switch (type) {
-            case "string" -> {
+            case "string":
                 data.set(key, PersistentDataType.STRING, value);
-            }
+                break;
 
-            case "integer" -> {
+            case "integer":
                 try {
                     data.set(key, PersistentDataType.INTEGER, Integer.parseInt(value));
                 }
                 catch (NumberFormatException e) {
                     return 2;
                 }
-            }
+                break;
 
-            case "double" -> {
+            case "double":
                 try {
                     data.set(key, PersistentDataType.DOUBLE, Double.parseDouble(value));
                 }
                 catch (NumberFormatException e) {
                     return 2;
                 }
-            }
+                break;
 
-            case "float" -> {
+            case "float":
                 try {
                     data.set(key, PersistentDataType.FLOAT, Float.parseFloat(value));
                 }
                 catch (NumberFormatException e) {
                     return 2;
                 }
-            }
+                break;
 
-            case "long" -> {
+            case "long":
                 try {
                     data.set(key, PersistentDataType.LONG, Long.parseLong(value));
                 }
                 catch (NumberFormatException e) {
                     return 2;
                 }
-            }
+                break;
 
-            case "short" -> {
+            case "short":
                 try {
                     data.set(key, PersistentDataType.SHORT, Short.parseShort(value));
                 }
                 catch (NumberFormatException e) {
                     return 2;
                 }
-            }
+                break;
 
-            case "byte" -> {
+            case "byte":
                 try {
                     data.set(key, PersistentDataType.BYTE, Byte.parseByte(value));
                 }
                 catch (NumberFormatException e) {
                     return 2;
                 }
-            }
+                break;
 
-            case "byte_array" -> {
+            case "byte_array": {
                 String[] split = value.split(" ");
                 byte[] bytes = new byte[split.length];
 
@@ -148,9 +148,10 @@ public class SetPersistentData extends CMD {
                 }
 
                 data.set(key, PersistentDataType.BYTE_ARRAY, bytes);
+                break;
             }
 
-            case "int_array" -> {
+            case "int_array": {
                 String[] split = value.split(" ");
                 int[] ints = new int[split.length];
 
@@ -164,9 +165,10 @@ public class SetPersistentData extends CMD {
                 }
 
                 data.set(key, PersistentDataType.INTEGER_ARRAY, ints);
+                break;
             }
 
-            case "long_array" -> {
+            case "long_array": {
                 String[] split = value.split(" ");
                 long[] longs = new long[split.length];
 
@@ -180,9 +182,10 @@ public class SetPersistentData extends CMD {
                 }
 
                 data.set(key, PersistentDataType.LONG_ARRAY, longs);
+                break;
             }
 
-            default -> {
+            default: {
                 return 1;
             }
         }
@@ -192,7 +195,7 @@ public class SetPersistentData extends CMD {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
-        List<String> tab = new ArrayList<String>();
+        List<String> tab = new ArrayList<>();
 
         if (args.length == 2) {
             tab.add("string");

@@ -14,14 +14,15 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Potion extends EntityCommand {
 
-    private static final Map<PotionType, Integer> effectsOldVersions = Map.of(
-            PotionType.FIRE_RESISTANCE, 1
-    );
+    private static final Map<PotionType, Integer> effectsOldVersions = new HashMap<PotionType, Integer>() {{
+        put(PotionType.FIRE_RESISTANCE, 1);
+    }};
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -89,6 +90,7 @@ public class Potion extends EntityCommand {
                 return false;
             }
             PotionMeta meta = (PotionMeta) pot.getItemMeta();
+            assert meta != null;
             meta.addCustomEffect(new PotionEffect(potion, duration, amp-1), true);
             pot.setItemMeta(meta);
         } else {
@@ -100,6 +102,7 @@ public class Potion extends EntityCommand {
                 s(sender, "&cInvalid potion type");
                 return false;
             }
+            //noinspection deprecation (old versions)
             pot.setDurability(effectsOldVersions.get(type).shortValue());
         }
 
