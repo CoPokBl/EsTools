@@ -59,7 +59,7 @@ public class Main extends JavaPlugin {
 		sc("walkspeed", "walkspeed", new WalkSpeed());
 		sc("flyspeed", "flyspeed", new FlySpeed());
 		sc("setunbreakable", "setunbreakable", new SetUnbreakable());
-		sc("hideflags", "hideflags", new HideFlags());
+		sc("hideflags", "hideflags", new HideFlags(), 8);
 		sc("eff", "effect", new Eff());
 		sc("safetp", "safetp", new SafeTP());
 		sc("infinite", "infinite", new Infinite());
