@@ -20,7 +20,7 @@ public class SetUnbreakable extends CMD {
 
         ItemStack is = getMainHand((Player) sender);
 
-        if (is == null || is.getType() == Material.AIR || is.getItemMeta() == null) {
+        if (is == null || is.getType() == Material.AIR || (Main.version > 10 && is.getItemMeta() == null)) {
             s(sender, "&cMust be a damageable item");
             return true;
         }
