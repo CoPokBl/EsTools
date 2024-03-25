@@ -51,13 +51,13 @@ public class Main extends JavaPlugin {
 		sc("estools", new EsTools());
 		sc("ench", "ench", new Ench());
 		sc("fix", "fix", new Fix());
-		sc("cchest", new CChest());
+		sc("cchest", new CChest(), 7);
 		sc("back", "back", new Back());
 		sc("setstack", "setstack", new SetStack());
 		sc("ci", "clearinv", new ClearInv());
 		sc("sun", "time", new Sun());
 		sc("moon", "time", new Night());
-		sc("walkspeed", "walkspeed", new WalkSpeed());
+		sc("walkspeed", "walkspeed", new WalkSpeed(), 4);
 		sc("flyspeed", "flyspeed", new FlySpeed());
 		sc("setunbreakable", "setunbreakable", new SetUnbreakable());
 		sc("hideflags", "hideflags", new HideFlags(), 8);
@@ -73,21 +73,23 @@ public class Main extends JavaPlugin {
 		sc("powershovel", "powerpick", new PowerShovel());
 		sc("powerhoe", "powerpick", new PowerHoe());
 
-		sc("rename", "rename", new Rename(), 4);
-		sc("sudo", "sudo", new Sudo(), 4);
+		if (Main.version >= 4 && Main.minorVersion >= 6) {
+			sc("rename", "rename", new Rename(), 4);
+		}
+		sc("sudo", "sudo", new Sudo());
 
-		sc("heal", "heal", new Heal(), 6);
-		sc("suicide", "suicide", new Suicide(), 6);
-		sc("sethealth", "sethealth", new SetHealth(), 6);
-		sc("setmaxhealth", "setmaxhealth", new SetMaxHealth(), 6);
-		sc("getinfo", "getinfo", new GetInfo(), 6);
+		sc("heal", "heal", new Heal());
+		sc("suicide", "suicide", new Suicide());
+		sc("sethealth", "sethealth", new SetHealth());
+		sc("setmaxhealth", "setmaxhealth", new SetMaxHealth());
+		sc("getinfo", "getinfo", new GetInfo());
 
 		sc("editsign", "editsign", new EditSign(), 8);
 
 		sc("god", "god", new God());
 
 		sc("music", "music", new Music(), 13);
-		sc("potion", "potion", new Potion());
+		sc("potion", "potion", new Potion(), 4);
 
 		sc("setpersistentdata", "setpersistentdata", new SetPersistentData(), 14);
 		sc("getpersistentdata", "getpersistentdata", new GetPersistentData(), 14);
