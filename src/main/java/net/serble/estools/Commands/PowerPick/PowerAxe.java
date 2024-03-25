@@ -21,6 +21,7 @@ public class PowerAxe extends CMD {
 
         if (Main.version > 10) {
             ItemMeta im = powerPick.getItemMeta();
+            assert im != null;
             im.setUnbreakable(true);
             powerPick.setItemMeta(im);
         } else {

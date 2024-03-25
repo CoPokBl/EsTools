@@ -9,6 +9,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Objects;
+
 public class PowerSword extends CMD {
     private static ItemStack powerPick;
 
@@ -16,13 +18,14 @@ public class PowerSword extends CMD {
         if (Main.version > 12) {
             powerPick = new ItemStack(Material.SALMON);
         } else {
-            powerPick = new ItemStack(Material.getMaterial("RAW_FISH"));
+            powerPick = new ItemStack(Objects.requireNonNull(Material.getMaterial("RAW_FISH")));
         }
 
         powerPick.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 32767);
 
         if (Main.version > 10) {
             ItemMeta im = powerPick.getItemMeta();
+            assert im != null;
             im.setUnbreakable(true);
             powerPick.setItemMeta(im);
         } else {
