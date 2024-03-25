@@ -40,9 +40,10 @@ public class SafeTP extends CMD implements Listener {
 
     @EventHandler
     public void teleport(final PlayerTeleportEvent e) {
-        if (enabled)
-            if (equalsOr(e.getCause(), PlayerTeleportEvent.TeleportCause.COMMAND, PlayerTeleportEvent.TeleportCause.PLUGIN))
-                e.getPlayer().setFallDistance(0);
+        if (enabled && equalsOr(e.getCause(), PlayerTeleportEvent.TeleportCause.COMMAND,
+                PlayerTeleportEvent.TeleportCause.PLUGIN, PlayerTeleportEvent.TeleportCause.UNKNOWN)) {
+            e.getPlayer().setFallDistance(0);
+        }
     }
 }
 
