@@ -29,6 +29,12 @@ public class Rename extends CMD {
 		
 		ItemStack is = getMainHand(p);
 		ItemMeta im = is.getItemMeta();
+
+		if (im == null) {
+			s(sender, "&cMust be holding an item");
+			return true;
+		}
+
 		im.setDisplayName(name);
 		is.setItemMeta(im);
 		
