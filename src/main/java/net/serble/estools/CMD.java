@@ -7,7 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -158,7 +157,7 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 			}
 
 			try {
-				return (double)(int)Damageable.class.getMethod("getMaxHealth").invoke(p);
+				return (double)(int)LivingEntity.class.getMethod("getMaxHealth").invoke(p);
 			} catch(Exception e) {
 				Bukkit.getLogger().severe(e.toString());
 				return 20d;
@@ -176,7 +175,7 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 			}
 
 			try {
-				Damageable.class.getMethod("setMaxHealth", int.class).invoke(p, (int)value);
+				LivingEntity.class.getMethod("setMaxHealth", int.class).invoke(p, (int)value);
 			}
 			catch (Exception ex) {
 				Bukkit.getLogger().severe(ex.toString());
@@ -190,7 +189,7 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 		}
 
 		try {
-			return (double)(int)Damageable.class.getMethod("getHealth").invoke(p);
+			return (double)(int)LivingEntity.class.getMethod("getHealth").invoke(p);
 		}
 		catch (Exception ex) {
 			Bukkit.getLogger().severe(ex.toString());
@@ -205,7 +204,7 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 		}
 
 		try {
-			Damageable.class.getMethod("setHealth", int.class).invoke(p, (int)value);
+			LivingEntity.class.getMethod("setHealth", int.class).invoke(p, (int)value);
 		}
 		catch (Exception ex) {
 			Bukkit.getLogger().severe(ex.toString());
