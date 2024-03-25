@@ -158,7 +158,7 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 			}
 
 			try {
-				return (double)Damageable.class.getMethod("getMaxHealth").invoke(p);
+				return (double)(int)Damageable.class.getMethod("getMaxHealth").invoke(p);
 			} catch(Exception e) {
 				Bukkit.getLogger().severe(e.toString());
 				return 20d;
@@ -190,7 +190,7 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 		}
 
 		try {
-			return (double)Damageable.class.getMethod("getHealth").invoke(p);
+			return (double)(int)Damageable.class.getMethod("getHealth").invoke(p);
 		}
 		catch (Exception ex) {
 			Bukkit.getLogger().severe(ex.toString());
