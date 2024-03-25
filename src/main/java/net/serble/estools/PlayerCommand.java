@@ -13,7 +13,7 @@ public abstract class PlayerCommand extends CMD {
 	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
 		List<String> tab = new ArrayList<>();
 
-		for (Player p : Bukkit.getOnlinePlayers()) {
+		for (Player p : getOnlinePlayers()) {
 			tab.add(p.getName());
 		}
 

@@ -36,11 +36,11 @@ public class EsTools extends CMD {
 			
 			Give.enable();
 			
-			for (Player p : Bukkit.getOnlinePlayers()) {
+			for (Player p : getOnlinePlayers()) {
 				CChest.savePlayer(p);
 			}
 			
-			for (Player p : Bukkit.getOnlinePlayers()) {
+			for (Player p : getOnlinePlayers()) {
 				CChest.loadPlayer(p);
 			}
 			

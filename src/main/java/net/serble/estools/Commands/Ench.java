@@ -95,7 +95,7 @@ public class Ench extends CMD {
 				break;
 				
 			case 3:
-				for (Player p : Bukkit.getOnlinePlayers()) {
+				for (Player p : getOnlinePlayers()) {
 					tab.add(p.getName());
 				}
 				break;

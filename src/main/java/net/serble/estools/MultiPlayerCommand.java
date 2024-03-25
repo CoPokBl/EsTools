@@ -13,7 +13,7 @@ public abstract class MultiPlayerCommand extends CMD {
     public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
         List<String> tab = new ArrayList<>();
 
-        for (Player p : Bukkit.getOnlinePlayers()) {
+        for (Player p : getOnlinePlayers()) {
             tab.add(p.getName());
         }
 
@@ -28,7 +28,7 @@ public abstract class MultiPlayerCommand extends CMD {
         }
 
         if (names[0].equals("*")) {
-            return new ArrayList<Player>(Bukkit.getOnlinePlayers());
+            return new ArrayList<Player>(getOnlinePlayers());
         }
 
         ArrayList<Player> players = new ArrayList<>();
@@ -48,7 +48,7 @@ public abstract class MultiPlayerCommand extends CMD {
 
     public static ArrayList<Player> getPlayers(CommandSender sender, String name) {
         if (name.equals("*")) {
-            return new ArrayList<Player>(Bukkit.getOnlinePlayers());
+            return new ArrayList<Player>(getOnlinePlayers());
         }
 
         ArrayList<Player> players = new ArrayList<>();

@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public abstract class CMD implements CommandExecutor, TabCompleter {
@@ -179,5 +181,21 @@ public abstract class CMD implements CommandExecutor, TabCompleter {
 		}
 
 		return "Entity";
+	}
+
+	public static Collection<? extends Player> getOnlinePlayers() {
+		try {
+			if (Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
+				return Bukkit.getOnlinePlayers();
+			}
+			else {
+				Player[] players = (Player[]) Bukkit.class.getMethod("getOnlinePlayers").invoke(null, new Object[0]);
+				return Arrays.asList(players);
+			}
+
+		} catch(Exception e) {
+			Bukkit.getLogger().severe(e.toString());
+			return new ArrayList<>();
+		}
 	}
 }

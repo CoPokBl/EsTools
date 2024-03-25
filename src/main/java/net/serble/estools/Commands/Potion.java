@@ -89,8 +89,14 @@ public class Potion extends EntityCommand {
             meta.addCustomEffect(new PotionEffect(potion, duration, amp-1), true);
             pot.setItemMeta(meta);
         } else {
+            PotionType potionType = Effects.getPotionByName(args[0]);
+            if (potionType == null) {
+                s(sender, "&cInvalid potion type");
+                return false;
+            }
+
             @SuppressWarnings("deprecation")
-            org.bukkit.potion.Potion potion = new org.bukkit.potion.Potion(Effects.getPotionByName(args[0]), amp);
+            org.bukkit.potion.Potion potion = new org.bukkit.potion.Potion(potionType, amp);
             potion.setSplash(potType == PotType.splash);
             pot = potion.toItemStack(amount);
         }
