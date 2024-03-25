@@ -38,7 +38,7 @@ public class Main extends JavaPlugin {
 		sc("gms", "gm", new gms());
 		sc("gmc", "gm", new gmc());
 		sc("gma", "gm", new gma());
-		sc("gmsp", "gm", new gmsp());
+		sc("gmsp", "gm", new gmsp(), 8);
 		sc("tphere", "tp", new TPHere());
 		sc("tpall", "tp", new TPAll());
 		sc("feed", "feed", new Feed());
