@@ -51,7 +51,13 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	}
 	
 	public static String t(String m, Object... a) {
-		return ChatColor.translateAlternateColorCodes('&', String.format(m, a));
+		if (Main.version > 1) {
+			return ChatColor.translateAlternateColorCodes('&', String.format(m, a));
+		}
+
+		// translateAlternateColorCodes doesn't exist in 1.1 and 1.0
+		// do it manually
+		return String.format(m, a).replace('&', '§');
 	}
 	
 	public static boolean isNotPlayer(CommandSender sender, String usage, Object... a) {
