@@ -76,7 +76,6 @@ public class CChest extends CMD implements Listener {
 		p.openInventory(inv);
 		
 		cchests.put(puid, inv);
-		
 		return true;
 	}
 	

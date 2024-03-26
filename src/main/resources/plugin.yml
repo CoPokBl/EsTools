@@ -1,7 +1,7 @@
 main: net.serble.estools.Main
 name: EsTools
 description: Simple highly compatible general purpose plugin.
-version: 3.3
+version: '${project.version}'
 softdepend: [Vault]
 authors: [Calcilator, CoPokBl]
 api-version: 1.13

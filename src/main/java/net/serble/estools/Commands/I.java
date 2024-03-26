@@ -36,10 +36,12 @@ public class I extends CMD {
 		
 		ItemStack is = Give.getItem(args[0], amount);
 		
-		if (is != null)
-			p.getInventory().addItem(is);
-		else
-			s(sender, "&cItem &6%s&c not found.", args[0]);
+		if (is != null) {
+            p.getInventory().addItem(is);
+			s(sender, "&aGave &6%s", is.getType().name());
+        } else {
+            s(sender, "&cItem &6%s&c not found", args[0]);
+        }
 		
 		return true;
 	}

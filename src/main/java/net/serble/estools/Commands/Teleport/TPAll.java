@@ -1,8 +1,6 @@
 package net.serble.estools.Commands.Teleport;
 
 import net.serble.estools.EntityCommand;
-import net.serble.estools.Main;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
@@ -22,8 +20,12 @@ public class TPAll extends EntityCommand {
         }
 
         for (LivingEntity t : getOnlinePlayers()) {
+            assert p != null;
             t.teleport(p);
         }
+
+        assert p != null;
+        s(sender, "&aTeleported all players to &6%s", getEntityName(p));
         return true;
     }
 }

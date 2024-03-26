@@ -67,8 +67,7 @@ public class GetInfo extends EntityCommand {
 			}
 		}
 
-		// Living entity
-		if (entity instanceof LivingEntity) {
+		if (entity instanceof LivingEntity) {  // Living entity
 			LivingEntity le = (LivingEntity) entity;
 			String maxHealth = String.valueOf(Math.round(getMaxHealth(le)));
 
@@ -118,9 +117,7 @@ public class GetInfo extends EntityCommand {
 
 		}
 
-		if (entity instanceof Player) {
-			// Players
-
+		if (entity instanceof Player) {  // Players
 			Player player = (Player) entity;
 
 			String playerInfo =
@@ -141,12 +138,6 @@ public class GetInfo extends EntityCommand {
 			}
 
 			info += playerInfo;
-		} else {
-			// Non player entities
-
-			String entityInfo = "";
-			entityInfo = String.format(entityInfo);
-			// info += entityInfo; // currently there is no extra info for non player entities
 		}
 		s(sender, info);
 		return true;

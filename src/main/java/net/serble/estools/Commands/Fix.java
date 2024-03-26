@@ -78,33 +78,31 @@ public class Fix extends PlayerCommand {
 
 			p.getInventory().setContents(contents);
 		} else {
-			ItemStack ir = Repair(is);
-//
-//			if (ir != null) {
-//				is = ir.clone();
-//			}
-		}
+            Repair(is);
+        }
 
+		s(sender, "&aRepaired &6%s's &aitem(s)!", getEntityName(p));
 		return true;
 	}
 
-	private ItemStack Repair(ItemStack is) {
-		if (is == null)
-			return null;
+	private void Repair(ItemStack is) {
+		if (is == null) {
+			return;
+		}
 
 		if (Main.version > 12) {
 			ItemMeta im = is.getItemMeta();
 
-			if (im == null) return null;
+			if (im == null) return;
 
 			((Damageable) im).setDamage(0);
 
 			is.setItemMeta(im);
 		} else {
+			//noinspection deprecation
 			is.setDurability((short) 0);
 		}
 
-		return is;
 	}
 
 	@Override

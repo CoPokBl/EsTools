@@ -29,6 +29,7 @@ public class PowerPick extends CMD {
         Player p = (Player)sender;
 
         p.getInventory().addItem(pp);
+        s(sender, "&aThere you go!");
     }
 
     public static void init() {

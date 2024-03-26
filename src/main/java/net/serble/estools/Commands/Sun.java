@@ -14,6 +14,7 @@ public class Sun extends CMD {
             return true;
 
         ((Player)sender).getWorld().setTime(1000);
+        s(sender, "&aSet time to &6day");
         return true;
     }
 

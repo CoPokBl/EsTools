@@ -22,8 +22,9 @@ public class Heal extends EntityCommand {
 		} else {
 			p = getEntity(sender, args[0]);
 			
-			if (p == null)
-				return false;
+			if (p == null) {
+                return false;
+            }
 			
 			s(sender, "&aHealed &6%s", getEntityName(p));
 		}

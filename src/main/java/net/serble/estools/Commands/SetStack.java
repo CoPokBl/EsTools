@@ -29,7 +29,8 @@ public class SetStack extends CMD {
 		}
 
 		getMainHand(((Player)sender)).setAmount(amount);
-		
+
+		s(sender, "&aSet stack size to &6%d", amount);
 		return true;
 	}
 

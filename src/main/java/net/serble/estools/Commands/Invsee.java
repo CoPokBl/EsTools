@@ -25,7 +25,7 @@ public class Invsee extends PlayerCommand {
 
 		((Player) sender).openInventory(target.getInventory());
 
-        s(sender, "&aOpened %s's Inventory", target.getName());
+        s(sender, "&aOpened &6%s's &aInventory", target.getName());
 		return true;
 	}
 

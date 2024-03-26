@@ -57,7 +57,6 @@ public class Music extends CMD {
 		name = String.valueOf(name.charAt(0)).toUpperCase() + name.substring(1);
 		
 		s(sender, "&aNow Playing: &6%s", name);
-		
 		return true;
 	}
 	

@@ -30,6 +30,12 @@ public class Feed extends MultiPlayerCommand {
 			p.setFoodLevel(20);
 			p.setSaturation(20);
 		}
+
+		if (args.length == 0) {
+			s(sender, "&aFed!");
+		} else {
+			s(sender, "&aFed &6%s&a!", args[0]);
+		}
 		return true;
 	}
 

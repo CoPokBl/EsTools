@@ -17,6 +17,7 @@ public class Suicide extends PlayerCommand {
 		LivingEntity p = (LivingEntity) sender;
 
 		setHealth(p, 0);
+		s(sender, "&aRest in peace");
 		return true;
 	}
 

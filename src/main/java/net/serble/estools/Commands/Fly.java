@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Fly extends MultiPlayerCommand {
 
@@ -26,16 +27,10 @@ public class Fly extends MultiPlayerCommand {
 				return false;
 		}
 
-		Player s = null;
-
-		if (sender instanceof Player) {
-			s = (Player)sender;
-		}
-
-		for (Player p : ps) {
+        for (Player p : ps) {
 			boolean isFly = p.getAllowFlight();
 
-			if (args.length != 0 && args[0] != "*") {
+			if (args.length != 0 && !Objects.equals(args[0], "*")) {
 				if (isFly)
 					s(sender, "&aFly Disabled for &6%s", p.getName());
 				else

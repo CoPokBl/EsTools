@@ -32,10 +32,10 @@ public class Infinite extends CMD implements Listener {
 
         if (!currentPlayers.contains(pu)) {
             currentPlayers.add(pu);
-            s(sender, "&aYou now have infinite blocks!");
+            s(sender, "&aYou now have &6infinite &ablocks!");
         } else {
             currentPlayers.remove(pu);
-            s(sender, "&aYou no longer have infinite blocks");
+            s(sender, "&aYou now have &6finite &ablocks!");
         }
 
         return true;
