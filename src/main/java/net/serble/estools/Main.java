@@ -161,7 +161,10 @@ public class Main extends JavaPlugin {
 	public PluginCommand sc(String name, String perm, CMD ce) {
 		PluginCommand cmd = sc(name, ce);
 		cmd.setPermission("estools." + perm);
-		cmd.setPermissionMessage(CMD.t("&cYou do not have permission to run this command."));
+
+		if (Main.version > 0) {  // Permission errors weren't a thing in 1.0
+			cmd.setPermissionMessage(CMD.t("&cYou do not have permission to run this command."));
+		}
 
 		if (tabCompleteEnabled && cmd.getTabCompleter() == null) {  // Give every command tab complete if they haven't already registered it
 			ce.register(cmd);
