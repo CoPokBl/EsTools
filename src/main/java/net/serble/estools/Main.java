@@ -63,7 +63,7 @@ public class Main extends JavaPlugin {
 		sc("sun", "time", new Sun());
 		sc("moon", "time", new Night());
 		sc("walkspeed", "walkspeed", new WalkSpeed(), 4);
-		sc("flyspeed", "flyspeed", new FlySpeed());
+		sc("flyspeed", "flyspeed", new FlySpeed(), 3);
 		sc("setunbreakable", "setunbreakable", new SetUnbreakable());
 		sc("hideflags", "hideflags", new HideFlags(), 8);
 		sc("eff", "effect", new Eff());
