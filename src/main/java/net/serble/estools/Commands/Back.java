@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import net.serble.estools.CMD;
@@ -44,7 +45,18 @@ public class Back extends CMD implements Listener {
 
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
-		tpLoc.put(e.getEntity().getUniqueId(), e.getEntity().getLocation());
+		if (Main.version > 1) {
+			tpLoc.put(e.getEntity().getUniqueId(), e.getEntity().getLocation());
+			return;
+		}
+
+		try {
+			Player p = (Player)EntityEvent.class.getMethod("getEntity").invoke(e);
+			tpLoc.put(p.getUniqueId(), p.getLocation());
+		}
+		catch (Exception ex) {
+			Bukkit.getLogger().severe(ex.toString());
+		}
 	}
 
 	@EventHandler
