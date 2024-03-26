@@ -1,7 +1,6 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.CMD;
-import net.serble.estools.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -10,9 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 public class EditSign extends CMD {
 
@@ -68,32 +65,13 @@ public class EditSign extends CMD {
 		return true;
 	}
 
-	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
-		List<String> tab = new ArrayList<>();
-
-		switch (args.length) {
-			case 1:
-				tab.add("1"); tab.add("2"); tab.add("3"); tab.add("4");
-				break;
-		}
-
-		return tab;
-	}
-
 	public Block getTargetBlock(Player p) {
-		if (Main.version > 12) {
-			return p.getTargetBlockExact(5);
-		} else if (Main.version > 7) {
-			return p.getTargetBlock(null, 5);
-		} else {
-			try {
-				return (Block) LivingEntity.class.getMethod("getTargetBlock", HashSet.class, int.class).invoke(p, null, 5);
-			}
-			catch (Exception e) {
-				Bukkit.getLogger().severe(e.toString());
-				return null;
-			}
+		try {
+			return (Block) LivingEntity.class.getMethod("getTargetBlock", HashSet.class, int.class).invoke(p, null, 5);
+		}
+		catch (Exception e) {
+			Bukkit.getLogger().severe(e.toString());
+			return null;
 		}
 	}
 }

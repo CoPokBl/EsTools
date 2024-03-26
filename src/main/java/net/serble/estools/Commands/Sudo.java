@@ -1,13 +1,12 @@
 package net.serble.estools.Commands;
 
+import net.serble.estools.CMD;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import net.serble.estools.PlayerCommand;
-
-public class Sudo extends PlayerCommand {
+public class Sudo extends CMD {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

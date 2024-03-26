@@ -1,12 +1,11 @@
 package net.serble.estools.Commands;
 
+import net.serble.estools.CMD;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 
-import net.serble.estools.PlayerCommand;
-
-public class Suicide extends PlayerCommand {
+public class Suicide extends CMD {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

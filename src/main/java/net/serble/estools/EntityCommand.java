@@ -1,9 +1,5 @@
 package net.serble.estools;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -11,30 +7,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import java.util.List;
+import java.util.UUID;
+
 public abstract class EntityCommand extends CMD {
-	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
-		List<String> tab = new ArrayList<>();
-		
-		if (sender instanceof Player) {
-			Player p = (Player) sender;
-			
-			List<Entity> ens = p.getNearbyEntities(5, 5, 5);
-			
-			Entity en = getTarget(p, ens);
-			
-			if (en != null && !(en instanceof Player)) {
-				String eu = en.getUniqueId().toString();
-				tab.add(eu);
-			}
-		}
-		
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			tab.add(p.getName());
-		}
-		
-		return tab;
-	}
 	
 	public static LivingEntity getEntity(CommandSender sender, String name) {
 		Entity entity = getNonLivingEntity(sender, name);
@@ -52,17 +28,13 @@ public abstract class EntityCommand extends CMD {
 			try {
 				UUID uid = UUID.fromString(name);
 
-				if (Main.version > 11) {
-					p = Bukkit.getEntity(uid);
-				} else {
-					if (sender instanceof Player) {
-						List<Entity> entities = ((Player)sender).getWorld().getEntities();
+				if (sender instanceof Player) {
+					List<Entity> entities = ((Player)sender).getWorld().getEntities();
 
-						for (Entity e : entities) {
-							if (e.getUniqueId().equals(uid)) {
-								p = e;
-								break;
-							}
+					for (Entity e : entities) {
+						if (e.getUniqueId().equals(uid)) {
+							p = e;
+							break;
 						}
 					}
 				}

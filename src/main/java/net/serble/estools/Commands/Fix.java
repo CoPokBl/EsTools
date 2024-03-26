@@ -1,20 +1,13 @@
 package net.serble.estools.Commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.serble.estools.Main;
+import net.serble.estools.CMD;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import net.serble.estools.PlayerCommand;
-
-public class Fix extends PlayerCommand {
+public class Fix extends CMD {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -41,9 +34,6 @@ public class Fix extends PlayerCommand {
 		if (args.length > 0) {
 			switch (args[0].toLowerCase()) {					
 				case "offhand":
-				    if (Main.version > 8) {
-                        is = pInv.getItemInOffHand();
-                    }
 					break;
 					
 				case "helmet":
@@ -78,52 +68,19 @@ public class Fix extends PlayerCommand {
 
 			p.getInventory().setContents(contents);
 		} else {
-			ItemStack ir = Repair(is);
-//
-//			if (ir != null) {
-//				is = ir.clone();
-//			}
-		}
+            Repair(is);
+        }
 
 		return true;
 	}
 
-	private ItemStack Repair(ItemStack is) {
+	private void Repair(ItemStack is) {
 		if (is == null)
-			return null;
+			return;
 
-		if (Main.version > 12) {
-			ItemMeta im = is.getItemMeta();
+		//noinspection deprecation
+		is.setDurability((short) 0);
 
-			if (im == null) return null;
-
-			((Damageable) im).setDamage(0);
-
-			is.setItemMeta(im);
-		} else {
-			is.setDurability((short) 0);
-		}
-
-		return is;
-	}
-
-	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
-		List<String> tab = new ArrayList<String>();
-		
-		if (args.length == 1) {
-			tab.add("hand"); tab.add("helmet"); tab.add("chestplate");
-			tab.add("leggings"); tab.add("boots"); tab.add("all");
-
-			if (Main.version > 8) {
-                tab.add("offhand");
-            }
-		}
-		else if (args.length == 2) {
-			return super.tabComplete(sender, args, lArg);
-		}
-		
-		return tab;
 	}
 
 }
