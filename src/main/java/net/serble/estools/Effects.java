@@ -78,7 +78,11 @@ public class Effects {
         }};
 
         for (PotionEffectType p : PotionEffectType.values()) {
-            String name = p.getName().toLowerCase(Locale.ENGLISH);
+            if (p == null) { // 1.1 has null values in here...
+                continue;
+            }
+
+            String name = p.getName().toLowerCase(Locale.ENGLISH);;
 
             if (nameReplacers.containsKey(name)) {
                 name = nameReplacers.get(name);
