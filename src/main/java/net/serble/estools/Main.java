@@ -43,7 +43,7 @@ public class Main extends JavaPlugin {
 		
 		sc("gms", "gm", new gms());
 		sc("gmc", "gm", new gmc());
-		sc("gma", "gm", new gma());
+		sc("gma", "gm", new gma(), 3);
 		sc("gmsp", "gm", new gmsp(), 8);
 		sc("tphere", "tp", new TPHere());
 		sc("tpall", "tp", new TPAll());
@@ -127,7 +127,7 @@ public class Main extends JavaPlugin {
 
 	public PluginCommand sc(String name, CMD ce, int minVer) {
 		if (Main.version >= minVer) return sc(name, ce);
-		else return sc(name, new WrongVersion());
+		else return sc(name, new WrongVersion(minVer));
 	}
 	
 	public PluginCommand sc(String name, CMD ce, EsToolsTabCompleter tc) {
@@ -140,7 +140,7 @@ public class Main extends JavaPlugin {
 
 	public PluginCommand sc(String name, CMD ce, EsToolsTabCompleter tc, int minVer) {
 		if (Main.version >= minVer) return sc(name, ce, tc);
-		else return sc(name, new WrongVersion(), new WrongVersion());
+		else return sc(name, new WrongVersion(minVer), new WrongVersion(minVer));
 	}
 	
 	public PluginCommand sc(String name, String perm, CMD ce) {
@@ -152,7 +152,7 @@ public class Main extends JavaPlugin {
 
 	public PluginCommand sc(String name, String perm, CMD ce, int minVer) {
 		if (Main.version >= minVer) return sc(name, perm, ce);
-		else return sc(name, perm, new WrongVersion());
+		else return sc(name, perm, new WrongVersion(minVer));
 	}
 	
 	public PluginCommand sc(String name, String perm, CMD ce, EsToolsTabCompleter tc) {
@@ -165,7 +165,7 @@ public class Main extends JavaPlugin {
 
 	public PluginCommand sc(String name, String perm, CMD ce, EsToolsTabCompleter tc, int minVer) {
 		if (Main.version >= minVer) return sc(name, perm, ce, tc);
-		else return sc(name, perm, new WrongVersion(), new WrongVersion());
+		else return sc(name, perm, new WrongVersion(minVer), new WrongVersion(minVer));
 	}
 
 	private void getVersion() {
