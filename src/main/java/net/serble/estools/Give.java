@@ -3,7 +3,6 @@ package net.serble.estools;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class Give implements TabCompleter {
+public class Give implements EsToolsTabCompleter {
 	
 	private static HashMap<String, Material> cmats;
 	private static HashMap<String, Material> nmats;
