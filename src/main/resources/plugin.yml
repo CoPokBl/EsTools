@@ -1,7 +1,7 @@
 main: net.serble.estools.Main
 name: EsTools
 description: Simple highly compatible general purpose plugin. Written for Bukkit beta 1.7.3
-version: b7-4.0
+version: '${project.version}'
 authors: [Calcilator, CoPokBl]
 api-version: 1.13
 
@@ -81,7 +81,7 @@ permissions:
   estools.getinfo:
     description: Lets people get info about a player
     default: op
-    
+
   estools.give:
     description: Lets people give themselves items
     default: op
@@ -89,7 +89,7 @@ permissions:
   estools.reload:
     description: Lets people reload config files
     default: op
-    
+
   estools.fix:
     description: Lets people repair items
     default: op
@@ -97,7 +97,7 @@ permissions:
   estools.editsign:
     description: Lets people edit signs
     default: op
-    
+
   estools.setstack:
     description: Lets people set the amount of itens in a stack
     default: op

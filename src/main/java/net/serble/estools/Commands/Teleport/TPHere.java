@@ -24,6 +24,8 @@ public class TPHere extends EntityCommand {
             if (t != null)
                 t.teleport(p);
         }
+
+        s(sender, "&aTeleported &6%s&a to &6%s", argsToString(args, 0), getEntityName(p));
         return true;
     }
 }

@@ -30,7 +30,7 @@ public class Sudo extends CMD {
 		com = new StringBuilder(com.toString().trim());
 		
 		Bukkit.dispatchCommand(p, com.toString());
-		
+		s(sender, "&aExecuted command &6%s&a as &6%s", com.toString(), p.getName());
 		return true;
 	}
 

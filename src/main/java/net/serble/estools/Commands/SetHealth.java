@@ -44,10 +44,11 @@ public class SetHealth extends EntityCommand {
 			
 			setHealth(p, health);
 			
-			if (args.length > 1)
-				s(sender, "&aSet health for &6%s&a to &6%s", getEntityName(p), String.valueOf(health));
-			else
-				s(sender, "&aSet health to &6%s", String.valueOf(health));
+			if (args.length > 1) {
+                s(sender, "&aSet health for &6%s&a to &6%s", getEntityName(p), String.valueOf(health));
+            } else {
+                s(sender, "&aSet health to &6%s", String.valueOf(health));
+            }
 		}
 		else
 			s(sender, "&cCannot set health to less than 0");

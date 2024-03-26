@@ -26,8 +26,7 @@ public class Smite extends EntityCommand {
 				
 		}
 
-		if (args.length > 0)
-			s(sender, "&aBAM!");
+        s(sender, "&aBAM!");
 		return true;
 	}
 

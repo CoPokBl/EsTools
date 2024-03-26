@@ -25,6 +25,7 @@ public class Suicide extends EntityCommand {
 		}
 
 		setHealth(p, 0);
+		s(sender, "&aRest in peace");
 		return true;
 	}
 

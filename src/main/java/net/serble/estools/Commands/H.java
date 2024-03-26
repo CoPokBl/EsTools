@@ -36,10 +36,12 @@ public class H extends CMD {
 		
 		ItemStack is = Give.getItem(args[0], amount);
 		
-		if (is != null)
-			setMainHand(p, is);
-		else
-			s(sender, "&cItem &6%s&c not found.", args[0]);
+		if (is != null) {
+            setMainHand(p, is);
+			s(sender, "&aGave &6%s", is.getType().name());
+        } else {
+            s(sender, "&cItem &6%s&c not found", args[0]);
+        }
 		
 		return true;
 	}

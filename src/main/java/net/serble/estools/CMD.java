@@ -106,10 +106,10 @@ public abstract class CMD implements CommandExecutor {
 		return outp;
 	}
 
-	public static String argsToString(String[] args, int amount) {
+	public static String argsToString(String[] args, int skipAmount) {
 		StringBuilder outp = new StringBuilder();
 
-		for (int i = amount; i < args.length; i++) {
+		for (int i = skipAmount; i < args.length; i++) {
 			outp.append(args[i]);
 		}
 

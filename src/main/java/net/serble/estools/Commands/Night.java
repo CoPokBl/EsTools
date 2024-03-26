@@ -14,6 +14,7 @@ public class Night extends CMD {
             return true;
 
         ((Player)sender).getWorld().setTime(13000);
+        s(sender, "&aSet time to &6night");
         return true;
     }
 

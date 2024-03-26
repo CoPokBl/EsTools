@@ -71,16 +71,17 @@ public class Fix extends CMD {
             Repair(is);
         }
 
+		s(sender, "&aRepaired &6%s's &aitem(s)!", getEntityName(p));
 		return true;
 	}
 
-	private void Repair(ItemStack is) {
-		if (is == null)
-			return;
+    private void Repair(ItemStack is) {
+        if (is == null)
+            return;
 
-		//noinspection deprecation
-		is.setDurability((short) 0);
+        //noinspection deprecation
+        is.setDurability((short) 0);
 
-	}
+    }
 
 }
