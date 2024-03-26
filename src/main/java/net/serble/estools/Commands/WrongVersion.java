@@ -5,10 +5,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 public class WrongVersion extends CMD {
-    private final int minVersion;
+    private final String minVersion;
 
     public WrongVersion(int minVersion) {
-        this.minVersion = minVersion;
+        this.minVersion = minVersion + "";
+    }
+
+    public WrongVersion(String ver) {
+        minVersion = ver;
     }
 
     @Override
