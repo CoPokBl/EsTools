@@ -64,59 +64,27 @@ public class Effects {
             }
         }
 
-        EFFECTS.put("blindness", PotionEffectType.BLINDNESS);
-        EFFECTS.put("nausea", PotionEffectType.CONFUSION);
-        EFFECTS.put("resistance", PotionEffectType.DAMAGE_RESISTANCE);
-        EFFECTS.put("haste", PotionEffectType.FAST_DIGGING);
-        EFFECTS.put("fire_resistance", PotionEffectType.FIRE_RESISTANCE);
-        EFFECTS.put("instant_damage", PotionEffectType.HARM);
-        EFFECTS.put("instant_health", PotionEffectType.HEAL);
-        EFFECTS.put("hunger", PotionEffectType.HUNGER);
-        EFFECTS.put("strength", PotionEffectType.INCREASE_DAMAGE);
-        EFFECTS.put("invisibility", PotionEffectType.INVISIBILITY);
-        EFFECTS.put("night_vision", PotionEffectType.NIGHT_VISION);
-        EFFECTS.put("poison", PotionEffectType.POISON);
-        EFFECTS.put("regeneration", PotionEffectType.REGENERATION);
-        EFFECTS.put("slowness", PotionEffectType.SLOW);
-        EFFECTS.put("mining_fatigue", PotionEffectType.SLOW_DIGGING);
-        EFFECTS.put("speed", PotionEffectType.SPEED);
-        EFFECTS.put("water_breathing", PotionEffectType.WATER_BREATHING);
-        EFFECTS.put("weakness", PotionEffectType.WEAKNESS);
+        HashMap<String, String> nameReplacers = new HashMap<String, String>() {{
+            put("confusion", "nausea");
+            put("damage_resistance", "resistance");
+            put("fast_digging", "haste");
+            put("harm", "instant_damage");
+            put("heal", "instant_health");
+            put("increase_damage", "strength");
+            put("slow", "slowness");
+            put("speed", "swiftness");
+            put("slow_digging", "mining_fatigue");
+            put("jump", "jump_boost");
+        }};
 
-        if (Main.version >= 5) {
-            EFFECTS.put("wither", PotionEffectType.WITHER);
-        }
+        for (PotionEffectType p : PotionEffectType.values()) {
+            String name = p.getName().toLowerCase(Locale.ENGLISH);
 
-        if (Main.version >= 7) {
-            EFFECTS.put("health_boost", PotionEffectType.HEALTH_BOOST);
-            EFFECTS.put("absorption", PotionEffectType.ABSORPTION);
-            EFFECTS.put("saturation", PotionEffectType.SATURATION);
-        }
+            if (nameReplacers.containsKey(name)) {
+                name = nameReplacers.get(name);
+            }
 
-        if (Main.version >= 8) {
-            EFFECTS.put("jump_boost", PotionEffectType.JUMP);
-        }
-
-        if (Main.version >= 9) {
-            EFFECTS.put("levitation", PotionEffectType.LEVITATION);
-            EFFECTS.put("glowing", PotionEffectType.GLOWING);
-            EFFECTS.put("luck", PotionEffectType.LUCK);
-            EFFECTS.put("unluck", PotionEffectType.UNLUCK);
-        }
-
-        if (Main.version >= 13) {
-            EFFECTS.put("slow_falling", PotionEffectType.SLOW_FALLING);
-            EFFECTS.put("conduit_power", PotionEffectType.CONDUIT_POWER);
-            EFFECTS.put("dolphins_grace", PotionEffectType.DOLPHINS_GRACE);
-        }
-
-        if (Main.version >= 14) {
-            EFFECTS.put("bad_omen", PotionEffectType.BAD_OMEN);
-            EFFECTS.put("hero_of_the_village", PotionEffectType.HERO_OF_THE_VILLAGE);
-        }
-
-        if (Main.version >= 19) {
-            EFFECTS.put("darkness", PotionEffectType.getByName("DARKNESS"));
+            EFFECTS.put(name, p);
         }
     }
 }
