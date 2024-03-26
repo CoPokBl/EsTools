@@ -78,15 +78,13 @@ public class Main extends JavaPlugin {
 		sc("powershovel", "powerpick", new PowerShovel());
 		sc("powerhoe", "powerpick", new PowerHoe());
 
-		if (Main.version >= 4 && Main.minorVersion >= 6) {
-			sc("rename", "rename", new Rename(), 4);
-		}
+		sc("rename", "rename", new Rename(), null, 4.6);
 		sc("sudo", "sudo", new Sudo());
 
 		sc("heal", "heal", new Heal());
 		sc("suicide", "suicide", new Suicide());
 		sc("sethealth", "sethealth", new SetHealth());
-		sc("setmaxhealth", "setmaxhealth", new SetMaxHealth());
+		sc("setmaxhealth", "setmaxhealth", new SetMaxHealth(), 3);
 		sc("getinfo", "getinfo", new GetInfo());
 
 		sc("editsign", "editsign", new EditSign(), 8);
@@ -122,6 +120,10 @@ public class Main extends JavaPlugin {
 		PluginCommand cmd = getCommand(name);
 		cmd.setExecutor(ce);
 		ce.onEnable();
+
+		if (tabCompleteEnabled && cmd.getTabCompleter() == null) {
+			ce.register(cmd);
+		}
 		return cmd;
 	}
 
@@ -142,11 +144,27 @@ public class Main extends JavaPlugin {
 		if (Main.version >= minVer) return sc(name, ce, tc);
 		else return sc(name, new WrongVersion(minVer), new WrongVersion(minVer));
 	}
+
+	public PluginCommand sc(String name, String perm, CMD ce, EsToolsTabCompleter tc, double minVer) {
+		int major = (int)minVer;
+		int minor = (int)((minVer - major) * 10);
+		String versionName = major + "." + minor;
+		if (Main.version >= major && (Main.minorVersion >= minor || Main.version > major)) {
+			if (tc == null) {
+				return sc(name, perm, ce);
+			}
+            return sc(name, perm, ce, tc);
+        } else return sc(name, new WrongVersion(versionName), new WrongVersion(versionName));
+	}
 	
 	public PluginCommand sc(String name, String perm, CMD ce) {
 		PluginCommand cmd = sc(name, ce);
 		cmd.setPermission("estools." + perm);
 		cmd.setPermissionMessage(CMD.t("&cYou do not have permission to run this command."));
+
+		if (tabCompleteEnabled && cmd.getTabCompleter() == null) {  // Give every command tab complete if they haven't already registered it
+			ce.register(cmd);
+		}
 		return cmd;
 	}
 
