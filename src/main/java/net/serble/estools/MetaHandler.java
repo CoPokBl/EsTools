@@ -4,10 +4,13 @@ import net.serble.estools.Commands.Potion;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+
+import java.util.Objects;
 
 import static net.serble.estools.CMD.s;
 
@@ -52,6 +55,13 @@ public class MetaHandler {
             s(sender, "&cPotions are not yet supported in this version, they may be in the future.");
             return null;
         }
+    }
+
+    public static ItemStack renameItem(ItemStack item, String name) {
+        ItemMeta meta = Objects.requireNonNull(item.getItemMeta());
+        meta.setDisplayName(name);
+        item.setItemMeta(meta);
+        return item;
     }
 
 }
