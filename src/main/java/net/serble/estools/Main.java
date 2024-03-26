@@ -74,7 +74,7 @@ public class Main extends JavaPlugin {
 		sc("powerhoe", "powerpick", new PowerHoe());
 
 		if (Main.version >= 4 && Main.minorVersion >= 6) {
-			sc("rename", "rename", new Rename(), 4);
+			sc("rename", "rename", new Rename());
 		}
 		sc("sudo", "sudo", new Sudo());
 
