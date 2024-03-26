@@ -6,7 +6,7 @@
 
   <groupId>net.serble.EsTools</groupId>
   <artifactId>EsTools</artifactId>
-  <version>4.0</version>
+  <version>b7-4.0</version>
   <packaging>jar</packaging>
 
   <name>EsTools</name>
