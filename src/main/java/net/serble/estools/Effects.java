@@ -114,5 +114,9 @@ public class Effects {
             EFFECTS.put("bad_omen", PotionEffectType.BAD_OMEN);
             EFFECTS.put("hero_of_the_village", PotionEffectType.HERO_OF_THE_VILLAGE);
         }
+
+        if (Main.version >= 19) {
+            EFFECTS.put("darkness", PotionEffectType.getByName("DARKNESS"));
+        }
     }
 }
