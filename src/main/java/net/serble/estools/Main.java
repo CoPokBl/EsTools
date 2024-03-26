@@ -78,7 +78,7 @@ public class Main extends JavaPlugin {
 		sc("powershovel", "powerpick", new PowerShovel());
 		sc("powerhoe", "powerpick", new PowerHoe());
 
-		sc("rename", "rename", new Rename(), null, 4.6);
+		sc("rename", "rename", new Rename(), null, 4, 6);
 		sc("sudo", "sudo", new Sudo());
 
 		sc("heal", "heal", new Heal());
@@ -145,14 +145,13 @@ public class Main extends JavaPlugin {
 		else return sc(name, new WrongVersion(minVer), new WrongVersion(minVer));
 	}
 
-	public PluginCommand sc(String name, String perm, CMD ce, EsToolsTabCompleter tc, double minVer) {
-		int major = (int)minVer;
-		int minor = (int)((minVer - major) * 10);
-		String versionName = major + "." + minor;
-		if (Main.version >= major && (Main.minorVersion >= minor || Main.version > major)) {
+	public PluginCommand sc(String name, String perm, CMD ce, EsToolsTabCompleter tc, int minMajor, int minMinor) {
+		String versionName = minMajor + "." + minMinor;
+		if (Main.version > minMajor || (Main.version == minMajor && Main.minorVersion >= minMinor)) {
 			if (tc == null) {
 				return sc(name, perm, ce);
 			}
+
             return sc(name, perm, ce, tc);
         } else return sc(name, new WrongVersion(versionName), new WrongVersion(versionName));
 	}
