@@ -87,7 +87,7 @@ public class Main extends JavaPlugin {
 		sc("setmaxhealth", "setmaxhealth", new SetMaxHealth(), 3);
 		sc("getinfo", "getinfo", new GetInfo());
 
-		sc("editsign", "editsign", new EditSign(), 8);
+		sc("editsign", "editsign", new EditSign());
 
 		sc("god", "god", new God());
 

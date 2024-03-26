@@ -2,14 +2,16 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.CMD;
 import net.serble.estools.Main;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class EditSign extends CMD {
@@ -57,7 +59,7 @@ public class EditSign extends CMD {
 		}
 		
 		lineText = new StringBuilder(lineText.toString().trim());
-		lineText = new StringBuilder(ChatColor.translateAlternateColorCodes('&', lineText.toString()));
+		lineText = new StringBuilder(t(lineText.toString()));
 		
 		sign.setLine(lineNum - 1, lineText.toString());
 		sign.update();
@@ -82,8 +84,16 @@ public class EditSign extends CMD {
 	public Block getTargetBlock(Player p) {
 		if (Main.version > 12) {
 			return p.getTargetBlockExact(5);
-		} else {
+		} else if (Main.version > 7) {
 			return p.getTargetBlock(null, 5);
+		} else {
+			try {
+				return (Block) LivingEntity.class.getMethod("getTargetBlock", HashSet.class, int.class).invoke(p, null, 5);
+			}
+			catch (Exception e) {
+				Bukkit.getLogger().severe(e.toString());
+				return null;
+			}
 		}
 	}
 }
