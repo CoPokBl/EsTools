@@ -48,9 +48,9 @@ public class Main extends JavaPlugin {
 		sc("tphere", "tp", new TPHere());
 		sc("tpall", "tp", new TPAll());
 		sc("feed", "feed", new Feed());
-		sc("fly", "fly", new Fly());
+		sc("fly", "fly", new Fly(), 2);
 		sc("smite", "smite", new Smite());
-		sc("invsee", "invsee", new Invsee());
+		sc("invsee", "invsee", new Invsee(), 2);
 		sc("i", "give", new I(), new Give());
 		sc("h", "give", new H(), new Give());
 		sc("estools", new EsTools());
