@@ -12,6 +12,8 @@ commands:
     description: Teleport a player to you.
   tpall:
     description: Teleport all players to you.
+  tp:
+    description: Teleport
   feed:
     description: Fill saturation and hunger.
   heal:

@@ -1,8 +1,7 @@
 package net.serble.estools;
 
 import net.serble.estools.Commands.*;
-import net.serble.estools.Commands.Teleport.TPAll;
-import net.serble.estools.Commands.Teleport.TPHere;
+import net.serble.estools.Commands.Teleport.*;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,6 +17,7 @@ public class Main extends JavaPlugin {
 
 		sc("tphere", "tp", new TPHere());
 		sc("tpall", "tp", new TPAll());
+		sc("tp", "tp", new TP());
 		sc("smite", "smite", new Smite());
 		sc("i", "give", new I());
 		sc("h", "give", new H());

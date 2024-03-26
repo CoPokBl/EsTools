@@ -54,6 +54,14 @@ public abstract class CMD implements CommandExecutor {
 			return defaultValue;
 		}
 	}
+
+	public static double tryParseDouble(String obj, double defaultValue) {
+		try {
+			return Double.parseDouble(obj);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
 	
 	public static boolean checkPerms(CommandSender sender, String perm) {
 		if (!sender.hasPermission("estools." + perm)) {
