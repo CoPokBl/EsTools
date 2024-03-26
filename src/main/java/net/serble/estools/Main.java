@@ -32,7 +32,9 @@ public class Main extends JavaPlugin {
 
 		getVersion();
 
-		saveDefaultConfig();
+		if (version > 0) {  // Doesn't exist in 1.0 lol
+			saveDefaultConfig();
+		}
 
 		if (version <= 2) {
 			Bukkit.getLogger().info("Tab completion is not supported for versions 1.2 and below.");
@@ -187,6 +189,12 @@ public class Main extends JavaPlugin {
 
 	private void getVersion() {
 		String versionS = Bukkit.getVersion();
+
+		if (versionS.contains("(MC: 1.0.0)")) {
+			version = 0;
+			minorVersion = 0;
+			return;
+		}
 
 		for (int i = 0; i < 99; i++) {
 			if (versionS.contains("1." + i)) {
