@@ -183,7 +183,7 @@ public class Main extends JavaPlugin {
 			}
 		}
 
-	    getLogger().info("Version detected as: " + version + '.' + minorVersion + " from: " + versionS);
+	    getLogger().info("Version detected as: 1." + version + '.' + minorVersion + " from: " + versionS);
 	}
 }
 
