@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
@@ -104,8 +105,15 @@ public class Potion extends EntityCommand {
 
         switch (args.length) {
             case 1:
-                for (Map.Entry<String, PotionType> e : Effects.potionEntrySet()) {
-                    tab.add(e.getKey().toLowerCase());
+                if (Main.version <= 8) {
+                    for (Map.Entry<String, PotionType> e : Effects.potionEntrySet()) {
+                        tab.add(e.getKey().toLowerCase());
+                    }
+                }
+                else {
+                    for (Map.Entry<String, PotionEffectType> e : Effects.entrySet()) {
+                        tab.add(e.getKey().toLowerCase());
+                    }
                 }
                 break;
 
