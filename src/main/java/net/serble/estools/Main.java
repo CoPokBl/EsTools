@@ -156,7 +156,7 @@ public class Main extends JavaPlugin {
             return sc(name, perm, ce, tc);
         } else return sc(name, new WrongVersion(versionName), new WrongVersion(versionName));
 	}
-	
+
 	public PluginCommand sc(String name, String perm, CMD ce) {
 		PluginCommand cmd = sc(name, ce);
 		cmd.setPermission("estools." + perm);
@@ -201,7 +201,7 @@ public class Main extends JavaPlugin {
 			}
 		}
 
-	    getLogger().info("Version detected as: " + version + '.' + minorVersion + " from: " + versionS);
+	    getLogger().info("Version detected as: 1." + version + '.' + minorVersion + " from: " + versionS);
 	}
 }
 
