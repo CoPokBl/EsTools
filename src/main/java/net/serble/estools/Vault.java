@@ -14,14 +14,12 @@ public class Vault {
     public static boolean setupEconomy() {
         Logger l = Bukkit.getLogger();
 
-        if (Main.current.getServer().getPluginManager().getPlugin("Vault") == null) {
+        if (Bukkit.getServer().getPluginManager().getPlugin("Vault") == null) {
             l.warning("No Vault plugin found, please install vault for economy functionality");
             return false;
         }
 
-
-
-        RegisteredServiceProvider<Economy> rsp = Main.current.getServer().getServicesManager().getRegistration(Economy.class);
+        RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
             l.warning("No vault service found, make sure vault and a economy plugin is installed!");
             return false;

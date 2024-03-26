@@ -1,8 +1,8 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.CMD;
+import net.serble.estools.EventsHelper;
 import net.serble.estools.Main;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
@@ -16,7 +16,7 @@ public class SafeTP extends CMD implements Listener {
     @Override
     public void onEnable() {
         enabled = Main.current.getConfig().getBoolean("safetp", true);
-        Bukkit.getServer().getPluginManager().registerEvents(this, Main.current);
+        EventsHelper.registerEvents(this, EventsHelper.EventType.PlayerTeleport);
     }
 
     @Override

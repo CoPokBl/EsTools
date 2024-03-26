@@ -56,29 +56,29 @@ public class Main extends JavaPlugin {
 		sc("i", "give", new I(), new Give());
 		sc("h", "give", new H(), new Give());
 		sc("estools", new EsTools());
-		sc("ench", "ench", new Ench());
+		sc("ench", "ench", new Ench(), 1);
 		sc("fix", "fix", new Fix());
 		sc("cchest", new CChest(), 7);
-		sc("back", "back", new Back());
+		sc("back", "back", new Back(), 1);
 		sc("setstack", "setstack", new SetStack());
 		sc("ci", "clearinv", new ClearInv());
 		sc("sun", "time", new Sun());
 		sc("moon", "time", new Night());
 		sc("walkspeed", "walkspeed", new WalkSpeed(), 4);
 		sc("flyspeed", "flyspeed", new FlySpeed(), 3);
-		sc("setunbreakable", "setunbreakable", new SetUnbreakable());
+		sc("setunbreakable", "setunbreakable", new SetUnbreakable(), 1);
 		sc("hideflags", "hideflags", new HideFlags(), 8);
-		sc("eff", "effect", new Eff());
-		sc("safetp", "safetp", new SafeTP());
-		sc("infinite", "infinite", new Infinite());
+		sc("eff", "effect", new Eff(), 1);
+		sc("safetp", "safetp", new SafeTP(), 1);
+		sc("infinite", "infinite", new Infinite(), 1);
 		sc("sethunger", "sethunger", new SetHunger());
 		sc("setsaturation", "setsaturation", new SetSaturation());
 
-		sc("powerpick", "powerpick", new PowerPick());
-		sc("poweraxe", "powerpick", new PowerAxe());
-		sc("powersword", "powerpick", new PowerSword());
-		sc("powershovel", "powerpick", new PowerShovel());
-		sc("powerhoe", "powerpick", new PowerHoe());
+		sc("powerpick", "powerpick", new PowerPick(), 1);
+		sc("poweraxe", "powerpick", new PowerAxe(), 1);
+		sc("powersword", "powerpick", new PowerSword(), 1);
+		sc("powershovel", "powerpick", new PowerShovel(), 1);
+		sc("powerhoe", "powerpick", new PowerHoe(), 1);
 
 		sc("rename", "rename", new Rename(), null, 4, 6);
 		sc("sudo", "sudo", new Sudo());
@@ -91,7 +91,7 @@ public class Main extends JavaPlugin {
 
 		sc("editsign", "editsign", new EditSign());
 
-		sc("god", "god", new God());
+		sc("god", "god", new God(), 1);
 
 		sc("music", "music", new Music(), 13);
 		sc("potion", "potion", new Potion(), 4);
@@ -102,11 +102,10 @@ public class Main extends JavaPlugin {
 
 		// Other
 
-		SignMain.init();
-
-		Bukkit.getServer().getPluginManager().registerEvents(new SignMain(), this);
-
-		PowerPick.initall();
+		if (version > 0) {  // Enchants and events don't work on 1.0.0
+			PowerPick.initall();
+			SignMain.init();
+		}
 
 		if (Main.version < 7) {
 			Bukkit.getLogger().info("Saving not supported in 1.6 or below.");
