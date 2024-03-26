@@ -7,7 +7,6 @@ import net.serble.estools.Commands.Teleport.TPHere;
 import net.serble.estools.Signs.SignMain;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.serble.estools.Commands.*;
@@ -17,6 +16,7 @@ public class Main extends JavaPlugin {
 	public static Main current;
 	public static int version;
 	public static int minorVersion;
+	public static boolean tabCompleteEnabled = true;
 
 	// MultiEntityCommand
 	
@@ -34,11 +34,16 @@ public class Main extends JavaPlugin {
 
 		saveDefaultConfig();
 
+		if (version <= 2) {
+			getLogger().info("Tab completion is not supported for versions 1.2 and below.");
+			tabCompleteEnabled = false;
+		}
+
 		// Commands
 		
 		sc("gms", "gm", new gms());
 		sc("gmc", "gm", new gmc());
-		sc("gma", "gm", new gma());
+		sc("gma", "gm", new gma(), 3);
 		sc("gmsp", "gm", new gmsp(), 8);
 		sc("tphere", "tp", new TPHere());
 		sc("tpall", "tp", new TPAll());
@@ -122,18 +127,20 @@ public class Main extends JavaPlugin {
 
 	public PluginCommand sc(String name, CMD ce, int minVer) {
 		if (Main.version >= minVer) return sc(name, ce);
-		else return sc(name, new WrongVersion());
+		else return sc(name, new WrongVersion(minVer));
 	}
 	
-	public PluginCommand sc(String name, CMD ce, TabCompleter tc) {
+	public PluginCommand sc(String name, CMD ce, EsToolsTabCompleter tc) {
 		PluginCommand cmd = sc(name, ce);
-		cmd.setTabCompleter(tc);
+		if (tabCompleteEnabled) {
+			tc.register(cmd);
+		}
 		return cmd;
 	}
 
-	public PluginCommand sc(String name, CMD ce, TabCompleter tc, int minVer) {
+	public PluginCommand sc(String name, CMD ce, EsToolsTabCompleter tc, int minVer) {
 		if (Main.version >= minVer) return sc(name, ce, tc);
-		else return sc(name, new WrongVersion(), new WrongVersion());
+		else return sc(name, new WrongVersion(minVer), new WrongVersion(minVer));
 	}
 	
 	public PluginCommand sc(String name, String perm, CMD ce) {
@@ -145,18 +152,20 @@ public class Main extends JavaPlugin {
 
 	public PluginCommand sc(String name, String perm, CMD ce, int minVer) {
 		if (Main.version >= minVer) return sc(name, perm, ce);
-		else return sc(name, perm, new WrongVersion());
+		else return sc(name, perm, new WrongVersion(minVer));
 	}
 	
-	public PluginCommand sc(String name, String perm, CMD ce, TabCompleter tc) {
+	public PluginCommand sc(String name, String perm, CMD ce, EsToolsTabCompleter tc) {
 		PluginCommand cmd = sc(name, perm, ce);
-		cmd.setTabCompleter(tc);
+		if (tabCompleteEnabled) {
+			tc.register(cmd);
+		}
 		return cmd;
 	}
 
-	public PluginCommand sc(String name, String perm, CMD ce, TabCompleter tc, int minVer) {
+	public PluginCommand sc(String name, String perm, CMD ce, EsToolsTabCompleter tc, int minVer) {
 		if (Main.version >= minVer) return sc(name, perm, ce, tc);
-		else return sc(name, perm, new WrongVersion(), new WrongVersion());
+		else return sc(name, perm, new WrongVersion(minVer), new WrongVersion(minVer));
 	}
 
 	private void getVersion() {

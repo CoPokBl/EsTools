@@ -43,7 +43,10 @@ public class Potion extends EntityCommand {
         if (args.length >= 5) {
             try {
                 potType = PotType.valueOf(args[4].toLowerCase());
-            } catch (IllegalArgumentException ignored) { }
+            } catch (IllegalArgumentException ignored) {
+                s(sender, "&cInvalid potion type, must be drink, splash, or lingering (if on 1.9+)");
+                return false;
+            }
 
             // Check versions
             if (Main.version < 9 && potType == PotType.lingering) {
@@ -68,26 +71,23 @@ public class Potion extends EntityCommand {
             }
         }
 
-        ItemStack pot;
-        if (Main.version >= 9) {
-            pot = MetaHandler.newPotHelper(sender, potType, duration, amp, amount, args[0]);
-        } else if (Main.version >= 4) {
-            PotionType potionType = Effects.getPotionByName(args[0]);
-            if (potionType == null) {
-                s(sender, "&cInvalid potion type");
-                return false;
-            }
-
-            pot = MetaHandler.potHelper(potType, potionType, amp);
-            pot.setAmount(amount);
-        } else {
+        if (Main.version <= 3) {
             s(sender, "&cPotions are not yet supported in this version, they may be in the future.");
             return false;
         }
 
+        ItemStack pot = MetaHandler.getPotion(sender, potType, args[0], duration, amp, amount);
+        if (pot == null) {
+            return false;
+        }
 
         player.getInventory().addItem(pot);
 
+        if (player == sender) {
+            s(sender, "&aThere you go!");
+        } else {
+            s(sender, "&aGave &6%s &aa potion", player.getName());
+        }
         return true;
     }
 

@@ -9,13 +9,13 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public class God extends EntityCommand implements Listener {
-	private static final HashMap<UUID, BukkitRunnable> currentPlayers = new HashMap<>();
+	private static final HashMap<UUID, BukkitTask> currentPlayers = new HashMap<>();
 
 	private static final String usage = genUsage("/god <entity> <time>");
 
@@ -26,9 +26,7 @@ public class God extends EntityCommand implements Listener {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
 		LivingEntity p;
-
 		int timer = -1;
 		
 		if (args.length == 0) {
@@ -54,20 +52,13 @@ public class God extends EntityCommand implements Listener {
 
 		UUID u = p.getUniqueId();
 
-		BukkitRunnable r = null;
+		BukkitTask r = null;
 
 		String timerStr = "forever";
 		if (timer >= 0) {
 			timerStr = timer / 20d + " seconds";
 
-			r = new BukkitRunnable() {
-				@Override
-				public void run() {
-					currentPlayers.remove(u);
-				}
-			};
-
-			r.runTaskLaterAsynchronously(Main.current, timer);
+			r = Bukkit.getScheduler().runTaskLater(Main.current, () -> currentPlayers.remove(u), timer);
 		}
 
 		if (currentPlayers.containsKey(u)) {
