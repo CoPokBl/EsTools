@@ -1,5 +1,6 @@
 package net.serble.estools;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -77,8 +78,8 @@ public class Give implements EsToolsTabCompleter {
 			ms = loadItems(f);
 		}
 		
-		if (ms == null || ms.isEmpty()) { // if it hasnt loaded or if it cant load anything
-			Main.current.getLogger().info("Creating new give.yml");
+		if (ms == null || ms.isEmpty()) { // if it hasn't loaded or if it cant load anything
+			Bukkit.getLogger().info("Creating new give.yml");
 
 			try {
 				copyDefaultGiveYML();

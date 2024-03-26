@@ -2,6 +2,7 @@ package net.serble.estools;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -11,7 +12,7 @@ public class Vault {
     public static Economy econ = null;
 
     public static boolean setupEconomy() {
-        Logger l = Main.current.getLogger();
+        Logger l = Bukkit.getLogger();
 
         if (Main.current.getServer().getPluginManager().getPlugin("Vault") == null) {
             l.warning("No Vault plugin found, please install vault for economy functionality");

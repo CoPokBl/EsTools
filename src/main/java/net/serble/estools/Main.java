@@ -27,7 +27,7 @@ public class Main extends JavaPlugin {
 		try {
 			Vault.setupEconomy();
 		} catch (Exception e) {
-			getLogger().warning("No Vault plugin found, please install vault for economy functionality");
+			Bukkit.getLogger().warning("No Vault plugin found, please install vault for economy functionality");
 		}
 
 		getVersion();
@@ -35,7 +35,7 @@ public class Main extends JavaPlugin {
 		saveDefaultConfig();
 
 		if (version <= 2) {
-			getLogger().info("Tab completion is not supported for versions 1.2 and below.");
+			Bukkit.getLogger().info("Tab completion is not supported for versions 1.2 and below.");
 			tabCompleteEnabled = false;
 		}
 
@@ -107,7 +107,7 @@ public class Main extends JavaPlugin {
 		PowerPick.initall();
 
 		if (Main.version < 7) {
-			Main.current.getLogger().info("Saving not supported in 1.6 or below.");
+			Bukkit.getLogger().info("Saving not supported in 1.6 or below.");
 		}
 
 		Give.enable();
@@ -200,7 +200,7 @@ public class Main extends JavaPlugin {
 			}
 		}
 
-	    getLogger().info("Version detected as: 1." + version + '.' + minorVersion + " from: " + versionS);
+		Bukkit.getLogger().info("Version detected as: 1." + version + '.' + minorVersion + " from: " + versionS);
 	}
 }
 
