@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class PowerHoe extends CMD {
-    private static ItemStack powerPick = new ItemStack(Material.DIAMOND_HOE);
+    private static ItemStack powerPick = new ItemStack(Material.DIAMOND_HOE, 1);
 
     public static void init() {
         if (Main.version > 15) {

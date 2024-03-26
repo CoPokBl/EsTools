@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class PowerPick extends CMD {
 
-    private static ItemStack powerPick = new ItemStack(Material.DIAMOND_PICKAXE);
+    private static ItemStack powerPick = new ItemStack(Material.DIAMOND_PICKAXE, 1);
 
     public static void initall() {
         init();

@@ -18,7 +18,7 @@ public class PowerSword extends CMD {
         if (Main.version > 12) {
             powerPick = new ItemStack(Material.SALMON);
         } else {
-            powerPick = new ItemStack(Objects.requireNonNull(Material.getMaterial("RAW_FISH")));
+            powerPick = new ItemStack(Objects.requireNonNull(Material.getMaterial("RAW_FISH")), 1);
         }
 
         powerPick.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 32767);

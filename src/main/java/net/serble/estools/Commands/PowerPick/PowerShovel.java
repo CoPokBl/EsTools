@@ -21,7 +21,7 @@ public class PowerShovel extends CMD {
         } else if (Main.version > 12) {
             powerPick = new ItemStack(Material.DIAMOND_SHOVEL);
         } else {
-            powerPick = new ItemStack(Objects.requireNonNull(Material.getMaterial("DIAMOND_SPADE")));
+            powerPick = new ItemStack(Objects.requireNonNull(Material.getMaterial("DIAMOND_SPADE")), 1);
         }
 
         powerPick.addUnsafeEnchantment(Enchantment.DIG_SPEED, 32767);
