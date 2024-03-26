@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -46,13 +45,10 @@ public class Infinite extends CMD implements Listener {
         if (currentPlayers.contains(e.getPlayer().getUniqueId())) {
             ItemStack item = e.getItemInHand().clone();
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    setMainHand(e.getPlayer(), item);
-                    e.getPlayer().updateInventory();
-                }
-            }.runTask(Main.current);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(Main.current, () -> {
+                setMainHand(e.getPlayer(), item);
+                e.getPlayer().updateInventory();
+            }, 0);
         }
     }
 }
