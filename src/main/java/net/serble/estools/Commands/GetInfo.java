@@ -12,6 +12,8 @@ import net.serble.estools.EntityCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
+import java.util.Objects;
+
 public class GetInfo extends EntityCommand {
 
 	@Override
@@ -45,7 +47,7 @@ public class GetInfo extends EntityCommand {
 				loc.getBlockX(),
 				loc.getBlockY(),
 				loc.getBlockZ(),
-				loc.getWorld().getName(),
+				Objects.requireNonNull(loc.getWorld()).getName(),
 				entity.getUniqueId());
 
 		// Passengers
@@ -123,15 +125,22 @@ public class GetInfo extends EntityCommand {
 
 			String playerInfo =
 							"&aHunger: &6%s\n" +
-							"&aSaturation: &6%s\n" +
-							"&aCan Fly: &6%s\n" +
-							"&aIs Flying: &6%s\n";
+							"&aSaturation: &6%s\n";
 
-			info += String.format(playerInfo,
+			playerInfo = String.format(playerInfo,
 					player.getFoodLevel(),
-					player.getSaturation(),
-					player.getAllowFlight(),
-					player.isFlying());
+					player.getSaturation());
+
+			if (Main.version > 1) {
+				playerInfo += "&aCan Fly: &6%s\n" +
+						      "&aIs Flying: &6%s\n";
+
+				playerInfo = String.format(playerInfo,
+						player.getAllowFlight(),
+						player.isFlying());
+			}
+
+			info += playerInfo;
 		} else {
 			// Non player entities
 

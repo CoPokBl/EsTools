@@ -43,7 +43,17 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	}
 	
 	public static void s(CommandSender s, String m, Object... a) {
-		s.sendMessage(t(m, a));
+		if (Main.version > 1) {
+			s.sendMessage(t(m, a));
+			return;
+		}
+
+		// Newlines don't work in 1.1 and 1.0
+		// Send each message individually
+		String[] lines = t(m, a).split("\n");
+		for (String line : lines) {
+			s.sendMessage(line);
+		}
 	}
 	
 	public static void s(Player s, String m, Object... a) {
