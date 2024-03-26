@@ -1,23 +1,19 @@
 # EsTools
-A general purpose Essentials like plugin with everything you need but not messing up anything (1.3+)
+A general purpose Essentials like plugin with everything you need but not messing up anything (Beta 1.7.3)
 
 EsTools is a plugin designed to be like EssentialsX in that it provides heaps of 
 helpful commands, but unlike essentials it doesn't mess up or override vanilla features (e.g. the give command). 
-This plugin doesn't override existing Minecraft commands and therefore is less likely to mess stuff up.
+This plugin doesn't override existing Minecraft commands and therefore is less likely to mess stuff up. However 
+because beta 1.7.3 has very few commands, we have re-added a few commands that are in vanilla Minecraft.
 
-Commands:
-[View Them In Our Wiki](https://github.com/CoPokBl/EsTools/wiki/commands)
+This branch is entirely based on developing for [Project Poseidon](https://github.com/RhysB/Project-Poseidon) (Bukkit beta 1.7.3).
+The code is this branch will only work on VERY early versions of Minecraft. If you want EsTools for 1.0+ please use the master branch.
 
 ## Support
-The plugin is designed to work on every public spigot build. Any issues found on legacy versions
-should be reported. Due to the size of the task, we can't test every new feature on every version.
+The plugin is designed to work on only beta 1.7.3, although it may work on other early versions.
 If you find a bug, please report it on the [GitHub Issues](https://github.com/CoPokBl/EsTools/issues).
 
-To find out what versions have been tested look at TestedVersions.txt in the project.
-We will likely be slow to test new Minecraft versions, but you can probably assume 
-that EsTools will be fully functional on new versions.
-
-**We officially support Spigot 1.3.2 and above.**
+**We officially support [Project Poseidon](https://github.com/RhysB/Project-Poseidon).**
 
 For support DM us at: Discord: @copokbl and @calcilore. Or email support@serble.net.
 
