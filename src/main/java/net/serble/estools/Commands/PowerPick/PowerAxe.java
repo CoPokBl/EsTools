@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class PowerAxe extends CMD {
-    private static ItemStack powerPick = new ItemStack(Material.DIAMOND_AXE);
+    private static ItemStack powerPick = new ItemStack(Material.DIAMOND_AXE, 1);
 
     public static void init() {
         if (Main.version > 15) {
