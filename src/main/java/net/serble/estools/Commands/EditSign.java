@@ -22,8 +22,8 @@ public class EditSign extends CMD {
 		if (isNotPlayer(sender))
 			return false;
 		
-		if (args.length < 2) {
-			s(sender, genUsage("/editsign <line number> <line>"));
+		if (args.length < 1) {
+			s(sender, genUsage("/editsign <line number> [line]"));
 			return false;
 		}
 		
@@ -39,11 +39,11 @@ public class EditSign extends CMD {
 		Sign sign = (Sign) signB.getState();
 		
 		int lineNum;
-		
+
 		try {
 			lineNum = Integer.parseInt(args[0]);
 		} catch (Exception e) {
-			s(sender, genUsage("/editsign <line number> <line>"));
+			s(sender, genUsage("/editsign <line number> [line]"));
 			return false;
 		}
 		
@@ -52,19 +52,23 @@ public class EditSign extends CMD {
 			return false;
 		}
 		
-		StringBuilder lineText = new StringBuilder();
+		StringBuilder lineTextBuilder = new StringBuilder();
 		
 		for (int i = 1; i < args.length; i++) {
-			lineText.append(args[i]).append(" ");
+			lineTextBuilder.append(args[i]).append(" ");
 		}
+
+		String lineText = t(lineTextBuilder.toString()).trim();
 		
-		lineText = new StringBuilder(lineText.toString().trim());
-		lineText = new StringBuilder(t(lineText.toString()));
-		
-		sign.setLine(lineNum - 1, lineText.toString());
+		sign.setLine(lineNum - 1, lineText);
 		sign.update();
-		
-		s(sender, "&aAdded &6%s&a to line &6%d&a successfully!", lineText.toString(), lineNum);
+
+		if (lineText.isEmpty()) {
+			s(sender, "&aEmptied line &6%d&a successfully!", lineNum);
+			return true;
+		}
+
+		s(sender, "&aAdded &6%s&ato line &6%d&a successfully!", lineTextBuilder.toString(), lineNum);
 		return true;
 	}
 
@@ -72,11 +76,12 @@ public class EditSign extends CMD {
 	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
 		List<String> tab = new ArrayList<>();
 
-		switch (args.length) {
-			case 1:
-				tab.add("1"); tab.add("2"); tab.add("3"); tab.add("4");
-				break;
-		}
+        if (args.length == 1) {
+            tab.add("1");
+            tab.add("2");
+            tab.add("3");
+            tab.add("4");
+        }
 
 		return tab;
 	}
