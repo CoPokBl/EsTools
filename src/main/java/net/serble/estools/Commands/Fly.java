@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Fly extends MultiPlayerCommand {
+	private static final String usage = genUsage("/fly [Player]");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -16,7 +17,7 @@ public class Fly extends MultiPlayerCommand {
 		ArrayList<Player> ps = new ArrayList<>();
 		
 		if (args.length == 0) {
-			if (isNotPlayer(sender, genUsage("/fly [Player]"))) 
+			if (isNotPlayer(sender, usage))
 				return false;
 			
 			ps.add((Player) sender);

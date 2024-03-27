@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class EditSign extends CMD {
+	private static final String usage = genUsage("/editsign <line number> [line]");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -23,7 +24,7 @@ public class EditSign extends CMD {
 			return false;
 		
 		if (args.length < 1) {
-			s(sender, genUsage("/editsign <line number> [line]"));
+			s(sender, usage);
 			return false;
 		}
 		
@@ -43,7 +44,7 @@ public class EditSign extends CMD {
 		try {
 			lineNum = Integer.parseInt(args[0]);
 		} catch (Exception e) {
-			s(sender, genUsage("/editsign <line number> [line]"));
+			s(sender, usage);
 			return false;
 		}
 		

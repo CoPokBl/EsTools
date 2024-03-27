@@ -16,12 +16,13 @@ import java.util.List;
 import java.util.Map;
 
 public class Potion extends EntityCommand {
+    private static final String usage = genUsage("/potion <potion> [amplifier] [duration] [amount] [drink/splash/lingering] [player]");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (args.length == 0) {
-            s(sender, genUsage("/potion <potion> [amplifier] [duration] [amount] [drink/splash/lingering] [player]"));
+            s(sender, usage);
             return false;
         }
 

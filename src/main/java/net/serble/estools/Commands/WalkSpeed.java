@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WalkSpeed extends MultiPlayerCommand {
-
     private static final String usage = genUsage("/walkspeed <speed> [players]");
 
     @Override

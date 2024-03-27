@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 
 public class Heal extends EntityCommand {
+	private static final String usage = genUsage("/heal [entity]");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -13,7 +14,7 @@ public class Heal extends EntityCommand {
 		LivingEntity p;
 		
 		if (args.length == 0) {
-			if (isNotEntity(sender, genUsage("/heal <entity>")))
+			if (isNotEntity(sender, usage))
 				return false;
 			
 			p = (LivingEntity) sender;

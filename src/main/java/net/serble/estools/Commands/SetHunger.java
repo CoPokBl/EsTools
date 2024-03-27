@@ -7,11 +7,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SetHunger extends PlayerCommand {
+	private static final String usage = genUsage("/sethunger <amount> [entity]");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (args.length == 0) {
-			s(sender, genUsage("/sethunger <amount> [entity]"));
+			s(sender, usage);
 			return false;
 		}
 		
@@ -33,7 +34,7 @@ public class SetHunger extends PlayerCommand {
 		try {
 			hunger = Integer.parseInt(args[0]);
 		} catch (Exception e) {
-			s(sender, genUsage("/sethunger <amount> [entity]"));
+			s(sender, usage);
 			return false;
 		}
 		

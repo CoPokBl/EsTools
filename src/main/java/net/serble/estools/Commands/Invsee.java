@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Invsee extends PlayerCommand {
+	private static final String usage = genUsage("/invsee <player>");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -14,7 +15,7 @@ public class Invsee extends PlayerCommand {
 			return false;
 		
 		if (args.length == 0) {
-			s(sender, genUsage("/invsee <player>"));
+			s(sender, usage);
 			return false;
 		}
 		

@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import net.serble.estools.CMD;
 
 public class Rename extends CMD {
-	
 	public static final String usage = genUsage("/rename <name>");
 
 	@Override

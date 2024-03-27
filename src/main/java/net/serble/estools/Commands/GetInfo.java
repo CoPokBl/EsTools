@@ -15,12 +15,13 @@ import org.bukkit.potion.PotionEffect;
 import java.util.Objects;
 
 public class GetInfo extends EntityCommand {
+	private static final String usage = genUsage("/getinfo <entity>");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
 		if (args.length == 0) {
-			s(sender, genUsage("/getinfo <entity>"));
+			s(sender, usage);
 			return false;
 		}
 

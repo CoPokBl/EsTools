@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class Eff extends MultiPlayerCommand {
 
-    public static final String usage = genUsage("/eff <effect> <amplifier> <duration> <players>");
+    private static final String usage = genUsage("/eff <effect> <amplifier> <duration> <players>");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import net.serble.estools.PlayerCommand;
 
 public class Fix extends PlayerCommand {
+	private static final String usage = genUsage("/fix [hand/offhand/helmet/chestplate/leggings/boots] [player]");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -22,7 +23,7 @@ public class Fix extends PlayerCommand {
 		Player p;
 		
 		if (args.length < 2) {
-			if (isNotPlayer(sender, genUsage("/fix <hand/offhand/helmet/chestplate/leggings/boots> <player>")))
+			if (isNotPlayer(sender, usage))
 				return false;
 			
 			p = (Player) sender;

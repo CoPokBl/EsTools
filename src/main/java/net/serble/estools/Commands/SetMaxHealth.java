@@ -6,12 +6,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 
 public class SetMaxHealth extends EntityCommand {
+	private static final String usage = genUsage("/setmaxhealth <amount> [entity]");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
 		if (args.length == 0) {
-			s(sender, genUsage("/setmaxhealth <amount> [entity]"));
+			s(sender, usage);
 		}
 		
 		LivingEntity p;
@@ -20,7 +21,7 @@ public class SetMaxHealth extends EntityCommand {
 		try {
 			health = Double.valueOf(args[0]);
 		} catch (Exception e) {
-			s(sender, genUsage("/sethealth <amount> [entity]"));
+			s(sender, usage);
 			return false;
 		}
 		

@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 
 public class TPHere extends EntityCommand {
+    private static final String usage = genUsage("/tphere <entity1> [entity2] [entity3]...");
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
@@ -13,7 +15,7 @@ public class TPHere extends EntityCommand {
             return false;
 
         if (args.length == 0) {
-            s(sender, genUsage("/tphere <entity1> [entity2] [entity3]..."));
+            s(sender, usage);
             return false;
         }
 

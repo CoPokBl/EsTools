@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 
 public class Feed extends MultiPlayerCommand {
+	private static final String usage = genUsage("/feed <Player>");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -15,7 +16,7 @@ public class Feed extends MultiPlayerCommand {
 		ArrayList<Player> ps = new ArrayList<>();
 		
 		if (args.length == 0) {
-			if (isNotPlayer(sender, genUsage("/feed <Player>")))
+			if (isNotPlayer(sender, usage))
 				return false;
 			
 			ps.add((Player) sender);

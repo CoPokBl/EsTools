@@ -9,6 +9,7 @@ import net.serble.estools.CMD;
 import net.serble.estools.Give;
 
 public class H extends CMD {
+	private static final String usage = genUsage("/h <item> [amount]");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -17,7 +18,7 @@ public class H extends CMD {
 			return false;
 		
 		if (args.length == 0) {
-			s(sender, genUsage("/h <item> [amount]"));
+			s(sender, usage);
 			return false;
 		}
 		
@@ -29,7 +30,7 @@ public class H extends CMD {
 			try {
 				amount = Integer.parseInt(args[1]);
 			} catch(Exception e) {
-				s(sender, genUsage("/h <item> [amount]"));
+				s(sender, usage);
 				return false;
 			}
 		}

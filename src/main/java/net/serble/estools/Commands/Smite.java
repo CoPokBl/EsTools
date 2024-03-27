@@ -7,12 +7,13 @@ import org.bukkit.entity.LivingEntity;
 import net.serble.estools.EntityCommand;
 
 public class Smite extends EntityCommand {
+	private static final String usage = genUsage("/smite <entity1> [entity2] [entity3]...");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
 		if (args.length == 0) {
-			s(sender, genUsage("/smite <entity1> [entity2] [entity3]..."));
+			s(sender, usage);
 			return false;
 		}
 		

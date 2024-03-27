@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 
 public class TPAll extends EntityCommand {
+    private static final String usage = genUsage("/tpall [entity]");
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         LivingEntity p;
@@ -13,7 +15,7 @@ public class TPAll extends EntityCommand {
         if (args.length == 0) {
             p = (LivingEntity) sender;
 
-            if (isNotEntity(sender, genUsage("/tpall [entity]")))
+            if (isNotEntity(sender, usage))
                 return false;
         } else {
             p = getEntity(sender, args[0]);

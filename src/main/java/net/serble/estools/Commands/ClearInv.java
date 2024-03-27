@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 
 public class ClearInv extends MultiPlayerCommand {
+    private static final String usage = genUsage("/ci <player1> [player2]");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -15,7 +16,7 @@ public class ClearInv extends MultiPlayerCommand {
         ArrayList<Player> ps = new ArrayList<>();
 
         if (args.length == 0) {
-            if (isNotPlayer(sender, genUsage("/ci <player1> [player2]")))
+            if (isNotPlayer(sender, usage))
                 return true;
 
             ps.add((Player)sender);

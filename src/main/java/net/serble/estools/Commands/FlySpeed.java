@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FlySpeed extends MultiPlayerCommand {
-
     private static final String usage = genUsage("/flyspeed <speed> [players]");
 
     @Override

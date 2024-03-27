@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Music extends CMD {
+	private static final String usage = genUsage("/music [song]");
 	
 	public static ArrayList<Sound> musics = new ArrayList<>();
 
@@ -43,7 +44,7 @@ public class Music extends CMD {
 				if (args[0].equalsIgnoreCase("random")) {
 					sound = musics.get((int)(Math.random() * musics.size()));
 				} else {
-					s(sender, genUsage("/music [song]"));
+					s(sender, usage);
 					return true;
 				}
 			}

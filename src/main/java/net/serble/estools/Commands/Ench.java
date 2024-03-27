@@ -17,12 +17,13 @@ import org.bukkit.inventory.ItemStack;
 import net.serble.estools.CMD;
 
 public class Ench extends CMD {
+	private static final String usage = genUsage("/ench <enchantment> [level] [player]");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
 		if (args.length == 0) {
-			s(sender, genUsage("/ench <enchantment> [level] [player]"));
+			s(sender, usage);
 			return false;
 		}
 		
@@ -34,13 +35,13 @@ public class Ench extends CMD {
 			try {
 				level = Integer.parseInt(args[1]);
 			} catch (Exception e) {
-				s(sender, genUsage("/ench <enchantment> [level] [player]"));
+				s(sender, usage);
 				return false;
 			}
 		}
 		
 		if (args.length <= 2) {
-			if (isNotPlayer(sender, genUsage("/ench <enchantment> <level> <player>")))
+			if (isNotPlayer(sender, usage))
 				return false;
 			
 			is = getMainHand(((Player) sender));
@@ -61,7 +62,7 @@ public class Ench extends CMD {
 			else
 				ench = Enchantments.getByName(args[0].toLowerCase());
 		} catch (IllegalArgumentException e) {
-			s(sender, genUsage("/ench <enchantment> [level] [player]"));
+			s(sender, usage);
 			return true;
 		}
 		
@@ -71,7 +72,7 @@ public class Ench extends CMD {
 			s(sender, "&aEnchantment &6%s&a at level &6%s&a was added!", args[0].toLowerCase(), level);
 		}
 		else {
-			s(sender, genUsage("/ench <enchantment> [level] [player]"));
+			s(sender, usage);
 		}
 		return true;
 	}
