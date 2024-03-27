@@ -1,6 +1,7 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.Effects;
+import net.serble.estools.Main;
 import net.serble.estools.MultiPlayerCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -42,14 +43,25 @@ public class Eff extends MultiPlayerCommand {
             }
         }
 
-        int duration = 600;
+        int duration = 1200;
+        String durationStr = "60 seconds";
 
         if (args.length > 2) {
-            try {
-                duration = Integer.parseInt(args[2]) * 20;
-            } catch (Exception x) {
+            duration = calculateDuration(args[2]);
+
+            if (duration == -1) {
                 s(sender, usage);
-                return true;
+                return false;
+            }
+
+            durationStr = String.format("%s seconds", duration / 20);
+
+            if (duration == 32767) {
+                if (Main.version >= 19) {
+                    duration = -1;
+                }
+
+                durationStr = "forever";
             }
         }
 
@@ -72,8 +84,26 @@ public class Eff extends MultiPlayerCommand {
             p.addPotionEffect(new PotionEffect(effect, duration, amplifier));
         }
 
-        s(sender, "&aAdded effect &6%s&a at level &6%s&a for &6%s Seconds", Effects.getName(effect), amplifier + 1, duration / 20);
+        s(sender, "&aAdded effect &6%s&a at level &6%s&a for &6%s", Effects.getName(effect), amplifier + 1, durationStr);
         return true;
+    }
+
+    private int calculateDuration(String input) {
+        if (input.equalsIgnoreCase("infinite")) {
+            return 32767;
+        }
+
+        try {
+            int duration = Integer.parseInt(input) * 20;
+
+            if (duration >= 0) {
+                return duration;
+            }
+
+            return 32767;
+        } catch (Exception x) {
+            return -1;
+        }
     }
 
     @Override
@@ -93,6 +123,7 @@ public class Eff extends MultiPlayerCommand {
 
             case 3:
                 tab.add("60");
+                tab.add("infinite");
                 break;
 
             case 4:
