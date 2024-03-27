@@ -21,21 +21,12 @@ public class PowerSword extends CMD {
             powerPick = new ItemStack(Objects.requireNonNull(Material.getMaterial("RAW_FISH")), 1);
         }
 
-        powerPick.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 32767);
-
-        if (Main.version > 10) {
-            ItemMeta im = powerPick.getItemMeta();
-            assert im != null;
-            im.setUnbreakable(true);
-            powerPick.setItemMeta(im);
-        } else {
-            powerPick.addUnsafeEnchantment(Enchantment.DURABILITY, 32767);
-        }
+        PowerTool.setupItem(powerPick, Enchantment.DAMAGE_ALL);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        PowerPick.cmd(sender, powerPick);
+        PowerTool.cmd(sender, powerPick);
         return true;
     }
 }

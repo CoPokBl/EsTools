@@ -10,28 +10,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class PowerHoe extends CMD {
-    private static ItemStack powerPick = new ItemStack(Material.DIAMOND_HOE, 1);
+    private static ItemStack powerItem;
 
     public static void init() {
         if (Main.version > 15) {
-            powerPick = new ItemStack(Material.NETHERITE_HOE);
+            powerItem = new ItemStack(Material.NETHERITE_HOE);
+        }
+        else {
+            powerItem = new ItemStack(Material.DIAMOND_HOE, 1);
         }
 
-        powerPick.addUnsafeEnchantment(Enchantment.DIG_SPEED, 32767);
-
-        if (Main.version > 10) {
-            ItemMeta im = powerPick.getItemMeta();
-            assert im != null;
-            im.setUnbreakable(true);
-            powerPick.setItemMeta(im);
-        } else {
-            powerPick.addUnsafeEnchantment(Enchantment.DURABILITY, 32767);
-        }
+        PowerTool.setupItem(powerItem, Enchantment.DIG_SPEED);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        PowerPick.cmd(sender, powerPick);
+        PowerTool.cmd(sender, powerItem);
         return true;
     }
 }

@@ -11,47 +11,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class PowerPick extends CMD {
-
-    private static ItemStack powerPick = new ItemStack(Material.DIAMOND_PICKAXE, 1);
-
-    public static void initall() {
-        init();
-        PowerAxe.init();
-        PowerShovel.init();
-        PowerHoe.init();
-        PowerSword.init();
-    }
-
-    public static void cmd(CommandSender sender, ItemStack pp) {
-        if (isNotPlayer(sender))
-            return;
-
-        Player p = (Player)sender;
-
-        p.getInventory().addItem(pp);
-        s(sender, "&aThere you go!");
-    }
+    private static ItemStack powerItem;
 
     public static void init() {
         if (Main.version > 15) {
-            powerPick = new ItemStack(Material.NETHERITE_PICKAXE);
+            powerItem = new ItemStack(Material.NETHERITE_PICKAXE);
+        }
+        else {
+            powerItem = new ItemStack(Material.DIAMOND_PICKAXE, 1);
         }
 
-        powerPick.addUnsafeEnchantment(Enchantment.DIG_SPEED, 32767);
-
-        if (Main.version > 10) {
-            ItemMeta im = powerPick.getItemMeta();
-            assert im != null;
-            im.setUnbreakable(true);
-            powerPick.setItemMeta(im);
-        } else {
-            powerPick.addUnsafeEnchantment(Enchantment.DURABILITY, 32767);
-        }
+        PowerTool.setupItem(powerItem, Enchantment.DIG_SPEED);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        cmd(sender, powerPick);
+        PowerTool.cmd(sender, powerItem);
         return true;
     }
 }

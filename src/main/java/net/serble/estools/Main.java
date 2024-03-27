@@ -103,7 +103,7 @@ public class Main extends JavaPlugin {
 		// Other
 
 		if (version > 0) {  // Enchants and events don't work on 1.0.0
-			PowerPick.initall();
+			PowerTool.init();
 			SignMain.init();
 		}
 
