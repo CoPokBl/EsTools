@@ -14,6 +14,7 @@ public class TPHere extends EntityCommand {
 
         if (args.length == 0) {
             s(sender, genUsage("/tphere <entity1> [entity2] [entity3]..."));
+            return false;
         }
 
         LivingEntity p = (LivingEntity) sender;
