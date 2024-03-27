@@ -114,6 +114,10 @@ commands:
     description: Get persistent nbt tags on items.
   removepersistentdata:
     description: Remove persistent nbt tags on items.
+  warp:
+    description: Warp to saved locations.
+  warps:
+    description: Create, Add, or Modify warps.
 
 permissions:
   estools.tp:
@@ -282,4 +286,16 @@ permissions:
 
   estools.removepersistentdata:
     description: Lets players remove persistent nbt tags on items
+    default: op
+
+  estools.warps.use:
+    description: Lets players use warps
+    default: op
+
+  estools.warps.manage:
+    description: Lets players create, delete and edit warps
+    default: op
+
+  estools.warps.default:
+    description: Is the default warp permission. If this is false, players will not be able to use a certain warp unless have estools.warp.<warpname>
     default: op

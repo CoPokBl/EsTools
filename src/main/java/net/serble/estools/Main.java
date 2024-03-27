@@ -2,8 +2,8 @@ package net.serble.estools;
 
 import net.serble.estools.Commands.GameMode.*;
 import net.serble.estools.Commands.PowerPick.*;
-import net.serble.estools.Commands.Teleport.TPAll;
-import net.serble.estools.Commands.Teleport.TPHere;
+import net.serble.estools.Commands.Teleport.*;
+import net.serble.estools.Commands.Warps.*;
 import net.serble.estools.Signs.SignMain;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
@@ -99,6 +99,9 @@ public class Main extends JavaPlugin {
 		sc("setpersistentdata", "setpersistentdata", new SetPersistentData(), 14);
 		sc("getpersistentdata", "getpersistentdata", new GetPersistentData(), 14);
 		sc("removepersistentdata", "removepersistentdata", new RemovePersistentData(), 14);
+
+		sc("warp", "warps.use", new Warp());
+		sc("warps", "warps.manage", new WarpManager());
 
 		// Other
 

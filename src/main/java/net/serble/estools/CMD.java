@@ -2,6 +2,7 @@ package net.serble.estools;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -93,6 +94,14 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 			return defaultValue;
 		}
 	}
+
+	public static double tryParseDouble(String obj, double defaultValue) {
+		try {
+			return Double.parseDouble(obj);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
 	
 	public static boolean checkPerms(CommandSender sender, String perm) {
 		if (!sender.hasPermission("estools." + perm)) {
@@ -103,7 +112,7 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	}
 	
 	public static String genUsage(String use) {
-		return "&r&c&lUsage: &r&c" + use;
+		return "&r&c&lUsage: &r&c" + use.replace("\n", "\n           ");
 	}
 	
 	public static Player getPlayer(CommandSender sender, String name) {
@@ -145,6 +154,18 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 		}
 
 		return outp.toString();
+	}
+
+	public static double parseCoorinate(String coord, double playerLoc) {
+		if (coord.startsWith("~")) {
+			return tryParseDouble(coord.substring(1), 0) + playerLoc;
+		}
+
+		return tryParseDouble(coord, 0);
+	}
+
+	public static String locationToString(Location loc) {
+		return String.format("%d %d %d", Math.round(loc.getX()), Math.round(loc.getY()), Math.round(loc.getZ()));
 	}
 
 	public static ItemStack getMainHand(Player p) {
