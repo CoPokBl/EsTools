@@ -12,35 +12,28 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class CChest extends CMD implements Listener {
 
-	public static HashMap<UUID, Inventory> cchests = new HashMap<UUID, Inventory>();
-	public static HashMap<UUID, ItemStack> heldItem = new HashMap<UUID, ItemStack>();
+	public static HashMap<UUID, Inventory> cchests = new HashMap<>();
 
 	@Override
 	public void onEnable() {
-		if (Main.version > 4)
+		if (Main.version > 4) {
 			Bukkit.getServer().getPluginManager().registerEvents(this, Main.current);
+		}
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
 		if (isNotPlayer(sender))
 			return true;
 
@@ -57,156 +50,185 @@ public class CChest extends CMD implements Listener {
 			if (checkPerms(sender, "cchest.survival"))
 				return false;
 		}
+
+		UUID uid = p.getUniqueId();
+		Inventory inv = cchests.get(uid);
 		
-		Inventory inv = Bukkit.createInventory(null, 54, t("&1Creative Chest"));
-		
-		UUID puid = p.getUniqueId();
-		
-		if (cchests.containsKey(puid)) {
-			inv = cchests.get(puid);
+		if (inv == null) {
+			Inventory loaded = loadPlayer(p);
+			if (loaded != null) {
+				inv = loaded;
+			} else {
+				inv = Bukkit.createInventory(null, 54, t("&1Creative Chest"));
+			}
 		}
 		
 		p.closeInventory();
 		p.openInventory(inv);
 		
-		cchests.put(puid, inv);
+		cchests.put(uid, inv);
 		return true;
 	}
 	
 	@EventHandler
-	public void onInventory(final InventoryClickEvent e) {
-		UUID puid = e.getWhoClicked().getUniqueId();
-		
-		ItemStack cItem = e.getCurrentItem();
+	public void inventoryClick(final InventoryClickEvent e) {
+		UUID uid = e.getWhoClicked().getUniqueId();
+		ItemStack currentItem = e.getCurrentItem();
 		
 		// check if inventory is cchest
-		if (cchests.containsKey(puid) && cchests.get(puid).equals(e.getInventory())) {
-			
-			if (e.getClickedInventory() == null) return;
-			
-			if (equalsOr(e.getAction(), InventoryAction.PICKUP_ALL, InventoryAction.PICKUP_HALF,
-										InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_SOME)) {
+        if (!cchests.containsKey(uid) || !cchests.get(uid).equals(e.getInventory()) || e.getClickedInventory() == null) {
+            return;
+        }
 
-				heldItem.put(puid, cItem.clone());
+        if (e.getAction().equals(InventoryAction.COLLECT_TO_CURSOR)) {
+            e.setCancelled(true);
+
+            ItemStack cursor = e.getCursor();
+			if (cursor == null) {
+				return;
 			}
-			
-			if (e.getAction().equals(InventoryAction.COLLECT_TO_CURSOR)) {
-				e.setCancelled(true);
-			}
-			
-			// if they clicked cchest:
-			if (e.getClickedInventory().equals(cchests.get(puid))) {		
-				
-				// right click on chest
-				if (e.getClick().equals(ClickType.RIGHT)) {
-					e.setCancelled(true);
-					
-					if (cItem != null) {
-						e.getClickedInventory().setItem(e.getSlot(), null);
-					}
+
+			Inventory pInv = e.getWhoClicked().getInventory();
+            for (Map.Entry<Integer, ? extends ItemStack> i : pInv.all(cursor.getType()).entrySet()) {
+				ItemStack item = i.getValue();
+
+				if (item == null) {
+					continue;
 				}
-				
-				// left click or drop on chest
-				else if (equalsOr(e.getClick(), ClickType.LEFT, ClickType.DROP, ClickType.CONTROL_DROP)) {
-					if (e.getAction().equals(InventoryAction.PLACE_ALL)) {
-						e.setCancelled(true);
-						
-						new BukkitRunnable() {
-							@Override
-							public void run() {
-								e.getInventory().setItem(e.getRawSlot(), heldItem.get(puid));
-							}
-						}.runTaskLater(Main.current, 0);
-						
+
+				if (cursor.isSimilar(item)) {
+					cursor.setAmount(cursor.getAmount() + item.getAmount());
+
+					if (cursor.getAmount() > cursor.getMaxStackSize()) {
+						item.setAmount(cursor.getAmount() - cursor.getMaxStackSize());
+						cursor.setAmount(cursor.getMaxStackSize());
 					} else {
-						new BukkitRunnable() {
-							@Override
-							public void run() {
-								if (cItem != null)
-									e.getInventory().setItem(e.getRawSlot(), cItem.clone());
-							}
-						}.runTaskLater(Main.current, 0);
+						pInv.setItem(i.getKey(), null);
 					}
 				}
-
-				// shift click on cchest
-				else if (equalsOr(e.getClick(), ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT)) {
-					e.setCancelled(true);
-					if (cItem != null)
-						e.getWhoClicked().getInventory().addItem(cItem.clone());
-				}
 			}
-			
-			// if player inventory
-			else {
-				if (equalsOr(e.getAction(), InventoryAction.PLACE_ALL, InventoryAction.PLACE_ONE, 
-						InventoryAction.PLACE_SOME)) {
+			return;
+        }
 
-					heldItem.remove(puid);
-				}
-			}
-		}
-	}
-	
-	// cancel drag if cchest
-	@EventHandler
-    public void onInventoryDrag(final InventoryDragEvent e) {
-		UUID puid = e.getWhoClicked().getUniqueId();
-		
-		if (cchests.containsKey(puid)) {
-			if (cchests.get(puid).equals(e.getInventory())) {
+		// if player inventory
+        if (!e.getClickedInventory().equals(cchests.get(uid))) {
+			// shift click into cchest
+			if (equalsOr(e.getClick(), ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT) && currentItem != null) {
 				e.setCancelled(true);
+
+				e.getInventory().addItem(currentItem.clone());
 			}
+
+			return;
+        }
+
+		// right click in cchest (clear item)
+		if (e.getClick().equals(ClickType.RIGHT) && currentItem != null) {
+			e.setCancelled(true);
+			e.getClickedInventory().setItem(e.getSlot(), null);
+			return;
+		}
+
+		// add to chest
+		if (equalsOr(e.getAction(), InventoryAction.PLACE_ALL, InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME)) {
+			e.setCancelled(true);
+			ItemStack item = e.getCursor();
+			if (item == null) {
+				return;
+			}
+
+			ItemStack finalItem = item.clone();
+
+			if (equalsOr(e.getAction(), InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME)) {
+				finalItem.setAmount(1);
+			}
+
+			setItemTask(e.getInventory(), e.getSlot(), finalItem);
+			return;
+		}
+
+		// remove from cchest
+		if (equalsOr(e.getClick(), ClickType.LEFT, ClickType.DROP, ClickType.CONTROL_DROP,
+				ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT) && currentItem != null) {
+			ItemStack item = currentItem.clone();
+			setItemTask(e.getInventory(), e.getSlot(), item);
 		}
     }
 
-//    // Cancel if dropping items from cchest
-//    @EventHandler
-//	public void onDrop(final PlayerDropItemEvent e) {
-//		if (e.getPlayer().getOpenInventory().getTopInventory().equals(cchests.get(e.getPlayer().getUniqueId()))) {
-//			e.setCancelled(true);
-//		}
-//	}
-	
-	public static void loadPlayer(Player p) {		
-		UUID puid = p.getUniqueId();
-		
-		FileConfiguration f = ConfigManager.load("cchests/" + puid.toString() + ".yml");
-		
-		if (f.contains("items")) {
-			@SuppressWarnings("unchecked")
-			ArrayList<ItemStack> content = (ArrayList<ItemStack>) f.get("items");
-			
-			ItemStack[] cA = new ItemStack[content.size()];
-			
-			cA = content.toArray(cA);
-			
-			Inventory inv = Bukkit.createInventory(null, 54, t("&1Creative Chest"));
-			inv.setContents(cA);
-			cchests.put(puid, inv);
-		}
+	private static void setItemTask(Inventory inv, int slot, ItemStack item) {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				inv.setItem(slot, item);
+			}
+		}.runTask(Main.current);
 	}
+	
+	// cancel drag if inside cchest
+	@EventHandler
+    public void onInventoryDrag(final InventoryDragEvent e) {
+		Inventory inv = cchests.get(e.getWhoClicked().getUniqueId());
+
+		if (inv.equals(e.getInventory())) {
+			// check if any of the slots dragged are in the cchest
+			for (int slot : e.getRawSlots()) {
+				if (inv.equals(e.getView().getInventory(slot))) {
+					e.setCancelled(true);
+					return;
+				}
+			}
+		}
+    }
+	
+	public static Inventory loadPlayer(Player p) {
+		UUID uid = p.getUniqueId();
+		
+		FileConfiguration f = ConfigManager.load("cchests/" + uid + ".yml");
+
+        if (!f.contains("items")) {
+            return null;
+        }
+
+        @SuppressWarnings("unchecked")
+        ItemStack[] content = ((ArrayList<ItemStack>) Objects.requireNonNull(f.get("items"))).toArray(new ItemStack[0]);
+
+        Inventory inv = Bukkit.createInventory(null, 54, t("&1Creative Chest"));
+        inv.setContents(content);
+        cchests.put(uid, inv);
+
+        return inv;
+    }
 	
 	public static void savePlayer(Player p) {		
-		UUID puid = p.getUniqueId();
+		UUID uid = p.getUniqueId();
 		
-		if (!cchests.containsKey(puid)) return;
+		if (!cchests.containsKey(uid)) {
+			return;
+		}
 		
 		FileConfiguration f = new YamlConfiguration();
+		f.set("items", cchests.get(uid).getContents());
+		ConfigManager.save("cchests/" + uid + ".yml", f);
+	}
 
-		f.set("items", cchests.get(puid).getContents());
-		
-		ConfigManager.save("cchests/" + puid.toString() + ".yml", f);
-		
-		cchests.remove(p.getUniqueId());
+	@EventHandler
+	public void onClose(InventoryCloseEvent e) {
+		UUID uid = e.getPlayer().getUniqueId();
+
+		if (e.getInventory().equals(cchests.get(uid))) {
+			savePlayer((Player)e.getPlayer());
+		}
+	}
+
+	@EventHandler
+	public void onQuit(PlayerQuitEvent e) {
+		savePlayer(e.getPlayer());
+		cchests.remove(e.getPlayer().getUniqueId());
 	}
 	
 	@EventHandler
-	public void onQuit(PlayerQuitEvent e) { savePlayer(e.getPlayer()); }
-	
-	@EventHandler
-	public void onKick(PlayerKickEvent e) { savePlayer(e.getPlayer()); }
-	
-	@EventHandler
-	public void onJoin(PlayerJoinEvent e) { loadPlayer(e.getPlayer()); }
+	public void onKick(PlayerKickEvent e) {
+		savePlayer(e.getPlayer());
+		cchests.remove(e.getPlayer().getUniqueId());
+	}
 }
