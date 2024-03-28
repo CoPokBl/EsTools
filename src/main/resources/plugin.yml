@@ -120,11 +120,11 @@ commands:
     description: Create, Add, or Modify warps.
 
 permissions:
-  estools.tp:
+  estools.teleport:
     description: Lets people teleport themselves and others
     default: op
     
-  estools.gm:
+  estools.gamemode:
     description: Lets people change the gamemode of themselves and others
     default: op
     
@@ -152,7 +152,7 @@ permissions:
     description: Lets people strike lightning on people
     default: op
     
-  estools.`sethealth:
+  estools.sethealth:
     description: Lets people set the health for themselves and others
     default: op
     
@@ -180,8 +180,8 @@ permissions:
     description: Lets people reset all config files
     default: op
     
-  estools.ench:
-    description: Lets people enchant items (sharp 2 billion allowed)
+  estools.enchant:
+    description: Lets people enchant items (unsafe enchantments allowed)
     default: op
     
   estools.fix:
