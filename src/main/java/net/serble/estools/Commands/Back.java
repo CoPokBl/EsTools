@@ -3,7 +3,6 @@ package net.serble.estools.Commands;
 import java.util.HashMap;
 import java.util.UUID;
 
-import net.serble.estools.EventsHelper;
 import net.serble.estools.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -24,7 +23,7 @@ public class Back extends CMD implements Listener {
 
 	@Override
 	public void onEnable() {
-		EventsHelper.registerEvents(this, EventsHelper.EventType.PlayerDeath, EventsHelper.EventType.PlayerTeleport);
+		Bukkit.getServer().getPluginManager().registerEvents(this, Main.current);
 	}
 
 	@Override

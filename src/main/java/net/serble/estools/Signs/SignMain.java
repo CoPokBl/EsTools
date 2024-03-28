@@ -1,7 +1,8 @@
 package net.serble.estools.Signs;
 
 import net.serble.estools.CMD;
-import net.serble.estools.EventsHelper;
+import net.serble.estools.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,7 +26,7 @@ public class SignMain implements Listener {
         addSign(new Repair(), "[repair]", CMD.t("&1[Repair]"));
         addSign(new Sell(), "[sell]", CMD.t("&1[Sell]"));
 
-        EventsHelper.registerEvents(new SignMain(), EventsHelper.EventType.PlayerInteract);
+        Bukkit.getServer().getPluginManager().registerEvents(new SignMain(), Main.current);
     }
 
     public static void addSign(SignType st, String conv, String sign) {

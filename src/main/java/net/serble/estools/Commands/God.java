@@ -1,7 +1,6 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EntityCommand;
-import net.serble.estools.EventsHelper;
 import net.serble.estools.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -21,7 +20,7 @@ public class God extends EntityCommand implements Listener {
 
 	@Override
 	public void onEnable() {
-		EventsHelper.registerEvents(this, EventsHelper.EventType.EntityDamage);
+		Bukkit.getServer().getPluginManager().registerEvents(this, Main.current);
 	}
 
 	@Override
