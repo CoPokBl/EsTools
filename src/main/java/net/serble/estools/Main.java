@@ -80,6 +80,7 @@ public class Main extends JavaPlugin {
 		sc("powershovel", "powerpick", new PowerShovel(), 1);
 		sc("powerhoe", "powerpick", new PowerHoe(), 1);
 
+		sc("lore", "lore", new Lore(), null, 4, 6);
 		sc("rename", "rename", new Rename(), null, 4, 6);
 		sc("sudo", "sudo", new Sudo());
 

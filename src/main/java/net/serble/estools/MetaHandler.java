@@ -10,6 +10,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static net.serble.estools.CMD.s;
@@ -64,4 +66,18 @@ public class MetaHandler {
         return item;
     }
 
+    public static List<String> getLore(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null || !meta.hasLore()) {
+            return new ArrayList<>();
+        }
+
+        return meta.getLore();
+    }
+
+    public static void setLore(ItemStack item, List<String> lore) {
+        ItemMeta meta = Objects.requireNonNull(item.getItemMeta());
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+    }
 }

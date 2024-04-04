@@ -118,6 +118,8 @@ commands:
     description: Warp to saved locations.
   warps:
     description: Create, Add, or Modify warps.
+  lore:
+    description: Add, Change, or Remove lore from items.
 
 permissions:
   estools.teleport:
@@ -298,4 +300,8 @@ permissions:
 
   estools.warps.default:
     description: Is the default warp permission. If this is false, players will not be able to use a certain warp unless have estools.warp.<warpname>
+    default: op
+
+  estools.lore:
+    description: Lets players add, change, or remove lore from items
     default: op
