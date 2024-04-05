@@ -72,7 +72,6 @@ public class Effects {
             put("heal", "instant_health");
             put("increase_damage", "strength");
             put("slow", "slowness");
-            put("speed", "swiftness");
             put("slow_digging", "mining_fatigue");
             put("jump", "jump_boost");
         }};
@@ -82,7 +81,7 @@ public class Effects {
                 continue;
             }
 
-            String name = p.getName().toLowerCase(Locale.ENGLISH);;
+            String name = p.getName().toLowerCase(Locale.ENGLISH);
 
             if (nameReplacers.containsKey(name)) {
                 name = nameReplacers.get(name);
