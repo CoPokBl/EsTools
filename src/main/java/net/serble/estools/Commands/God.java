@@ -1,17 +1,19 @@
 package net.serble.estools.Commands;
 
+import net.serble.estools.ConfigManager;
 import net.serble.estools.EntityCommand;
 import net.serble.estools.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class God extends EntityCommand implements Listener {
 	private static final HashMap<UUID, Integer> currentPlayers = new HashMap<>();
@@ -21,6 +23,10 @@ public class God extends EntityCommand implements Listener {
 	@Override
 	public void onEnable() {
 		Bukkit.getServer().getPluginManager().registerEvents(this, Main.current);
+
+		FileConfiguration f = ConfigManager.load("gods.yml");
+		List<String> godList = f.getStringList("gods");
+		godList.forEach(w -> currentPlayers.put(UUID.fromString(w), null));
 	}
 
 	@Override
@@ -41,35 +47,43 @@ public class God extends EntityCommand implements Listener {
 
 			if (args.length > 1) {
 				try {
-					timer = (int)(Double.parseDouble(args[1]) * 20);
-				} catch (Exception x) {
+					timer = Math.max((int)(Double.parseDouble(args[1]) * 20), -1);
+				} catch (NumberFormatException x) {
 					s(sender, usage);
 					return true;
 				}
 			}
 		}
 
-		UUID u = p.getUniqueId();
+		UUID uid = p.getUniqueId();
 
-		Integer r = null;
+		if (currentPlayers.containsKey(uid)) {
+			int taskId = currentPlayers.get(uid);
+			currentPlayers.remove(uid);
 
-		String timerStr = "forever";
-		if (timer >= 0) {
-			timerStr = timer / 20d + " seconds";
-
-			r = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.current, () -> currentPlayers.remove(u), timer);
-		}
-
-		if (currentPlayers.containsKey(u)) {
-			if (currentPlayers.get(u) != null) {
-				Bukkit.getScheduler().cancelTask(currentPlayers.get(u));
+			if (taskId == -1) {
+				save();
+			} else {
+				Bukkit.getScheduler().cancelTask(taskId);
 			}
 
-			currentPlayers.remove(u);
 			s(sender, "&aGod mode &6disabled&a for &6%s", getEntityName(p));
 		}
 		else {
-			currentPlayers.put(u, r);
+			Integer taskId = null;
+
+			String timerStr = "forever";
+			if (timer >= 0) {
+				timerStr = timer / 20d + " seconds";
+
+				taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.current, () -> currentPlayers.remove(uid), timer);
+			}
+
+			currentPlayers.put(uid, taskId);
+			if (timer < 0) {
+				save();
+			}
+
 			s(sender, "&aGod mode &6enabled&a for &6%s&a for &6%s", getEntityName(p), timerStr);
 		}
 		return true;
@@ -80,5 +94,21 @@ public class God extends EntityCommand implements Listener {
 		if (currentPlayers.containsKey(e.getEntity().getUniqueId())) {
 			e.setCancelled(true);
 		}
+	}
+
+	private static void save() {
+		FileConfiguration f = new YamlConfiguration();
+
+		List<String> gods = new ArrayList<>();
+		for (Map.Entry<UUID, Integer> kv : currentPlayers.entrySet()) {
+			// only save if there isn't a time limit!
+			if (kv.getValue() == null) {
+				gods.add(kv.getKey().toString());
+			}
+		}
+
+		f.set("gods", gods);
+
+		ConfigManager.save("gods.yml", f);
 	}
 }
