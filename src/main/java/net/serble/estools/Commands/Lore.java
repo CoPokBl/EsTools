@@ -107,7 +107,7 @@ public class Lore extends CMD {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
         List<String> tab = new ArrayList<>();
 
         if (args.length == 1) {
