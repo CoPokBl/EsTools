@@ -5,6 +5,7 @@ import net.serble.estools.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.SignSide;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
@@ -38,7 +39,25 @@ public class EditSign extends CMD {
 		}
 		
 		Sign sign = (Sign) signB.getState();
-		
+
+		switch (args[0].toLowerCase()) {
+			case "glow":
+				if (setGlow(sign, p, true)) {
+					s(sender, "&aMade the sign &6glow!");
+					return true;
+				}
+
+				return false;
+
+			case "unglow":
+				if (setGlow(sign, p, false)) {
+					s(sender, "&aMade the sign no longer &6glow.");
+					return true;
+				}
+
+				return false;
+		}
+
 		int lineNum;
 
 		try {
@@ -60,8 +79,14 @@ public class EditSign extends CMD {
 		}
 
 		String lineText = t(lineTextBuilder.toString()).trim();
-		
-		sign.setLine(lineNum - 1, lineText);
+
+		if (Main.version >= 20) {
+			SignSide side = sign.getTargetSide(p);
+			side.setLine(lineNum - 1, lineText);
+		}
+		else {
+			sign.setLine(lineNum - 1, lineText);
+		}
 		sign.update();
 
 		if (lineText.isEmpty()) {
@@ -82,6 +107,11 @@ public class EditSign extends CMD {
             tab.add("2");
             tab.add("3");
             tab.add("4");
+
+			if (Main.version >= 17) { // only add glow autocomplete if it exists
+				tab.add("glow");
+				tab.add("unglow");
+			}
         }
 
 		return tab;
@@ -101,5 +131,43 @@ public class EditSign extends CMD {
 				return null;
 			}
 		}
+	}
+
+	public boolean setGlow(Sign sign, Player p, boolean glow) {
+		if (Main.version >= 20) {
+			SignSide side = sign.getTargetSide(p);
+
+			if (side.isGlowingText() == glow) {
+				if (glow) {
+					s(p, "&cThis sign is already &6glowing!");
+				}
+				else {
+					s(p, "&cThis sign is already not &6glowing!");
+				}
+				return false;
+			}
+
+			side.setGlowingText(glow);
+		}
+		else if (Main.version >= 17) {
+			if (sign.isGlowingText() == glow) {
+				if (glow) {
+					s(p, "&cThis sign is already &6glowing!");
+				}
+				else {
+					s(p, "&cThis sign is already not &6glowing!");
+				}
+				return false;
+			}
+
+			sign.setGlowingText(glow);
+		}
+		else {
+			s(p, "&cGlowing signs do not exist in this version!");
+			return false;
+		}
+
+		sign.update();
+		return true;
 	}
 }
