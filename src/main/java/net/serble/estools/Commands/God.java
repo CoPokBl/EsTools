@@ -26,7 +26,7 @@ public class God extends EntityCommand implements Listener {
 
 		FileConfiguration f = ConfigManager.load("gods.yml");
 		List<String> godList = f.getStringList("gods");
-		godList.forEach(w -> currentPlayers.put(UUID.fromString(w), null));
+		godList.forEach(w -> currentPlayers.put(UUID.fromString(w), -1));
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class God extends EntityCommand implements Listener {
 			s(sender, "&aGod mode &6disabled&a for &6%s", getEntityName(p));
 		}
 		else {
-			Integer taskId = null;
+			int taskId = -1;
 
 			String timerStr = "forever";
 			if (timer >= 0) {
@@ -102,7 +102,7 @@ public class God extends EntityCommand implements Listener {
 		List<String> gods = new ArrayList<>();
 		for (Map.Entry<UUID, Integer> kv : currentPlayers.entrySet()) {
 			// only save if there isn't a time limit!
-			if (kv.getValue() == null) {
+			if (kv.getValue() == -1) {
 				gods.add(kv.getKey().toString());
 			}
 		}
