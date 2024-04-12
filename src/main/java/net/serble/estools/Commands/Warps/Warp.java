@@ -69,7 +69,9 @@ public class Warp extends CMD {
 
         if (args.length == 1) {
             for (WarpLocation warp : WarpManager.warps.values()) {
-                if (canUseWarp(p, warp)) {
+                boolean inSameWorld = p.getWorld().equals(warp.location.getWorld());
+
+                if (canUseWarp(p, warp) && (warp.global || inSameWorld)) {
                     tab.add(warp.name);
                 }
             }

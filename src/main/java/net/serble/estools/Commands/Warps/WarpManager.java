@@ -36,6 +36,17 @@ public class WarpManager extends CMD {
             return;
         }
 
+        warpList.sort((w1, w2) -> {
+            if (w1 instanceof WarpLocation && w2 instanceof WarpLocation) {
+                WarpLocation warp1 = (WarpLocation)w1;
+                WarpLocation warp2 = (WarpLocation)w1;
+
+                return warp1.name.compareTo(warp2.name);
+            }
+
+            return 0;
+        });
+
         warpList.forEach(w -> {
             if (w instanceof WarpLocation) {
                 WarpLocation warp = (WarpLocation)w;
@@ -74,7 +85,9 @@ public class WarpManager extends CMD {
             StringBuilder warpList = new StringBuilder("&aWarps:");
 
             for (WarpLocation warp : warps.values()) {
-                warpList.append(t("\n&6%s &aat &6%s &ais &6%s", warp.name, locationToString(warp.location), warp.global ? "global" : "local"));
+                warpList.append(t("\n&6%s &aat &6%s &ain &6%s &ais &6%s",
+                        warp.name, locationToString(warp.location),
+                        warp.location.getWorld().getName(), warp.global ? "global" : "local"));
             }
 
             s(sender, warpList.toString());
@@ -226,7 +239,7 @@ public class WarpManager extends CMD {
             return tab;
         }
 
-        if (args.length == 2) { // <warp>
+        if (args.length == 2 && !args[0].equalsIgnoreCase("add")) { // <warp>
             tab.addAll(warps.keySet());
         }
 
