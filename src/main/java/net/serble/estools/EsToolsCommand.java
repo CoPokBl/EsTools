@@ -142,13 +142,7 @@ public abstract class EsToolsCommand implements CommandExecutor, EsToolsTabCompl
 	}
 
 	public static String argsToString(String[] args, int skipAmount) {
-		StringBuilder output = new StringBuilder();
-
-		for (int i = skipAmount; i < args.length; i++) {
-			output.append(args[i]);
-		}
-
-		return output.toString();
+		return String.join(" ", removeArgs(args, skipAmount));
 	}
 
 	public static double parseCoordinate(String coord, double playerLoc) {
