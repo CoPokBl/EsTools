@@ -19,19 +19,20 @@ public class Fix extends PlayerCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
 		Player p;
 		
 		if (args.length < 2) {
-			if (isNotPlayer(sender, usage))
-				return false;
+			if (isNotPlayer(sender, usage)) {
+                return false;
+            }
 			
 			p = (Player) sender;
 		} else {
 			p = getPlayer(sender, args[1]);
 			
-			if (p == null)
-				return false;
+			if (p == null) {
+                return false;
+            }
 		}
 		
 		PlayerInventory pInv = p.getInventory();
@@ -42,7 +43,7 @@ public class Fix extends PlayerCommand {
 		if (args.length > 0) {
 			switch (args[0].toLowerCase()) {					
 				case "offhand":
-				    if (Main.version > 8) {
+				    if (Main.majorVersion > 8) {
                         is = pInv.getItemInOffHand();
                     }
 					break;
@@ -68,32 +69,29 @@ public class Fix extends PlayerCommand {
 					break;
 			}
 		}
-		
 
 		if (all) {
 			ItemStack[] contents = p.getInventory().getContents();
-
 			for (ItemStack i : contents) {
-				Repair(i);
+				repair(i);
 			}
 
 			p.getInventory().setContents(contents);
 		} else {
-            Repair(is);
+            repair(is);
         }
 
-		s(sender, "&aRepaired &6%s's &aitem(s)!", getEntityName(p));
+		send(sender, "&aRepaired &6%s's &aitem(s)!", getEntityName(p));
 		return true;
 	}
 
-	private void Repair(ItemStack is) {
+	public static void repair(ItemStack is) {
 		if (is == null) {
 			return;
 		}
 
-		if (Main.version > 12) {
+		if (Main.majorVersion > 12) {
 			ItemMeta im = is.getItemMeta();
-
 			if (im == null) return;
 
 			((Damageable) im).setDamage(0);
@@ -103,22 +101,20 @@ public class Fix extends PlayerCommand {
 			//noinspection deprecation
 			is.setDurability((short) 0);
 		}
-
 	}
 
 	@Override
 	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
-		List<String> tab = new ArrayList<String>();
+		List<String> tab = new ArrayList<>();
 		
 		if (args.length == 1) {
 			tab.add("hand"); tab.add("helmet"); tab.add("chestplate");
 			tab.add("leggings"); tab.add("boots"); tab.add("all");
 
-			if (Main.version > 8) {
+			if (Main.majorVersion > 8) {
                 tab.add("offhand");
             }
-		}
-		else if (args.length == 2) {
+		} else if (args.length == 2) {
 			return super.tabComplete(sender, args, lArg);
 		}
 		

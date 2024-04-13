@@ -1,6 +1,6 @@
 package net.serble.estools.Signs;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
@@ -13,45 +13,46 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.util.HashMap;
 
 public class SignMain implements Listener {
-
-    static HashMap<String, SignType> signs = new HashMap<>();
-    static HashMap<String, String> signConversions = new HashMap<>();
+    private static final HashMap<String, SignType> signs = new HashMap<>();
+    private static final HashMap<String, String> signConversions = new HashMap<>();
 
     public static void init() {
-        addSign(new Disposal(), "[disposal]", CMD.t("&1[Disposal]"));
-        addSign(new Give(), "[give]", CMD.t("&1[Give]"));
-        addSign(new Heal(), "[heal]", CMD.t("&1[Heal]"));
-        addSign(new Feed(), "[feed]", CMD.t("&1[Feed]"));
-        addSign(new Balance(), "[balance]", CMD.t("&1[Balance]"));
-        addSign(new Repair(), "[repair]", CMD.t("&1[Repair]"));
-        addSign(new Sell(), "[sell]", CMD.t("&1[Sell]"));
+        addSign(new Disposal(), "[disposal]", EsToolsCommand.translate("&1[Disposal]"));
+        addSign(new Give(), "[give]", EsToolsCommand.translate("&1[Give]"));
+        addSign(new Heal(), "[heal]", EsToolsCommand.translate("&1[Heal]"));
+        addSign(new Feed(), "[feed]", EsToolsCommand.translate("&1[Feed]"));
+        addSign(new Balance(), "[balance]", EsToolsCommand.translate("&1[Balance]"));
+        addSign(new Repair(), "[repair]", EsToolsCommand.translate("&1[Repair]"));
+        addSign(new Sell(), "[sell]", EsToolsCommand.translate("&1[Sell]"));
 
-        Bukkit.getServer().getPluginManager().registerEvents(new SignMain(), Main.current);
+        Bukkit.getServer().getPluginManager().registerEvents(new SignMain(), Main.plugin);
     }
 
-    public static void addSign(SignType st, String conv, String sign) {
-        signConversions.put(conv, sign);
-        signs.put(sign, st);
+    public static void addSign(SignType signType, String conversion, String sign) {
+        signConversions.put(conversion, sign);
+        signs.put(sign, signType);
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void interact(PlayerInteractEvent e) {
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().name().endsWith("SIGN")) {
-            Sign s = (Sign)e.getClickedBlock().getState();
+            Sign state = (Sign)e.getClickedBlock().getState();
 
-            SignType st = signs.get(s.getLine(0));
+            SignType signType = signs.get(state.getLine(0));
 
-            if (st != null) {
+            if (signType != null) {
                 e.setCancelled(true);
-                st.run(e.getPlayer(), s.getLines());
+                signType.run(e.getPlayer(), state.getLines());
             }
         }
     }
 
     @EventHandler
     public void changeSign(SignChangeEvent e) {
-        if (!e.getPlayer().hasPermission("estools.signs"))
+        if (!e.getPlayer().hasPermission("estools.signs")) {
             return;
+        }
 
         String str = signConversions.get(e.getLine(0).toLowerCase());
 

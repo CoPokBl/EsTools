@@ -1,6 +1,6 @@
 package net.serble.estools.Commands.Warps;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ConfigManager;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 // this command is /warps
-public class WarpManager extends CMD {
+public class WarpManager extends EsToolsCommand {
     private static final String addSetUsage = genUsage("/warps <add/set> <warp> [LOCAL/global] [x] [y] [z] [yaw] [pitch]");
     private static final String usage = genUsage("/warps <add/set> <warp> [LOCAL/global] [x] [y] [z] [yaw] [pitch]\n" +
                                                       "/warps remove <warp>\n" +
@@ -70,7 +70,7 @@ public class WarpManager extends CMD {
                 return false;
             }
 
-            s(sender, usage);
+            send(sender, usage);
             return false;
         }
 
@@ -78,19 +78,19 @@ public class WarpManager extends CMD {
 
         if (command.equals("list")) {
             if (warps.isEmpty()) {
-                s(sender, "&cThere are no warps.");
+                send(sender, "&cThere are no warps.");
                 return true;
             }
 
             StringBuilder warpList = new StringBuilder("&aWarps:");
 
             for (WarpLocation warp : warps.values()) {
-                warpList.append(t("\n&6%s &aat &6%s &ain &6%s &ais &6%s",
+                warpList.append(translate("\n&6%s &aat &6%s &ain &6%s &ais &6%s",
                         warp.name, locationToString(warp.location),
                         warp.location.getWorld().getName(), warp.global ? "global" : "local"));
             }
 
-            s(sender, warpList.toString());
+            send(sender, warpList.toString());
             return true;
         }
 
@@ -99,7 +99,7 @@ public class WarpManager extends CMD {
         }
 
         if (args.length < 2) {
-            s(sender, usage);
+            send(sender, usage);
             return false;
         }
 
@@ -108,14 +108,14 @@ public class WarpManager extends CMD {
 
         if (command.equals("remove")) {
             if (warp == null) {
-                s(sender, "&cWarp does not exist.");
+                send(sender, "&cWarp does not exist.");
                 return false;
             }
 
             warps.remove(warpName);
             saveWarps();
 
-            s(sender, "&aRemoved warp &6%s&a.", warpName);
+            send(sender, "&aRemoved warp &6%s&a.", warpName);
             return true;
         }
 
@@ -125,12 +125,12 @@ public class WarpManager extends CMD {
                 case "global":
                     global = true;
                     break;
+
                 case "local":
-                    global = false;
-                    break;
+                    break;  // Global is already false
 
                 default:
-                    s(sender, usage);
+                    send(sender, usage);
                     return false;
             }
         }
@@ -138,7 +138,7 @@ public class WarpManager extends CMD {
         switch (args[0].toLowerCase()) {
             case "add": {
                 if (warp != null) {
-                    s(sender, "&cWarp does not exist, please use add to create it.");
+                    send(sender, "&cWarp does not exist, please use add to create it.");
                     return false;
                 }
 
@@ -146,13 +146,13 @@ public class WarpManager extends CMD {
                     return false;
                 }
 
-                s(sender, "&aAdded warp &6%s&a.", warpName);
+                send(sender, "&aAdded warp &6%s&a.", warpName);
                 break;
             }
 
             case "set": {
                 if (warp == null) {
-                    s(sender, "&cWarp does not exist, please use add to create it.");
+                    send(sender, "&cWarp does not exist, please use add to create it.");
                     return false;
                 }
 
@@ -160,12 +160,12 @@ public class WarpManager extends CMD {
                     return false;
                 }
 
-                s(sender, "&aModified warp &6%s&a.", warpName);
+                send(sender, "&aModified warp &6%s&a.", warpName);
                 break;
             }
 
             default:
-                s(sender, usage);
+                send(sender, usage);
                 return false;
         }
         return true;
@@ -180,14 +180,14 @@ public class WarpManager extends CMD {
             loc = p.getLocation();
         }
         else if (args.length < 6) { // if you supplied only some of the coordinates, what are you doing???
-            s(p, addSetUsage);
+            send(p, addSetUsage);
             return true;
         }
         else {
             loc = new Location(p.getWorld(),
-                parseCoorinate(args[3], p.getLocation().getX()),
-                parseCoorinate(args[4], p.getLocation().getY()),
-                parseCoorinate(args[5], p.getLocation().getZ())
+                parseCoordinate(args[3], p.getLocation().getX()),
+                parseCoordinate(args[4], p.getLocation().getY()),
+                parseCoordinate(args[5], p.getLocation().getZ())
             );
 
             // add pitch and yaw only if there are enough arguments
@@ -204,7 +204,7 @@ public class WarpManager extends CMD {
                     loc.setPitch(Float.parseFloat(args[7]));
                 }
             } catch (NumberFormatException ignored) {
-                s(p, addSetUsage);
+                send(p, addSetUsage);
                 return true;
             }
         }

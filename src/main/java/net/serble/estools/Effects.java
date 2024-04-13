@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("deprecation")
 public class Effects {
     private static final Map<String, PotionEffectType> EFFECTS = new HashMap<>();
     private static final Map<String, PotionType> POTIONS = new HashMap<>();
@@ -39,7 +40,7 @@ public class Effects {
     }
 
     static {
-        if (Main.version <= 8) {  // 1.8 only potions be funky
+        if (Main.majorVersion <= 8) {  // 1.8 only potions be funky
             POTIONS.put("regeneration", PotionType.REGEN);
             POTIONS.put("speed", PotionType.SPEED);
             POTIONS.put("fire_resistance", PotionType.FIRE_RESISTANCE);
@@ -50,16 +51,16 @@ public class Effects {
             POTIONS.put("slowness", PotionType.SLOWNESS);
             POTIONS.put("instant_damage", PotionType.INSTANT_DAMAGE);
 
-            if (Main.version >= 4 && Main.minorVersion >= 2) {  // Night vision was added in 1.4.2
+            if (Main.majorVersion >= 4 && Main.minorVersion >= 2) {  // Night vision was added in 1.4.2
                 POTIONS.put("night_vision", PotionType.NIGHT_VISION);
                 POTIONS.put("invisibility", PotionType.INVISIBILITY);
             }
 
-            if (Main.version >= 7 && Main.minorVersion >= 2) {  // 1.7.2
+            if (Main.majorVersion >= 7 && Main.minorVersion >= 2) {  // 1.7.2
                 POTIONS.put("water_breathing", PotionType.WATER);
             }
 
-            if (Main.version >= 8) {  // 1.8
+            if (Main.majorVersion >= 8) {  // 1.8
                 POTIONS.put("jump_boost", PotionType.JUMP);
             }
         }

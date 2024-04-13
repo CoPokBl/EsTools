@@ -13,39 +13,42 @@ public class Fly extends MultiPlayerCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-		ArrayList<Player> ps = new ArrayList<>();
+		ArrayList<Player> players = new ArrayList<>();
 		
 		if (args.length == 0) {
-			if (isNotPlayer(sender, usage))
-				return false;
+			if (isNotPlayer(sender, usage)) {
+                return false;
+            }
 			
-			ps.add((Player) sender);
+			players.add((Player) sender);
 		} else {
-			ps = getPlayers(sender, args[0]);
+			players = getPlayers(sender, args[0]);
 			
-			if (ps.isEmpty())
-				return false;
+			if (players.isEmpty()) {
+                return false;
+            }
 		}
 
-        for (Player p : ps) {
+        for (Player p : players) {
 			boolean isFly = p.getAllowFlight();
 
 			if (args.length != 0 && !Objects.equals(args[0], "*")) {
-				if (isFly)
-					s(sender, "&aFly Disabled for &6%s", p.getName());
-				else
-					s(sender, "&aFly Enabled for &6%s", p.getName());
+				if (isFly) {
+                    send(sender, "&aFly Disabled for &6%s", p.getName());
+                } else {
+                    send(sender, "&aFly Enabled for &6%s", p.getName());
+                }
 			}
 
 			p.setAllowFlight(!isFly);
 
-			if (isFly)
-				s(p, "&aFly Disabled!");
-			else
-				s(p, "&aFly Enabled!");
+			if (isFly) {
+                send(p, "&aFly Disabled!");
+            } else {
+                send(p, "&aFly Enabled!");
+            }
 		}
+
 		return true;
 	}
-
 }

@@ -12,30 +12,31 @@ public class Feed extends MultiPlayerCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-		ArrayList<Player> ps = new ArrayList<>();
+		ArrayList<Player> players = new ArrayList<>();
 		
 		if (args.length == 0) {
-			if (isNotPlayer(sender, usage))
-				return false;
+			if (isNotPlayer(sender, usage)) {
+                return false;
+            }
 			
-			ps.add((Player) sender);
+			players.add((Player) sender);
 		} else {
-			ps = getPlayers(sender, args);
+			players = getPlayers(sender, args);
 			
-			if (ps.isEmpty())
-				return false;
+			if (players.isEmpty()) {
+                return false;
+            }
 		}
 
-		for (Player p : ps) {
+		for (Player p : players) {
 			p.setFoodLevel(20);
 			p.setSaturation(20);
 		}
 
 		if (args.length == 0) {
-			s(sender, "&aFed!");
+			send(sender, "&aFed!");
 		} else {
-			s(sender, "&aFed &6%s&a!", args[0]);
+			send(sender, "&aFed &6%s&a!", args[0]);
 		}
 		return true;
 	}

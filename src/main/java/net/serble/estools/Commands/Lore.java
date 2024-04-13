@@ -1,6 +1,6 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.MetaHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,18 +11,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Lore extends CMD {
+public class Lore extends EsToolsCommand {
     public static final String usage = genUsage("/lore <add> <lore>\n" +
             "/lore <set/insert> <line number> <lore>\n" +
             "/lore <remove> <line number>");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (isNotPlayer(sender))
+        if (isNotPlayer(sender)) {
             return false;
+        }
 
         if (args.length < 2) {
-            s(sender, usage);
+            send(sender, usage);
             return false;
         }
 
@@ -30,7 +31,7 @@ public class Lore extends CMD {
         ItemStack is = getMainHand(p);
 
         if (is.getItemMeta() == null) {
-            s(sender, "&cThis item cannot have lore!");
+            send(sender, "&cThis item cannot have lore!");
             return false;
         }
 
@@ -72,12 +73,12 @@ public class Lore extends CMD {
                 }
 
                 lore.remove(line);
-                s(sender, "&aRemoved line &6%d", line + 1);
+                send(sender, "&aRemoved line &6%d", line + 1);
                 break;
             }
 
             default:
-                s(sender, usage);
+                send(sender, usage);
                 return false;
         }
 
@@ -90,20 +91,20 @@ public class Lore extends CMD {
             int line = Integer.parseInt(num) - 1;
 
             if (line < 0 || line >= limit) {
-                s(sender, "&cInvalid line number!");
+                send(sender, "&cInvalid line number!");
                 return Integer.MIN_VALUE;
             }
 
             return line;
         }
         catch (NumberFormatException ignored) {
-            s(sender, usage);
+            send(sender, usage);
             return Integer.MIN_VALUE;
         }
     }
 
     private String getLore(String[] args, int start) {
-        return t("&f" + String.join(" ", Arrays.copyOfRange(args, start, args.length)));
+        return translate("&f" + String.join(" ", Arrays.copyOfRange(args, start, args.length)));
     }
 
     @Override

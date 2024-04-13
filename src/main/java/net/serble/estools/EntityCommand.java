@@ -11,7 +11,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-public abstract class EntityCommand extends CMD {
+public abstract class EntityCommand extends EsToolsCommand {
 	@Override
 	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
 		List<String> tab = new ArrayList<>();
@@ -40,7 +40,7 @@ public abstract class EntityCommand extends CMD {
 		Entity entity = getNonLivingEntity(sender, name);
 		if (entity instanceof LivingEntity) return (LivingEntity) entity;
 		if (entity != null) {
-			s(sender, "&cPlayer/Entity not found.");
+			send(sender, "&cPlayer/Entity not found.");
 		}
 		return null;
 	}
@@ -52,7 +52,7 @@ public abstract class EntityCommand extends CMD {
 			try {
 				UUID uid = UUID.fromString(name);
 
-				if (Main.version > 11) {
+				if (Main.majorVersion > 11) {
 					p = Bukkit.getEntity(uid);
 				} else {
 					if (sender instanceof Player) {
@@ -67,11 +67,12 @@ public abstract class EntityCommand extends CMD {
 					}
 				}
 
-				if (p != null)
-					return p;
-			} catch (Exception ignored) { }
+				if (p != null) {
+                    return p;
+                }
+			} catch (IllegalArgumentException ignored) { }
 
-			s(sender, "&cPlayer/Entity not found.");
+			send(sender, "&cPlayer/Entity not found.");
 		}
 
 		return p;
@@ -102,7 +103,7 @@ public abstract class EntityCommand extends CMD {
     
     public static boolean isNotEntity(CommandSender sender, String usage, Object... a) {
 		if (!(sender instanceof LivingEntity)) {
-			s(sender, usage, a);
+			send(sender, usage, a);
 			return true;
 		}
 		return false;
@@ -110,7 +111,7 @@ public abstract class EntityCommand extends CMD {
 	
 	public static boolean isNotEntity(CommandSender sender) {
 		if (!(sender instanceof LivingEntity)) {
-			s(sender, "&cYou must be a player to run this command!");
+			send(sender, "&cYou must be a player to run this command!");
 			return true;
 		}
 		return false;

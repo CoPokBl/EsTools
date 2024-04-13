@@ -4,27 +4,26 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class Give extends SignType {
+
     @Override
     public void run(Player p, String[] lines) {
-
         int amount = 1;
-
         try {
             amount = Integer.parseInt(lines[2]);
-        } catch (Exception e) { /* Ignored */ }
+        } catch (NumberFormatException e) { /* Ignored */ }
 
-        ItemStack is = net.serble.estools.Give.getItem(lines[1], amount);
+        ItemStack item = net.serble.estools.Commands.Give.Give.getItem(lines[1], amount);
 
-        if (is == null) {
-            s(p, "&cItem not found!");
+        if (item == null) {
+            send(p, "&cItem not found!");
             return;
         }
 
         if (!takeMoney(lines[3], p)) {
-            s(p, "&cYou cannot afford this!");
+            send(p, "&cYou cannot afford this!");
             return;
         }
 
-        p.getInventory().addItem(is.clone());
+        p.getInventory().addItem(item.clone());
     }
 }

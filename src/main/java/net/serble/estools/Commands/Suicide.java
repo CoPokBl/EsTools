@@ -10,15 +10,14 @@ public class Suicide extends PlayerCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
-		if (isNotPlayer(sender))
-			return false;
+		if (isNotPlayer(sender)) {
+            return false;
+        }
 		
 		LivingEntity p = (LivingEntity) sender;
 
 		setHealth(p, 0);
-		s(sender, "&aRest in peace");
+		send(sender, "&aRest in peace");
 		return true;
 	}
-
 }

@@ -10,49 +10,50 @@ public class SetHealth extends EntityCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
 		if (args.length == 0) {
-			s(sender, usage);
+			send(sender, usage);
 		}
 		
-		LivingEntity p;
-		double health;
-		
+		LivingEntity entity;
 		if (args.length > 1) {
-			p = getEntity(sender, args[1]);
+			entity = getEntity(sender, args[1]);
 			
-			if (p == null)
-				return false;
+			if (entity == null) {
+                return false;
+            }
 		} else {
-			if (isNotEntity(sender))
-				return false;
+			if (isNotEntity(sender)) {
+                return false;
+            }
 			
-			p = (LivingEntity) sender;
+			entity = (LivingEntity) sender;
 		}
-		
+
+		double health;
 		try {
 			health = Double.parseDouble(args[0]);
 		} catch (Exception e) {
-			s(sender, usage);
+			send(sender, usage);
 			return false;
 		}
 		
-		if (health >= 0) {
-			double maxhealth = getMaxHealth(p);
-
-			if (maxhealth < health)
-				health = maxhealth;
-			
-			setHealth(p, health);
-			
-			if (args.length > 1) {
-                s(sender, "&aSet health for &6%s&a to &6%s", getEntityName(p), String.valueOf(health));
-            } else {
-                s(sender, "&aSet health to &6%s", String.valueOf(health));
-            }
+		if (health < 0) {
+			send(sender, "&cCannot set health to less than 0");
+			return false;
 		}
-		else
-			s(sender, "&cCannot set health to less than 0");
+
+		double maxhealth = getMaxHealth(entity);
+		if (maxhealth < health) {
+			health = maxhealth;
+		}
+
+		setHealth(entity, health);
+
+		if (args.length > 1) {
+			send(sender, "&aSet health for &6%s&a to &6%s", getEntityName(entity), String.valueOf(health));
+		} else {
+			send(sender, "&aSet health to &6%s", String.valueOf(health));
+		}
 		return true;
 	}
 }

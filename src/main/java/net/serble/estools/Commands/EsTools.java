@@ -4,30 +4,29 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import net.serble.estools.CMD;
-import net.serble.estools.Give;
+import net.serble.estools.EsToolsCommand;
+import net.serble.estools.Commands.Give.Give;
 import net.serble.estools.Main;
 
-public class EsTools extends CMD {
+public class EsTools extends EsToolsCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
 		if (args.length == 0) {
-			s(sender, "&aEsTools v" + Main.current.getDescription().getVersion());
+			send(sender, "&aEsTools v" + Main.plugin.getDescription().getVersion());
 			return true;
 		}
 		
-		if (args[0].equalsIgnoreCase("reload")) {
-			if (checkPerms(sender, "reload"))
-				return false;
+		if (args[0].equalsIgnoreCase("reload")) {  // Reloads the plugin
+			if (checkPerms(sender, "reload")) {
+                return false;
+            }
 			
-			s(sender, "&aReloading...");
+			send(sender, "&aReloading...");
 			
 			Give.enable();
 			
@@ -39,25 +38,27 @@ public class EsTools extends CMD {
 				CChest.loadPlayer(p);
 			}
 			
-			s(sender, "&aReloaded!");
-		} else if (args[0].equalsIgnoreCase("reset")) {
-			if (checkPerms(sender, "reset"))
-				return false;
+			send(sender, "&aReloaded!");
+		} else if (args[0].equalsIgnoreCase("reset")) {  // Resets all configuration files
+			if (checkPerms(sender, "reset")) {
+                return false;
+            }
 			
 			if (args.length > 1 && args[1].equalsIgnoreCase("confirm")) {
-				File f = new File(Main.current.getDataFolder(), "give.yml");
+				File f = new File(Main.plugin.getDataFolder(), "give.yml");
 				if (!f.delete()) {
-					s(sender, "&cFailed to delete data.");
+					send(sender, "&cFailed to delete data.");
 					return false;
 				}
 				
 				Give.enable();
-				s(sender, "&cAll data deleted!");
+				send(sender, "&cAll data deleted!");
 				return true;
 			}
-			s(sender, "&cWarning, you will lose data, use /estools reset confirm to reset");
+
+			send(sender, "&cWarning, this will reset all configuration files, use /estools reset confirm to reset");
 		} else {
-			s(sender, "&aEsTools v" + Main.current.getDescription().getVersion());
+			send(sender, "&aEsTools v" + Main.plugin.getDescription().getVersion());
 		}
 		
 		return true;
@@ -65,7 +66,7 @@ public class EsTools extends CMD {
 
 	@Override
 	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
-		List<String> tab = new ArrayList<String>();
+		List<String> tab = new ArrayList<>();
 		
 		if (args.length == 1) {
 			tab.add("reload");

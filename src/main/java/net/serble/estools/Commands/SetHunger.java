@@ -1,6 +1,6 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.PlayerCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,7 +12,7 @@ public class SetHunger extends PlayerCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (args.length == 0) {
-			s(sender, usage);
+			send(sender, usage);
 			return false;
 		}
 		
@@ -20,13 +20,15 @@ public class SetHunger extends PlayerCommand {
 		int hunger;
 		
 		if (args.length > 1) {
-			p = CMD.getPlayer(sender, args[1]);
+			p = EsToolsCommand.getPlayer(sender, args[1]);
 			
-			if (p == null)
-				return false;
+			if (p == null) {
+                return false;
+            }
 		} else {
-			if (isNotPlayer(sender))
-				return false;
+			if (isNotPlayer(sender)) {
+                return false;
+            }
 			
 			p = (Player)sender;
 		}
@@ -34,25 +36,28 @@ public class SetHunger extends PlayerCommand {
 		try {
 			hunger = Integer.parseInt(args[0]);
 		} catch (Exception e) {
-			s(sender, usage);
+			send(sender, usage);
 			return false;
 		}
-		
-		if (hunger >= 0) {
-			int maxHunger = 20;
 
-			if (maxHunger < hunger)
-				hunger = maxHunger;
-			
-			p.setFoodLevel(hunger);
-			
-			if (args.length > 1)
-				s(sender, "&aSet hunger for &6%s&a for &6%d", p.getName(), hunger);
-			else
-				s(sender, "&aSet hunger to &6%d", hunger);
+        if (hunger < 0) {
+			send(sender, "&cCannot set hunger to less than 0");
+			return false;
 		}
-		else
-			s(sender, "&cCannot set hunger to less than 0");
-		return true;
+
+		int maxHunger = 20;
+
+		if (maxHunger < hunger) {
+			hunger = maxHunger;
+		}
+
+		p.setFoodLevel(hunger);
+
+		if (args.length > 1) {
+			send(sender, "&aSet hunger for &6%s&a for &6%d", p.getName(), hunger);
+		} else {
+			send(sender, "&aSet hunger to &6%d", hunger);
+		}
+        return true;
 	}
 }

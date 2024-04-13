@@ -1,6 +1,6 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -15,17 +15,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class EditSign extends CMD {
+public class EditSign extends EsToolsCommand {
 	private static final String usage = genUsage("/editsign <line number> [line]");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
-		if (isNotPlayer(sender))
-			return false;
+		if (isNotPlayer(sender)) {
+            return false;
+        }
 		
 		if (args.length < 1) {
-			s(sender, usage);
+			send(sender, usage);
 			return false;
 		}
 		
@@ -34,7 +34,7 @@ public class EditSign extends CMD {
 		Block signB = getTargetBlock(p);
 
 		if (signB == null || !(signB.getState() instanceof Sign)) {
-			s(sender, "&cYou must be looking at a sign!");
+			send(sender, "&cYou must be looking at a sign!");
 			return false;
 		}
 		
@@ -43,7 +43,7 @@ public class EditSign extends CMD {
 		switch (args[0].toLowerCase()) {
 			case "glow":
 				if (setGlow(sign, p, true)) {
-					s(sender, "&aMade the sign &6glow!");
+					send(sender, "&aMade the sign &6glow!");
 					return true;
 				}
 
@@ -51,7 +51,7 @@ public class EditSign extends CMD {
 
 			case "unglow":
 				if (setGlow(sign, p, false)) {
-					s(sender, "&aMade the sign no longer &6glow.");
+					send(sender, "&aMade the sign no longer &6glow.");
 					return true;
 				}
 
@@ -59,16 +59,15 @@ public class EditSign extends CMD {
 		}
 
 		int lineNum;
-
 		try {
 			lineNum = Integer.parseInt(args[0]);
 		} catch (Exception e) {
-			s(sender, usage);
+			send(sender, usage);
 			return false;
 		}
 		
 		if (lineNum < 1 || lineNum > 4) {
-			s(sender, "&cline number must be between 1 and 4");
+			send(sender, "&cline number must be between 1 and 4");
 			return false;
 		}
 		
@@ -78,23 +77,23 @@ public class EditSign extends CMD {
 			lineTextBuilder.append(args[i]).append(" ");
 		}
 
-		String lineText = t(lineTextBuilder.toString()).trim();
+		String lineText = translate(lineTextBuilder.toString()).trim();
 
-		if (Main.version >= 20) {
+		if (Main.majorVersion >= 20) {
 			SignSide side = sign.getTargetSide(p);
 			side.setLine(lineNum - 1, lineText);
-		}
-		else {
-			sign.setLine(lineNum - 1, lineText);
+		} else {
+            //noinspection deprecation
+            sign.setLine(lineNum - 1, lineText);
 		}
 		sign.update();
 
 		if (lineText.isEmpty()) {
-			s(sender, "&aEmptied line &6%d&a successfully!", lineNum);
+			send(sender, "&aEmptied line &6%d&a successfully!", lineNum);
 			return true;
 		}
 
-		s(sender, "&aAdded &6%s&ato line &6%d&a successfully!", lineTextBuilder.toString(), lineNum);
+		send(sender, "&aAdded &6%s&ato line &6%d&a successfully!", lineTextBuilder.toString(), lineNum);
 		return true;
 	}
 
@@ -108,7 +107,7 @@ public class EditSign extends CMD {
             tab.add("3");
             tab.add("4");
 
-			if (Main.version >= 17) { // only add glow autocomplete if it exists
+			if (Main.majorVersion >= 17) { // only add glow autocomplete if it exists
 				tab.add("glow");
 				tab.add("unglow");
 			}
@@ -118,13 +117,14 @@ public class EditSign extends CMD {
 	}
 
 	public Block getTargetBlock(Player p) {
-		if (Main.version > 12) {
+		if (Main.majorVersion > 12) {
 			return p.getTargetBlockExact(5);
-		} else if (Main.version > 7) {
+		} else if (Main.majorVersion > 7) {
 			return p.getTargetBlock(null, 5);
 		} else {
 			try {
-				return (Block) LivingEntity.class.getMethod("getTargetBlock", HashSet.class, int.class).invoke(p, null, 5);
+                //noinspection JavaReflectionMemberAccess
+                return (Block) LivingEntity.class.getMethod("getTargetBlock", HashSet.class, int.class).invoke(p, null, 5);
 			}
 			catch (Exception e) {
 				Bukkit.getLogger().severe(e.toString());
@@ -133,29 +133,30 @@ public class EditSign extends CMD {
 		}
 	}
 
-	public boolean setGlow(Sign sign, Player p, boolean glow) {
-		if (Main.version >= 20) {
+	@SuppressWarnings("deprecation")
+    public boolean setGlow(Sign sign, Player p, boolean glow) {
+		if (Main.majorVersion >= 20) {
 			SignSide side = sign.getTargetSide(p);
 
 			if (side.isGlowingText() == glow) {
 				if (glow) {
-					s(p, "&cThis sign is already &6glowing!");
+					send(p, "&cThis sign is already &6glowing!");
 				}
 				else {
-					s(p, "&cThis sign is already not &6glowing!");
+					send(p, "&cThis sign is already not &6glowing!");
 				}
 				return false;
 			}
 
 			side.setGlowingText(glow);
 		}
-		else if (Main.version >= 17) {
+		else if (Main.majorVersion >= 17) {
 			if (sign.isGlowingText() == glow) {
 				if (glow) {
-					s(p, "&cThis sign is already &6glowing!");
+					send(p, "&cThis sign is already &6glowing!");
 				}
 				else {
-					s(p, "&cThis sign is already not &6glowing!");
+					send(p, "&cThis sign is already not &6glowing!");
 				}
 				return false;
 			}
@@ -163,7 +164,7 @@ public class EditSign extends CMD {
 			sign.setGlowingText(glow);
 		}
 		else {
-			s(p, "&cGlowing signs do not exist in this version!");
+			send(p, "&cGlowing signs do not exist in this version!");
 			return false;
 		}
 

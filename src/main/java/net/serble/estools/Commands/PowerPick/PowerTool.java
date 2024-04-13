@@ -1,6 +1,6 @@
 package net.serble.estools.Commands.PowerPick;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -20,7 +20,7 @@ public class PowerTool {
     public static void setupItem(ItemStack item, Enchantment enchantment) {
         item.addUnsafeEnchantment(enchantment, 32767);
 
-        if (Main.version > 10) {
+        if (Main.majorVersion > 10) {
             ItemMeta im = item.getItemMeta();
             assert im != null;
             im.setUnbreakable(true);
@@ -31,12 +31,13 @@ public class PowerTool {
     }
 
     public static void cmd(CommandSender sender, ItemStack pp) {
-        if (CMD.isNotPlayer(sender))
+        if (EsToolsCommand.isNotPlayer(sender)) {
             return;
+        }
 
         Player p = (Player)sender;
 
         p.getInventory().addItem(pp);
-        CMD.s(sender, "&aThere you go!");
+        EsToolsCommand.send(sender, "&aThere you go!");
     }
 }

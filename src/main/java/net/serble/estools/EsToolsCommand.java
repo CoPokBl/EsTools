@@ -12,23 +12,19 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
-public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
+public abstract class EsToolsCommand implements CommandExecutor, EsToolsTabCompleter {
 
 	public void onEnable() {}
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		if (Main.version < 7) {
-			return new ArrayList<String>();
+		if (Main.majorVersion < 7) {
+			return new ArrayList<>();
 		}
 
 		String lArg = args[args.length - 1];
-
 		return fixTabComplete(tabComplete(sender, args, lArg), lArg);
 	}
 
@@ -40,29 +36,29 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	}
 
 	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 	
-	public static void s(CommandSender s, String m, Object... a) {
-		if (Main.version > 1) {
-			s.sendMessage(t(m, a));
+	public static void send(CommandSender s, String m, Object... a) {
+		if (Main.majorVersion > 1) {
+			s.sendMessage(translate(m, a));
 			return;
 		}
 
 		// Newlines don't work in 1.1 and 1.0
 		// Send each message individually
-		String[] lines = t(m, a).split("\n");
+		String[] lines = translate(m, a).split("\n");
 		for (String line : lines) {
 			s.sendMessage(line);
 		}
 	}
 	
-	public static void s(Player s, String m, Object... a) {
-		s.sendMessage(t(m, a));
+	public static void send(Player s, String m, Object... a) {
+		s.sendMessage(translate(m, a));
 	}
 	
-	public static String t(String m, Object... a) {
-		if (Main.version > 1) {
+	public static String translate(String m, Object... a) {
+		if (Main.majorVersion > 1) {
 			return ChatColor.translateAlternateColorCodes('&', String.format(m, a));
 		}
 
@@ -73,7 +69,7 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	
 	public static boolean isNotPlayer(CommandSender sender, String usage, Object... a) {
 		if (!(sender instanceof Player)) {
-			s(sender, usage, a);
+			send(sender, usage, a);
 			return true;
 		}
 		return false;
@@ -81,7 +77,7 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	
 	public static boolean isNotPlayer(CommandSender sender) {
 		if (!(sender instanceof Player)) {
-			s(sender, "&cYou must be a player to run this command!");
+			send(sender, "&cYou must be a player to run this command!");
 			return true;
 		}
 		return false;
@@ -105,7 +101,7 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	
 	public static boolean checkPerms(CommandSender sender, String perm) {
 		if (!sender.hasPermission("estools." + perm)) {
-			s(sender, "&cYou do not have permission to run this command.");
+			send(sender, "&cYou do not have permission to run this command.");
 			return true;
 		}
 		return false;
@@ -116,13 +112,12 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	}
 	
 	public static Player getPlayer(CommandSender sender, String name) {
-
 		Player p = Bukkit.getPlayer(name);
 		
 		if (p == null) {
-			s(sender, "&cPlayer not found.");
+			send(sender, "&cPlayer not found.");
 		}
-			
+
 		return p;
 	}
 	
@@ -137,26 +132,26 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	}
 
 	public static String[] removeArgs(String[] args, int amount) {
-		String[] outp = new String[args.length - amount];
+		String[] output = new String[args.length - amount];
 
-		for (int i = amount; i < args.length; i++) {
-			outp[i - amount] = args[i];
-		}
+        if (args.length - amount >= 0) {
+            System.arraycopy(args, amount, output, 0, args.length - amount);
+        }
 
-		return outp;
+		return output;
 	}
 
 	public static String argsToString(String[] args, int skipAmount) {
-		StringBuilder outp = new StringBuilder();
+		StringBuilder output = new StringBuilder();
 
 		for (int i = skipAmount; i < args.length; i++) {
-			outp.append(args[i]);
+			output.append(args[i]);
 		}
 
-		return outp.toString();
+		return output.toString();
 	}
 
-	public static double parseCoorinate(String coord, double playerLoc) {
+	public static double parseCoordinate(String coord, double playerLoc) {
 		if (coord.startsWith("~")) {
 			return tryParseDouble(coord.substring(1), 0) + playerLoc;
 		}
@@ -169,27 +164,30 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	}
 
 	public static ItemStack getMainHand(Player p) {
-		if (Main.version > 8) {
+		if (Main.majorVersion > 8) {
 			return p.getInventory().getItemInMainHand();
 		} else {
-			return p.getInventory().getItemInHand();
+            //noinspection deprecation
+            return p.getInventory().getItemInHand();
 		}
 	}
 
 	public static void setMainHand(Player p, ItemStack is) {
-		if (Main.version > 8) {
+		if (Main.majorVersion > 8) {
 			p.getInventory().setItemInMainHand(is);
 		} else {
-			p.getInventory().setItemInHand(is);
+            //noinspection deprecation
+            p.getInventory().setItemInHand(is);
 		}
 	}
 
 	public static double getMaxHealth(LivingEntity p) {
-		if (Main.version > 8) {
-			return p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+		if (Main.majorVersion > 8) {
+			return Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
 		} else {
-			if (Main.version > 5) {
-				return p.getMaxHealth();
+			if (Main.majorVersion > 5) {
+                //noinspection deprecation
+                return p.getMaxHealth();
 			}
 
 			try {
@@ -202,16 +200,18 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	}
 
 	public static void setMaxHealth(LivingEntity p, double value) {
-		if (Main.version > 8) {
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(value);
+		if (Main.majorVersion > 8) {
+			Objects.requireNonNull(p.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(value);
 		} else {
-			if (Main.version > 5) {
-				p.setMaxHealth(value);
+			if (Main.majorVersion > 5) {
+                //noinspection deprecation
+                p.setMaxHealth(value);
 				return;
 			}
 
 			try {
-				LivingEntity.class.getMethod("setMaxHealth", int.class).invoke(p, (int)value);
+                //noinspection JavaReflectionMemberAccess
+                LivingEntity.class.getMethod("setMaxHealth", int.class).invoke(p, (int)value);
 			}
 			catch (Exception ex) {
 				Bukkit.getLogger().severe(ex.toString());
@@ -220,7 +220,7 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	}
 
 	public static double getHealth(LivingEntity p) {
-		if (Main.version > 5) {
+		if (Main.majorVersion > 5) {
 			return p.getHealth();
 		}
 
@@ -234,13 +234,14 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	}
 
 	public static void setHealth(LivingEntity p, double value) {
-		if (Main.version > 5) {
+		if (Main.majorVersion > 5) {
 			p.setHealth(value);
 			return;
 		}
 
 		try {
-			LivingEntity.class.getMethod("setHealth", int.class).invoke(p, (int)value);
+            //noinspection JavaReflectionMemberAccess
+            LivingEntity.class.getMethod("setHealth", int.class).invoke(p, (int)value);
 		}
 		catch (Exception ex) {
 			Bukkit.getLogger().severe(ex.toString());
@@ -248,7 +249,7 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 	}
 
 	public static String getEntityName(Entity p) {
-		if (Main.version > 7) {
+		if (Main.majorVersion > 7) {
 			return p.getName();
 		}
 
@@ -268,7 +269,7 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 
 	public static Collection<? extends Player> getOnlinePlayers() {
 		try {
-			if (Bukkit.class.getMethod("getOnlinePlayers", new Class<?>[0]).getReturnType() == Collection.class) {
+			if (Bukkit.class.getMethod("getOnlinePlayers").getReturnType() == Collection.class) {
 				return Bukkit.getOnlinePlayers();
 			}
 			else {
@@ -276,7 +277,7 @@ public abstract class CMD implements CommandExecutor, EsToolsTabCompleter {
 				return Arrays.asList(players);
 			}
 
-		} catch(Exception e) {
+		} catch (Exception e) {
 			Bukkit.getLogger().severe(e.toString());
 			return new ArrayList<>();
 		}

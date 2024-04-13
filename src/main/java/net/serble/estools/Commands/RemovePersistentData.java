@@ -1,6 +1,6 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class RemovePersistentData extends CMD {
+public class RemovePersistentData extends EsToolsCommand {
     public static final String usage = genUsage("/removepersistentdata <key>");
 
     @Override
@@ -17,7 +17,7 @@ public class RemovePersistentData extends CMD {
             return false;
 
         if (args.length < 1) {
-            s(sender, usage);
+            send(sender, usage);
             return true;
         }
 
@@ -26,20 +26,20 @@ public class RemovePersistentData extends CMD {
         ItemStack item = getMainHand((Player) sender);
         NamespacedKey key = GetPersistentData.getNamespacedKey(tagString);
         if (key == null) {
-            s(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
+            send(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
             return false;
         }
 
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
-            s(sender, "&cItem does not have nbt tags!");
+            send(sender, "&cItem does not have nbt tags!");
             return false;
         }
 
         meta.getPersistentDataContainer().remove(key);
         item.setItemMeta(meta);
 
-        s(sender, "&aRemove NBT tag &e\"" + tagString + "\"&a!");
+        send(sender, "&aRemove NBT tag &e\"" + tagString + "\"&a!");
         return true;
     }
 }

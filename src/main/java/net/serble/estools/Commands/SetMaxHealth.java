@@ -10,38 +10,38 @@ public class SetMaxHealth extends EntityCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
 		if (args.length == 0) {
-			s(sender, usage);
-		}
-		
-		LivingEntity p;
-		double health;
-		
-		try {
-			health = Double.valueOf(args[0]);
-		} catch (Exception e) {
-			s(sender, usage);
-			return false;
-		}
-		
-		if (args.length > 1) {
-			p = getEntity(sender, args[1]);
-			
-			if (p == null)
-				return false;
-			
-			s(sender, "&aSet max health for &6%s&a to &6%s", getEntityName(p), String.valueOf(health));
-		} else {
-			if (isNotEntity(sender))
-				return false;
-			
-			p = (LivingEntity) sender;
-			
-			s(sender, "&aSet max health to &6%s", String.valueOf(health));
+			send(sender, usage);
 		}
 
-		setMaxHealth(p, health);
+		double health;
+		try {
+			health = Double.parseDouble(args[0]);
+		} catch (Exception e) {
+			send(sender, usage);
+			return false;
+		}
+
+		LivingEntity entity;
+		if (args.length > 1) {
+			entity = getEntity(sender, args[1]);
+			
+			if (entity == null) {
+                return false;
+            }
+			
+			send(sender, "&aSet max health for &6%s&a to &6%s", getEntityName(entity), String.valueOf(health));
+		} else {
+			if (isNotEntity(sender)) {
+                return false;
+            }
+			
+			entity = (LivingEntity) sender;
+			
+			send(sender, "&aSet max health to &6%s", String.valueOf(health));
+		}
+
+		setMaxHealth(entity, health);
 		return true;
 	}
 

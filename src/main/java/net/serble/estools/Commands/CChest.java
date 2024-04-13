@@ -1,6 +1,6 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ConfigManager;
 import net.serble.estools.Main;
 import org.bukkit.Bukkit;
@@ -17,56 +17,58 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-public class CChest extends CMD implements Listener {
+public class CChest extends EsToolsCommand implements Listener {
 
-	public static HashMap<UUID, Inventory> cchests = new HashMap<>();
+	public static HashMap<UUID, Inventory> cChests = new HashMap<>();
 
 	@Override
 	public void onEnable() {
-		if (Main.version > 4) {
-			Bukkit.getServer().getPluginManager().registerEvents(this, Main.current);
+		if (Main.majorVersion > 4) {
+			Bukkit.getServer().getPluginManager().registerEvents(this, Main.plugin);
 		}
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (isNotPlayer(sender))
-			return true;
+		if (isNotPlayer(sender)) {
+            return false;
+        }
 
-		if (Main.version < 7) {
-			s(sender, "&cWarning: CChest doesn't work to full capacity");
+		if (Main.majorVersion < 7) {
+			send(sender, "&cWarning: CChest doesn't work to full capacity");
 		}
 
 		Player p = (Player)sender;
 		
 		if (p.getGameMode().equals(GameMode.CREATIVE)) {
-			if (checkPerms(sender, "cchest.creative"))
-				return false;
+			if (checkPerms(sender, "cchest.creative")) {
+                return false;
+            }
 		} else {
-			if (checkPerms(sender, "cchest.survival"))
-				return false;
+			if (checkPerms(sender, "cchest.survival")) {
+                return false;
+            }
 		}
 
 		UUID uid = p.getUniqueId();
-		Inventory inv = cchests.get(uid);
+		Inventory inv = cChests.get(uid);
 		
 		if (inv == null) {
 			Inventory loaded = loadPlayer(p);
 			if (loaded != null) {
 				inv = loaded;
 			} else {
-				inv = Bukkit.createInventory(null, 54, t("&1Creative Chest"));
+				inv = Bukkit.createInventory(null, 54, translate("&1Creative Chest"));
 			}
 		}
 		
 		p.closeInventory();
 		p.openInventory(inv);
 		
-		cchests.put(uid, inv);
+		cChests.put(uid, inv);
 		return true;
 	}
 	
@@ -75,8 +77,8 @@ public class CChest extends CMD implements Listener {
 		UUID uid = e.getWhoClicked().getUniqueId();
 		ItemStack currentItem = e.getCurrentItem();
 		
-		// check if inventory is cchest
-        if (!cchests.containsKey(uid) || !cchests.get(uid).equals(e.getInventory()) || e.getClickedInventory() == null) {
+		// Check if inventory is cChest
+        if (!cChests.containsKey(uid) || !cChests.get(uid).equals(e.getInventory()) || e.getClickedInventory() == null) {
             return;
         }
 
@@ -110,9 +112,9 @@ public class CChest extends CMD implements Listener {
 			return;
         }
 
-		// if player inventory
-        if (!e.getClickedInventory().equals(cchests.get(uid))) {
-			// shift click into cchest
+		// If player inventory
+        if (!e.getClickedInventory().equals(cChests.get(uid))) {
+			// Shift click into cChest
 			if (equalsOr(e.getClick(), ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT) && currentItem != null) {
 				e.setCancelled(true);
 
@@ -122,14 +124,14 @@ public class CChest extends CMD implements Listener {
 			return;
         }
 
-		// right click in cchest (clear item)
+		// Right click in cChest (clear item)
 		if (e.getClick().equals(ClickType.RIGHT) && currentItem != null) {
 			e.setCancelled(true);
 			e.getClickedInventory().setItem(e.getSlot(), null);
 			return;
 		}
 
-		// add to chest
+		// Add to chest
 		if (equalsOr(e.getAction(), InventoryAction.PLACE_ALL, InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME)) {
 			e.setCancelled(true);
 			ItemStack item = e.getCursor();
@@ -147,7 +149,7 @@ public class CChest extends CMD implements Listener {
 			return;
 		}
 
-		// remove from cchest
+		// Remove from cChest
 		if (equalsOr(e.getClick(), ClickType.LEFT, ClickType.DROP, ClickType.CONTROL_DROP,
 				ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT) && currentItem != null) {
 			ItemStack item = currentItem.clone();
@@ -156,21 +158,16 @@ public class CChest extends CMD implements Listener {
     }
 
 	private static void setItemTask(Inventory inv, int slot, ItemStack item) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				inv.setItem(slot, item);
-			}
-		}.runTask(Main.current);
+		Bukkit.getScheduler().runTask(Main.plugin, () -> inv.setItem(slot, item));
 	}
 	
-	// cancel drag if inside cchest
+	// Cancel drag if inside cChest
 	@EventHandler
     public void onInventoryDrag(final InventoryDragEvent e) {
-		Inventory inv = cchests.get(e.getWhoClicked().getUniqueId());
+		Inventory inv = cChests.get(e.getWhoClicked().getUniqueId());
 
 		if (inv.equals(e.getInventory())) {
-			// check if any of the slots dragged are in the cchest
+			// Check if any of the slots dragged are in the cChest
 			for (int slot : e.getRawSlots()) {
 				if (inv.equals(e.getView().getInventory(slot))) {
 					e.setCancelled(true);
@@ -192,22 +189,22 @@ public class CChest extends CMD implements Listener {
         @SuppressWarnings("unchecked")
         ItemStack[] content = ((ArrayList<ItemStack>) Objects.requireNonNull(f.get("items"))).toArray(new ItemStack[0]);
 
-        Inventory inv = Bukkit.createInventory(null, 54, t("&1Creative Chest"));
+        Inventory inv = Bukkit.createInventory(null, 54, translate("&1Creative Chest"));
         inv.setContents(content);
-        cchests.put(uid, inv);
+        cChests.put(uid, inv);
 
         return inv;
     }
 	
-	public static void savePlayer(Player p) {		
+	public static void savePlayer(Player p) {
 		UUID uid = p.getUniqueId();
 		
-		if (!cchests.containsKey(uid)) {
+		if (!cChests.containsKey(uid)) {
 			return;
 		}
 		
 		FileConfiguration f = new YamlConfiguration();
-		f.set("items", cchests.get(uid).getContents());
+		f.set("items", cChests.get(uid).getContents());
 		ConfigManager.save("cchests/" + uid + ".yml", f);
 	}
 
@@ -215,7 +212,7 @@ public class CChest extends CMD implements Listener {
 	public void onClose(InventoryCloseEvent e) {
 		UUID uid = e.getPlayer().getUniqueId();
 
-		if (e.getInventory().equals(cchests.get(uid))) {
+		if (e.getInventory().equals(cChests.get(uid))) {
 			savePlayer((Player)e.getPlayer());
 		}
 	}
@@ -223,12 +220,12 @@ public class CChest extends CMD implements Listener {
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
 		savePlayer(e.getPlayer());
-		cchests.remove(e.getPlayer().getUniqueId());
+		cChests.remove(e.getPlayer().getUniqueId());
 	}
 	
 	@EventHandler
 	public void onKick(PlayerKickEvent e) {
 		savePlayer(e.getPlayer());
-		cchests.remove(e.getPlayer().getUniqueId());
+		cChests.remove(e.getPlayer().getUniqueId());
 	}
 }

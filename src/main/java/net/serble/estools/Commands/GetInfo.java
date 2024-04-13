@@ -19,19 +19,17 @@ public class GetInfo extends EntityCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
 		if (args.length == 0) {
-			s(sender, usage);
+			send(sender, usage);
 			return false;
 		}
 
 		Entity entity = getNonLivingEntity(sender, args[0]);
-		
-		if (entity == null)
-			return false;
+		if (entity == null) {
+            return false;
+        }
 
 		Location loc = entity.getLocation();
-
 		String name = getEntityName(entity);
 
 		// Global Values
@@ -42,6 +40,7 @@ public class GetInfo extends EntityCommand {
 				"&aLocation: &6%s, %s, %s\n" +
 				"&aWorld: &6%s\n" +
 				"&aUUID: &6%s\n";
+
 		info = String.format(info,
 				name,
 				entity.getType().name(),
@@ -52,13 +51,14 @@ public class GetInfo extends EntityCommand {
 				entity.getUniqueId());
 
 		// Passengers
-		if (Main.version > 12) {
+		if (Main.majorVersion > 12) {
 			StringBuilder passengerText = new StringBuilder("&aPassengers: &6");
 			boolean passengersExist = false;
 			for (Entity passenger : entity.getPassengers()) {
 				passengerText.append(getEntityName(passenger)).append(" (").append(passenger.getType()).append("), ");
 				passengersExist = true;
 			}
+
 			if (passengersExist) {
 				passengerText.deleteCharAt(passengerText.length() - 1);
 				passengerText.deleteCharAt(passengerText.length() - 1);
@@ -73,7 +73,6 @@ public class GetInfo extends EntityCommand {
 			String maxHealth = String.valueOf(Math.round(getMaxHealth(le)));
 
 			StringBuilder potionEffects = new StringBuilder();
-
 			{
 				Object[] pos = le.getActivePotionEffects().toArray();
 
@@ -97,9 +96,10 @@ public class GetInfo extends EntityCommand {
 					getHealth(le),
 					maxHealth,
 					potionEffects);
+
 			info += livingEntityInfo;
 
-			if (Main.version > 12) {
+			if (Main.majorVersion > 12) {
 				// Scoreboard tags
 				StringBuilder tags = new StringBuilder("&aScoreboard Tags: &6");
 				boolean tagsExist = false;
@@ -107,6 +107,7 @@ public class GetInfo extends EntityCommand {
 					tags.append(tag).append(", ");
 					tagsExist = true;
 				}
+
 				if (!tagsExist) {
 					info += "&aScoreboard Tags: &6None\n";
 				} else {
@@ -115,7 +116,6 @@ public class GetInfo extends EntityCommand {
 					info += tags + "\n";
 				}
 			}
-
 		}
 
 		if (entity instanceof Player) {  // Players
@@ -129,7 +129,7 @@ public class GetInfo extends EntityCommand {
 					player.getFoodLevel(),
 					player.getSaturation());
 
-			if (Main.version > 1) {
+			if (Main.majorVersion > 1) {
 				playerInfo += "&aCan Fly: &6%s\n" +
 						      "&aIs Flying: &6%s\n";
 
@@ -140,7 +140,8 @@ public class GetInfo extends EntityCommand {
 
 			info += playerInfo;
 		}
-		s(sender, info);
+
+		send(sender, info);
 		return true;
 	}
 

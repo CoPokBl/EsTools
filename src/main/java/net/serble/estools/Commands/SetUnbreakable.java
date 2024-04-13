@@ -1,6 +1,6 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -10,41 +10,40 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class SetUnbreakable extends CMD {
+public class SetUnbreakable extends EsToolsCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-        if (isNotPlayer(sender))
-            return true;
-
-        ItemStack is = getMainHand((Player) sender);
-
-        if (is == null || is.getType() == Material.AIR || (Main.version > 10 && is.getItemMeta() == null)) {
-            s(sender, "&cMust be a damageable item");
-            return true;
+        if (isNotPlayer(sender)) {
+            return false;
         }
 
-        String un = "&aSet item to &6Breakable!";
+        ItemStack item = getMainHand((Player) sender);
+        if (item == null || item.getType() == Material.AIR || (Main.majorVersion > 10 && item.getItemMeta() == null)) {
+            send(sender, "&cMust be a damageable item");
+            return false;
+        }
 
-        if (Main.version > 10) {
-            ItemMeta im = is.getItemMeta();
-            im.setUnbreakable(!im.isUnbreakable());
-            is.setItemMeta(im);
+        String message = "&aSet item to &6Breakable!";
 
-            if (im.isUnbreakable()) {
-                un = "&aSet item to &6Unbreakable!";
+        if (Main.majorVersion > 10) {
+            ItemMeta itemMeta = item.getItemMeta();
+            itemMeta.setUnbreakable(!itemMeta.isUnbreakable());
+            item.setItemMeta(itemMeta);
+
+            if (itemMeta.isUnbreakable()) {
+                message = "&aSet item to &6Unbreakable!";
             }
         } else {
-            if (is.getEnchantments().containsKey(Enchantment.DURABILITY)) {
-                is.removeEnchantment(Enchantment.DURABILITY);
+            if (item.getEnchantments().containsKey(Enchantment.DURABILITY)) {
+                item.removeEnchantment(Enchantment.DURABILITY);
             } else {
-                is.addUnsafeEnchantment(Enchantment.DURABILITY, 32767);
-                un = "&aSet item to &6Unbreakable!";
+                item.addUnsafeEnchantment(Enchantment.DURABILITY, 32767);
+                message = "&aSet item to &6Unbreakable!";
             }
         }
 
-        s(sender, un);
+        send(sender, message);
         return true;
     }
 }

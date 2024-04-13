@@ -12,26 +12,27 @@ public class ClearInv extends MultiPlayerCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-        ArrayList<Player> ps = new ArrayList<>();
+        ArrayList<Player> players = new ArrayList<>();
 
         if (args.length == 0) {
-            if (isNotPlayer(sender, usage))
-                return true;
+            if (isNotPlayer(sender, usage)) {
+                return false;
+            }
 
-            ps.add((Player)sender);
+            players.add((Player)sender);
         } else {
-            ps = getPlayers(sender, args);
+            players = getPlayers(sender, args);
 
-            if (ps.isEmpty())
-                return true;
+            if (players.isEmpty()) {
+                return false;
+            }
         }
 
-        for (Player p : ps) {
+        for (Player p : players) {
             p.getInventory().clear();
         }
 
-        s(sender, "&aCleared Inventory!");
+        send(sender, "&aCleared Inventory!");
         return true;
     }
 }

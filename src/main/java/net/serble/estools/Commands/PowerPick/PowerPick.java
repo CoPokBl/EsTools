@@ -1,20 +1,18 @@
 package net.serble.estools.Commands.PowerPick;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-public class PowerPick extends CMD {
+public class PowerPick extends EsToolsCommand {
     private static ItemStack powerItem;
 
     public static void init() {
-        if (Main.version > 15) {
+        if (Main.majorVersion > 15) {
             powerItem = new ItemStack(Material.NETHERITE_PICKAXE);
         }
         else {

@@ -17,12 +17,11 @@ import java.util.*;
 
 public class God extends EntityCommand implements Listener {
 	private static final HashMap<UUID, Integer> currentPlayers = new HashMap<>();
-
 	private static final String usage = genUsage("/god <entity> <time>");
 
 	@Override
 	public void onEnable() {
-		Bukkit.getServer().getPluginManager().registerEvents(this, Main.current);
+		Bukkit.getServer().getPluginManager().registerEvents(this, Main.plugin);
 
 		FileConfiguration f = ConfigManager.load("gods.yml");
 		List<String> godList = f.getStringList("gods");
@@ -35,22 +34,24 @@ public class God extends EntityCommand implements Listener {
 		int timer = -1;
 		
 		if (args.length == 0) {
-			if (isNotEntity(sender, usage))
-				return false;
+			if (isNotEntity(sender, usage)) {
+                return false;
+            }
 			
 			p = (LivingEntity) sender;
 		} else {
 			p = getEntity(sender, args[0]);
 			
-			if (p == null)
-				return false;
+			if (p == null) {
+                return false;
+            }
 
 			if (args.length > 1) {
 				try {
 					timer = Math.max((int)(Double.parseDouble(args[1]) * 20), -1);
 				} catch (NumberFormatException x) {
-					s(sender, usage);
-					return true;
+					send(sender, usage);
+					return false;
 				}
 			}
 		}
@@ -67,7 +68,7 @@ public class God extends EntityCommand implements Listener {
 				Bukkit.getScheduler().cancelTask(taskId);
 			}
 
-			s(sender, "&aGod mode &6disabled&a for &6%s", getEntityName(p));
+			send(sender, "&aGod mode &6disabled&a for &6%s", getEntityName(p));
 		}
 		else {
 			int taskId = -1;
@@ -76,7 +77,7 @@ public class God extends EntityCommand implements Listener {
 			if (timer >= 0) {
 				timerStr = timer / 20d + " seconds";
 
-				taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.current, () -> currentPlayers.remove(uid), timer);
+				taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () -> currentPlayers.remove(uid), timer);
 			}
 
 			currentPlayers.put(uid, taskId);
@@ -84,8 +85,9 @@ public class God extends EntityCommand implements Listener {
 				save();
 			}
 
-			s(sender, "&aGod mode &6enabled&a for &6%s&a for &6%s", getEntityName(p), timerStr);
+			send(sender, "&aGod mode &6enabled&a for &6%s&a for &6%s", getEntityName(p), timerStr);
 		}
+
 		return true;
 	}
 
@@ -108,7 +110,6 @@ public class God extends EntityCommand implements Listener {
 		}
 
 		f.set("gods", gods);
-
 		ConfigManager.save("gods.yml", f);
 	}
 }

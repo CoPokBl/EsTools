@@ -1,32 +1,27 @@
 package net.serble.estools.Signs;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Vault;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public abstract class SignType {
-    public void run(Player p, String[] lines) {}
+    public void run(Player p, String[] lines) { }
 
     public static double getSignMoney(String line, Player p) {
         double price = 0;
-
         try {
-            String priceS = line.substring(1);
+            String priceString = line.substring(1);
 
             if (!line.startsWith("$")) {
-                s(p, "&cMoney must be formatted with \"$COST\"");
+                send(p, "&cMoney must be formatted with \"$COST\"");
                 return -1;
             }
 
-            price = Double.parseDouble(priceS);
-        } catch (Exception e) { /* Ignored */ }
+            price = Double.parseDouble(priceString);
+        } catch (NumberFormatException e) { /* Ignored */ }
 
         return price;
-    }
-
-    public static boolean hasMoney(String line, Player p) {
-        return Vault.hasMoney(getSignMoney(line, p), p);
     }
 
     public static boolean takeMoney(String line, Player p) {
@@ -37,7 +32,7 @@ public abstract class SignType {
         return Vault.payMoney(getSignMoney(line, p), p);
     }
 
-    public static void s(CommandSender s, String msg, Object... args) {
-        CMD.s(s, msg, args);
+    public static void send(CommandSender s, String msg, Object... args) {
+        EsToolsCommand.send(s, msg, args);
     }
 }

@@ -1,45 +1,44 @@
-package net.serble.estools.Commands;
+package net.serble.estools.Commands.MoveSpeed;
 
 import net.serble.estools.MultiPlayerCommand;
-import org.bukkit.command.Command;
+import net.serble.estools.Tuple;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WalkSpeed extends MultiPlayerCommand {
-    private static final String usage = genUsage("/walkspeed <speed> [players]");
+public abstract class MoveSpeed extends MultiPlayerCommand {
+    protected abstract String getUsage();
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
+    public Tuple<List<Player>, Float> getTargets(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            s(sender, usage);
-            return true;
+            send(sender, getUsage());
+            return null;
         }
 
-        ArrayList<Player> p = new ArrayList<>();
+        ArrayList<Player> players = new ArrayList<>();
 
         if (args.length == 1) {
-            if (isNotPlayer(sender, usage))
-                return true;
+            if (isNotPlayer(sender, getUsage())) {
+                return null;
+            }
 
-            p.add((Player)sender);
+            players.add((Player)sender);
         } else {
-            p = getPlayers(sender, removeArgs(args, 1));
+            players = getPlayers(sender, removeArgs(args, 1));
 
-            if (p.isEmpty())
-                return true;
+            if (players.isEmpty()) {
+                return null;
+            }
         }
 
         float amount;
-
         try {
             amount = Float.parseFloat(args[0]) / 10f;
         } catch (Exception e) {
-            s(sender, usage);
-            return true;
+            send(sender, getUsage());
+            return null;
         }
 
         if (amount > 1) {
@@ -48,13 +47,7 @@ public class WalkSpeed extends MultiPlayerCommand {
             amount = 0;
         }
 
-
-        for (Player ip : p) {
-            ip.setWalkSpeed(amount);
-        }
-
-        s(sender, "&aSet walk speed to &6%s", String.valueOf(amount * 10));
-        return true;
+        return new Tuple<>(players, amount);
     }
 
     @Override

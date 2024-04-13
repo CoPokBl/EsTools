@@ -10,13 +10,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigManager {
 	
-	public static final Main plugin = Main.current;
+	public static final Main plugin = Main.plugin;
 	
 	public static FileConfiguration load(String fileName) {
 		return load(new File(plugin.getDataFolder(), fileName));
 	}
 	
-	public static FileConfiguration load(File configFile) {
+	@SuppressWarnings("ResultOfMethodCallIgnored")
+    public static FileConfiguration load(File configFile) {
 		if (!configFile.exists()) {
             configFile.getParentFile().mkdirs();
             try {
@@ -36,7 +37,8 @@ public class ConfigManager {
         return config;
 	}
 	
-	public static void save(String file, FileConfiguration config) {
+	@SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void save(String file, FileConfiguration config) {
 		File configFile = new File(plugin.getDataFolder(), file);
 		if (!configFile.exists()) {
             configFile.getParentFile().mkdirs();

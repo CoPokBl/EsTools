@@ -1,6 +1,6 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
 import net.serble.estools.Tuple;
 import org.apache.commons.lang.ArrayUtils;
@@ -16,7 +16,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetPersistentData extends CMD {
+public class GetPersistentData extends EsToolsCommand {
     public static final String usage = genUsage("/getpersistentdata <key> <type>");
 
     @Override
@@ -25,7 +25,7 @@ public class GetPersistentData extends CMD {
             return false;
 
         if (args.length < 2) {
-            s(sender, usage);
+            send(sender, usage);
             return false;
         }
 
@@ -35,13 +35,13 @@ public class GetPersistentData extends CMD {
         ItemStack item = getMainHand((Player) sender);
         NamespacedKey key = getNamespacedKey(tagString);
         if (key == null) {
-            s(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
+            send(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
             return false;
         }
 
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
-            s(sender, "&cItem does not have nbt tags!");
+            send(sender, "&cItem does not have nbt tags!");
             return false;
         }
 
@@ -49,21 +49,21 @@ public class GetPersistentData extends CMD {
 
         Tuple<Integer, String> value = getData(typeString, key, data);
         if (value.a() == 3) {
-            s(sender, "&cNBT tag &e\"" + tagString + "\"&c does not exist!");
+            send(sender, "&cNBT tag &e\"" + tagString + "\"&c does not exist!");
             return false;
         }
 
         if (value.a() == 1) {
-            s(sender, "&cNBT tag type &e\"" + typeString + "\"&c is unsupported!");
+            send(sender, "&cNBT tag type &e\"" + typeString + "\"&c is unsupported!");
             return false;
         }
 
         if (value.a() == 2) {
-            s(sender, "&cNBT tag &e\"" + tagString + "\"&c exists, but is not a " + typeString + "!");
+            send(sender, "&cNBT tag &e\"" + tagString + "\"&c exists, but is not a " + typeString + "!");
             return false;
         }
 
-        s(sender, "&aNBT tag &e\"" + tagString + "\"&a is &e" + value.b() + "&a!");
+        send(sender, "&aNBT tag &e\"" + tagString + "\"&a is &e" + value.b() + "&a!");
         return true;
     }
 
@@ -161,18 +161,17 @@ public class GetPersistentData extends CMD {
         return new Tuple<>(1, null);
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public static NamespacedKey getNamespacedKey(String keyString) {
-        if (Main.version >= 16) {
-            return NamespacedKey.fromString(keyString, Main.current);
+        if (Main.majorVersion >= 16) {
+            return NamespacedKey.fromString(keyString, Main.plugin);
         }
 
         String[] parts = keyString.split(":");
         if (parts.length == 2) {
-            //noinspection deprecation (This is the only way to create a NamespacedKey pre 1.16)
             return new NamespacedKey(parts[0], parts[1]);
         } else if (parts.length == 1) {  // Incorrectly formatted key
             String pluginName = Main.getPlugin(Main.class).getName();
-            //noinspection deprecation
             return new NamespacedKey(pluginName, parts[0]);
         }
 

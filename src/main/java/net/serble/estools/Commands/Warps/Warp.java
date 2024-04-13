@@ -1,6 +1,6 @@
 package net.serble.estools.Commands.Warps;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Warp extends CMD {
+public class Warp extends EsToolsCommand {
     private static final String usage = genUsage("/warp <warp>");
 
     @Override
@@ -20,7 +20,7 @@ public class Warp extends CMD {
         Player p = (Player)sender;
 
         if (args.length == 0) {
-            s(p, usage);
+            send(p, usage);
             return false;
         }
 
@@ -28,17 +28,17 @@ public class Warp extends CMD {
         WarpLocation warp = WarpManager.warps.get(warpName);
 
         if (args.length != 1) {
-            s(p, usage);
+            send(p, usage);
             return false;
         }
 
         if (!canUseWarp(p, warp)) {
-            s(p, "&cWarp &6%s&c does not exist.", warpName);
+            send(p, "&cWarp &6%s&c does not exist.", warpName);
             return false;
         }
 
         p.teleport(warp.location);
-        s(p, "&aTeleported to warp &6%s&a.", warpName);
+        send(p, "&aTeleported to warp &6%s&a.", warpName);
         return true;
     }
 

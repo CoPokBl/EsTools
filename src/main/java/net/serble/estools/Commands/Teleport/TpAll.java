@@ -5,7 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 
-public class TPAll extends EntityCommand {
+public class TpAll extends EntityCommand {
     private static final String usage = genUsage("/tpall [entity]");
 
     @Override
@@ -15,8 +15,9 @@ public class TPAll extends EntityCommand {
         if (args.length == 0) {
             p = (LivingEntity) sender;
 
-            if (isNotEntity(sender, usage))
+            if (isNotEntity(sender, usage)) {
                 return false;
+            }
         } else {
             p = getEntity(sender, args[0]);
         }
@@ -27,7 +28,7 @@ public class TPAll extends EntityCommand {
         }
 
         assert p != null;
-        s(sender, "&aTeleported all players to &6%s", getEntityName(p));
+        send(sender, "&aTeleported all players to &6%s", getEntityName(p));
         return true;
     }
 }

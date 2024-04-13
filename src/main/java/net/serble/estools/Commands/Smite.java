@@ -11,23 +11,22 @@ public class Smite extends EntityCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
 		if (args.length == 0) {
-			s(sender, usage);
+			send(sender, usage);
 			return false;
 		}
-		
 		
 		for (String arg : args) {
 			LivingEntity target = getEntity(sender, arg);
 			
-			if (target != null) {
-				target.getWorld().strikeLightning(target.getLocation());
+			if (target == null) {
+				return false;
 			}
-				
+
+			target.getWorld().strikeLightning(target.getLocation());
 		}
 
-        s(sender, "&aBAM!");
+        send(sender, "&aBAM!");
 		return true;
 	}
 

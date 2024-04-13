@@ -42,29 +42,29 @@ public class Enchantments {
         ENCHANTMENTS.put("infinity", Enchantment.ARROW_INFINITE);
         ENCHANTMENTS.put("fortune", Enchantment.LOOT_BONUS_BLOCKS);
 
-        if (Main.version <= 3) return;
+        if (Main.majorVersion <= 3) return;
         ENCHANTMENTS.put("thorns", Enchantment.THORNS);
 
-        if (Main.version <= 6) return;
+        if (Main.majorVersion <= 6) return;
         ENCHANTMENTS.put("luck", Enchantment.LUCK);
         ENCHANTMENTS.put("lure", Enchantment.LURE);
 
-        if (Main.version <= 7) return;
+        if (Main.majorVersion <= 7) return;
         ENCHANTMENTS.put("depthstrider", Enchantment.DEPTH_STRIDER);
 
-        if (Main.version <= 8) return;
+        if (Main.majorVersion <= 8) return;
         ENCHANTMENTS.put("frostwalker", Enchantment.FROST_WALKER);
         ENCHANTMENTS.put("mending", Enchantment.MENDING);
 
-        if (Main.version <= 10) return;
+        if (Main.majorVersion <= 10) return;
         ENCHANTMENTS.put("bindingcurse", Enchantment.BINDING_CURSE);
         ENCHANTMENTS.put("vanishingcurse", Enchantment.VANISHING_CURSE);
         ENCHANTMENTS.put("sweepingedge", Enchantment.SWEEPING_EDGE);
 
-        if (Main.version <= 15) return;
+        if (Main.majorVersion <= 15) return;
         ENCHANTMENTS.put("soulspeed", Enchantment.SOUL_SPEED);
 
-        if (Main.version <= 18) return;
+        if (Main.majorVersion <= 18) return;
         ENCHANTMENTS.put("loyalty", Enchantment.LOYALTY);
     }
 }

@@ -1,6 +1,6 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
@@ -10,9 +10,8 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Music extends CMD {
+public class Music extends EsToolsCommand {
 	private static final String usage = genUsage("/music [song]");
-	
 	public static ArrayList<Sound> musics = new ArrayList<>();
 
 	@Override
@@ -29,24 +28,19 @@ public class Music extends CMD {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
-		if (isNotPlayer(sender))
-			return true;
+		if (isNotPlayer(sender)) {
+            return false;
+        }
 		
 		Player p = (Player) sender;
-		
+
 		Sound sound;
-		
-		if (args.length > 0) {
+		if (args.length > 0 && !args[0].equalsIgnoreCase("random")) {
 			try {
 				sound = Sound.valueOf("MUSIC_DISC_" + args[0].toUpperCase());
-			} catch (Exception e) {
-				if (args[0].equalsIgnoreCase("random")) {
-					sound = musics.get((int)(Math.random() * musics.size()));
-				} else {
-					s(sender, usage);
-					return true;
-				}
+			} catch (IllegalArgumentException e) {
+				send(sender, usage);
+				return false;
 			}
 		} else {
 			sound = musics.get((int)(Math.random() * musics.size()));
@@ -57,7 +51,7 @@ public class Music extends CMD {
 		String name = sound.toString().toLowerCase().substring(11);
 		name = String.valueOf(name.charAt(0)).toUpperCase() + name.substring(1);
 		
-		s(sender, "&aNow Playing: &6%s", name);
+		send(sender, "&aNow Playing: &6%s", name);
 		return true;
 	}
 	

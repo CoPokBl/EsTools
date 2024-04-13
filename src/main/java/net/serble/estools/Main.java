@@ -1,6 +1,11 @@
 package net.serble.estools;
 
 import net.serble.estools.Commands.GameMode.*;
+import net.serble.estools.Commands.Give.Give;
+import net.serble.estools.Commands.Give.GiveItem;
+import net.serble.estools.Commands.Give.SetHandItem;
+import net.serble.estools.Commands.MoveSpeed.FlySpeed;
+import net.serble.estools.Commands.MoveSpeed.WalkSpeed;
 import net.serble.estools.Commands.PowerPick.*;
 import net.serble.estools.Commands.Teleport.*;
 import net.serble.estools.Commands.Warps.*;
@@ -11,50 +16,47 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.serble.estools.Commands.*;
 
+@SuppressWarnings("UnusedReturnValue")
 public class Main extends JavaPlugin {
-	
-	public static Main current;
-	public static int version;
+	public static Main plugin;
+	public static int majorVersion;
 	public static int minorVersion;
 	public static boolean tabCompleteEnabled = true;
-
-	// MultiEntityCommand
 	
 	@Override
 	public void onEnable() {
-		current = this;
+		plugin = this;
 
 		try {
 			Vault.setupEconomy();
 		} catch (Exception e) {
-			Bukkit.getLogger().warning("No Vault plugin found, please install vault for economy functionality");
+			Bukkit.getLogger().warning("No Vault plugin found, please install vault for economy functionality.");
 		}
 
-		getVersion();
+		getVersion();  // Set the major and minor version variables
 
-		if (version > 0) {  // Doesn't exist in 1.0 lol
+		if (majorVersion > 0) {  // Config doesn't exist in 1.0 lol
 			saveDefaultConfig();
 		}
 
-		if (version <= 2) {
+		if (majorVersion <= 2) {
 			Bukkit.getLogger().info("Tab completion is not supported for versions 1.2 and below.");
 			tabCompleteEnabled = false;
 		}
 
 		// Commands
-		
-		sc("gms", "gm", new gms());
-		sc("gmc", "gm", new gmc());
-		sc("gma", "gm", new gma(), 3);
-		sc("gmsp", "gm", new gmsp(), 8);
-		sc("tphere", "tp", new TPHere());
-		sc("tpall", "tp", new TPAll());
+		sc("gms", "gm", new Gms());
+		sc("gmc", "gm", new Gmc());
+		sc("gma", "gm", new Gma(), 3);
+		sc("gmsp", "gm", new Gmsp(), 8);
+		sc("tphere", "tp", new TpHere());
+		sc("tpall", "tp", new TpAll());
 		sc("feed", "feed", new Feed());
 		sc("fly", "fly", new Fly(), 2);
 		sc("smite", "smite", new Smite());
-		sc("invsee", "invsee", new Invsee(), 2);
-		sc("i", "give", new I(), new Give());
-		sc("h", "give", new H(), new Give());
+		sc("invsee", "invsee", new InvSee(), 2);
+		sc("i", "give", new GiveItem(), new Give());
+		sc("h", "give", new SetHandItem(), new Give());
 		sc("estools", new EsTools());
 		sc("ench", "ench", new Ench(), 1);
 		sc("fix", "fix", new Fix());
@@ -69,7 +71,7 @@ public class Main extends JavaPlugin {
 		sc("setunbreakable", "setunbreakable", new SetUnbreakable(), 1);
 		sc("hideflags", "hideflags", new HideFlags(), 8);
 		sc("eff", "effect", new Eff(), 1);
-		sc("safetp", "safetp", new SafeTP(), 1);
+		sc("safetp", "safetp", new SafeTp(), 1);
 		sc("infinite", "infinite", new Infinite(), 1);
 		sc("sethunger", "sethunger", new SetHunger());
 		sc("setsaturation", "setsaturation", new SetSaturation());
@@ -104,15 +106,14 @@ public class Main extends JavaPlugin {
 		sc("warp", "warps.use", new Warp());
 		sc("warps", "warps.manage", new WarpManager());
 
-		// Other
-
-		if (version > 0) {  // Enchants and events don't work on 1.0.0
+		// Load other features
+		if (majorVersion > 0) {  // Enchants and events don't work on 1.0.0
 			PowerTool.init();
 			SignMain.init();
 		}
 
-		if (Main.version < 7) {
-			Bukkit.getLogger().info("Saving not supported in 1.6 or below.");
+		if (Main.majorVersion < 7) {
+			Bukkit.getLogger().info("Saving configs not supported in 1.6 or below.");
 		}
 
 		Give.enable();
@@ -120,10 +121,13 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {}
-	
-	public PluginCommand sc(String name, CMD ce) {
+
+	// Setup Command Overloads
+
+	public PluginCommand sc(String name, EsToolsCommand ce) {
 		PluginCommand cmd = getCommand(name);
-		cmd.setExecutor(ce);
+        assert cmd != null;
+        cmd.setExecutor(ce);
 		ce.onEnable();
 
 		if (tabCompleteEnabled && cmd.getTabCompleter() == null) {
@@ -132,12 +136,12 @@ public class Main extends JavaPlugin {
 		return cmd;
 	}
 
-	public PluginCommand sc(String name, CMD ce, int minVer) {
-		if (Main.version >= minVer) return sc(name, ce);
+	public PluginCommand sc(String name, EsToolsCommand ce, int minVer) {
+		if (Main.majorVersion >= minVer) return sc(name, ce);
 		else return sc(name, new WrongVersion(minVer));
 	}
 	
-	public PluginCommand sc(String name, CMD ce, EsToolsTabCompleter tc) {
+	public PluginCommand sc(String name, EsToolsCommand ce, EsToolsTabCompleter tc) {
 		PluginCommand cmd = sc(name, ce);
 		if (tabCompleteEnabled) {
 			tc.register(cmd);
@@ -145,14 +149,9 @@ public class Main extends JavaPlugin {
 		return cmd;
 	}
 
-	public PluginCommand sc(String name, CMD ce, EsToolsTabCompleter tc, int minVer) {
-		if (Main.version >= minVer) return sc(name, ce, tc);
-		else return sc(name, new WrongVersion(minVer), new WrongVersion(minVer));
-	}
-
-	public PluginCommand sc(String name, String perm, CMD ce, EsToolsTabCompleter tc, int minMajor, int minMinor) {
+	public PluginCommand sc(String name, String perm, EsToolsCommand ce, EsToolsTabCompleter tc, int minMajor, int minMinor) {
 		String versionName = minMajor + "." + minMinor;
-		if (Main.version > minMajor || (Main.version == minMajor && Main.minorVersion >= minMinor)) {
+		if (Main.majorVersion > minMajor || (Main.majorVersion == minMajor && Main.minorVersion >= minMinor)) {
 			if (tc == null) {
 				return sc(name, perm, ce);
 			}
@@ -161,12 +160,12 @@ public class Main extends JavaPlugin {
         } else return sc(name, new WrongVersion(versionName), new WrongVersion(versionName));
 	}
 
-	public PluginCommand sc(String name, String perm, CMD ce) {
+	public PluginCommand sc(String name, String perm, EsToolsCommand ce) {
 		PluginCommand cmd = sc(name, ce);
 		cmd.setPermission("estools." + perm);
 
-		if (Main.version > 0) {  // Permission errors weren't a thing in 1.0
-			cmd.setPermissionMessage(CMD.t("&cYou do not have permission to run this command."));
+		if (Main.majorVersion > 0) {  // Permission errors weren't a thing in 1.0
+			cmd.setPermissionMessage(EsToolsCommand.translate("&cYou do not have permission to run this command."));
 		}
 
 		if (tabCompleteEnabled && cmd.getTabCompleter() == null) {  // Give every command tab complete if they haven't already registered it
@@ -175,12 +174,12 @@ public class Main extends JavaPlugin {
 		return cmd;
 	}
 
-	public PluginCommand sc(String name, String perm, CMD ce, int minVer) {
-		if (Main.version >= minVer) return sc(name, perm, ce);
+	public PluginCommand sc(String name, String perm, EsToolsCommand ce, int minVer) {
+		if (Main.majorVersion >= minVer) return sc(name, perm, ce);
 		else return sc(name, perm, new WrongVersion(minVer));
 	}
 	
-	public PluginCommand sc(String name, String perm, CMD ce, EsToolsTabCompleter tc) {
+	public PluginCommand sc(String name, String perm, EsToolsCommand ce, EsToolsTabCompleter tc) {
 		PluginCommand cmd = sc(name, perm, ce);
 		if (tabCompleteEnabled) {
 			tc.register(cmd);
@@ -188,33 +187,30 @@ public class Main extends JavaPlugin {
 		return cmd;
 	}
 
-	public PluginCommand sc(String name, String perm, CMD ce, EsToolsTabCompleter tc, int minVer) {
-		if (Main.version >= minVer) return sc(name, perm, ce, tc);
-		else return sc(name, perm, new WrongVersion(minVer), new WrongVersion(minVer));
-	}
-
-	private void getVersion() {
+	private void getVersion() {  // Parse the minecraft version from the Bukkit version string
 		String versionS = Bukkit.getVersion();
 
-		if (versionS.contains("(MC: 1.0.0)")) {
-			version = 0;
-			minorVersion = 0;
+		if (versionS.contains("(MC: ")) {
+			int posOfMC = versionS.indexOf("(MC: ") + 5;
+			versionS = versionS.substring(posOfMC, versionS.indexOf(')', posOfMC));
+		} else {
+			Bukkit.getLogger().warning("Could not detect version from: " + versionS);
 			return;
 		}
 
 		for (int i = 0; i < 99; i++) {
 			if (versionS.contains("1." + i)) {
-				version = i;
+				majorVersion = i;
 			}
 		}
 
 		for (int i = 0; i < 99; i++) {
-			if (versionS.contains("1." + version + '.' + i)) {
+			if (versionS.contains("1." + majorVersion + '.' + i)) {
 				minorVersion = i;
 			}
 		}
 
-		Bukkit.getLogger().info("Version detected as: 1." + version + '.' + minorVersion + " from: " + versionS);
+		Bukkit.getLogger().info("Version detected as: 1." + majorVersion + '.' + minorVersion + " from: " + versionS);
 	}
 }
 

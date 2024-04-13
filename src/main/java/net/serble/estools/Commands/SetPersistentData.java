@@ -1,6 +1,6 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.CMD;
+import net.serble.estools.EsToolsCommand;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,7 +13,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SetPersistentData extends CMD {
+public class SetPersistentData extends EsToolsCommand {
     public static final String usage = genUsage("/setpersistentdata <key> <type> <value>");
 
     @Override
@@ -22,7 +22,7 @@ public class SetPersistentData extends CMD {
             return false;
 
         if (args.length < 3) {
-            s(sender, usage);
+            send(sender, usage);
             return true;
         }
 
@@ -44,13 +44,13 @@ public class SetPersistentData extends CMD {
         NamespacedKey key = GetPersistentData.getNamespacedKey(keyString);
 
         if (key == null) {
-            s(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
+            send(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
             return false;
         }
 
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
-            s(sender, "&cItem does not have nbt tags!");
+            send(sender, "&cItem does not have nbt tags!");
             return false;
         }
 
@@ -58,18 +58,18 @@ public class SetPersistentData extends CMD {
 
         int code = setNbt(typeString, key, data, valueString);
         if (code == 1) {
-            s(sender, "&cNBT tag type &e\"" + typeString + "\"&c is unsupported!");
+            send(sender, "&cNBT tag type &e\"" + typeString + "\"&c is unsupported!");
             return false;
         }
 
         if (code == 2) {
-            s(sender, "&cInvalid value for type &e\"" + typeString + "\"&c! (arrays are separated by spaces)");
+            send(sender, "&cInvalid value for type &e\"" + typeString + "\"&c! (arrays are separated by spaces)");
             return false;
         }
 
         item.setItemMeta(meta);
 
-        s(sender, "&aSet NBT tag &e\"" + args[0].toLowerCase() + "\"&a to &e\"" + valueString + "\"&a!");
+        send(sender, "&aSet NBT tag &e\"" + args[0].toLowerCase() + "\"&a to &e\"" + valueString + "\"&a!");
         return true;
     }
 

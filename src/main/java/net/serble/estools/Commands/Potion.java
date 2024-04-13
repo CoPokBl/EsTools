@@ -20,9 +20,8 @@ public class Potion extends EntityCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
         if (args.length == 0) {
-            s(sender, usage);
+            send(sender, usage);
             return false;
         }
 
@@ -46,14 +45,14 @@ public class Potion extends EntityCommand {
             try {
                 potType = PotType.valueOf(args[4].toLowerCase());
             } catch (IllegalArgumentException ignored) {
-                s(sender, "&cInvalid potion type, must be drink, splash, or lingering (if on 1.9+)");
+                send(sender, "&cInvalid potion type, must be drink, splash, or lingering (if on 1.9+)");
                 return false;
             }
 
             // Check versions
-            if (Main.version < 9 && potType == PotType.lingering) {
+            if (Main.majorVersion < 9 && potType == PotType.lingering) {
                 // Doesn't exist
-                s(sender, "&cLingering potions don't exist in this version");
+                send(sender, "&cLingering potions don't exist in this version");
                 return false;
             }
         }
@@ -68,13 +67,13 @@ public class Potion extends EntityCommand {
                 player = (Player) sender;
             } else {
                 // They are console
-                s(sender, "&cConsole must specify a player");
+                send(sender, "&cConsole must specify a player");
                 return false;
             }
         }
 
-        if (Main.version <= 3) {
-            s(sender, "&cPotions are not yet supported in this version, they may be in the future.");
+        if (Main.majorVersion <= 3) {
+            send(sender, "&cPotions are not yet supported in this version, they may be in the future.");
             return false;
         }
 
@@ -86,9 +85,9 @@ public class Potion extends EntityCommand {
         player.getInventory().addItem(pot);
 
         if (player == sender) {
-            s(sender, "&aThere you go!");
+            send(sender, "&aThere you go!");
         } else {
-            s(sender, "&aGave &6%s &aa potion", player.getName());
+            send(sender, "&aGave &6%s &aa potion", player.getName());
         }
         return true;
     }
@@ -106,7 +105,7 @@ public class Potion extends EntityCommand {
 
         switch (args.length) {
             case 1:
-                if (Main.version <= 8) {
+                if (Main.majorVersion <= 8) {
                     for (Map.Entry<String, PotionType> e : Effects.potionEntrySet()) {
                         tab.add(e.getKey().toLowerCase());
                     }
@@ -130,7 +129,7 @@ public class Potion extends EntityCommand {
             case 5:
                 tab.add("drink");
                 tab.add("splash");
-                if (Main.version >= 9) tab.add("lingering");
+                if (Main.majorVersion >= 9) tab.add("lingering");
                 break;
 
             case 6:
@@ -139,5 +138,4 @@ public class Potion extends EntityCommand {
 
         return tab;
     }
-
 }

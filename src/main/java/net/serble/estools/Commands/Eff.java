@@ -14,32 +14,29 @@ import java.util.List;
 import java.util.Map;
 
 public class Eff extends MultiPlayerCommand {
-
     private static final String usage = genUsage("/eff <effect> <amplifier> <duration> <players>");
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
         if (args.length == 0) {
-            s(sender, usage);
-            return true;
+            send(sender, usage);
+            return false;
         }
 
         PotionEffectType effect = Effects.getByName(args[0]);
 
         if (effect == null) {
-            s(sender, "&cEffect not found!");
-            return true;
+            send(sender, "&cEffect not found!");
+            return false;
         }
 
         int amplifier = 0;
-
         if (args.length > 1) {
             try {
                 amplifier = Integer.parseInt(args[1]) - 1;
             } catch (Exception x) {
-                s(sender, usage);
-                return true;
+                send(sender, usage);
+                return false;
             }
         }
 
@@ -50,14 +47,14 @@ public class Eff extends MultiPlayerCommand {
             duration = calculateDuration(args[2]);
 
             if (duration == -1) {
-                s(sender, usage);
+                send(sender, usage);
                 return false;
             }
 
             durationStr = String.format("%s seconds", duration / 20);
 
             if (duration == 32767) {
-                if (Main.version >= 19) {
+                if (Main.majorVersion >= 19) {
                     duration = -1;
                 }
 
@@ -65,26 +62,28 @@ public class Eff extends MultiPlayerCommand {
             }
         }
 
-        ArrayList<Player> ps = new ArrayList<>();
+        ArrayList<Player> players = new ArrayList<>();
 
         if (args.length < 4) {
-            if (isNotPlayer(sender, usage))
-                return true;
+            if (isNotPlayer(sender, usage)) {
+                return false;
+            }
 
-            ps.add((Player)sender);
+            players.add((Player)sender);
         } else {
-            ps = getPlayers(sender, removeArgs(args, 3));
+            players = getPlayers(sender, removeArgs(args, 3));
 
-            if (ps.isEmpty())
-                return true;
+            if (players.isEmpty()) {
+                return false;
+            }
         }
 
-        for (Player p : ps) {
+        for (Player p : players) {
             p.removePotionEffect(effect);
             p.addPotionEffect(new PotionEffect(effect, duration, amplifier));
         }
 
-        s(sender, "&aAdded effect &6%s&a at level &6%s&a for &6%s", Effects.getName(effect), amplifier + 1, durationStr);
+        send(sender, "&aAdded effect &6%s&a at level &6%s&a for &6%s", Effects.getName(effect), amplifier + 1, durationStr);
         return true;
     }
 
@@ -94,14 +93,14 @@ public class Eff extends MultiPlayerCommand {
         }
 
         try {
-            int duration = Integer.parseInt(input) * 20;
+            int duration = (int)(Double.parseDouble(input) * 20);
 
             if (duration >= 0) {
                 return duration;
             }
 
             return 32767;
-        } catch (Exception x) {
+        } catch (NumberFormatException x) {
             return -1;
         }
     }

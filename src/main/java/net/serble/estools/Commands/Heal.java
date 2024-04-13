@@ -10,28 +10,26 @@ public class Heal extends EntityCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
-		LivingEntity p;
-		
+		LivingEntity entity;
 		if (args.length == 0) {
-			if (isNotEntity(sender, usage))
-				return false;
-			
-			p = (LivingEntity) sender;
-			
-			s(sender, "&aHealed!");
-		} else {
-			p = getEntity(sender, args[0]);
-			
-			if (p == null) {
+			if (isNotEntity(sender, usage)) {
                 return false;
             }
 			
-			s(sender, "&aHealed &6%s", getEntityName(p));
+			entity = (LivingEntity) sender;
+			send(sender, "&aHealed!");
+		} else {
+			entity = getEntity(sender, args[0]);
+			
+			if (entity == null) {
+                return false;
+            }
+			
+			send(sender, "&aHealed &6%s", getEntityName(entity));
 		}
 
-		setHealth(p, getMaxHealth(p));
-		p.setFireTicks(0);
+		setHealth(entity, getMaxHealth(entity));
+		entity.setFireTicks(0);
 		return true;
 	}
 

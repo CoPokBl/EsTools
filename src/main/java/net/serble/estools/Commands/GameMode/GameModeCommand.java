@@ -7,7 +7,8 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public abstract class GM extends MultiPlayerCommand {
+public abstract class GameModeCommand extends MultiPlayerCommand {
+
     public static void setGamemode(CommandSender sender, String label, String[] args, GameMode gm) {
         ArrayList<Player> ps = new ArrayList<>();
 
@@ -17,14 +18,14 @@ public abstract class GM extends MultiPlayerCommand {
 
             ps.add((Player) sender);
 
-            s(sender, "&aGamemode set to &6%s", gm.toString());
+            send(sender, "&aGamemode set to &6%s", gm.toString());
         } else {
             ps = getPlayers(sender, args);
 
             if (ps.isEmpty())
                 return;
 
-            s(sender, "&aGamemode set to &6%s&a for &6%s", gm.toString(), argsToString(args, 0));
+            send(sender, "&aGamemode set to &6%s&a for &6%s", gm.toString(), argsToString(args, 0));
         }
 
         for (Player p : ps) {

@@ -1,13 +1,12 @@
 package net.serble.estools;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PlayerCommand extends CMD {
+public abstract class PlayerCommand extends EsToolsCommand {
 	
 	@Override
 	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {

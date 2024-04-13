@@ -11,28 +11,22 @@ public class Sudo extends PlayerCommand {
 	private static final String usage = genUsage("/sudo <player> <command>");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (args.length < 2) {
-			s(sender, usage);
+			send(sender, usage);
 			return false;
 		}
 		
 		Player p = getPlayer(sender, args[0]);
 		
-		if (p == null)
-			return true;
+		if (p == null) {
+            return false;
+        }
 		
-		StringBuilder com = new StringBuilder();
+		String command = argsToString(args, 1);
 		
-		for (int i = 1; i < args.length; i++) {
-			com.append(args[i]).append(" ");
-		}
-		
-		com = new StringBuilder(com.toString().trim());
-		
-		Bukkit.dispatchCommand(p, com.toString());
-		s(sender, "&aExecuted command &6%s&a as &6%s", com.toString(), p.getName());
+		Bukkit.dispatchCommand(p, command);
+		send(sender, "&aExecuted command &6%s&a as &6%s", command, p.getName());
 		return true;
 	}
 
