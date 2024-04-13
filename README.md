@@ -1,5 +1,5 @@
 # EsTools
-A general purpose Essentials like plugin with everything you need but not messing up anything (1.3+)
+A general purpose Essentials like plugin with everything you need but not messing up anything (MC 1.0+)
 
 EsTools is a plugin designed to be like EssentialsX in that it provides heaps of 
 helpful commands, but unlike essentials it doesn't mess up or override vanilla features (e.g. the give command). 
@@ -17,7 +17,7 @@ To find out what versions have been tested look at TestedVersions.txt in the pro
 We will likely be slow to test new Minecraft versions, but you can probably assume 
 that EsTools will be fully functional on new versions.
 
-**We officially support Spigot 1.3.2 and above.**
+**We officially support Spigot/Bukkit/Paper 1.0.0 and above.**
 
 For support DM us at: Discord: @copokbl and @calcilore. Or email support@serble.net.
 
