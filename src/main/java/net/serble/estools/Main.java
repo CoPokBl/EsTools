@@ -118,9 +118,6 @@ public class Main extends JavaPlugin {
 
 		Give.enable();
 	}
-	
-	@Override
-	public void onDisable() {}
 
 	// Setup Command Overloads
 
