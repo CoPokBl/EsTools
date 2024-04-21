@@ -79,7 +79,7 @@ public class Give implements EsToolsTabCompleter {
         boolean removeWithUnderscores = (boolean) f.get("settings.removeWithUnderscores");
 
 		for (Material mat : Material.values()) {
-			if (!mat.isItem()) continue;
+			if (Main.majorVersion >= 12 && !mat.isItem()) continue;
 
 			String name = mat.toString().toUpperCase();
 
