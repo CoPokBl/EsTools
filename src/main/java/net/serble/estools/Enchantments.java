@@ -7,6 +7,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+// This class exists because the registry doesn't exist pre 1.13, so all the enchantments names have to be hardcoded.
+// only enchantments before 1.13 need to be here because this class isn't used past 1.13
 public class Enchantments {
     private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<>();
 
@@ -60,11 +62,5 @@ public class Enchantments {
         ENCHANTMENTS.put("bindingcurse", Enchantment.BINDING_CURSE);
         ENCHANTMENTS.put("vanishingcurse", Enchantment.VANISHING_CURSE);
         ENCHANTMENTS.put("sweepingedge", Enchantment.SWEEPING_EDGE);
-
-        if (Main.majorVersion <= 15) return;
-        ENCHANTMENTS.put("soulspeed", Enchantment.SOUL_SPEED);
-
-        if (Main.majorVersion <= 18) return;
-        ENCHANTMENTS.put("loyalty", Enchantment.LOYALTY);
     }
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import net.serble.estools.Enchantments;
 import net.serble.estools.Main;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -56,8 +57,7 @@ public class Ench extends EsToolsCommand {
 		Enchantment ench;
 		try {
 			if (Main.majorVersion > 12) {
-                // TODO: Fix for versions that use Registry
-                ench = Enchantment.getByKey(NamespacedKey.minecraft(args[0].toLowerCase()));
+                ench = Registry.ENCHANTMENT.get(NamespacedKey.minecraft(args[0].toLowerCase()));
             } else {
                 ench = Enchantments.getByName(args[0].toLowerCase());
             }
@@ -84,8 +84,7 @@ public class Ench extends EsToolsCommand {
 		switch (args.length) {
 			case 1:
 				if (Main.majorVersion > 12) {
-					// TODO: Fix for versions that use Registry
-                    for (Enchantment e : Enchantment.values()) {
+                    for (Enchantment e : Registry.ENCHANTMENT) {
 						tab.add(e.getKey().getKey());
 					}
 				} else {
