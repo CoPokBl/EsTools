@@ -96,7 +96,7 @@ public class Main extends JavaPlugin {
 
 		sc("god", "god", new God(), 1);
 
-		sc("music", "music", new Music());
+		sc("music", "music", new Music(), 9);
 		sc("potion", "potion", new Potion(), 4);
 
 		sc("setpersistentdata", "setpersistentdata", new SetPersistentData(), 14);
@@ -118,9 +118,6 @@ public class Main extends JavaPlugin {
 
 		Give.enable();
 	}
-	
-	@Override
-	public void onDisable() {}
 
 	// Setup Command Overloads
 
