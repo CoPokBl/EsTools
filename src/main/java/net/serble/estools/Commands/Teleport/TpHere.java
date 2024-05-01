@@ -25,6 +25,8 @@ public class TpHere extends EntityCommand {
 
             if (t != null) {
                 t.teleport(p);
+            } else {
+                return false;
             }
         }
 
