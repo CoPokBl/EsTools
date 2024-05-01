@@ -27,7 +27,7 @@ public class HideFlags extends EsToolsCommand {
         ItemMeta im = is.getItemMeta();
         String un;
 
-        if (im.getItemFlags().size() >= ItemFlag.values().length) {
+        if (!im.getItemFlags().isEmpty()) {
             im.removeItemFlags(ItemFlag.values());
             un = "&aRemoved Item Flags";
         } else {
