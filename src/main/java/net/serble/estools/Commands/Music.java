@@ -89,7 +89,7 @@ public class Music extends EsToolsCommand {
 	@Override
 	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
 		if (args.length == 1) {
-			return tabComplete;
+			return new ArrayList<>(tabComplete);
 		}
 		
 		return new ArrayList<>();
