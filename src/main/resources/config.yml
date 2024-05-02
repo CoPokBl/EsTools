@@ -1,1 +1,5 @@
+# Stops players taking fall damage when they teleport
 safetp: true
+
+# Toggle bStats metrics
+metrics: true

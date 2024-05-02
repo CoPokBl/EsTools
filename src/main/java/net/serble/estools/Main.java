@@ -10,6 +10,8 @@ import net.serble.estools.Commands.PowerPick.*;
 import net.serble.estools.Commands.Teleport.*;
 import net.serble.estools.Commands.Warps.*;
 import net.serble.estools.Signs.SignMain;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +24,8 @@ public class Main extends JavaPlugin {
 	public static int majorVersion;
 	public static int minorVersion;
 	public static boolean tabCompleteEnabled = true;
+
+	private static final int bStatsId = 21760;
 	
 	@Override
 	public void onEnable() {
@@ -37,6 +41,15 @@ public class Main extends JavaPlugin {
 
 		if (majorVersion > 0) {  // Config doesn't exist in 1.0 lol
 			saveDefaultConfig();
+		}
+
+		// Metrics
+		if (getConfig().getBoolean("metrics", true)) {
+			Metrics metrics = new Metrics(this, bStatsId);
+			metrics.addCustomChart(new SimplePie("vault_enabled", () -> String.valueOf(Vault.economy != null)));
+			Bukkit.getLogger().info("Started bStat metrics");
+		} else {
+			Bukkit.getLogger().info("Metrics are disabled");
 		}
 
 		if (majorVersion <= 2) {
