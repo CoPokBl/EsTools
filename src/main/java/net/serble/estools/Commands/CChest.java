@@ -165,16 +165,17 @@ public class CChest extends EsToolsCommand implements Listener {
 	@EventHandler
     public void onInventoryDrag(final InventoryDragEvent e) {
 		Inventory inv = cChests.get(e.getWhoClicked().getUniqueId());
+        if (!e.getInventory().equals(inv)) {
+            return;
+        }
 
-		if (inv.equals(e.getInventory())) {
-			// Check if any of the slots dragged are in the cChest
-			for (int slot : e.getRawSlots()) {
-				if (inv.equals(e.getView().getInventory(slot))) {
-					e.setCancelled(true);
-					return;
-				}
-			}
-		}
+        // Check if any of the slots dragged are in the cChest
+        for (int slot : e.getRawSlots()) {
+            if (inv.equals(e.getView().getInventory(slot))) {
+                e.setCancelled(true);
+                return;
+            }
+        }
     }
 	
 	public static Inventory loadPlayer(Player p) {
