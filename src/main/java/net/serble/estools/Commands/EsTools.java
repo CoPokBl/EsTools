@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.serble.estools.Tester;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -57,6 +58,15 @@ public class EsTools extends EsToolsCommand {
 			}
 
 			send(sender, "&cWarning, this will reset all configuration files, use /estools reset confirm to reset");
+		} else if (args[0].equalsIgnoreCase("test")) {
+			if (!(sender instanceof Player)) {
+				send(sender, "&cYou must be a player to use this command.");
+				return false;
+			}
+			Tester tester = new Tester((Player) sender);
+			tester.startTests();
+		} else if (args[0].equalsIgnoreCase("throw")) {
+			throw new RuntimeException("Test exception");
 		} else {
 			send(sender, "&aEsTools v" + Main.plugin.getDescription().getVersion());
 		}
@@ -72,6 +82,7 @@ public class EsTools extends EsToolsCommand {
 			tab.add("reload");
 			tab.add("version");
 			tab.add("reset");
+			tab.add("test");
 		}
 		
 		return tab;

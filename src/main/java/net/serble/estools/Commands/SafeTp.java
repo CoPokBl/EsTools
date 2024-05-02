@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class SafeTp extends EsToolsCommand implements Listener {
-    private static boolean enabled = true;
+    public static boolean enabled = true;
 
     @Override
     public void onEnable() {

@@ -4,9 +4,15 @@ A general purpose Essentials like plugin with everything you need but not messin
 EsTools is a plugin designed to be like EssentialsX in that it provides heaps of 
 helpful commands, but unlike essentials it doesn't mess up or override vanilla features (e.g. the give command). 
 This plugin doesn't override existing Minecraft commands and therefore is less likely to mess stuff up.
+EsTools is also completely `/reload` safe.
 
 Commands:
 [View Them In Our Wiki](https://github.com/CoPokBl/EsTools/wiki/commands)
+
+## Installing
+Download the latest .jar from our [releases page](https://github.com/CoPokBl/EsTools/releases/). Place
+the file in the plugins folder of your server and start it. 
+For optional Vault support install [Vault from SpigotMC](https://www.spigotmc.org/resources/vault.34315/).
 
 ## Support
 The plugin is designed to work on every public spigot build. Any issues found on legacy versions
@@ -35,3 +41,11 @@ Language features from Java 8 are used in the plugin.
 We are open to contributions. If you want to contribute to the project, please fork the repository and make a pull request.
 
 **DO NOT CONTRIBUTE CODE WITH JAVA 9+ FEATURES**
+
+## Testing
+We have a builtin testing system for commands. It isn't fully autonomous and will still require you to 
+verify that the commands were successful, although it will report any exceptions that occur in commands.  
+
+Start the test with `/estools test`. Read the chat output as it goes through and runs every command, 
+sometimes it may `/msg` you and ask you to do something. In general don't switch item slots 
+and only move for the commands `/fly`, `/flyspeed` and `/walkspeed`.
