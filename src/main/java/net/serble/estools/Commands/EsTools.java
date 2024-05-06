@@ -18,6 +18,9 @@ public class EsTools extends EsToolsCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (args.length == 0) {
+			if (checkPerms(sender, "version")) {
+				return false;
+			}
 			send(sender, "&aEsTools v" + Main.plugin.getDescription().getVersion());
 			return true;
 		}
@@ -76,6 +79,9 @@ public class EsTools extends EsToolsCommand {
 			Tester.runningTests.put(p.getUniqueId(), tester);
 			tester.startTests();
 		} else if (args[0].equalsIgnoreCase("throw")) {
+			if (checkPerms(sender, "throw")) {
+				return false;
+			}
 			throw new RuntimeException("Test exception");
 		} else {
 			send(sender, "&aEsTools v" + Main.plugin.getDescription().getVersion());
