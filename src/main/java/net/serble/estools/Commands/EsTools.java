@@ -58,12 +58,22 @@ public class EsTools extends EsToolsCommand {
 			}
 
 			send(sender, "&cWarning, this will reset all configuration files, use /estools reset confirm to reset");
-		} else if (args[0].equalsIgnoreCase("test")) {
+		} else if (args[0].equalsIgnoreCase("test")) { // TODO: Add perms for /estools test
 			if (!(sender instanceof Player)) {
 				send(sender, "&cYou must be a player to use this command.");
 				return false;
 			}
-			Tester tester = new Tester((Player) sender);
+
+			Player p = (Player) sender;
+			Tester tester = Tester.runningTests.get(p.getUniqueId());
+
+			if (tester != null) {
+				tester.continueTests();
+				return true;
+			}
+
+			tester = new Tester(p);
+			Tester.runningTests.put(p.getUniqueId(), tester);
 			tester.startTests();
 		} else if (args[0].equalsIgnoreCase("throw")) {
 			throw new RuntimeException("Test exception");
