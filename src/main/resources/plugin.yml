@@ -305,3 +305,15 @@ permissions:
   estools.lore:
     description: Lets players add, change, or remove lore from items
     default: op
+
+  estools.throw:
+    description: Allows the player to throw a test exception for testing purposes
+    default: op
+
+  estools.version:
+    description: Allows the player to view the plugin version, this allows the player to see that the server is running EsTools
+    default: true
+
+  estools.test:
+    description: Allows the player the test all the EsTools commands using the builtin tester, the player still needs permissions for each individual command
+    default: op
