@@ -15,7 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import net.serble.estools.PlayerCommand;
 
 public class Fix extends PlayerCommand {
-	private static final String usage = genUsage("/fix [hand/offhand/helmet/chestplate/leggings/boots] [player]");
+	private static final String usage = genUsage("/fix [hand/offhand/helmet/chestplate/leggings/boots/all] [player]");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
