@@ -129,6 +129,10 @@ commands:
     description: Create, Add, or Modify warps.
   lore:
     description: Add, Change, or Remove lore from items.
+  mount:
+    description: Make entities ride another entity.
+  dismount:
+    description: Make entities dismount other entities.
 
 permissions:
   estools.teleport:
@@ -329,4 +333,8 @@ permissions:
 
   estools.test:
     description: Allows the player the test all the EsTools commands using the builtin tester, the player still needs permissions for each individual command
+    default: op
+
+  estools.mount:
+    description: Allows the player to make entities ride other entities
     default: op

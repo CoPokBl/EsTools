@@ -124,6 +124,9 @@ public class Main extends JavaPlugin {
 		sc("warp", "warps.use", new Warp());
 		sc("warps", "warps.manage", new WarpManager());
 
+		sc("mount", "mount", new Mount());
+		sc("dismount", "mount", new Dismount());
+
 		// Load other features
 		if (majorVersion > 0) {  // Enchants and events don't work on 1.0.0
 			PowerTool.init();
@@ -136,6 +139,10 @@ public class Main extends JavaPlugin {
 
 		Give.enable();
 	}
+
+	@Override
+	public void onDisable() { /* Needed for older versions, which require an onDisable method */ }
+
 
 	// Setup Command Overloads
 
@@ -180,7 +187,8 @@ public class Main extends JavaPlugin {
 		cmd.setPermission("estools." + perm);
 
 		if (Main.majorVersion > 0) {  // Permission errors weren't a thing in 1.0
-			cmd.setPermissionMessage(EsToolsCommand.translate("&cYou do not have permission to run this command."));
+            //noinspection deprecation, is still useful in pre 1.13 and technically is useful in rare situations post 1.13
+            cmd.setPermissionMessage(EsToolsCommand.translate("&cYou do not have permission to run this command."));
 		}
 
 		if (tabCompleteEnabled && cmd.getTabCompleter() == null) {  // Give every command tab complete if they haven't already registered it
