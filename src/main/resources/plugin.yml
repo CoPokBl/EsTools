@@ -82,12 +82,21 @@ commands:
   powerhoe:
     description: Give yourself an op hoe.
     aliases: ph
-  sun:
+  day:
     description: Set the time to day.
-    aliases: day
-  moon:
+  night:
     description: Set the time to night.
-    aliases: night
+    aliases: moon
+  noon:
+    description: Set the time to noon.
+  midnight:
+    description: Set the time to midnight.
+  rain:
+    description: Set the weather to rain.
+  sun:
+    description: Set the weather to clear.
+  thunder:
+    description: Set the weather to thunderstorm.
   walkspeed:
     description: Set your walk speed.
   flyspeed:
@@ -232,6 +241,10 @@ permissions:
 
   estools.time:
     description: Lets people change the time
+    default: op
+
+  estools.weather:
+    description: Lets people set the weather
     default: op
 
   estools.setunbreakable:

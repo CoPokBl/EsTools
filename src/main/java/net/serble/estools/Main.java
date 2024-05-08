@@ -77,8 +77,13 @@ public class Main extends JavaPlugin {
 		sc("back", "back", new Back(), 1);
 		sc("setstack", "setstack", new SetStack());
 		sc("ci", "clearinv", new ClearInv());
-		sc("sun", "time", new Sun());
+		sc("day", "time", new Day());
 		sc("moon", "time", new Night());
+		sc("noon", "time", new Noon());
+		sc("midnight", "time", new Midnight());
+		sc("sun", "weather", new Sun());
+		sc("rain", "weather", new Rain());
+		sc("thunder", "weather", new Thunder());
 		sc("walkspeed", "walkspeed", new WalkSpeed(), 4);
 		sc("flyspeed", "flyspeed", new FlySpeed(), 3);
 		sc("setunbreakable", "setunbreakable", new SetUnbreakable(), 1);

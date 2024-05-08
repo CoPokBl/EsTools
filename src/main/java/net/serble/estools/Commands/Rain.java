@@ -6,7 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Sun extends EsToolsCommand {
+public class Rain extends EsToolsCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -15,10 +15,10 @@ public class Sun extends EsToolsCommand {
         }
 
         World world = ((Player) sender).getWorld();
-        world.setStorm(false);
+        world.setStorm(true);
         world.setThundering(false);
 
-        send(sender, "&aSet weather to &6clear");
+        send(sender, "&aSet weather to &6rain");
         return true;
     }
 }

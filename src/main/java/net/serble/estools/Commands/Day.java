@@ -1,12 +1,11 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Sun extends EsToolsCommand {
+public class Day extends EsToolsCommand {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -14,11 +13,8 @@ public class Sun extends EsToolsCommand {
             return false;
         }
 
-        World world = ((Player) sender).getWorld();
-        world.setStorm(false);
-        world.setThundering(false);
-
-        send(sender, "&aSet weather to &6clear");
+        ((Player)sender).getWorld().setTime(1000);
+        send(sender, "&aSet time to &6day");
         return true;
     }
 }
