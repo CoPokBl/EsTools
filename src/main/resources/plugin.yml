@@ -133,6 +133,8 @@ commands:
     description: Make entities ride another entity.
   dismount:
     description: Make entities dismount other entities.
+  buddha:
+    description: Stop entities from dying from damage, their health will overflow back to full.
 
 permissions:
   estools.teleport:
