@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class SetHunger extends PlayerCommand {
-	private static final String usage = genUsage("/sethunger <amount> [entity]");
+	private static final String usage = genUsage("/sethunger <amount> [player]");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
