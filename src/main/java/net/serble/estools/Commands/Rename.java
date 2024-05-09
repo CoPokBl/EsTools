@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import net.serble.estools.EsToolsCommand;
 
 public class Rename extends EsToolsCommand {
-	public static final String usage = genUsage("/rename <name>");
+	public static final String usage = genUsage("/rename [name]");
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
