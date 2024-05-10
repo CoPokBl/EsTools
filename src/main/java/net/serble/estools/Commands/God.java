@@ -17,7 +17,7 @@ import java.util.*;
 
 public class God extends EntityCommand implements Listener {
 	private static final HashMap<UUID, Integer> currentPlayers = new HashMap<>();
-	private static final String usage = genUsage("/god <entity> <time>");
+	private static final String usage = genUsage("/god [entity] [time]");
 
 	@Override
 	public void onEnable() {
