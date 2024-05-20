@@ -15,7 +15,7 @@ public class Dismount extends EntityCommand {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		List<Entity> targets = new ArrayList<>();
-		for (String arg : args) {  // Can only be non-living Entity in 1.2+
+		for (String arg : args) {  // Can only be living Entity in 1.2+
 			Entity entity = Main.majorVersion >= 2 ? getNonLivingEntity(sender, arg) : getEntity(sender, arg);
 			if (entity == null) {
 				return false;
