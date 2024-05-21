@@ -7,7 +7,7 @@ This plugin doesn't override existing Minecraft commands and therefore is less l
 EsTools is also completely `/reload` safe.
 
 Commands:
-[View Them In Our Wiki](https://github.com/CoPokBl/EsTools/wiki/commands)
+[View Them In Our Wiki](https://estools.serble.net)
 
 ## Installing
 Download the latest .jar from our [releases page](https://github.com/CoPokBl/EsTools/releases/). Place
