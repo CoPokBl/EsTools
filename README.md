@@ -37,6 +37,8 @@ The plugin will be in the target folder.
 Our builds are built against Java 8. We can't guarantee that the plugin will work on Java 7 or below.
 Language features from Java 8 are used in the plugin.
 
+For our latest builds check out our [Jenkins instance](https://ci.serble.net/job/EsTools/).
+
 ## Contributing
 We are open to contributions. If you want to contribute to the project, please fork the repository and make a pull request.
 
