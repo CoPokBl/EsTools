@@ -49,3 +49,9 @@ verify that the commands were successful, although it will report any exceptions
 Start the test with `/estools test`. Read the chat output as it goes through and runs every command, 
 sometimes it may `/msg` you and ask you to do something. In general don't switch item slots 
 and only move for the commands `/fly`, `/flyspeed` and `/walkspeed`.
+
+## Metrics
+EsTools uses [bStats metrics](https://bstats.org) to collect anonymous usage data.
+View the front page of [our wiki](https://estools.serble.net/) for information
+on opting out.
+![EsTools bStats statistics](https://bstats.org/signatures/bukkit/EsTools.svg)
