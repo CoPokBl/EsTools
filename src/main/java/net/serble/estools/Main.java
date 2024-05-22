@@ -1,6 +1,5 @@
 package net.serble.estools;
 
-import net.serble.estools.Commands.GameMode.*;
 import net.serble.estools.Commands.Give.Give;
 import net.serble.estools.Commands.Give.GiveItem;
 import net.serble.estools.Commands.Give.SetHandItem;
@@ -13,6 +12,7 @@ import net.serble.estools.Signs.SignMain;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -75,10 +75,10 @@ public class Main extends JavaPlugin {
 		}
 
 		// Commands
-		sc("gms", "gm", new Gms());
-		sc("gmc", "gm", new Gmc());
-		sc("gma", "gm", new Gma(), 3);
-		sc("gmsp", "gm", new Gmsp(), 8);
+		sc("gms", "gamemode.survival", new GameModeCommand(GameMode.SURVIVAL));
+		sc("gmc", "gamemode.creative", new GameModeCommand(GameMode.CREATIVE));
+		sc("gma", "gamemode.adventure", new GameModeCommand(GameMode.ADVENTURE), 3);
+		sc("gmsp", "gamemode.spectator", new GameModeCommand(GameMode.SPECTATOR), 8);
 		sc("tphere", "tp", new TpHere());
 		sc("tpall", "tp", new TpAll());
 		sc("feed", "feed", new Feed());

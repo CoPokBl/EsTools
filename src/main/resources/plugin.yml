@@ -144,8 +144,20 @@ permissions:
   estools.teleport:
     description: Lets people teleport themselves and others
     default: op
-    
-  estools.gamemode:
+
+  estools.gamemode.survival:
+    description: Lets people change the gamemode of themselves and others
+    default: op
+
+  estools.gamemode.creative:
+    description: Lets people change the gamemode of themselves and others
+    default: op
+
+  estools.gamemode.adventure:
+    description: Lets people change the gamemode of themselves and others
+    default: op
+
+  estools.gamemode.spectator:
     description: Lets people change the gamemode of themselves and others
     default: op
     
