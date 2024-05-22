@@ -139,6 +139,11 @@ public class Main extends JavaPlugin {
 		}
 
 		Give.enable();
+
+		if (getConfig().getBoolean("updater.auto-update", false) ||
+				getConfig().getBoolean("updater.warn-on-outdated", false)) {
+			Updater.checkForUpdate();
+		}
 	}
 
 	@Override

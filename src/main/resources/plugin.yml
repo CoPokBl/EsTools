@@ -137,6 +137,10 @@ commands:
     description: Stop entities from dying from damage, their health will overflow back to full.
 
 permissions:
+  estools.update:
+    description: Lets people update the plugin
+    default: op
+
   estools.teleport:
     description: Lets people teleport themselves and others
     default: op

@@ -3,3 +3,19 @@ safetp: true
 
 # Toggle bStats metrics
 metrics: true
+
+# Configure the EsTools auto updater, everything is disabled by default
+updater:
+
+  # The GitHub API path to query for the latest version, change if you want to use a fork
+  github-release-url: "https://api.github.com/repos/CoPokBl/EsTools/releases/latest"
+
+  # Whether to automatically install updates if they are available
+  auto-update: false
+
+  # Whether to notify operators when they join the server if the plugin is outdated
+  # Leave this off if you enable auto-update, this will prompt user to type /estools update
+  warn-on-outdated: false
+
+  # Log to the console when the plugin is out of date
+  log-on-outdated: true
