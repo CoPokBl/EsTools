@@ -20,10 +20,6 @@ public class SafeTp extends EsToolsCommand implements Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (isNotPlayer(sender)) {
-            return false;
-        }
-
         if (enabled) {
             enabled = false;
             send(sender, "&aTeleporting now &6&lWILL&a make you take fall damage!");
