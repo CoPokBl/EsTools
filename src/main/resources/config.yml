@@ -1,3 +1,5 @@
+# Go to https://estools.serble.net/configuration.html for information on configuring the plugin
+
 # Stops players taking fall damage when they teleport
 safetp: true
 

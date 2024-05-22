@@ -91,5 +91,10 @@
           <version>3.0.2</version>
           <scope>compile</scope>
       </dependency>
+      <dependency>  <!-- Needed because GSON isn't shipped in some Minecraft versions -->
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+          <version>2.11.0</version>
+      </dependency>
   </dependencies>
 </project>

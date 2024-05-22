@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.serble.estools.Tester;
+import net.serble.estools.Updater;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +22,8 @@ public class EsTools extends EsToolsCommand {
 			if (checkPerms(sender, "version")) {
 				return false;
 			}
-			send(sender, "&aEsTools v" + Main.plugin.getDescription().getVersion());
+
+			sendVersion(sender);
 			return true;
 		}
 		
@@ -82,13 +84,33 @@ public class EsTools extends EsToolsCommand {
 			tester = new Tester(p);
 			Tester.runningTests.put(p.getUniqueId(), tester);
 			tester.startTests();
-		} else if (args[0].equalsIgnoreCase("throw")) {
+		} else if (args[0].equalsIgnoreCase("throw")) {  // This isn't in tab complete because it's a dev command
 			if (checkPerms(sender, "throw")) {
 				return false;
 			}
 			throw new RuntimeException("Test exception");
+		} else if (args[0].equalsIgnoreCase("update")) {
+			if (checkPerms(sender, "update")) {
+				return false;
+			}
+
+			if (Main.newVersionReady) {
+				send(sender, "&cThe new version has already been downloaded and is waiting on a server restart/reload");
+				return false;
+			}
+
+			if (Main.newVersion == null) {
+				send(sender, "&cThere are no available updates, use &6/estools forceupdate &cto force a download of the latest version");
+				return false;
+			}
+
+			send(sender, "&aDownloading version: &6" + Main.newVersion.getString());
+			Updater.downloadNewUpdate(sender);
+		} else if (args[0].equalsIgnoreCase("forceupdate")) {
+			send(sender, "&aForce updating &c(This might downgrade your plugin)");
+			Updater.downloadNewUpdate(sender);
 		} else {
-			send(sender, "&aEsTools v" + Main.plugin.getDescription().getVersion());
+			sendVersion(sender);
 		}
 		
 		return true;
@@ -99,12 +121,26 @@ public class EsTools extends EsToolsCommand {
 		List<String> tab = new ArrayList<>();
 		
 		if (args.length == 1) {
-			tab.add("reload");
-			tab.add("version");
-			tab.add("reset");
-			tab.add("test");
+			if (checkPerms(sender, "reload")) tab.add("reload");
+			if (checkPerms(sender, "version")) tab.add("version");
+			if (checkPerms(sender, "reset")) tab.add("reset");
+			if (checkPerms(sender, "test")) tab.add("test");
+			if (checkPerms(sender, "update")) {
+				tab.add("update");
+				tab.add("forceupdate");
+			}
 		}
 		
 		return tab;
 	}
+
+	private void sendVersion(CommandSender sender) {
+		if (Main.newVersion == null) {
+			send(sender, "&aEsTools v" + Main.plugin.getDescription().getVersion());
+		} else {
+			send(sender, "&aEsTools &cv" + Main.plugin.getDescription().getVersion() + ".&c An update is available, use " +
+					"&6/estools update&c to update to &6v" + Main.newVersion.getString());
+		}
+	}
+
 }

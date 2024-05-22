@@ -14,9 +14,15 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.serble.estools.Commands.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 
 @SuppressWarnings("UnusedReturnValue")
 public class Main extends JavaPlugin {
@@ -24,6 +30,9 @@ public class Main extends JavaPlugin {
 	public static int majorVersion;
 	public static int minorVersion;
 	public static boolean tabCompleteEnabled = true;
+	private static FileConfiguration config;  // Get with overriden getConfig() method
+	public static PluginVersion newVersion = null;  // The version available to download
+	public static boolean newVersionReady = false;
 
 	private static final int bStatsId = 21760;
 	
@@ -39,8 +48,16 @@ public class Main extends JavaPlugin {
 
 		getVersion();  // Set the major and minor version variables
 
-		if (majorVersion > 0) {  // Config doesn't exist in 1.0 lol
-			saveDefaultConfig();
+		// Create config if not exists, saveDefaultConfig() doesn't exist in 1.0
+		File configFile = new File(plugin.getDataFolder(), "config.yml");
+		if (!configFile.exists()) {
+			saveResource("config.yml", false);
+		}
+		config = ConfigManager.load("config.yml");
+
+		// Add keys that don't exist from the default config
+		if (ConfigManager.patchDefaults(getConfig(), getResource("config.yml"))) {
+			ConfigManager.save("config.yml", getConfig());  // Only save if something changed
 		}
 
 		// Metrics
@@ -134,16 +151,8 @@ public class Main extends JavaPlugin {
 			SignMain.init();
 		}
 
-		if (Main.majorVersion < 7) {
-			Bukkit.getLogger().info("Saving configs not supported in 1.6 or below.");
-		}
-
 		Give.enable();
-
-		if (getConfig().getBoolean("updater.auto-update", false) ||
-				getConfig().getBoolean("updater.warn-on-outdated", false)) {
-			Updater.checkForUpdate();
-		}
+		Updater.checkForUpdate();
 	}
 
 	@Override
@@ -240,6 +249,49 @@ public class Main extends JavaPlugin {
 		}
 
 		Bukkit.getLogger().info("Version detected as: 1." + majorVersion + '.' + minorVersion + " from: " + versionS);
+	}
+
+	// Overriding to create more predictable behaviour between versions
+	@Override
+	public FileConfiguration getConfig() {
+		return config;
+	}
+
+	// Overriding because method doesn't exist in very early versions
+    public void saveResource(String res, boolean replace) {
+		InputStream resource = getResource(res);
+		File file = new File(getDataFolder(), res);
+
+		if (file.exists()) {
+			Bukkit.getLogger().info("Tried to copy resource but it already exists: " + res);
+			return;
+		}
+
+		try {
+			Files.createDirectories(file.getParentFile().toPath());
+            asrt(resource != null);
+            Files.copy(resource, file.toPath());
+			Bukkit.getLogger().info("Copied " + res + " to " + file.toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+			Bukkit.getLogger().severe("Failed to save resource: " + e);
+		}
+	}
+
+	public static void asrt(boolean condition) {
+		asrt(condition, "Condition is false");
+	}
+
+	// I'm sick of Java assertions not failing by default, so I made my own.
+	public static void asrt(boolean condition, String msg) {
+		assert condition : msg;
+
+		if (condition) {
+            return;
+		}
+
+		Bukkit.getLogger().severe("Assertion failed: " + msg);
+		throw new AssertionError(msg);
 	}
 }
 
