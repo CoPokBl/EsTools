@@ -44,14 +44,14 @@ public class Updater {
                     .get("browser_download_url")
                     .getAsString();
 
-            PluginVersion onlineVersion = new PluginVersion(response.get("tag_name").getAsString());
+            SemanticVersion onlineVersion = new SemanticVersion(response.get("tag_name").getAsString());
             String cVersion = Main.plugin.getDescription().getVersion();
 
             if (cVersion.contains("-")) {
                 cVersion = cVersion.substring(0, cVersion.indexOf("-"));
             }
 
-            PluginVersion currentVersion = new PluginVersion(cVersion);
+            SemanticVersion currentVersion = new SemanticVersion(cVersion);
 
             // Provide download URL just in case we force update
             waitingDownloadUrl = downloadUrl;

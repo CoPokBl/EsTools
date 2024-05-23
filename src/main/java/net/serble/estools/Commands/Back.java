@@ -3,12 +3,12 @@ package net.serble.estools.Commands;
 import java.util.HashMap;
 import java.util.UUID;
 
+import net.serble.estools.EsLocation;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityEvent;
@@ -18,20 +18,20 @@ import net.serble.estools.EsToolsCommand;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class Back extends EsToolsCommand implements Listener {
-	private static final HashMap<UUID, Location> prevLocations = new HashMap<>();
+	private static final HashMap<UUID, EsLocation> prevLocations = new HashMap<>();
 
 	@Override
 	public void onEnable() {
-		Bukkit.getServer().getPluginManager().registerEvents(this, Main.plugin);
+		Bukkit.getServer().getPluginManager().registerEvents(this, Main.bukkitPlugin);
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (isNotPlayer(sender)) {
             return false;
         }
 		
-		Player p = (Player) sender;
+		EsPlayer p = (EsPlayer) sender;
 		if (prevLocations.containsKey(p.getUniqueId())) {
 			p.teleport(prevLocations.get(p.getUniqueId()));
 			send(sender, "&aTeleported to last location!");
@@ -44,13 +44,13 @@ public class Back extends EsToolsCommand implements Listener {
 
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
-		if (Main.majorVersion > 1) {
-			prevLocations.put(e.getEntity().getUniqueId(), e.getEntity().getLocation());
+		if (Main.minecraftVersion.getMinor() > 1) {
+			prevLocations.put(e.getEntity().getUniqueId(), BukkitHelper.fromBukkitLocation(e.getEntity().getLocation()));
 			return;
 		}
 
 		try {
-			Player p = (Player)EntityEvent.class.getMethod("getEntity").invoke(e);
+			EsPlayer p = (EsPlayer)EntityEvent.class.getMethod("getEntity").invoke(e);
 			prevLocations.put(p.getUniqueId(), p.getLocation());
 		} catch (Exception ex) {
 			Bukkit.getLogger().severe(ex.toString());
@@ -60,7 +60,7 @@ public class Back extends EsToolsCommand implements Listener {
 	@EventHandler
 	public void onTeleport(PlayerTeleportEvent e) {
 		if (equalsOr(e.getCause(), PlayerTeleportEvent.TeleportCause.COMMAND, PlayerTeleportEvent.TeleportCause.PLUGIN)) {
-			prevLocations.put(e.getPlayer().getUniqueId(), e.getPlayer().getLocation());
+			prevLocations.put(e.getPlayer().getUniqueId(), BukkitHelper.fromBukkitLocation(e.getPlayer().getLocation()));
 		}
 	}
 }

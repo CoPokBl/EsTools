@@ -1,17 +1,24 @@
 package net.serble.estools;
 
-public class PluginVersion {
+public class SemanticVersion {
     private final int major;
     private final int minor;
     private final int patch;
     private final String string;
 
-    public PluginVersion(String str) {
+    public SemanticVersion(String str) {
         String[] parts = str.split("\\.");
         major = Integer.parseInt(parts[0]);
         minor = Integer.parseInt(parts[1]);
         patch = Integer.parseInt(parts[2]);
         string = str;
+    }
+
+    public SemanticVersion(int major, int minor, int patch) {
+        this.major = major;
+        this.minor = minor;
+        this.patch = patch;
+        string = major + "." + minor + "." + patch;
     }
 
     public int getMajor() {
@@ -30,7 +37,7 @@ public class PluginVersion {
         return string;
     }
 
-    public boolean isLowerThan(PluginVersion other) {
+    public boolean isLowerThan(SemanticVersion other) {
         if (getMajor() < other.getMajor()) {
             return true;
         } else if (getMajor() > other.getMajor()) {

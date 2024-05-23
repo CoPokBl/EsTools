@@ -2,13 +2,12 @@ package net.serble.estools.Commands.Warps;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ConfigManager;
-import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import net.serble.estools.EsLocation;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,7 +63,7 @@ public class WarpManager extends EsToolsCommand {
         ConfigManager.save("warps.yml", f);
     }
 
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean execute(EsCommandSender sender, String[] args) {
         if (args.length == 0) {
             if (isNotPlayer(sender, consoleUsage)) {
                 return false;
@@ -142,7 +141,7 @@ public class WarpManager extends EsToolsCommand {
                     return false;
                 }
 
-                if (createWarp((Player)sender, warpName, args, global)) {
+                if (createWarp((EsPlayer)sender, warpName, args, global)) {
                     return false;
                 }
 
@@ -156,7 +155,7 @@ public class WarpManager extends EsToolsCommand {
                     return false;
                 }
 
-                if (createWarp((Player)sender, warpName, args, global)) {
+                if (createWarp((EsPlayer)sender, warpName, args, global)) {
                     return false;
                 }
 
@@ -172,10 +171,10 @@ public class WarpManager extends EsToolsCommand {
     }
 
     // returns true if failed
-    private static boolean createWarp(Player p, String warpName, String[] args, boolean global) {
+    private static boolean createWarp(EsPlayer p, String warpName, String[] args, boolean global) {
         // /warps <add/set> <warp> [LOCAL/global] [x] [y] [z] [yaw] [pitch]
 
-        Location loc;
+        EsLocation loc;
         if (args.length <= 3) {
             loc = p.getLocation();
         }
@@ -184,7 +183,7 @@ public class WarpManager extends EsToolsCommand {
             return true;
         }
         else {
-            loc = new Location(p.getWorld(),
+            loc = new EsLocation(p.getWorld(),
                 parseCoordinate(args[3], p.getLocation().getX()),
                 parseCoordinate(args[4], p.getLocation().getY()),
                 parseCoordinate(args[5], p.getLocation().getZ())
@@ -221,7 +220,7 @@ public class WarpManager extends EsToolsCommand {
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+    public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
         List<String> tab = new ArrayList<>();
         // /warps <add/set> <warp> [LOCAL/global] [x] [y] [z] [yaw] [pitch]
         // /warps remove <warp>

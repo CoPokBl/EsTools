@@ -1,13 +1,13 @@
 package net.serble.estools.Commands.Give;
 
 import net.serble.estools.*;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.inventory.ItemStack;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -15,21 +15,21 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class Give implements EsToolsTabCompleter {
-	private static HashMap<String, Material> materialNames;
+	private static HashMap<String, String> materialNames;
 
-    public static ItemStack getItem(String name, int amount) {
+    public static EsItemStack getItem(String name, int amount) {
 		name = name.toUpperCase();
-		Material mat = materialNames.get(name);
+		String mat = materialNames.get(name);
 		
 		if (mat == null) {
 			return null;
 		}
 		
-		return new ItemStack(mat, amount);
+		return Main.server.createItemStack(mat, amount);
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+	public List<String> onTabComplete(EsCommandSender sender, Command command, String alias, String[] args) {
 		List<String> tab = new ArrayList<>();
 		
 		if (args.length == 1) {
@@ -49,7 +49,7 @@ public class Give implements EsToolsTabCompleter {
     public static void enable() {
 		// initialise hashmaps
         //noinspection Convert2Diamond
-        materialNames = new HashMap<String, Material>();
+        materialNames = new HashMap<String, String>();
 
 		// Load config
 		FileConfiguration f = ConfigManager.load("give.yml");
@@ -69,7 +69,7 @@ public class Give implements EsToolsTabCompleter {
 
 			try {
 				copyDefaultGiveYML();
-				f = ConfigManager.load(new File(Main.plugin.getDataFolder(), "give.yml"));
+				f = ConfigManager.load(new File(Main.bukkitPlugin.getDataFolder(), "give.yml"));
 				materials = loadItems(f);
 			} catch (Exception ignored) { }
 		}
@@ -79,19 +79,19 @@ public class Give implements EsToolsTabCompleter {
         boolean removeWithUnderscores = (boolean) f.get("settings.removeWithUnderscores");
 
 		for (Material mat : Material.values()) {
-			if (Main.majorVersion >= 12 && !mat.isItem()) continue;
+			if (Main.minecraftVersion.getMinor() >= 12 && !mat.isItem()) continue;
 
 			String name = mat.toString().toUpperCase();
 
 			if (name.contains("_") && addWithoutUnderscores) {
-				materialNames.put(name.replace("_",""), mat);
+				materialNames.put(name.replace("_",""), mat.name());
 
 				if (removeWithUnderscores) {
 					continue;
 				}
 			}
 
-			materialNames.put(name, mat);
+			materialNames.put(name, mat.name());
 		}
 
 		// Load custom items
@@ -99,7 +99,7 @@ public class Give implements EsToolsTabCompleter {
 			Material mat = Material.getMaterial(s.getValue().toUpperCase());
 
 			if (mat != null) {
-				materialNames.put(s.getKey().toUpperCase(), mat);
+				materialNames.put(s.getKey().toUpperCase(), mat.name());
 			}
 		}
 	}
@@ -134,7 +134,7 @@ public class Give implements EsToolsTabCompleter {
         //noinspection ResultOfMethodCallIgnored
         inputStream.read(buffer);
 		
-		File targetFile = new File(Main.plugin.getDataFolder(), "give.yml");
+		File targetFile = new File(Main.bukkitPlugin.getDataFolder(), "give.yml");
 	    OutputStream outStream = Files.newOutputStream(targetFile.toPath());
 	    outStream.write(buffer);
 	    
@@ -142,7 +142,7 @@ public class Give implements EsToolsTabCompleter {
 	    outStream.close();  
     }
 
-	public static ItemStack parseArgs(String[] args) {
+	public static EsItemStack parseArgs(String[] args) {
 		if (args.length == 0) {
 			throw new IllegalArgumentException();
 		}

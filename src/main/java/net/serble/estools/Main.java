@@ -8,6 +8,8 @@ import net.serble.estools.Commands.MoveSpeed.WalkSpeed;
 import net.serble.estools.Commands.PowerPick.*;
 import net.serble.estools.Commands.Teleport.*;
 import net.serble.estools.Commands.Warps.*;
+import net.serble.estools.ServerApi.Interfaces.EsServerSoftware;
+import net.serble.estools.ServerApi.ServerPlatform;
 import net.serble.estools.Signs.SignMain;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
@@ -15,9 +17,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import net.serble.estools.Commands.*;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,51 +27,59 @@ import java.io.InputStream;
 import java.nio.file.Files;
 
 @SuppressWarnings("UnusedReturnValue")
-public class Main extends JavaPlugin {
+public class Main {
 	public static Main plugin;
-	public static int majorVersion;
-	public static int minorVersion;
+	public static ServerPlatform platform;
+	public static SemanticVersion minecraftVersion;
 	public static boolean tabCompleteEnabled = true;
 	private static FileConfiguration config;  // Get with overriden getConfig() method
-	public static PluginVersion newVersion = null;  // The version available to download
+	public static SemanticVersion newVersion = null;  // The version available to download
 	public static boolean newVersionReady = false;
+	public static EsServerSoftware server;
+	public static JavaPlugin bukkitPlugin;
 
 	private static final int bStatsId = 21760;
-	
-	@Override
-	public void onEnable() {
-		plugin = this;
 
-		try {
-			Vault.setupEconomy();
-		} catch (Exception e) {
-			Bukkit.getLogger().warning("No Vault plugin found, please install vault for economy functionality.");
+	public Main(ServerPlatform plat) {
+		platform = plat;
+	}
+
+	public void enable() {
+		plugin = this;
+		server = platform.getServerInstance();
+
+		minecraftVersion = server.getVersion();
+
+		if (platform == ServerPlatform.Bukkit) {
+			try {
+				Vault.setupEconomy();
+			} catch (Exception e) {
+				Bukkit.getLogger().warning("No Vault plugin found, please install vault for economy functionality.");
+			}
 		}
 
-		getVersion();  // Set the major and minor version variables
-
 		// Create config if not exists, saveDefaultConfig() doesn't exist in 1.0
-		File configFile = new File(plugin.getDataFolder(), "config.yml");
+		File configFile = new File(bukkitPlugin.getDataFolder(), "config.yml");
 		if (!configFile.exists()) {
 			saveResource("config.yml", false);
 		}
 		config = ConfigManager.load("config.yml");
 
 		// Add keys that don't exist from the default config
-		if (ConfigManager.patchDefaults(getConfig(), getResource("config.yml"))) {
+		if (ConfigManager.patchDefaults(getConfig(), bukkitPlugin.getResource("config.yml"))) {
 			ConfigManager.save("config.yml", getConfig());  // Only save if something changed
 		}
 
 		// Metrics
 		if (getConfig().getBoolean("metrics", true)) {
-			Metrics metrics = new Metrics(this, bStatsId);
+			Metrics metrics = new Metrics(bukkitPlugin, bStatsId);
 			metrics.addCustomChart(new SimplePie("vault_enabled", () -> String.valueOf(Vault.economy != null)));
 			Bukkit.getLogger().info("Started bStat metrics");
 		} else {
 			Bukkit.getLogger().info("Metrics are disabled");
 		}
 
-		if (majorVersion <= 2) {
+		if (minecraftVersion.getMinor() <= 2) {
 			Bukkit.getLogger().info("Tab completion is not supported for versions 1.2 and below.");
 			tabCompleteEnabled = false;
 		}
@@ -146,7 +156,7 @@ public class Main extends JavaPlugin {
 		sc("dismount", "mount", new Dismount());
 
 		// Load other features
-		if (majorVersion > 0) {  // Enchants and events don't work on 1.0.0
+		if (minecraftVersion.getMinor() > 0) {  // Enchants and events don't work on 1.0.0
 			PowerTool.init();
 			SignMain.init();
 		}
@@ -155,14 +165,10 @@ public class Main extends JavaPlugin {
 		Updater.checkForUpdate();
 	}
 
-	@Override
-	public void onDisable() { /* Needed for older versions, which require an onDisable method */ }
-
-
 	// Setup Command Overloads
 
 	public PluginCommand sc(String name, EsToolsCommand ce) {
-		PluginCommand cmd = getCommand(name);
+		PluginCommand cmd = bukkitPlugin.getCommand(name);
         assert cmd != null;
         cmd.setExecutor(ce);
 		ce.onEnable();
@@ -174,7 +180,7 @@ public class Main extends JavaPlugin {
 	}
 
 	public PluginCommand sc(String name, EsToolsCommand ce, int minVer) {
-		if (Main.majorVersion >= minVer) return sc(name, ce);
+		if (minecraftVersion.getMinor() >= minVer) return sc(name, ce);
 		else return sc(name, new WrongVersion(minVer));
 	}
 	
@@ -188,7 +194,7 @@ public class Main extends JavaPlugin {
 
 	public PluginCommand sc(String name, String perm, EsToolsCommand ce, EsToolsTabCompleter tc, int minMajor, int minMinor) {
 		String versionName = minMajor + "." + minMinor;
-		if (Main.majorVersion > minMajor || (Main.majorVersion == minMajor && Main.minorVersion >= minMinor)) {
+		if (minecraftVersion.getMinor() > minMajor || (minecraftVersion.getMinor() == minMajor && minecraftVersion.getPatch() >= minMinor)) {
 			if (tc == null) {
 				return sc(name, perm, ce);
 			}
@@ -201,7 +207,7 @@ public class Main extends JavaPlugin {
 		PluginCommand cmd = sc(name, ce);
 		cmd.setPermission("estools." + perm);
 
-		if (Main.majorVersion > 0) {  // Permission errors weren't a thing in 1.0
+		if (minecraftVersion.getMinor() > 0) {  // Permission errors weren't a thing in 1.0
             //noinspection deprecation, is still useful in pre 1.13 and technically is useful in rare situations post 1.13
             cmd.setPermissionMessage(EsToolsCommand.translate("&cYou do not have permission to run this command."));
 		}
@@ -213,7 +219,7 @@ public class Main extends JavaPlugin {
 	}
 
 	public PluginCommand sc(String name, String perm, EsToolsCommand ce, int minVer) {
-		if (Main.majorVersion >= minVer) return sc(name, perm, ce);
+		if (minecraftVersion.getMinor() >= minVer) return sc(name, perm, ce);
 		else return sc(name, perm, new WrongVersion(minVer));
 	}
 	
@@ -225,42 +231,15 @@ public class Main extends JavaPlugin {
 		return cmd;
 	}
 
-	private void getVersion() {  // Parse the minecraft version from the Bukkit version string
-		String versionS = Bukkit.getVersion();
-
-		if (versionS.contains("(MC: ")) {
-			int posOfMC = versionS.indexOf("(MC: ") + 5;
-			versionS = versionS.substring(posOfMC, versionS.indexOf(')', posOfMC));
-		} else {
-			Bukkit.getLogger().warning("Could not detect version from: " + versionS);
-			return;
-		}
-
-		for (int i = 0; i < 99; i++) {
-			if (versionS.contains("1." + i)) {
-				majorVersion = i;
-			}
-		}
-
-		for (int i = 0; i < 99; i++) {
-			if (versionS.contains("1." + majorVersion + '.' + i)) {
-				minorVersion = i;
-			}
-		}
-
-		Bukkit.getLogger().info("Version detected as: 1." + majorVersion + '.' + minorVersion + " from: " + versionS);
-	}
-
 	// Overriding to create more predictable behaviour between versions
-	@Override
 	public FileConfiguration getConfig() {
 		return config;
 	}
 
 	// Overriding because method doesn't exist in very early versions
     public void saveResource(String res, boolean replace) {
-		InputStream resource = getResource(res);
-		File file = new File(getDataFolder(), res);
+		InputStream resource = bukkitPlugin.getResource(res);
+		File file = new File(bukkitPlugin.getDataFolder(), res);
 
 		if (file.exists()) {
 			Bukkit.getLogger().info("Tried to copy resource but it already exists: " + res);

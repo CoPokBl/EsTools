@@ -2,11 +2,10 @@ package net.serble.estools.Commands.PowerPick;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
-import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 public class PowerTool {
     public static void init() {
@@ -17,25 +16,24 @@ public class PowerTool {
         PowerSword.init();
     }
 
-    public static void setupItem(ItemStack item, Enchantment enchantment) {
-        item.addUnsafeEnchantment(enchantment, 32767);
+    public static void setupItem(EsItemStack item, String enchantment) {
+        item.addEnchantment(enchantment, 32767);
 
-        if (Main.majorVersion > 10) {
-            ItemMeta im = item.getItemMeta();
-            assert im != null;
+        if (Main.minecraftVersion.getMinor() > 10) {
+            EsItemMeta im = item.getItemMeta();
             im.setUnbreakable(true);
             item.setItemMeta(im);
         } else {
-            item.addUnsafeEnchantment(Enchantment.DURABILITY, 32767);
+            item.addEnchantment("DURABILITY", 32767);
         }
     }
 
-    public static void cmd(CommandSender sender, ItemStack pp) {
+    public static void cmd(EsCommandSender sender, EsItemStack pp) {
         if (EsToolsCommand.isNotPlayer(sender)) {
             return;
         }
 
-        Player p = (Player)sender;
+        EsPlayer p = (EsPlayer) sender;
 
         p.getInventory().addItem(pp);
         EsToolsCommand.send(sender, "&aThere you go!");

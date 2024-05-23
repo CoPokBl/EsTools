@@ -1,22 +1,21 @@
 package net.serble.estools.Commands.Give;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 
 import net.serble.estools.EsToolsCommand;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 public class GiveItem extends EsToolsCommand {
 	private static final String usage = genUsage("/i <item> [amount]");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (isNotPlayer(sender)) {
 			return false;
 		}
 
-		ItemStack item;
+		EsItemStack item;
 		try {
 			item = Give.parseArgs(args);
 		} catch (IllegalArgumentException e) {
@@ -24,11 +23,11 @@ public class GiveItem extends EsToolsCommand {
 			return false;
 		}
 
-		Player p = (Player) sender;
+		EsPlayer p = (EsPlayer) sender;
 		
 		if (item != null) {
             p.getInventory().addItem(item);
-			send(sender, "&aGave &6%s", item.getType().name());
+			send(sender, "&aGave &6%s", item.getType());
         } else {
             send(sender, "&cItem &6%s&c not found", args[0]);
         }

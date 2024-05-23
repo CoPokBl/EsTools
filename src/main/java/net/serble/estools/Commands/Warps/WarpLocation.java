@@ -1,6 +1,6 @@
 package net.serble.estools.Commands.Warps;
 
-import org.bukkit.Location;
+import net.serble.estools.EsLocation;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 @SerializableAs("WarpLocation")
 public class WarpLocation implements ConfigurationSerializable {
-    public Location location;
+    public EsLocation location;
     public String name;
     public boolean global;
 
@@ -28,7 +28,7 @@ public class WarpLocation implements ConfigurationSerializable {
     public static WarpLocation deserialize(Map<String, Object> args) {
         WarpLocation warp = new WarpLocation();
 
-        warp.location = (Location)args.get("location");
+        warp.location = (EsLocation)args.get("location");
         warp.name = (String)args.get("name");
         warp.global = (boolean)args.get("global");
 

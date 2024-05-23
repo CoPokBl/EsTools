@@ -3,47 +3,49 @@ package net.serble.estools.Commands;
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ConfigManager;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsGameMode;
+import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPlayer;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsInventory;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+// TODO: This class has config and events
 public class CChest extends EsToolsCommand implements Listener {
 
-	public static HashMap<UUID, Inventory> cChests = new HashMap<>();
+	public static HashMap<UUID, EsInventory> cChests = new HashMap<>();
 
 	@Override
 	public void onEnable() {
-		if (Main.majorVersion > 4) {
-			Bukkit.getServer().getPluginManager().registerEvents(this, Main.plugin);
+		if (Main.minecraftVersion.getMinor() > 4) {
+			Bukkit.getServer().getPluginManager().registerEvents(this, Main.bukkitPlugin);
 		}
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (isNotPlayer(sender)) {
             return false;
         }
 
-		if (Main.majorVersion < 7) {
+		if (Main.minecraftVersion.getMinor() < 7) {
 			send(sender, "&cWarning: CChest doesn't work to full capacity");
 		}
 
-		Player p = (Player)sender;
+		EsPlayer p = (EsPlayer) sender;
 		
-		if (p.getGameMode().equals(GameMode.CREATIVE)) {
+		if (p.getGameMode().equals(EsGameMode.Creative)) {
 			if (checkPerms(sender, "cchest.creative")) {
                 return false;
             }
@@ -54,14 +56,14 @@ public class CChest extends EsToolsCommand implements Listener {
 		}
 
 		UUID uid = p.getUniqueId();
-		Inventory inv = cChests.get(uid);
+		EsInventory inv = cChests.get(uid);
 		
 		if (inv == null) {
-			Inventory loaded = loadPlayer(p);
+			EsInventory loaded = loadPlayer(p);
 			if (loaded != null) {
 				inv = loaded;
 			} else {
-				inv = Bukkit.createInventory(null, 54, translate("&1Creative Chest"));
+				inv = Main.server.createInventory(null, 54, translate("&1Creative Chest"));
 			}
 		}
 		
@@ -90,7 +92,7 @@ public class CChest extends EsToolsCommand implements Listener {
 				return;
 			}
 
-			Inventory pInv = e.getWhoClicked().getInventory();
+			org.bukkit.inventory.Inventory pInv = e.getWhoClicked().getInventory();
             for (Map.Entry<Integer, ? extends ItemStack> i : pInv.all(cursor.getType()).entrySet()) {
 				ItemStack item = i.getValue();
 
@@ -113,7 +115,7 @@ public class CChest extends EsToolsCommand implements Listener {
         }
 
 		// If player inventory
-        if (!e.getClickedInventory().equals(cChests.get(uid))) {
+        if (!e.getClickedInventory().equals(cChests.get(uid))) {  // TODO: This comparison doesn't work
 			// Shift click into cChest
 			if (equalsOr(e.getClick(), ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT) && currentItem != null) {
 				e.setCancelled(true);
@@ -157,14 +159,14 @@ public class CChest extends EsToolsCommand implements Listener {
 		}
     }
 
-	private static void setItemTask(Inventory inv, int slot, ItemStack item) {
-		Bukkit.getScheduler().runTask(Main.plugin, () -> inv.setItem(slot, item));
+	private static void setItemTask(org.bukkit.inventory.Inventory inv, int slot, ItemStack item) {
+		Bukkit.getScheduler().runTask(Main.bukkitPlugin, () -> inv.setItem(slot, item));
 	}
 	
 	// Cancel drag if inside cChest
 	@EventHandler
     public void onInventoryDrag(final InventoryDragEvent e) {
-		Inventory inv = cChests.get(e.getWhoClicked().getUniqueId());
+		EsInventory inv = cChests.get(e.getWhoClicked().getUniqueId());
         if (!e.getInventory().equals(inv)) {
             return;
         }
@@ -178,7 +180,7 @@ public class CChest extends EsToolsCommand implements Listener {
         }
     }
 	
-	public static Inventory loadPlayer(Player p) {
+	public static EsInventory loadPlayer(EsPlayer p) {
 		UUID uid = p.getUniqueId();
 		
 		FileConfiguration f = ConfigManager.load("cchests/" + uid + ".yml");
@@ -188,16 +190,16 @@ public class CChest extends EsToolsCommand implements Listener {
         }
 
         @SuppressWarnings("unchecked")
-        ItemStack[] content = ((ArrayList<ItemStack>) Objects.requireNonNull(f.get("items"))).toArray(new ItemStack[0]);
+        EsItemStack[] content = ((ArrayList<EsItemStack>) Objects.requireNonNull(f.get("items"))).toArray(new EsItemStack[0]);
 
-        Inventory inv = Bukkit.createInventory(null, 54, translate("&1Creative Chest"));
+        EsInventory inv = Main.server.createInventory(null, 54, translate("&1Creative Chest"));
         inv.setContents(content);
         cChests.put(uid, inv);
 
         return inv;
     }
 	
-	public static void savePlayer(Player p) {
+	public static void savePlayer(EsPlayer p) {
 		UUID uid = p.getUniqueId();
 		
 		if (!cChests.containsKey(uid)) {
@@ -214,19 +216,19 @@ public class CChest extends EsToolsCommand implements Listener {
 		UUID uid = e.getPlayer().getUniqueId();
 
 		if (e.getInventory().equals(cChests.get(uid))) {
-			savePlayer((Player)e.getPlayer());
+			savePlayer((EsPlayer)e.getPlayer());
 		}
 	}
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
-		savePlayer(e.getPlayer());
+		savePlayer(new BukkitPlayer(e.getPlayer()));
 		cChests.remove(e.getPlayer().getUniqueId());
 	}
 	
 	@EventHandler
 	public void onKick(PlayerKickEvent e) {
-		savePlayer(e.getPlayer());
+		savePlayer(new BukkitPlayer(e.getPlayer()));
 		cChests.remove(e.getPlayer().getUniqueId());
 	}
 }

@@ -1,0 +1,104 @@
+package net.serble.estools.ServerApi.Implementations.Bukkit;
+
+import net.serble.estools.Main;
+import net.serble.estools.SemanticVersion;
+import net.serble.estools.ServerApi.Interfaces.*;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.inventory.InventoryHolder;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
+public class BukkitServer implements EsServerSoftware {
+    @Override
+    public EsPlayer getPlayer(String name) {
+        return new BukkitPlayer(Bukkit.getPlayer(name));
+    }
+
+    @Override
+    public EsEntity getEntity(UUID uuid) {
+        if (Main.minecraftVersion.getMinor() > 11) {
+            return new BukkitEntity(Bukkit.getEntity(uuid));
+        }
+
+        for (World world : Bukkit.getWorlds()) {
+            for (Entity entity : world.getEntities()) {
+                if (entity.getUniqueId() == uuid) {
+                    return new BukkitEntity(entity);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public SemanticVersion getVersion() {  // Parse the minecraft version from the Bukkit version string
+        String versionS = Bukkit.getVersion();
+        int minor = 0;
+        int patch = 0;
+
+        if (versionS.contains("(MC: ")) {
+            int posOfMC = versionS.indexOf("(MC: ") + 5;
+            versionS = versionS.substring(posOfMC, versionS.indexOf(')', posOfMC));
+        } else {
+            Bukkit.getLogger().warning("Could not detect version from: " + versionS);
+            throw new RuntimeException("Could not detect version");
+        }
+
+        for (int i = 0; i < 99; i++) {
+            if (versionS.contains("1." + i)) {
+                minor = i;
+            }
+        }
+
+        for (int i = 0; i < 99; i++) {
+            if (versionS.contains("1." + minor + '.' + i)) {
+                patch = i;
+            }
+        }
+
+        Bukkit.getLogger().info("Version detected as: 1." + minor + '.' + patch + " from: " + versionS);
+        return new SemanticVersion(1, minor, patch);
+    }
+
+    @Override
+    public Collection<? extends EsPlayer> getOnlinePlayers() {
+        try {
+            if (Bukkit.class.getMethod("getOnlinePlayers").getReturnType() == Collection.class) {
+                List<EsPlayer> players = new ArrayList<>();
+                for (org.bukkit.entity.Player p : Bukkit.getOnlinePlayers()) {
+                    players.add(new BukkitPlayer(p));
+                }
+                return players;
+            }
+            else {
+                org.bukkit.entity.Player[] players = (org.bukkit.entity.Player[]) Bukkit.class.getMethod("getOnlinePlayers").invoke(null, new Object[0]);
+                List<EsPlayer> users = new ArrayList<>();
+                for (org.bukkit.entity.Player p : players) {
+                    users.add(new BukkitPlayer(p));
+                }
+                return users;
+            }
+
+        } catch (Exception e) {
+            Bukkit.getLogger().severe(e.toString());
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public EsItemStack createItemStack(String material, int amount) {
+        return new BukkitItemStack(material, amount);
+    }
+
+    @Override
+    public EsInventory createInventory(EsPlayer owner, int size, String title) {
+        InventoryHolder holder = owner == null ? null : ((BukkitPlayer) owner).getBukkitPlayer();
+        return new BukkitInventory(Bukkit.createInventory(holder, size, title));
+    }
+}

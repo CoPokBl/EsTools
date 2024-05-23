@@ -1,8 +1,7 @@
 package net.serble.estools;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +9,10 @@ import java.util.List;
 public abstract class MultiPlayerCommand extends EsToolsCommand {
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+    public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
         List<String> tab = new ArrayList<>();
 
-        for (Player p : getOnlinePlayers()) {
+        for (EsPlayer p : Main.server.getOnlinePlayers()) {
             tab.add(p.getName());
         }
 
@@ -22,19 +21,19 @@ public abstract class MultiPlayerCommand extends EsToolsCommand {
         return tab;
     }
 
-    public static ArrayList<Player> getPlayers(CommandSender sender, String[] names) {
+    public static ArrayList<EsPlayer> getPlayers(EsCommandSender sender, String[] names) {
         if (names.length == 0) {
             return new ArrayList<>();
         }
 
         if (names[0].equals("*")) {
-            return new ArrayList<>(getOnlinePlayers());
+            return new ArrayList<>(Main.server.getOnlinePlayers());
         }
 
-        ArrayList<Player> players = new ArrayList<>();
+        ArrayList<EsPlayer> players = new ArrayList<>();
 
         for (String name : names) {
-            Player p = Bukkit.getPlayer(name);
+            EsPlayer p = Main.server.getPlayer(name);
 
             if (p == null) {
                 send(sender, "&cPlayer &6%s&c not found.", name);
@@ -46,14 +45,14 @@ public abstract class MultiPlayerCommand extends EsToolsCommand {
         return players;
     }
 
-    public static ArrayList<Player> getPlayers(CommandSender sender, String name) {
+    public static ArrayList<EsPlayer> getPlayers(EsCommandSender sender, String name) {
         if (name.equals("*")) {
-            return new ArrayList<>(getOnlinePlayers());
+            return new ArrayList<>(Main.server.getOnlinePlayers());
         }
 
-        ArrayList<Player> players = new ArrayList<>();
+        ArrayList<EsPlayer> players = new ArrayList<>();
 
-        Player p = Bukkit.getPlayer(name);
+        EsPlayer p = Main.server.getPlayer(name);
 
         if (p == null) {
             send(sender, "&cPlayer &6%s&c not found.", name);

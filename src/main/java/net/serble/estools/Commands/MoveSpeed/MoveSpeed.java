@@ -1,9 +1,9 @@
 package net.serble.estools.Commands.MoveSpeed;
 
 import net.serble.estools.MultiPlayerCommand;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import net.serble.estools.Tuple;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,20 +11,20 @@ import java.util.List;
 public abstract class MoveSpeed extends MultiPlayerCommand {
     protected abstract String getUsage();
 
-    public Tuple<List<Player>, Float> getTargets(CommandSender sender, String[] args) {
+    public Tuple<List<EsPlayer>, Float> getTargets(EsCommandSender sender, String[] args) {
         if (args.length == 0) {
             send(sender, getUsage());
             return null;
         }
 
-        ArrayList<Player> players = new ArrayList<>();
+        ArrayList<EsPlayer> players = new ArrayList<>();
 
         if (args.length == 1) {
             if (isNotPlayer(sender, getUsage())) {
                 return null;
             }
 
-            players.add((Player)sender);
+            players.add((EsPlayer)sender);
         } else {
             players = getPlayers(sender, removeArgs(args, 1));
 
@@ -51,7 +51,7 @@ public abstract class MoveSpeed extends MultiPlayerCommand {
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+    public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
         List<String> tab = new ArrayList<>();
 
         if (args.length == 1) {
