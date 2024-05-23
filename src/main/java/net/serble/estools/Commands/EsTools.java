@@ -121,11 +121,11 @@ public class EsTools extends EsToolsCommand {
 		List<String> tab = new ArrayList<>();
 		
 		if (args.length == 1) {
-			if (checkPerms(sender, "reload")) tab.add("reload");
-			if (checkPerms(sender, "version")) tab.add("version");
-			if (checkPerms(sender, "reset")) tab.add("reset");
-			if (checkPerms(sender, "test")) tab.add("test");
-			if (checkPerms(sender, "update")) {
+			if (hasPerm(sender, "reload")) tab.add("reload");
+			if (hasPerm(sender, "version")) tab.add("version");
+			if (hasPerm(sender, "reset")) tab.add("reset");
+			if (hasPerm(sender, "test")) tab.add("test");
+			if (hasPerm(sender, "update")) {
 				tab.add("update");
 				tab.add("forceupdate");
 			}

@@ -98,6 +98,11 @@ public abstract class EsToolsCommand implements CommandExecutor, EsToolsTabCompl
 			return defaultValue;
 		}
 	}
+
+	// This is different from checkPerms because it doesn't display any messages
+	public static boolean hasPerm(CommandSender sender, String perm) {
+		return sender.hasPermission("estools." + perm);
+	}
 	
 	public static boolean checkPerms(CommandSender sender, String perm) {
 		if (!sender.hasPermission("estools." + perm)) {
