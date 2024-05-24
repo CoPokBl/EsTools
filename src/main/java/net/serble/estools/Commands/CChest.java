@@ -14,6 +14,7 @@ import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
@@ -168,6 +169,12 @@ public class CChest extends EsToolsCommand implements Listener {
 
 	// TODO: Remove reliance on Bukkit
 	private static boolean isSameInv(Inventory a, EsInventory b) {
+		if (a == null && b == null) {
+			return true;
+		}
+		if (a == null || b == null) {
+			return false;
+		}
 		return a.equals(((BukkitInventory) b).getBukkitInventory());
 	}
 	
@@ -224,7 +231,7 @@ public class CChest extends EsToolsCommand implements Listener {
 		UUID uid = e.getPlayer().getUniqueId();
 
 		if (isSameInv(e.getInventory(), cChests.get(uid))) {
-			savePlayer((EsPlayer)e.getPlayer());
+			savePlayer(new BukkitPlayer((Player) e.getPlayer()));
 		}
 	}
 

@@ -22,4 +22,5 @@ public interface EsPlayer extends EsLivingEntity {
     void setAllowFlight(boolean val);
     boolean isFlying();
     void playSound(String sound, EsLocation loc, int volume, int pitch);
+    void updateInventory();
 }

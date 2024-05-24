@@ -115,6 +115,12 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
         bukkitPlayer.playSound(BukkitHelper.toBukkitLocation(loc), Sound.valueOf(sound), volume, pitch);
     }
 
+    @SuppressWarnings("UnstableApiUsage")  // Yes I know it's a bug
+    @Override
+    public void updateInventory() {
+        bukkitPlayer.updateInventory();
+    }
+
     private Block bukkitGetTargetBlock() {
         if (Main.minecraftVersion.getMinor() > 12) {
             return bukkitPlayer.getTargetBlockExact(5);

@@ -1,9 +1,7 @@
 package net.serble.estools;
 
 import net.serble.estools.Commands.SafeTp;
-import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
-import org.bukkit.Bukkit;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -159,7 +157,7 @@ public class Tester {
             String stackTrace = sw.toString();
 
             EsToolsCommand.send(player, "&c" + stackTrace);
-            Bukkit.getLogger().severe(stackTrace);
+            Main.logger.severe(stackTrace);
             return;
         }
 
@@ -178,7 +176,7 @@ public class Tester {
         }
 
         @SuppressWarnings("WrapperTypeMayBePrimitive") Double timeInTicks = (secVal * 20.0);  // The type cannot be primitive
-        /* TODO: Remove bukkit scheduler */ Bukkit.getScheduler().runTaskLater(EsToolsBukkit.plugin, this::execNextCommand, timeInTicks.longValue());
+        Main.server.runTaskLater(this::execNextCommand, timeInTicks.longValue());
         EsToolsCommand.send(player, "&bWaiting &6" + cCmd.b() + " seconds");
     }
 

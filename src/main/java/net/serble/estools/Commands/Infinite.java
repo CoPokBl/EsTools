@@ -2,6 +2,7 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.EsToolsCommand;
+import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitItemStack;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPlayer;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
@@ -43,7 +44,6 @@ public class Infinite extends EsToolsCommand implements Listener {
         return true;
     }
 
-    // TODO: This entire function depends on bukkit
     @EventHandler
     public void blockPlace(BlockPlaceEvent e) {
         if (!currentPlayers.contains(e.getPlayer().getUniqueId())) {
@@ -54,11 +54,9 @@ public class Infinite extends EsToolsCommand implements Listener {
         EsPlayer p = new BukkitPlayer(e.getPlayer());
 
         // TODO: This is a terrible way of implementing this btw
-        Bukkit.getScheduler().runTask(EsToolsBukkit.plugin, () -> {
+        Main.server.runTaskLater(() -> {
             p.setMainHand(item);
-            // A bug exists where the item is not updated in the player's inventory, this is needed for that
-            //noinspection UnstableApiUsage
-            e.getPlayer().updateInventory();
-        });
+            p.updateInventory();  // A bug makes this necessary
+        }, 0);
     }
 }

@@ -1,13 +1,16 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.Effects;
+import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.Main;
 import net.serble.estools.SemanticVersion;
 import net.serble.estools.ServerApi.EsPotType;
 import net.serble.estools.ServerApi.Interfaces.*;
+import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -27,13 +30,21 @@ public class BukkitServer implements EsServerSoftware {
 
     @Override
     public EsPlayer getPlayer(String name) {
-        return new BukkitPlayer(Bukkit.getPlayer(name));
+        Player p = Bukkit.getPlayer(name);
+        if (p == null) {
+            return null;
+        }
+        return new BukkitPlayer(p);
     }
 
     @Override
     public EsEntity getEntity(UUID uuid) {
         if (Main.minecraftVersion.getMinor() > 11) {
-            return new BukkitEntity(Bukkit.getEntity(uuid));
+            Entity entity = Bukkit.getEntity(uuid);
+            if (entity == null) {
+                return null;
+            }
+            return new BukkitEntity(entity);
         }
 
         for (World world : Bukkit.getWorlds()) {
@@ -228,5 +239,21 @@ public class BukkitServer implements EsServerSoftware {
     @Override
     public String getPluginName() {
         return plugin.getDescription().getName();
+    }
+
+    @Override
+    public void runTaskLater(Runnable task, long ticks) {
+        if (!BukkitHelper.isFolia()) {
+            Bukkit.getScheduler().runTaskLater(EsToolsBukkit.plugin, task, ticks);
+            return;
+        }
+
+        // TODO: Folia
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public EsLogger getLogger() {
+        return new BukkitLogger();
     }
 }

@@ -6,7 +6,7 @@
 
   <groupId>net.serble.EsTools</groupId>
   <artifactId>EsTools</artifactId>
-  <version>4.3.1</version>
+  <version>5.0.0</version>
   <packaging>jar</packaging>
 
   <name>EsTools</name>
@@ -100,7 +100,13 @@
           <artifactId>gson</artifactId>
           <version>2.11.0</version>
       </dependency>
-      <dependency>  <!-- Folia Support -->
+      <dependency>  <!-- Needed to interface with Folia -->
+          <groupId>io.papermc</groupId>
+          <artifactId>paperlib</artifactId>
+          <version>1.0.7</version>
+          <scope>compile</scope>
+      </dependency>
+      <dependency>
           <groupId>dev.folia</groupId>
           <artifactId>folia-api</artifactId>
           <version>1.20.4-R0.1-SNAPSHOT</version>

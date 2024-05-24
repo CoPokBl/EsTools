@@ -10,18 +10,16 @@ import net.serble.estools.Commands.Teleport.*;
 import net.serble.estools.Commands.Warps.*;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.EsGameMode;
+import net.serble.estools.ServerApi.Interfaces.EsLogger;
 import net.serble.estools.ServerApi.Interfaces.EsServerSoftware;
 import net.serble.estools.ServerApi.ServerPlatform;
 import net.serble.estools.Signs.SignMain;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import net.serble.estools.Commands.*;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +36,7 @@ public class Main {
 	public static SemanticVersion newVersion = null;  // The version available to download
 	public static boolean newVersionReady = false;
 	public static EsServerSoftware server;
+	public static EsLogger logger;
 	private final Object context;
 
 	private static final int bStatsId = 21760;
@@ -50,6 +49,7 @@ public class Main {
 	public void enable() {
 		plugin = this;
 		server = platform.getServerInstance(context);
+		logger = server.getLogger();
 
 		minecraftVersion = server.getVersion();
 
@@ -59,7 +59,7 @@ public class Main {
 			try {
 				Vault.setupEconomy();
 			} catch (Exception e) {
-				Bukkit.getLogger().warning("No Vault plugin found, please install vault for economy functionality.");
+				logger.warning("No Vault plugin found, please install vault for economy functionality.");
 			}
 		}
 
@@ -79,13 +79,13 @@ public class Main {
 		if (getConfig().getBoolean("metrics", true)) {
 			Metrics metrics = new Metrics(EsToolsBukkit.plugin, bStatsId);
 			metrics.addCustomChart(new SimplePie("vault_enabled", () -> String.valueOf(Vault.economy != null)));
-			Bukkit.getLogger().info("Started bStat metrics");
+			logger.info("Started bStat metrics");
 		} else {
-			Bukkit.getLogger().info("Metrics are disabled");
+			logger.info("Metrics are disabled");
 		}
 
 		if (minecraftVersion.getMinor() <= 2) {
-			Bukkit.getLogger().info("Tab completion is not supported for versions 1.2 and below.");
+			logger.info("Tab completion is not supported for versions 1.2 and below.");
 			tabCompleteEnabled = false;
 		}
 
@@ -247,7 +247,7 @@ public class Main {
 		File file = new File(EsToolsBukkit.plugin.getDataFolder(), res);
 
 		if (file.exists()) {
-			Bukkit.getLogger().info("Tried to copy resource but it already exists: " + res);
+			logger.info("Tried to copy resource but it already exists: " + res);
 			return;
 		}
 
@@ -255,10 +255,10 @@ public class Main {
 			Files.createDirectories(file.getParentFile().toPath());
             asrt(resource != null);
             Files.copy(resource, file.toPath());
-			Bukkit.getLogger().info("Copied " + res + " to " + file.toPath());
+			logger.info("Copied " + res + " to " + file.toPath());
 		} catch (IOException e) {
 			e.printStackTrace();
-			Bukkit.getLogger().severe("Failed to save resource: " + e);
+			logger.severe("Failed to save resource: " + e);
 		}
 	}
 
@@ -270,11 +270,13 @@ public class Main {
 	public static void asrt(boolean condition, String msg) {
 		assert condition : msg;
 
-		if (condition) {
+		// Asserts aren't enforced most of the time
+        //noinspection ConstantValue
+        if (condition) {
             return;
 		}
 
-		Bukkit.getLogger().severe("Assertion failed: " + msg);
+		logger.severe("Assertion failed: " + msg);
 		throw new AssertionError(msg);
 	}
 }

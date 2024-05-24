@@ -5,6 +5,7 @@ version: '${project.version}'
 softdepend: [Vault]
 authors: [Calcilator, CoPokBl]
 api-version: 1.13
+folia-supported: true
 
 commands:
   estools:

@@ -24,4 +24,6 @@ public interface EsServerSoftware {
     EsCommandSender getConsoleSender();
     SemanticVersion getPluginVersion();
     String getPluginName();
+    void runTaskLater(Runnable task, long ticks);
+    EsLogger getLogger();
 }

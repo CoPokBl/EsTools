@@ -1,5 +1,6 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
+import io.papermc.lib.PaperLib;
 import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsEntity;
@@ -27,7 +28,7 @@ public class BukkitEntity implements EsEntity {
 
     @Override
     public void teleport(EsLocation loc) {
-        bukkitEntity.teleport(toBukkitLocation(loc));
+        PaperLib.teleportAsync(bukkitEntity, BukkitHelper.toBukkitLocation(loc));
     }
 
     @Override
