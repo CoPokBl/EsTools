@@ -16,7 +16,7 @@ public class PowerAxe extends EsToolsCommand {
             powerItem = Main.server.createItemStack("DIAMOND_AXE", 1);
         }
 
-        PowerTool.setupItem(powerItem, "DIG_SPEED");
+        PowerTool.setupItem(powerItem, "efficiency");
     }
 
     @Override

@@ -24,7 +24,7 @@ public class PowerTool {
             im.setUnbreakable(true);
             item.setItemMeta(im);
         } else {
-            item.addEnchantment("DURABILITY", 32767);
+            item.addEnchantment("unbreaking", 32767);
         }
     }
 

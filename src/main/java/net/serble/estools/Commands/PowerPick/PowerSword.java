@@ -15,7 +15,7 @@ public class PowerSword extends EsToolsCommand {
             powerPick = Main.server.createItemStack("RAW_FISH", 1);
         }
 
-        PowerTool.setupItem(powerPick, "DAMAGE_ALL");
+        PowerTool.setupItem(powerPick, "sharpness");
     }
 
     @Override

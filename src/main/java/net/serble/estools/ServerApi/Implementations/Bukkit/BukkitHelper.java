@@ -21,8 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
-import java.util.Objects;
-
 public class BukkitHelper {
     public static Location toBukkitLocation(EsLocation loc) {
         return new Location(Bukkit.getWorld(loc.getWorld().getName()), loc.getX(), loc.getY(), loc.getZ());
@@ -142,11 +140,19 @@ public class BukkitHelper {
     @SuppressWarnings("deprecation")
     public static Enchantment getBukkitEnchantment(String name) {
         if (Main.minecraftVersion.getMinor() >= 13) {
-            Objects.requireNonNull(Registry.ENCHANTMENT.get(NamespacedKey.minecraft(name)));
+            Enchantment ench = Registry.ENCHANTMENT.get(NamespacedKey.minecraft(name));
+            if (ench == null) {
+                // Dump info and throw
+                Bukkit.getLogger().severe("Failed to find enchantment: " + name);
+                for (Enchantment e : Registry.ENCHANTMENT) {
+                    Bukkit.getLogger().severe("This exists: " + e.getName());
+                }
+                throw new RuntimeException("Could not find enchantment: " + name);
+            }
         }
 
         // We have to use deprecated method for pre 1.13
-        return Enchantment.getByName(name);
+        return Enchantment.getByName(BukkitEnchantmentsHelper.getByName(name));
     }
 
     public static PersistentDataType toBukkitPersistentDataType(EsPersistentDataType type) {

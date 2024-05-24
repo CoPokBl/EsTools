@@ -16,7 +16,7 @@ public class PowerPick extends EsToolsCommand {
             powerItem = Main.server.createItemStack("DIAMOND_PICKAXE", 1);
         }
 
-        PowerTool.setupItem(powerItem, "DIG_SPEED");
+        PowerTool.setupItem(powerItem, "efficiency");
     }
 
     @Override

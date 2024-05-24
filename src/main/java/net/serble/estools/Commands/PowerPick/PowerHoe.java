@@ -16,7 +16,7 @@ public class PowerHoe extends EsToolsCommand {
             powerItem = Main.server.createItemStack("DIAMOND_HOE", 1);
         }
 
-        PowerTool.setupItem(powerItem, "DIG_SPEED");
+        PowerTool.setupItem(powerItem, "efficiency");
     }
 
     @Override

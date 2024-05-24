@@ -168,13 +168,26 @@ public class BukkitServer implements EsServerSoftware {
     @SuppressWarnings("deprecation")
     @Override
     public String[] getEnchantments() {
-        Enchantment[] enchantments = (Enchantment[]) Registry.ENCHANTMENT.stream().toArray();
-        String[] out = new String[enchantments.length];
-        for (int i = 0; i < enchantments.length; i++) {
-            Enchantment enchantment = enchantments[i];
-            out[i] = enchantment.getName();
+        if (Main.minecraftVersion.getMinor() > 12) {
+            Enchantment[] enchantments = (Enchantment[]) Registry.ENCHANTMENT.stream().toArray();
+            String[] out = new String[enchantments.length];
+            for (int i = 0; i < enchantments.length; i++) {
+                Enchantment enchantment = enchantments[i];
+                out[i] = enchantment.getName();
+            }
+            return out;
         }
-        return out;
+
+        // Pre 1.13, we need to use the helper to get all the keys
+        Set<Map.Entry<String, String>> enchSet = BukkitEnchantmentsHelper.entrySet();
+        String[] enchs = new String[enchSet.size()];
+        int i = 0;
+        for (Map.Entry<String, String> enchEntry : enchSet) {
+            enchs[i] = enchEntry.getKey();
+            i++;
+        }
+
+        return enchs;
     }
 
     @Override

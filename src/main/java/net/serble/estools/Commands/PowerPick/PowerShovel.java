@@ -17,7 +17,7 @@ public class PowerShovel extends EsToolsCommand {
             powerItem = Main.server.createItemStack("DIAMOND_SPADE", 1);
         }
 
-        PowerTool.setupItem(powerItem, "DIG_SPEED");
+        PowerTool.setupItem(powerItem, "efficiency");
     }
 
     @Override

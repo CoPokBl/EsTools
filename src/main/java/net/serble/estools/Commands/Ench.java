@@ -3,9 +3,7 @@ package net.serble.estools.Commands;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import net.serble.estools.Enchantments;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
@@ -67,14 +65,7 @@ public class Ench extends EsToolsCommand {
 		
 		switch (args.length) {
 			case 1:
-				if (Main.minecraftVersion.getMinor() > 12) {
-                    tab.addAll(Arrays.asList(Main.server.getEnchantments()));
-				} else {
-					for (Map.Entry<String, String> e : Enchantments.entrySet()) {
-						tab.add(e.getKey());
-					}
-				}
-
+				tab.addAll(Arrays.asList(Main.server.getEnchantments()));
 				break;
 				
 			case 3:
