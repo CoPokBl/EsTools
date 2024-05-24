@@ -14,7 +14,7 @@ public class ConfigManager {
 	public static final Main plugin = Main.plugin;
 	
 	public static FileConfiguration load(String fileName) {
-		return load(new File(plugin.getDataFolder(), fileName));
+		return load(new File(Main.server.getDataFolder(), fileName));
 	}
 	
 	@SuppressWarnings("ResultOfMethodCallIgnored")
@@ -40,7 +40,7 @@ public class ConfigManager {
 	
 	@SuppressWarnings("ResultOfMethodCallIgnored")
     public static void save(String file, FileConfiguration config) {
-		File configFile = new File(plugin.getDataFolder(), file);
+		File configFile = new File(Main.server.getDataFolder(), file);
 		if (!configFile.exists()) {
             configFile.getParentFile().mkdirs();
             try {

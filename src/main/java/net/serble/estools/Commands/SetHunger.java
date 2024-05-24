@@ -2,21 +2,20 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.PlayerCommand;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 public class SetHunger extends PlayerCommand {
 	private static final String usage = genUsage("/sethunger <amount> [player]");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (args.length == 0) {
 			send(sender, usage);
 			return false;
 		}
 		
-		Player p;
+		EsPlayer p;
 		int hunger;
 		
 		if (args.length > 1) {
@@ -30,7 +29,7 @@ public class SetHunger extends PlayerCommand {
                 return false;
             }
 			
-			p = (Player)sender;
+			p = (EsPlayer)sender;
 		}
 		
 		try {

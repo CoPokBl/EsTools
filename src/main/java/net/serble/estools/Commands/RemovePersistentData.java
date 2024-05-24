@@ -1,18 +1,16 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
-import org.bukkit.NamespacedKey;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 public class RemovePersistentData extends EsToolsCommand {
     public static final String usage = genUsage("/removepersistentdata <key>");
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(EsCommandSender sender, String[] args) {
         if (isNotPlayer(sender))
             return false;
 
@@ -21,16 +19,16 @@ public class RemovePersistentData extends EsToolsCommand {
             return true;
         }
 
-        String tagString = args[0].toLowerCase();
+        String key = args[0].toLowerCase();
 
-        ItemStack item = getMainHand((Player) sender);
-        NamespacedKey key = GetPersistentData.getNamespacedKey(tagString);
-        if (key == null) {
-            send(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
-            return false;
-        }
+        EsItemStack item = ((EsPlayer) sender).getMainHand();
+//        NamespacedKey key = GetPersistentData.getNamespacedKey(tagString);
+//        if (key == null) {
+//            send(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
+//            return false;
+//        }
 
-        ItemMeta meta = item.getItemMeta();
+        EsItemMeta meta = item.getItemMeta();
         if (meta == null) {
             send(sender, "&cItem does not have nbt tags!");
             return false;
@@ -39,7 +37,7 @@ public class RemovePersistentData extends EsToolsCommand {
         meta.getPersistentDataContainer().remove(key);
         item.setItemMeta(meta);
 
-        send(sender, "&aRemove NBT tag &e\"" + tagString + "\"&a!");
+        send(sender, "&aRemove NBT tag &e\"" + key + "\"&a!");
         return true;
     }
 }

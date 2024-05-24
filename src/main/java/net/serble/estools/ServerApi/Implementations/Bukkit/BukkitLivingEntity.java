@@ -2,12 +2,12 @@ package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
+import net.serble.estools.ServerApi.Interfaces.EsWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -116,5 +116,10 @@ public class BukkitLivingEntity extends BukkitEntity implements EsLivingEntity {
             out.add(eff.getType().getName());
         }
         return out;
+    }
+
+    @Override
+    public EsWorld getWorld() {
+        return new BukkitWorld(bukkitEntity.getWorld());
     }
 }

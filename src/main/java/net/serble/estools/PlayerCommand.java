@@ -1,7 +1,7 @@
 package net.serble.estools;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,10 @@ import java.util.List;
 public abstract class PlayerCommand extends EsToolsCommand {
 	
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+	public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
 		List<String> tab = new ArrayList<>();
 
-		for (Player p : getOnlinePlayers()) {
+		for (EsPlayer p : Main.server.getOnlinePlayers()) {
 			tab.add(p.getName());
 		}
 

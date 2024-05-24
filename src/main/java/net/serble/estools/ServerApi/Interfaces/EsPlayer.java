@@ -15,7 +15,6 @@ public interface EsPlayer extends EsLivingEntity {
     EsPlayerInventory getInventory();
     void setFlySpeed(float val);
     void setWalkSpeed(float val);
-    EsWorld getWorld();
     void setGameMode(EsGameMode mode);
     EsGameMode getGameMode();
     EsBlock getTargetBlock();

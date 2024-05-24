@@ -1,18 +1,10 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
-import net.serble.estools.Main;
-import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
-import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
-import net.serble.estools.ServerApi.Interfaces.EsItemStack;
-import net.serble.estools.ServerApi.Interfaces.EsPlayer;
+import net.serble.estools.ServerApi.EsPersistentDataType;
+import net.serble.estools.ServerApi.Interfaces.*;
 import net.serble.estools.Tuple;
 import org.apache.commons.lang.ArrayUtils;
-import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +22,15 @@ public class GetPersistentData extends EsToolsCommand {
             return false;
         }
 
-        String tagString = args[0].toLowerCase();
+        String key = args[0].toLowerCase();
         String typeString = args[1].toLowerCase();
 
         EsItemStack item = ((EsPlayer) sender).getMainHand();
-        NamespacedKey key = getNamespacedKey(tagString);
-        if (key == null) {
-            send(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
-            return false;
-        }
+//        NamespacedKey key = getNamespacedKey(key);
+//        if (key == null) {
+//            send(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
+//            return false;
+//        }
 
         EsItemMeta meta = item.getItemMeta();
         if (meta == null) {
@@ -46,11 +38,11 @@ public class GetPersistentData extends EsToolsCommand {
             return false;
         }
 
-        PersistentDataContainer data = meta.getPersistentDataContainer();
+        EsPersistentDataContainer data = meta.getPersistentDataContainer();
 
         Tuple<Integer, String> value = getData(typeString, key, data);
         if (value.a() == 3) {
-            send(sender, "&cNBT tag &e\"" + tagString + "\"&c does not exist!");
+            send(sender, "&cNBT tag &e\"" + key + "\"&c does not exist!");
             return false;
         }
 
@@ -60,19 +52,19 @@ public class GetPersistentData extends EsToolsCommand {
         }
 
         if (value.a() == 2) {
-            send(sender, "&cNBT tag &e\"" + tagString + "\"&c exists, but is not a " + typeString + "!");
+            send(sender, "&cNBT tag &e\"" + key + "\"&c exists, but is not a " + typeString + "!");
             return false;
         }
 
-        send(sender, "&aNBT tag &e\"" + tagString + "\"&a is &e" + value.b() + "&a!");
+        send(sender, "&aNBT tag &e\"" + key + "\"&a is &e" + value.b() + "&a!");
         return true;
     }
 
-    private static Tuple<Integer, String> getData(String type, NamespacedKey key, PersistentDataContainer data) {
+    private static Tuple<Integer, String> getData(String type, String key, EsPersistentDataContainer data) {
         try {
             switch (type) {
                 case "string": {
-                    String value = data.get(key, PersistentDataType.STRING);
+                    String value = (String) data.get(key, EsPersistentDataType.String);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }
@@ -81,7 +73,7 @@ public class GetPersistentData extends EsToolsCommand {
                 }
 
                 case "integer": {
-                    Integer value = data.get(key, PersistentDataType.INTEGER);
+                    Integer value = (Integer) data.get(key, EsPersistentDataType.Integer);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }
@@ -89,7 +81,7 @@ public class GetPersistentData extends EsToolsCommand {
                 }
 
                 case "double": {
-                    Double value = data.get(key, PersistentDataType.DOUBLE);
+                    Double value = (Double) data.get(key, EsPersistentDataType.Double);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }
@@ -97,7 +89,7 @@ public class GetPersistentData extends EsToolsCommand {
                 }
 
                 case "float": {
-                    Float value = data.get(key, PersistentDataType.FLOAT);
+                    Float value = (Float) data.get(key, EsPersistentDataType.Float);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }
@@ -105,7 +97,7 @@ public class GetPersistentData extends EsToolsCommand {
                 }
 
                 case "long": {
-                    Long value = data.get(key, PersistentDataType.LONG);
+                    Long value = (Long) data.get(key, EsPersistentDataType.Long);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }
@@ -113,7 +105,7 @@ public class GetPersistentData extends EsToolsCommand {
                 }
 
                 case "short": {
-                    Short value = data.get(key, PersistentDataType.SHORT);
+                    Short value = (Short) data.get(key, EsPersistentDataType.Short);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }
@@ -121,7 +113,7 @@ public class GetPersistentData extends EsToolsCommand {
                 }
 
                 case "byte": {
-                    Byte value = data.get(key, PersistentDataType.BYTE);
+                    Byte value = (Byte) data.get(key, EsPersistentDataType.Byte);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }
@@ -129,7 +121,7 @@ public class GetPersistentData extends EsToolsCommand {
                 }
 
                 case "byte_array": {
-                    byte[] value = data.get(key, PersistentDataType.BYTE_ARRAY);
+                    byte[] value = (byte[]) data.get(key, EsPersistentDataType.ByteArray);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }
@@ -138,7 +130,7 @@ public class GetPersistentData extends EsToolsCommand {
                 }
 
                 case "int_array": {
-                    int[] value = data.get(key, PersistentDataType.INTEGER_ARRAY);
+                    int[] value = (int[]) data.get(key, EsPersistentDataType.IntArray);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }
@@ -147,7 +139,7 @@ public class GetPersistentData extends EsToolsCommand {
                 }
 
                 case "long_array": {
-                    long[] value = data.get(key, PersistentDataType.LONG_ARRAY);
+                    long[] value = (long[]) data.get(key, EsPersistentDataType.LongArray);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }

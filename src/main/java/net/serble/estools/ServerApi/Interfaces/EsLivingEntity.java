@@ -11,4 +11,5 @@ public interface EsLivingEntity extends EsEntity {
     void addPotionEffect(String effect, int duration, int amplifier);
     void removePotionEffect(String effect);
     List<String> getActivePotionEffects();
+    EsWorld getWorld();
 }

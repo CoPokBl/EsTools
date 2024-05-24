@@ -1,6 +1,7 @@
 package net.serble.estools.Commands.Give;
 
 import net.serble.estools.*;
+import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Bukkit;
@@ -69,7 +70,7 @@ public class Give implements EsToolsTabCompleter {
 
 			try {
 				copyDefaultGiveYML();
-				f = ConfigManager.load(new File(Main.bukkitPlugin.getDataFolder(), "give.yml"));
+				f = ConfigManager.load(new File(EsToolsBukkit.plugin.getDataFolder(), "give.yml"));
 				materials = loadItems(f);
 			} catch (Exception ignored) { }
 		}
@@ -134,7 +135,7 @@ public class Give implements EsToolsTabCompleter {
         //noinspection ResultOfMethodCallIgnored
         inputStream.read(buffer);
 		
-		File targetFile = new File(Main.bukkitPlugin.getDataFolder(), "give.yml");
+		File targetFile = new File(EsToolsBukkit.plugin.getDataFolder(), "give.yml");
 	    OutputStream outStream = Files.newOutputStream(targetFile.toPath());
 	    outStream.write(buffer);
 	    

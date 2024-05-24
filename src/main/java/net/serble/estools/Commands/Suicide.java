@@ -1,22 +1,20 @@
 package net.serble.estools.Commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.LivingEntity;
-
 import net.serble.estools.PlayerCommand;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 
 public class Suicide extends PlayerCommand {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (isNotPlayer(sender)) {
             return false;
         }
 		
-		LivingEntity p = (LivingEntity) sender;
+		EsLivingEntity p = (EsLivingEntity) sender;
 
-		setHealth(p, 0);
+		p.setHealth(0);
 		send(sender, "&aRest in peace");
 		return true;
 	}

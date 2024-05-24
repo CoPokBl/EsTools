@@ -3,6 +3,7 @@ package net.serble.estools.Commands;
 import java.util.HashMap;
 import java.util.UUID;
 
+import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
@@ -22,7 +23,7 @@ public class Back extends EsToolsCommand implements Listener {
 
 	@Override
 	public void onEnable() {
-		Bukkit.getServer().getPluginManager().registerEvents(this, Main.bukkitPlugin);
+		Bukkit.getServer().getPluginManager().registerEvents(this, EsToolsBukkit.plugin);
 	}
 
 	@Override

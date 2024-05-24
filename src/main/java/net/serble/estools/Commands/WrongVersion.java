@@ -1,8 +1,7 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 
 public class WrongVersion extends EsToolsCommand {
     private final String minVersion;
@@ -16,7 +15,7 @@ public class WrongVersion extends EsToolsCommand {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(EsCommandSender sender, String[] args) {
         send(sender, "&cThis command requires Minecraft to be at least 1.%s", minVersion);
         return true;
     }

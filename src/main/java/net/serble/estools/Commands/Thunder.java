@@ -1,21 +1,20 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
-import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
+import net.serble.estools.ServerApi.Interfaces.EsWorld;
 
 public class Thunder extends EsToolsCommand {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(EsCommandSender sender, String[] args) {
         if (isNotPlayer(sender)) {
             return false;
         }
 
-        World world = ((Player) sender).getWorld();
-        world.setStorm(true);
+        EsWorld world = ((EsPlayer) sender).getWorld();
+        world.setStorming(true);
         world.setThundering(true);
 
         send(sender, "&aSet weather to &6thunder");

@@ -2,6 +2,7 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.ConfigManager;
 import net.serble.estools.EntityCommand;
+import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
@@ -20,7 +21,7 @@ public class Buddha extends EntityCommand implements Listener {
 
 	@Override
 	public void onEnable() {
-		Bukkit.getServer().getPluginManager().registerEvents(this, Main.bukkitPlugin);
+		Bukkit.getServer().getPluginManager().registerEvents(this, EsToolsBukkit.plugin);
 
 		FileConfiguration f = ConfigManager.load("gods.yml");
 		List<String> buddhas = f.getStringList("buddhas");
@@ -76,7 +77,7 @@ public class Buddha extends EntityCommand implements Listener {
 			if (timer >= 0) {
 				timerStr = timer / 20d + " seconds";
 
-				taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.bukkitPlugin, () -> currentPlayers.remove(uid), timer);
+				taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(EsToolsBukkit.plugin, () -> currentPlayers.remove(uid), timer);
 			}
 
 			currentPlayers.put(uid, taskId);

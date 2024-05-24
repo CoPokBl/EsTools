@@ -1,23 +1,21 @@
 package net.serble.estools.Commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.LivingEntity;
-
 import net.serble.estools.EntityCommand;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 
 public class Smite extends EntityCommand {
 	private static final String usage = genUsage("/smite <entity1> [entity2] [entity3]...");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (args.length == 0) {
 			send(sender, usage);
 			return false;
 		}
 		
 		for (String arg : args) {
-			LivingEntity target = getEntity(sender, arg);
+			EsLivingEntity target = getEntity(sender, arg);
 			
 			if (target == null) {
 				return false;

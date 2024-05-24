@@ -1,18 +1,18 @@
 package net.serble.estools.Signs;
 
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 public class Give extends SignType {
 
     @Override
-    public void run(Player p, String[] lines) {
+    public void run(EsPlayer p, String[] lines) {
         int amount = 1;
         try {
             amount = Integer.parseInt(lines[2]);
         } catch (NumberFormatException e) { /* Ignored */ }
 
-        ItemStack item = net.serble.estools.Commands.Give.Give.getItem(lines[1], amount);
+        EsItemStack item = net.serble.estools.Commands.Give.Give.getItem(lines[1], amount);
 
         if (item == null) {
             send(p, "&cItem not found!");

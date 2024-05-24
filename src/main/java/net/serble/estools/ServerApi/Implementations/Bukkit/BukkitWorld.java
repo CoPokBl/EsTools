@@ -44,4 +44,19 @@ public class BukkitWorld implements EsWorld {
     public void setTime(long time) {
         bukkitWorld.setTime(time);
     }
+
+    @Override
+    public void setStorming(boolean val) {
+        bukkitWorld.setStorm(false);
+    }
+
+    @Override
+    public void setThundering(boolean val) {
+        bukkitWorld.setThundering(val);
+    }
+
+    @Override
+    public void strikeLightning(EsLocation loc) {
+        bukkitWorld.strikeLightning(BukkitHelper.toBukkitLocation(loc));
+    }
 }

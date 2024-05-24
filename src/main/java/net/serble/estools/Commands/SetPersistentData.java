@@ -1,14 +1,8 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
-import org.bukkit.NamespacedKey;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
+import net.serble.estools.ServerApi.EsPersistentDataType;
+import net.serble.estools.ServerApi.Interfaces.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +11,7 @@ public class SetPersistentData extends EsToolsCommand {
     public static final String usage = genUsage("/setpersistentdata <key> <type> <value>");
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(EsCommandSender sender, String[] args) {
         if (isNotPlayer(sender))
             return false;
 
@@ -26,7 +20,7 @@ public class SetPersistentData extends EsToolsCommand {
             return true;
         }
 
-        String keyString = args[0].toLowerCase();
+        String key = args[0].toLowerCase();
         String typeString = args[1].toLowerCase();
         String valueString;
 
@@ -40,21 +34,21 @@ public class SetPersistentData extends EsToolsCommand {
             valueString = valueBuilder.toString();
         }
 
-        ItemStack item = getMainHand((Player) sender);
-        NamespacedKey key = GetPersistentData.getNamespacedKey(keyString);
+        EsItemStack item = ((EsPlayer) sender).getMainHand();
+//        NamespacedKey key = GetPersistentData.getNamespacedKey(key);
+//
+//        if (key == null) {
+//            send(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
+//            return false;
+//        }
 
-        if (key == null) {
-            send(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
-            return false;
-        }
-
-        ItemMeta meta = item.getItemMeta();
+        EsItemMeta meta = item.getItemMeta();
         if (meta == null) {
             send(sender, "&cItem does not have nbt tags!");
             return false;
         }
 
-        PersistentDataContainer data = meta.getPersistentDataContainer();
+        EsPersistentDataContainer data = meta.getPersistentDataContainer();
 
         int code = setNbt(typeString, key, data, valueString);
         if (code == 1) {
@@ -74,15 +68,15 @@ public class SetPersistentData extends EsToolsCommand {
     }
 
     // 0 = success, 1 = unsupported, 2 = invalid value
-    public static int setNbt(String type, NamespacedKey key, PersistentDataContainer data, String value) {
+    public static int setNbt(String type, String key, EsPersistentDataContainer data, String value) {
         switch (type) {
             case "string":
-                data.set(key, PersistentDataType.STRING, value);
+                data.set(key, EsPersistentDataType.String, value);
                 break;
 
             case "integer":
                 try {
-                    data.set(key, PersistentDataType.INTEGER, Integer.parseInt(value));
+                    data.set(key, EsPersistentDataType.Integer, Integer.parseInt(value));
                 }
                 catch (NumberFormatException e) {
                     return 2;
@@ -91,7 +85,7 @@ public class SetPersistentData extends EsToolsCommand {
 
             case "double":
                 try {
-                    data.set(key, PersistentDataType.DOUBLE, Double.parseDouble(value));
+                    data.set(key, EsPersistentDataType.Double, Double.parseDouble(value));
                 }
                 catch (NumberFormatException e) {
                     return 2;
@@ -100,7 +94,7 @@ public class SetPersistentData extends EsToolsCommand {
 
             case "float":
                 try {
-                    data.set(key, PersistentDataType.FLOAT, Float.parseFloat(value));
+                    data.set(key, EsPersistentDataType.Float, Float.parseFloat(value));
                 }
                 catch (NumberFormatException e) {
                     return 2;
@@ -109,7 +103,7 @@ public class SetPersistentData extends EsToolsCommand {
 
             case "long":
                 try {
-                    data.set(key, PersistentDataType.LONG, Long.parseLong(value));
+                    data.set(key, EsPersistentDataType.Long, Long.parseLong(value));
                 }
                 catch (NumberFormatException e) {
                     return 2;
@@ -118,7 +112,7 @@ public class SetPersistentData extends EsToolsCommand {
 
             case "short":
                 try {
-                    data.set(key, PersistentDataType.SHORT, Short.parseShort(value));
+                    data.set(key, EsPersistentDataType.Short, Short.parseShort(value));
                 }
                 catch (NumberFormatException e) {
                     return 2;
@@ -127,7 +121,7 @@ public class SetPersistentData extends EsToolsCommand {
 
             case "byte":
                 try {
-                    data.set(key, PersistentDataType.BYTE, Byte.parseByte(value));
+                    data.set(key, EsPersistentDataType.Byte, Byte.parseByte(value));
                 }
                 catch (NumberFormatException e) {
                     return 2;
@@ -147,7 +141,7 @@ public class SetPersistentData extends EsToolsCommand {
                     }
                 }
 
-                data.set(key, PersistentDataType.BYTE_ARRAY, bytes);
+                data.set(key, EsPersistentDataType.ByteArray, bytes);
                 break;
             }
 
@@ -164,7 +158,7 @@ public class SetPersistentData extends EsToolsCommand {
                     }
                 }
 
-                data.set(key, PersistentDataType.INTEGER_ARRAY, ints);
+                data.set(key, EsPersistentDataType.IntArray, ints);
                 break;
             }
 
@@ -181,7 +175,7 @@ public class SetPersistentData extends EsToolsCommand {
                     }
                 }
 
-                data.set(key, PersistentDataType.LONG_ARRAY, longs);
+                data.set(key, EsPersistentDataType.LongArray, longs);
                 break;
             }
 
@@ -194,7 +188,7 @@ public class SetPersistentData extends EsToolsCommand {
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+    public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
         List<String> tab = new ArrayList<>();
 
         if (args.length == 2) {

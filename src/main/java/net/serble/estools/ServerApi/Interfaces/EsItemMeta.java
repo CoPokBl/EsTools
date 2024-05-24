@@ -15,4 +15,5 @@ public interface EsItemMeta {
     String getDisplayName();
     List<String> getLore();
     void setLore(List<String> val);
+    EsPersistentDataContainer getPersistentDataContainer();
 }

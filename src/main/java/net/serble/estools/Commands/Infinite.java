@@ -2,20 +2,15 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.EsToolsCommand;
-import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitItemStack;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPlayer;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -26,7 +21,7 @@ public class Infinite extends EsToolsCommand implements Listener {
 
     @Override
     public void onEnable() {
-        Bukkit.getServer().getPluginManager().registerEvents(this, Main.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, EsToolsBukkit.plugin);
     }
 
     @Override

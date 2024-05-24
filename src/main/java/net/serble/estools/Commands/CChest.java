@@ -1,5 +1,6 @@
 package net.serble.estools.Commands;
 
+import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ConfigManager;
 import net.serble.estools.Main;
@@ -29,7 +30,7 @@ public class CChest extends EsToolsCommand implements Listener {
 	@Override
 	public void onEnable() {
 		if (Main.minecraftVersion.getMinor() > 4) {
-			Bukkit.getServer().getPluginManager().registerEvents(this, Main.bukkitPlugin);
+			Bukkit.getServer().getPluginManager().registerEvents(this, EsToolsBukkit.plugin);
 		}
 	}
 
@@ -160,7 +161,7 @@ public class CChest extends EsToolsCommand implements Listener {
     }
 
 	private static void setItemTask(org.bukkit.inventory.Inventory inv, int slot, ItemStack item) {
-		Bukkit.getScheduler().runTask(Main.bukkitPlugin, () -> inv.setItem(slot, item));
+		Bukkit.getScheduler().runTask(EsToolsBukkit.plugin, () -> inv.setItem(slot, item));
 	}
 	
 	// Cancel drag if inside cChest

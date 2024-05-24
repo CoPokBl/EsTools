@@ -81,11 +81,6 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
     }
 
     @Override
-    public EsWorld getWorld() {
-        return new BukkitWorld(bukkitPlayer.getWorld());
-    }
-
-    @Override
     public void setGameMode(EsGameMode mode) {
         bukkitPlayer.setGameMode(BukkitHelper.toBukkitGameMode(mode));
     }

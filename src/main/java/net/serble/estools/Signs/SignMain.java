@@ -1,7 +1,8 @@
 package net.serble.estools.Signs;
 
+import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.EsToolsCommand;
-import net.serble.estools.Main;
+import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -12,6 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.HashMap;
 
+// TODO: Migrate away from bukkit events
 public class SignMain implements Listener {
     private static final HashMap<String, SignType> signs = new HashMap<>();
     private static final HashMap<String, String> signConversions = new HashMap<>();
@@ -25,7 +27,7 @@ public class SignMain implements Listener {
         addSign(new Repair(), "[repair]", EsToolsCommand.translate("&1[Repair]"));
         addSign(new Sell(), "[sell]", EsToolsCommand.translate("&1[Sell]"));
 
-        Bukkit.getServer().getPluginManager().registerEvents(new SignMain(), Main.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(new SignMain(), EsToolsBukkit.plugin);
     }
 
     public static void addSign(SignType signType, String conversion, String sign) {
@@ -43,7 +45,7 @@ public class SignMain implements Listener {
 
             if (signType != null) {
                 e.setCancelled(true);
-                signType.run(e.getPlayer(), state.getLines());
+                signType.run(new BukkitPlayer(e.getPlayer()), state.getLines());
             }
         }
     }

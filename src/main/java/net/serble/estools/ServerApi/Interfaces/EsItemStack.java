@@ -6,8 +6,10 @@ public interface EsItemStack {
     int getAmount();
     void setAmount(int amount);
     void addEnchantment(String enchantment, int level);
+    void removeEnchantment(String enchantment);
     EsItemMeta getItemMeta();
     void setItemMeta(EsItemMeta meta);
     void setDamage(int val);
     int getDamage();
+    EsItemStack clone();
 }

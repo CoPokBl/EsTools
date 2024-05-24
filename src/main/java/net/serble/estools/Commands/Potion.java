@@ -4,12 +4,10 @@ import net.serble.estools.Effects;
 import net.serble.estools.EntityCommand;
 import net.serble.estools.Main;
 import net.serble.estools.MetaHandler;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
+import net.serble.estools.ServerApi.EsPotType;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,7 @@ public class Potion extends EntityCommand {
     private static final String usage = genUsage("/potion <potion> [amplifier] [duration] [amount] [drink/splash/lingering] [player]");
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(EsCommandSender sender, String[] args) {
         if (args.length == 0) {
             send(sender, usage);
             return false;
@@ -40,31 +38,31 @@ public class Potion extends EntityCommand {
             duration = tryParseInt(args[2], 60*5)*20;
         }
 
-        PotType potType = PotType.drink;
+        EsPotType potType = EsPotType.drink;
         if (args.length >= 5) {
             try {
-                potType = PotType.valueOf(args[4].toLowerCase());
+                potType = EsPotType.valueOf(args[4].toLowerCase());
             } catch (IllegalArgumentException ignored) {
                 send(sender, "&cInvalid potion type, must be drink, splash, or lingering (if on 1.9+)");
                 return false;
             }
 
             // Check versions
-            if (Main.majorVersion < 9 && potType == PotType.lingering) {
+            if (Main.minecraftVersion.getMinor() < 9 && potType == EsPotType.lingering) {
                 // Doesn't exist
                 send(sender, "&cLingering potions don't exist in this version");
                 return false;
             }
         }
 
-        Player player;
+        EsPlayer player;
         if (args.length >= 6) {
             player = getPlayer(sender, args[5]);
             if (player == null) return false;
         } else {
-            if (sender instanceof Player) {
+            if (sender instanceof EsPlayer) {
                 // Give to them
-                player = (Player) sender;
+                player = (EsPlayer) sender;
             } else {
                 // They are console
                 send(sender, "&cConsole must specify a player");
@@ -72,12 +70,12 @@ public class Potion extends EntityCommand {
             }
         }
 
-        if (Main.majorVersion <= 3) {
+        if (Main.minecraftVersion.getMinor() <= 3) {
             send(sender, "&cPotions are not yet supported in this version, they may be in the future.");
             return false;
         }
 
-        ItemStack pot = MetaHandler.getPotion(sender, potType, args[0], duration, amp, amount);
+        EsItemStack pot = MetaHandler.getPotion(sender, potType, args[0], duration, amp, amount);
         if (pot == null) {
             return false;
         }
@@ -92,26 +90,20 @@ public class Potion extends EntityCommand {
         return true;
     }
 
-    public enum PotType {
-        drink,
-        splash,
-        lingering
-    }
-
     @Override
-    public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+    public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
         List<String> tab = new ArrayList<>();
         // /potion <potion> [amplifier] [duration] [amount] [drink/splash/lingering] [player]
 
         switch (args.length) {
             case 1:
-                if (Main.majorVersion <= 8) {
-                    for (Map.Entry<String, PotionType> e : Effects.getPotionList()) {
+                if (Main.minecraftVersion.getMinor() <= 8) {
+                    for (Map.Entry<String, String> e : Effects.getPotionList()) {
                         tab.add(e.getKey().toLowerCase());
                     }
                 }
                 else {
-                    for (Map.Entry<String, PotionEffectType> e : Effects.entrySet()) {
+                    for (Map.Entry<String, String> e : Effects.entrySet()) {
                         tab.add(e.getKey().toLowerCase());
                     }
                 }
@@ -129,7 +121,7 @@ public class Potion extends EntityCommand {
             case 5:
                 tab.add("drink");
                 tab.add("splash");
-                if (Main.majorVersion >= 9) tab.add("lingering");
+                if (Main.minecraftVersion.getMinor() >= 9) tab.add("lingering");
                 break;
 
             case 6:

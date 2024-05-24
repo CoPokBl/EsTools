@@ -1,14 +1,14 @@
 package net.serble.estools.Signs;
 
 import net.serble.estools.EsToolsCommand;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import net.serble.estools.Vault;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public abstract class SignType {
-    public void run(Player p, String[] lines) { }
+    public void run(EsPlayer p, String[] lines) { }
 
-    public static double getSignMoney(String line, Player p) {
+    public static double getSignMoney(String line, EsPlayer p) {
         double price = 0;
         try {
             String priceString = line.substring(1);
@@ -24,15 +24,15 @@ public abstract class SignType {
         return price;
     }
 
-    public static boolean takeMoney(String line, Player p) {
+    public static boolean takeMoney(String line, EsPlayer p) {
         return Vault.takeMoney(getSignMoney(line, p), p);
     }
 
-    public static boolean payMoney(String line, Player p) {
+    public static boolean payMoney(String line, EsPlayer p) {
         return Vault.payMoney(getSignMoney(line, p), p);
     }
 
-    public static void send(CommandSender s, String msg, Object... args) {
+    public static void send(EsCommandSender s, String msg, Object... args) {
         EsToolsCommand.send(s, msg, args);
     }
 }

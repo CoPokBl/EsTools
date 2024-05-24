@@ -4,11 +4,8 @@ import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Material;
-import org.bukkit.Registry;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.Objects;
 
 public class BukkitItemStack implements EsItemStack {
     private final org.bukkit.inventory.ItemStack bukkitItem;
@@ -51,6 +48,11 @@ public class BukkitItemStack implements EsItemStack {
     }
 
     @Override
+    public void removeEnchantment(String enchantment) {
+        bukkitItem.removeEnchantment(BukkitHelper.getBukkitEnchantment(enchantment));
+    }
+
+    @Override
     public EsItemMeta getItemMeta() {
         return new BukkitItemMeta(bukkitItem.getItemMeta());
     }
@@ -89,5 +91,10 @@ public class BukkitItemStack implements EsItemStack {
             return ((Damageable) meta).getDamage();
         }
         return 0;
+    }
+
+    @Override
+    public EsItemStack clone() {
+        return new BukkitItemStack(bukkitItem.clone());
     }
 }

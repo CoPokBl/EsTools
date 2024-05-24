@@ -1,22 +1,25 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
+import net.serble.estools.Effects;
 import net.serble.estools.Main;
 import net.serble.estools.SemanticVersion;
+import net.serble.estools.ServerApi.EsPotType;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class BukkitServer implements EsServerSoftware {
     private final JavaPlugin plugin;
@@ -107,6 +110,43 @@ public class BukkitServer implements EsServerSoftware {
         return new BukkitItemStack(material, amount);
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public EsItemStack createPotion(EsPotType potType, String effect, int duration, int amp, int amount) {
+        if (Main.minecraftVersion.getMinor() >= 9) {
+            String type = potType == EsPotType.drink ?
+                    "POTION" :
+                    potType.toString().toUpperCase() + "_POTION";
+            ItemStack pot = new ItemStack(Material.valueOf(type), amount);
+
+            String effType;
+            try {
+                effType = Effects.getByName(effect);
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
+
+            PotionMeta meta = (PotionMeta) pot.getItemMeta();
+            assert meta != null;
+            meta.addCustomEffect(new PotionEffect(Objects.requireNonNull(Registry.EFFECT.match(effType)), duration, amp-1), true);
+            pot.setItemMeta(meta);
+            return new BukkitItemStack(pot);
+        } else if (Main.minecraftVersion.getMinor() >= 4) {
+            String effType;
+            try {
+                effType = Effects.getPotionByName(effect);
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
+
+            org.bukkit.potion.Potion potion = new org.bukkit.potion.Potion(Objects.requireNonNull(Registry.POTION.match(effType)), amp);
+            potion.setSplash(potType == EsPotType.splash);
+            return new BukkitItemStack(potion.toItemStack(1));
+        } else {  // This isn't possible to get to because this class won't load on 1.3 and below
+            return null;
+        }
+    }
+
     @Override
     public EsInventory createInventory(EsPlayer owner, int size, String title) {
         InventoryHolder holder = owner == null ? null : ((BukkitPlayer) owner).getBukkitPlayer();
@@ -135,6 +175,11 @@ public class BukkitServer implements EsServerSoftware {
             out[i] = enchantment.getName();
         }
         return out;
+    }
+
+    @Override
+    public String[] getSounds() {
+        return new String[0];
     }
 
     @Override

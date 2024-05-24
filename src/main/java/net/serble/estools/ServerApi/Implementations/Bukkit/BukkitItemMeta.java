@@ -2,6 +2,7 @@ package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.ServerApi.EsItemFlag;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
+import net.serble.estools.ServerApi.Interfaces.EsPersistentDataContainer;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -78,6 +79,11 @@ public class BukkitItemMeta implements EsItemMeta {
     @Override
     public void setLore(List<String> val) {
         bukkitMeta.setLore(val);
+    }
+
+    @Override
+    public EsPersistentDataContainer getPersistentDataContainer() {
+        return new BukkitPersistentDataContainer(bukkitMeta.getPersistentDataContainer());
     }
 
     public ItemMeta getBukkitMeta() {

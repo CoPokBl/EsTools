@@ -1,24 +1,23 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.MetaHandler;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import net.serble.estools.EsToolsCommand;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 public class Rename extends EsToolsCommand {
 	public static final String usage = genUsage("/rename [name]");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (isNotPlayer(sender)) {
             return false;
         }
 		
-		Player p = (Player)sender;
-		ItemStack is = getMainHand(p);
+		EsPlayer p = (EsPlayer) sender;
+		EsItemStack is = p.getMainHand();
 
 		if (args.length == 0) {
 			MetaHandler.renameItem(is, "");
