@@ -4,11 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import net.serble.estools.Tester;
 import net.serble.estools.Updater;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Commands.Give.Give;
@@ -17,7 +16,7 @@ import net.serble.estools.Main;
 public class EsTools extends EsToolsCommand {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (args.length == 0) {
 			if (checkPerms(sender, "version")) {
 				return false;
@@ -36,11 +35,11 @@ public class EsTools extends EsToolsCommand {
 			
 			Give.enable();
 			
-			for (Player p : getOnlinePlayers()) {
+			for (EsPlayer p : Main.server.getOnlinePlayers()) {
 				CChest.savePlayer(p);
 			}
 			
-			for (Player p : getOnlinePlayers()) {
+			for (EsPlayer p : Main.server.getOnlinePlayers()) {
 				CChest.loadPlayer(p);
 			}
 			
@@ -51,7 +50,7 @@ public class EsTools extends EsToolsCommand {
             }
 			
 			if (args.length > 1 && args[1].equalsIgnoreCase("confirm")) {
-				File f = new File(Main.plugin.getDataFolder(), "give.yml");
+				File f = new File(Main.server.getDataFolder(), "give.yml");
 				if (!f.delete()) {
 					send(sender, "&cFailed to delete data.");
 					return false;
@@ -68,12 +67,12 @@ public class EsTools extends EsToolsCommand {
 				return false;
 			}
 
-			if (!(sender instanceof Player)) {
+			if (!(sender instanceof EsPlayer)) {
 				send(sender, "&cYou must be a player to use this command.");
 				return false;
 			}
 
-			Player p = (Player) sender;
+			EsPlayer p = (EsPlayer) sender;
 			Tester tester = Tester.runningTests.get(p.getUniqueId());
 
 			if (tester != null) {
@@ -117,7 +116,7 @@ public class EsTools extends EsToolsCommand {
 	}
 
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+	public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
 		List<String> tab = new ArrayList<>();
 		
 		if (args.length == 1) {
@@ -134,11 +133,11 @@ public class EsTools extends EsToolsCommand {
 		return tab;
 	}
 
-	private void sendVersion(CommandSender sender) {
+	private void sendVersion(EsCommandSender sender) {
 		if (Main.newVersion == null) {
-			send(sender, "&aEsTools v" + Main.plugin.getDescription().getVersion());
+			send(sender, "&aEsTools v" + Main.server.getPluginVersion());
 		} else {
-			send(sender, "&aEsTools &cv" + Main.plugin.getDescription().getVersion() + ".&c An update is available, use " +
+			send(sender, "&aEsTools &cv" + Main.server.getPluginVersion() + ".&c An update is available, use " +
 					"&6/estools update&c to update to &6v" + Main.newVersion.getString());
 		}
 	}

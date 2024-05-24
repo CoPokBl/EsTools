@@ -1,6 +1,7 @@
 package net.serble.estools.Commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -9,9 +10,6 @@ import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
-import org.bukkit.enchantments.Enchantment;
 
 import net.serble.estools.EsToolsCommand;
 
@@ -70,11 +68,9 @@ public class Ench extends EsToolsCommand {
 		switch (args.length) {
 			case 1:
 				if (Main.minecraftVersion.getMinor() > 12) {
-                    for (Enchantment e : Registry.ENCHANTMENT) {
-						tab.add(e.getKey().getKey());
-					}
+                    tab.addAll(Arrays.asList(Main.server.getEnchantments()));
 				} else {
-					for (Map.Entry<String, Enchantment> e : Enchantments.entrySet()) {
+					for (Map.Entry<String, String> e : Enchantments.entrySet()) {
 						tab.add(e.getKey());
 					}
 				}

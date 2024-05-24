@@ -7,10 +7,10 @@ public enum ServerPlatform {
     Bukkit,  // Includes all derivatives
     Folia;
 
-    public EsServerSoftware getServerInstance() {
+    public EsServerSoftware getServerInstance(Object context) {
         switch (this) {
             case Bukkit:
-                return new BukkitServer();
+                return new BukkitServer(context);
 
             default:
                 throw new IllegalArgumentException("Unsupported server software");

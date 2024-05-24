@@ -1,9 +1,9 @@
 package net.serble.estools;
 
+import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

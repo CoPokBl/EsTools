@@ -5,15 +5,20 @@ import net.serble.estools.ServerApi.EsGameMode;
 public interface EsPlayer extends EsLivingEntity {
     int getFoodLevel();
     void setFoodLevel(int val);
+    double getSaturation();
+    void setSaturation(double val);
     EsItemStack getMainHand();
     void setMainHand(EsItemStack item);
     void openInventory(EsInventory inv);
     void closeInventory();
-    EsInventory getInventory();
+    EsPlayerInventory getInventory();
     void setFlySpeed(float val);
     void setWalkSpeed(float val);
     EsWorld getWorld();
     void setGameMode(EsGameMode mode);
     EsGameMode getGameMode();
-    EsBlock getTargetBlock();  // TODO: Implement own Block class
+    EsBlock getTargetBlock();
+    boolean getAllowFlight();
+    void setAllowFlight(boolean val);
+    boolean isFlying();
 }

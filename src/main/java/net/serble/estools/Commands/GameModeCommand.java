@@ -1,30 +1,31 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.MultiPlayerCommand;
-import org.bukkit.GameMode;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.serble.estools.ServerApi.EsGameMode;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 
 public class GameModeCommand extends MultiPlayerCommand {
-    private final GameMode gameMode;
+    private final EsGameMode gameMode;
+    private final String cmd;
 
-    public GameModeCommand(GameMode gameMode) {
+    public GameModeCommand(EsGameMode gameMode, String cmd) {
         this.gameMode = gameMode;
+        this.cmd = cmd;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        ArrayList<Player> ps = new ArrayList<>();
+    public boolean execute(EsCommandSender sender, String[] args) {
+        ArrayList<EsPlayer> ps = new ArrayList<>();
 
         if (args.length == 0) {
-            if (isNotPlayer(sender, genUsage("/%s [player]"), label)) {
+            if (isNotPlayer(sender, genUsage("/%s [player]"), cmd)) {
                 return false;
             }
 
-            ps.add((Player) sender);
+            ps.add((EsPlayer) sender);
 
             send(sender, "&aGamemode set to &6%s", gameMode.toString());
         } else {
@@ -36,7 +37,7 @@ public class GameModeCommand extends MultiPlayerCommand {
             send(sender, "&aGamemode set to &6%s&a for &6%s", gameMode.toString(), argsToString(args, 0));
         }
 
-        for (Player p : ps) {
+        for (EsPlayer p : ps) {
             p.setGameMode(gameMode);
         }
 

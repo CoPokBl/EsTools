@@ -9,14 +9,22 @@ import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 public class BukkitServer implements EsServerSoftware {
+    private final JavaPlugin plugin;
+
+    public BukkitServer(Object pluginObj) {
+        plugin = (JavaPlugin) pluginObj;
+    }
+
     @Override
     public EsPlayer getPlayer(String name) {
         return new BukkitPlayer(Bukkit.getPlayer(name));
@@ -136,5 +144,30 @@ public class BukkitServer implements EsServerSoftware {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public File getDataFolder() {
+        return plugin.getDataFolder();
+    }
+
+    @Override
+    public void dispatchCommand(EsCommandSender sender, String cmd) {
+        Bukkit.dispatchCommand(BukkitHelper.toBukkitCommandSender(sender), cmd);
+    }
+
+    @Override
+    public EsCommandSender getConsoleSender() {
+        return null;
+    }
+
+    @Override
+    public SemanticVersion getPluginVersion() {
+        return new SemanticVersion(plugin.getDescription().getVersion());
+    }
+
+    @Override
+    public String getPluginName() {
+        return plugin.getDescription().getName();
     }
 }

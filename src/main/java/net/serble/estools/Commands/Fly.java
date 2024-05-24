@@ -1,9 +1,8 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.MultiPlayerCommand;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -12,15 +11,15 @@ public class Fly extends MultiPlayerCommand {
 	private static final String usage = genUsage("/fly [Player]");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		ArrayList<Player> players = new ArrayList<>();
+	public boolean execute(EsCommandSender sender, String[] args) {
+		ArrayList<EsPlayer> players = new ArrayList<>();
 		
 		if (args.length == 0) {
 			if (isNotPlayer(sender, usage)) {
                 return false;
             }
 			
-			players.add((Player) sender);
+			players.add((EsPlayer) sender);
 		} else {
 			players = getPlayers(sender, args[0]);
 			
@@ -29,7 +28,7 @@ public class Fly extends MultiPlayerCommand {
             }
 		}
 
-        for (Player p : players) {
+        for (EsPlayer p : players) {
 			boolean isFly = p.getAllowFlight();
 
 			if (args.length != 0 && !Objects.equals(args[0], "*")) {

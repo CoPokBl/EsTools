@@ -1,9 +1,12 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
+import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Material;
 import org.bukkit.Registry;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Objects;
 
@@ -55,5 +58,36 @@ public class BukkitItemStack implements EsItemStack {
     @Override
     public void setItemMeta(EsItemMeta meta) {
         bukkitItem.setItemMeta(((BukkitItemMeta) meta).getBukkitMeta());
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void setDamage(int val) {
+        if (Main.minecraftVersion.getMinor() > 12) {
+            ItemMeta meta = bukkitItem.getItemMeta();
+            if (meta instanceof Damageable) {
+                ((Damageable) meta).setDamage(val);
+            }
+        } else {
+            if (val > Short.MAX_VALUE) {
+                val = Short.MAX_VALUE;
+            }
+
+            bukkitItem.setDurability((short) val);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public int getDamage() {
+        if (Main.minecraftVersion.getMinor() > 12) {
+            return bukkitItem.getDurability();
+        }
+
+        ItemMeta meta = bukkitItem.getItemMeta();
+        if (meta instanceof Damageable) {
+            return ((Damageable) meta).getDamage();
+        }
+        return 0;
     }
 }

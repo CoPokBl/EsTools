@@ -1,6 +1,6 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
-import net.serble.estools.EsLocation;
+import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.ServerApi.Interfaces.EsEntity;
 import net.serble.estools.ServerApi.Interfaces.EsWorld;
 

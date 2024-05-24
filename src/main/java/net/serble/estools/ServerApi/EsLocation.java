@@ -1,4 +1,4 @@
-package net.serble.estools;
+package net.serble.estools.ServerApi;
 
 import net.serble.estools.ServerApi.Interfaces.EsWorld;
 
@@ -57,5 +57,17 @@ public class EsLocation extends Position {
 
     public void setYaw(double yaw) {
         this.yaw = yaw;
+    }
+
+    public int getBlockX() {
+        return (int) Math.round(getX());
+    }
+
+    public int getBlockY() {
+        return (int) Math.round(getY());
+    }
+
+    public int getBlockZ() {
+        return (int) Math.round(getZ());
     }
 }

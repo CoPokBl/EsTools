@@ -8,6 +8,7 @@ import net.serble.estools.Commands.MoveSpeed.WalkSpeed;
 import net.serble.estools.Commands.PowerPick.*;
 import net.serble.estools.Commands.Teleport.*;
 import net.serble.estools.Commands.Warps.*;
+import net.serble.estools.ServerApi.EsGameMode;
 import net.serble.estools.ServerApi.Interfaces.EsServerSoftware;
 import net.serble.estools.ServerApi.ServerPlatform;
 import net.serble.estools.Signs.SignMain;
@@ -36,17 +37,19 @@ public class Main {
 	public static SemanticVersion newVersion = null;  // The version available to download
 	public static boolean newVersionReady = false;
 	public static EsServerSoftware server;
-	public static JavaPlugin bukkitPlugin;
+	@Deprecated public static JavaPlugin bukkitPlugin;  // TODO: Just here until we get everything to work
+	private final Object context;
 
 	private static final int bStatsId = 21760;
 
-	public Main(ServerPlatform plat) {
+	public Main(ServerPlatform plat, Object context) {
 		platform = plat;
+		this.context = context;
 	}
 
 	public void enable() {
 		plugin = this;
-		server = platform.getServerInstance();
+		server = platform.getServerInstance(context);
 
 		minecraftVersion = server.getVersion();
 
@@ -87,10 +90,10 @@ public class Main {
 		}
 
 		// Commands
-		sc("gms", "gamemode.survival", new GameModeCommand(GameMode.SURVIVAL));
-		sc("gmc", "gamemode.creative", new GameModeCommand(GameMode.CREATIVE));
-		sc("gma", "gamemode.adventure", new GameModeCommand(GameMode.ADVENTURE), 3);
-		sc("gmsp", "gamemode.spectator", new GameModeCommand(GameMode.SPECTATOR), 8);
+		sc("gms", "gamemode.survival", new GameModeCommand(EsGameMode.Survival, "gms"));
+		sc("gmc", "gamemode.creative", new GameModeCommand(EsGameMode.Creative, "gmc"));
+		sc("gma", "gamemode.adventure", new GameModeCommand(EsGameMode.Adventure, "gma"), 3);
+		sc("gmsp", "gamemode.spectator", new GameModeCommand(EsGameMode.Spectator, "gmsp"), 8);
 		sc("tphere", "tp", new TpHere());
 		sc("tpall", "tp", new TpAll());
 		sc("feed", "feed", new Feed());

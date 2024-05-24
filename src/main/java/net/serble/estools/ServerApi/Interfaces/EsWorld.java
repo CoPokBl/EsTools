@@ -1,6 +1,6 @@
 package net.serble.estools.ServerApi.Interfaces;
 
-import net.serble.estools.EsLocation;
+import net.serble.estools.ServerApi.EsLocation;
 
 import java.util.List;
 

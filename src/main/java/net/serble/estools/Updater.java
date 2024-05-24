@@ -2,8 +2,8 @@ package net.serble.estools;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -45,13 +45,7 @@ public class Updater {
                     .getAsString();
 
             SemanticVersion onlineVersion = new SemanticVersion(response.get("tag_name").getAsString());
-            String cVersion = Main.plugin.getDescription().getVersion();
-
-            if (cVersion.contains("-")) {
-                cVersion = cVersion.substring(0, cVersion.indexOf("-"));
-            }
-
-            SemanticVersion currentVersion = new SemanticVersion(cVersion);
+            SemanticVersion currentVersion = Main.server.getPluginVersion();
 
             // Provide download URL just in case we force update
             waitingDownloadUrl = downloadUrl;
@@ -65,10 +59,10 @@ public class Updater {
 
             // Announcements
             if (Main.plugin.getConfig().getBoolean("updater.warn-on-outdated", false)) {
-                Bukkit.broadcast(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + cVersion + " -> " + onlineVersion.getString()), "estools.update");
+                Bukkit.broadcast(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + currentVersion.getString() + " -> " + onlineVersion.getString()), "estools.update");
             }
             if (Main.plugin.getConfig().getBoolean("updater.log-on-outdated", false)) {
-                Bukkit.getLogger().info(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + cVersion + " -> " + onlineVersion.getString()));
+                Bukkit.getLogger().info(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + currentVersion.getString() + " -> " + onlineVersion.getString()));
             }
 
             if (!Main.plugin.getConfig().getBoolean("updater.auto-update", false)) {
@@ -87,7 +81,7 @@ public class Updater {
         downloadNewUpdate(null);
     }
 
-    public static void downloadNewUpdate(CommandSender reportTo) {
+    public static void downloadNewUpdate(EsCommandSender reportTo) {
         if (waitingDownloadUrl == null) {
             throw new RuntimeException("We aren't waiting for an update");
         }

@@ -1,11 +1,15 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
-import net.serble.estools.EsLocation;
+import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper.toBukkitLocation;
@@ -17,9 +21,18 @@ public class BukkitEntity implements EsEntity {
         this.bukkitEntity = bukkitEntity;
     }
 
+    public Entity getBukkitEntity() {
+        return bukkitEntity;
+    }
+
     @Override
     public void teleport(EsLocation loc) {
         bukkitEntity.teleport(toBukkitLocation(loc));
+    }
+
+    @Override
+    public String getType() {
+        return bukkitEntity.getType().name();
     }
 
     @Override
@@ -76,5 +89,30 @@ public class BukkitEntity implements EsEntity {
         } else {
             return bukkitEntity.leaveVehicle();
         }
+    }
+
+    @Override
+    public List<EsEntity> getPassengers() {
+        List<Entity> bukkitList = bukkitEntity.getPassengers();
+        List<EsEntity> list = new ArrayList<>();
+        for (Entity entity : bukkitList) {
+            list.add(new BukkitEntity(entity));
+        }
+        return list;
+    }
+
+    @Override
+    public Set<String> getScoreboardTags() {
+        return bukkitEntity.getScoreboardTags();
+    }
+
+    @Override
+    public void addScoreboardTag(String tag) {
+        bukkitEntity.addScoreboardTag(tag);
+    }
+
+    @Override
+    public boolean hasScoreboardTag(String tag) {
+        return bukkitEntity.getScoreboardTags().contains(tag);
     }
 }

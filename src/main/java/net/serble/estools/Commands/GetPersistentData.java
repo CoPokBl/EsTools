@@ -2,12 +2,13 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import net.serble.estools.Tuple;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.NamespacedKey;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -20,7 +21,7 @@ public class GetPersistentData extends EsToolsCommand {
     public static final String usage = genUsage("/getpersistentdata <key> <type>");
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(EsCommandSender sender, String[] args) {
         if (isNotPlayer(sender))
             return false;
 
@@ -32,14 +33,14 @@ public class GetPersistentData extends EsToolsCommand {
         String tagString = args[0].toLowerCase();
         String typeString = args[1].toLowerCase();
 
-        ItemStack item = getMainHand((Player) sender);
+        EsItemStack item = ((EsPlayer) sender).getMainHand();
         NamespacedKey key = getNamespacedKey(tagString);
         if (key == null) {
             send(sender, "&cInvalid key! examples: 'estools:count', 'backpacks:size', etc");
             return false;
         }
 
-        ItemMeta meta = item.getItemMeta();
+        EsItemMeta meta = item.getItemMeta();
         if (meta == null) {
             send(sender, "&cItem does not have nbt tags!");
             return false;
@@ -163,15 +164,15 @@ public class GetPersistentData extends EsToolsCommand {
 
     @SuppressWarnings("UnstableApiUsage")
     public static NamespacedKey getNamespacedKey(String keyString) {
-        if (Main.majorVersion >= 16) {
-            return NamespacedKey.fromString(keyString, Main.plugin);
+        if (Main.minecraftVersion.getMinor() >= 16) {
+            return NamespacedKey.fromString(keyString, Main.bukkitPlugin);
         }
 
         String[] parts = keyString.split(":");
         if (parts.length == 2) {
             return new NamespacedKey(parts[0], parts[1]);
         } else if (parts.length == 1) {  // Incorrectly formatted key
-            String pluginName = Main.getPlugin(Main.class).getName();
+            String pluginName = Main.server.getPluginName();
             return new NamespacedKey(pluginName, parts[0]);
         }
 
@@ -190,7 +191,7 @@ public class GetPersistentData extends EsToolsCommand {
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+    public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
         List<String> tab = new ArrayList<>();
 
         if (args.length == 2) {

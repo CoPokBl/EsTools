@@ -34,6 +34,16 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
     }
 
     @Override
+    public double getSaturation() {
+        return bukkitPlayer.getSaturation();
+    }
+
+    @Override
+    public void setSaturation(double val) {
+        bukkitPlayer.setSaturation((float) val);
+    }
+
+    @Override
     public EsItemStack getMainHand() {
         return new BukkitItemStack(bukkitGetMainHand());
     }
@@ -54,8 +64,8 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
     }
 
     @Override
-    public EsInventory getInventory() {
-        return new BukkitInventory(bukkitPlayer.getInventory());
+    public EsPlayerInventory getInventory() {
+        return new BukkitPlayerInventory(bukkitPlayer.getInventory());
     }
 
     @Override
@@ -86,6 +96,21 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
     @Override
     public @Nullable EsBlock getTargetBlock() {
         return new BukkitBlock(Objects.requireNonNull(bukkitGetTargetBlock()).getState());
+    }
+
+    @Override
+    public boolean getAllowFlight() {
+        return bukkitPlayer.getAllowFlight();
+    }
+
+    @Override
+    public void setAllowFlight(boolean val) {
+        bukkitPlayer.setAllowFlight(val);
+    }
+
+    @Override
+    public boolean isFlying() {
+        return bukkitPlayer.isFlying();
     }
 
     private Block bukkitGetTargetBlock() {

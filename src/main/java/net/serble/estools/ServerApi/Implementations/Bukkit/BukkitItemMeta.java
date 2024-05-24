@@ -1,11 +1,13 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class BukkitItemMeta implements EsItemMeta {
-    private final org.bukkit.inventory.meta.ItemMeta bukkitMeta;
+    private final ItemMeta bukkitMeta;
 
-    public BukkitItemMeta(org.bukkit.inventory.meta.ItemMeta meta) {
+    public BukkitItemMeta(ItemMeta meta) {
         bukkitMeta = meta;
     }
 
@@ -19,7 +21,7 @@ public class BukkitItemMeta implements EsItemMeta {
         return bukkitMeta.isUnbreakable();
     }
 
-    public org.bukkit.inventory.meta.ItemMeta getBukkitMeta() {
+    public ItemMeta getBukkitMeta() {
         return bukkitMeta;
     }
 }

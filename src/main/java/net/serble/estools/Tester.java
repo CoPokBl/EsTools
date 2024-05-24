@@ -1,8 +1,8 @@
 package net.serble.estools;
 
 import net.serble.estools.Commands.SafeTp;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Tester {
-    private final Player player;
+    private final EsPlayer player;
     private int currentCommand = 0;
 
     public static final HashMap<UUID, Tester> runningTests = new HashMap<>();
@@ -100,7 +100,7 @@ public class Tester {
             new Tuple<>("suicide", 4)
     };
 
-    public Tester(Player p) {
+    public Tester(EsPlayer p) {
         player = p;
     }
 
@@ -130,8 +130,8 @@ public class Tester {
         String cmd = cCmd.a();
         if (cmd.contains("{randomplayer}")) {
             // Find a random player that isn't player
-            Player randomPlayer = null;
-            for (Player p : Bukkit.getOnlinePlayers()) {
+            EsPlayer randomPlayer = null;
+            for (EsPlayer p : Main.server.getOnlinePlayers()) {
                 if (p != player) {
                     randomPlayer = p;
                     break;
@@ -177,12 +177,12 @@ public class Tester {
         }
 
         @SuppressWarnings("WrapperTypeMayBePrimitive") Double timeInTicks = (secVal * 20.0);  // The type cannot be primitive
-        Bukkit.getScheduler().runTaskLater(Main.plugin, this::execNextCommand, timeInTicks.longValue());
+        /* TODO: Remove bukkit scheduler */ Bukkit.getScheduler().runTaskLater(Main.bukkitPlugin, this::execNextCommand, timeInTicks.longValue());
         EsToolsCommand.send(player, "&bWaiting &6" + cCmd.b() + " seconds");
     }
 
     private void exec(String cmd) {
         EsToolsCommand.send(player, "&aExecuting: " + cmd);
-        Bukkit.dispatchCommand(player, cmd);
+        Main.server.dispatchCommand(player, cmd);
     }
 }

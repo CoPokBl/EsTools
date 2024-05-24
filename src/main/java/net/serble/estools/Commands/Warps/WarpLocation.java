@@ -1,6 +1,6 @@
 package net.serble.estools.Commands.Warps;
 
-import net.serble.estools.EsLocation;
+import net.serble.estools.ServerApi.EsLocation;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 

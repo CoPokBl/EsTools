@@ -5,9 +5,13 @@ import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 public class BukkitLivingEntity extends BukkitEntity implements EsLivingEntity {
@@ -16,6 +20,10 @@ public class BukkitLivingEntity extends BukkitEntity implements EsLivingEntity {
     public BukkitLivingEntity(org.bukkit.entity.LivingEntity entity) {
         super(entity);
         bukkitEntity = entity;
+    }
+
+    public LivingEntity getBukkitEntity() {
+        return bukkitEntity;
     }
 
     @Override
@@ -97,5 +105,16 @@ public class BukkitLivingEntity extends BukkitEntity implements EsLivingEntity {
     @Override
     public void removePotionEffect(String effect) {
         bukkitEntity.removePotionEffect(Objects.requireNonNull(Registry.EFFECT.match(effect)));
+    }
+
+    @SuppressWarnings("deprecation")  // Gotta love backwards compatibility
+    @Override
+    public List<String> getActivePotionEffects() {
+        Collection<PotionEffect> bukkitEffects = bukkitEntity.getActivePotionEffects();
+        List<String> out = new ArrayList<>();
+        for (PotionEffect eff : bukkitEffects) {
+            out.add(eff.getType().getName());
+        }
+        return out;
     }
 }

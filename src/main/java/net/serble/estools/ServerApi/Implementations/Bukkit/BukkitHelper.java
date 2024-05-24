@@ -1,19 +1,19 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
-import net.serble.estools.EsLocation;
+import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.Main;
-import net.serble.estools.Position;
+import net.serble.estools.ServerApi.Position;
 import net.serble.estools.ServerApi.EsGameMode;
-import net.serble.estools.ServerApi.Interfaces.EsBlock;
-import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
-import net.serble.estools.ServerApi.Interfaces.EsEntity;
+import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -45,11 +45,11 @@ public class BukkitHelper {
             return new BukkitPlayer((Player) sender);
         }
 
-        if (sender instanceof org.bukkit.entity.LivingEntity) {
+        if (sender instanceof LivingEntity) {
             return new BukkitLivingEntity((org.bukkit.entity.LivingEntity) sender);
         }
 
-        if (sender instanceof org.bukkit.entity.Entity) {
+        if (sender instanceof Entity) {
             return new BukkitEntity((org.bukkit.entity.Entity) sender);
         }
 
@@ -59,6 +59,30 @@ public class BukkitHelper {
 
         if (sender instanceof BlockCommandSender) {
             return new BukkitCommandBlockSender((BlockCommandSender) sender);
+        }
+
+        throw new RuntimeException("Unrecognised command sender");
+    }
+
+    public static CommandSender toBukkitCommandSender(EsCommandSender sender) {
+        if (sender instanceof EsPlayer) {
+            return ((BukkitPlayer) sender).getBukkitPlayer();
+        }
+
+        if (sender instanceof EsLivingEntity) {
+            return ((BukkitLivingEntity) sender).getBukkitEntity();
+        }
+
+        if (sender instanceof EsEntity) {
+            return ((BukkitEntity) sender).getBukkitEntity();
+        }
+
+        if (sender instanceof EsConsoleSender) {
+            return Bukkit.getConsoleSender();
+        }
+
+        if (sender instanceof EsCommandBlockSender) {
+            return ((BukkitCommandBlockSender) sender).getBukkitSender();
         }
 
         throw new RuntimeException("Unrecognised command sender");

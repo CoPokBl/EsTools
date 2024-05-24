@@ -9,7 +9,7 @@ public class EsToolsBukkit extends JavaPlugin {
     @Override
     public void onEnable() {
         Main.bukkitPlugin = this;
-        Main main = new Main(ServerPlatform.Bukkit);
+        Main main = new Main(ServerPlatform.Bukkit, this);
         main.enable();
     }
 

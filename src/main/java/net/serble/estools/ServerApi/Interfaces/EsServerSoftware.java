@@ -2,6 +2,7 @@ package net.serble.estools.ServerApi.Interfaces;
 
 import net.serble.estools.SemanticVersion;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -15,4 +16,9 @@ public interface EsServerSoftware {
     String[] getPotionEffectTypes();
     String[] getEnchantments();
     boolean doesEnchantmentExist(String name);
+    File getDataFolder();
+    void dispatchCommand(EsCommandSender sender, String cmd);
+    EsCommandSender getConsoleSender();
+    SemanticVersion getPluginVersion();
+    String getPluginName();
 }

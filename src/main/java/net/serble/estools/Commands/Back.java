@@ -3,7 +3,7 @@ package net.serble.estools.Commands;
 import java.util.HashMap;
 import java.util.UUID;
 
-import net.serble.estools.EsLocation;
+import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;

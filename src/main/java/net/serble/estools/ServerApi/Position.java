@@ -1,4 +1,4 @@
-package net.serble.estools;
+package net.serble.estools.ServerApi;
 
 public class Position {
     private double x;

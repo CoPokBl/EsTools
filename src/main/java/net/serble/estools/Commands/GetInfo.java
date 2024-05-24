@@ -1,16 +1,14 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.Effects;
+import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.Main;
-import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 
 import net.serble.estools.EntityCommand;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
+import net.serble.estools.ServerApi.Interfaces.EsEntity;
+import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.Objects;
 
@@ -18,19 +16,19 @@ public class GetInfo extends EntityCommand {
 	private static final String usage = genUsage("/getinfo <entity>");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (args.length == 0) {
 			send(sender, usage);
 			return false;
 		}
 
-		Entity entity = getNonLivingEntity(sender, args[0]);
+		EsEntity entity = getNonLivingEntity(sender, args[0]);
 		if (entity == null) {
             return false;
         }
 
-		Location loc = entity.getLocation();
-		String name = getEntityName(entity);
+		EsLocation loc = entity.getLocation();
+		String name = entity.getName();
 
 		// Global Values
 		String info =
@@ -43,7 +41,7 @@ public class GetInfo extends EntityCommand {
 
 		info = String.format(info,
 				name,
-				entity.getType().name(),
+				entity.getType(),
 				loc.getBlockX(),
 				loc.getBlockY(),
 				loc.getBlockZ(),
@@ -51,11 +49,11 @@ public class GetInfo extends EntityCommand {
 				entity.getUniqueId());
 
 		// Passengers
-		if (Main.majorVersion > 12) {
+		if (Main.minecraftVersion.getMinor() > 12) {
 			StringBuilder passengerText = new StringBuilder("&aPassengers: &6");
 			boolean passengersExist = false;
-			for (Entity passenger : entity.getPassengers()) {
-				passengerText.append(getEntityName(passenger)).append(" (").append(passenger.getType()).append("), ");
+			for (EsEntity passenger : entity.getPassengers()) {
+				passengerText.append(passenger.getName()).append(" (").append(passenger.getType()).append("), ");
 				passengersExist = true;
 			}
 
@@ -68,23 +66,23 @@ public class GetInfo extends EntityCommand {
 			}
 		}
 
-		if (entity instanceof LivingEntity) {  // Living entity
-			LivingEntity le = (LivingEntity) entity;
-			String maxHealth = String.valueOf(Math.round(getMaxHealth(le)));
+		if (entity instanceof EsLivingEntity) {  // Living entity
+			EsLivingEntity le = (EsLivingEntity) entity;
+			String maxHealth = String.valueOf(Math.round(le.getMaxHealth()));
 
 			StringBuilder potionEffects = new StringBuilder();
 			{
-				Object[] pos = le.getActivePotionEffects().toArray();
+				String[] pos = le.getActivePotionEffects().toArray(new String[0]);
 
 				if (pos.length == 0) {
 					potionEffects.append("None");
 				} else {
 					for (int i = 0; i < pos.length - 1; i++) {
-						PotionEffect po = (PotionEffect) pos[i];
-						potionEffects.append(Effects.getName(po.getType())).append(", ");
+						String po = pos[i];
+						potionEffects.append(Effects.getName(po)).append(", ");
 					}
 
-					potionEffects.append(Effects.getName(((PotionEffect) pos[pos.length - 1]).getType()));
+					potionEffects.append(Effects.getName(pos[pos.length - 1]));
 				}
 			}
 
@@ -93,13 +91,13 @@ public class GetInfo extends EntityCommand {
 							"&aMax Health: &6%s\n" +
 							"&aPotion Effects: &6%s\n";
 			livingEntityInfo = String.format(livingEntityInfo,
-					getHealth(le),
+					le.getHealth(),
 					maxHealth,
 					potionEffects);
 
 			info += livingEntityInfo;
 
-			if (Main.majorVersion > 12) {
+			if (Main.minecraftVersion.getMinor() > 12) {
 				// Scoreboard tags
 				StringBuilder tags = new StringBuilder("&aScoreboard Tags: &6");
 				boolean tagsExist = false;
@@ -118,8 +116,8 @@ public class GetInfo extends EntityCommand {
 			}
 		}
 
-		if (entity instanceof Player) {  // Players
-			Player player = (Player) entity;
+		if (entity instanceof EsPlayer) {  // Players
+			EsPlayer player = (EsPlayer) entity;
 
 			String playerInfo =
 							"&aHunger: &6%s\n" +
@@ -129,7 +127,7 @@ public class GetInfo extends EntityCommand {
 					player.getFoodLevel(),
 					player.getSaturation());
 
-			if (Main.majorVersion > 1) {
+			if (Main.minecraftVersion.getMinor() > 1) {
 				playerInfo += "&aCan Fly: &6%s\n" +
 						      "&aIs Flying: &6%s\n";
 

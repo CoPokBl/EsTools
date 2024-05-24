@@ -2,7 +2,7 @@ package net.serble.estools.Commands.Warps;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ConfigManager;
-import net.serble.estools.EsLocation;
+import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.configuration.file.FileConfiguration;
