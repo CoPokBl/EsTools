@@ -3,7 +3,10 @@ package net.serble.estools.ServerApi.Implementations.Bukkit;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 import org.bukkit.Bukkit;
+import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
 
@@ -84,5 +87,15 @@ public class BukkitLivingEntity extends BukkitEntity implements EsLivingEntity {
         catch (Exception ex) {
             Bukkit.getLogger().severe(ex.toString());
         }
+    }
+
+    @Override
+    public void addPotionEffect(String effect, int duration, int amplifier) {
+        bukkitEntity.addPotionEffect(new PotionEffect(Objects.requireNonNull(Registry.EFFECT.match(effect)), duration, amplifier));
+    }
+
+    @Override
+    public void removePotionEffect(String effect) {
+        bukkitEntity.removePotionEffect(Objects.requireNonNull(Registry.EFFECT.match(effect)));
     }
 }

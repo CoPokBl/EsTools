@@ -1,18 +1,24 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.EsLocation;
+import net.serble.estools.Main;
 import net.serble.estools.Position;
 import net.serble.estools.ServerApi.EsGameMode;
+import net.serble.estools.ServerApi.Interfaces.EsBlock;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsEntity;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import java.util.Objects;
 
 public class BukkitHelper {
     public static Location toBukkitLocation(EsLocation loc) {
@@ -94,5 +100,25 @@ public class BukkitHelper {
         }
 
         throw new RuntimeException("Invalid GameMode");
+    }
+
+    public static EsBlock fromBukkitBlock(Block block) {
+        BlockState state = block.getState();
+
+        if (state instanceof Sign) {
+            return new BukkitSign((Sign) state);
+        }
+
+        return new BukkitBlock(state);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Enchantment getBukkitEnchantment(String name) {
+        if (Main.minecraftVersion.getMinor() >= 13) {
+            Objects.requireNonNull(Registry.ENCHANTMENT.get(NamespacedKey.minecraft(name)));
+        }
+
+        // We have to use deprecated method for pre 1.13
+        return Enchantment.getByName(name);
     }
 }

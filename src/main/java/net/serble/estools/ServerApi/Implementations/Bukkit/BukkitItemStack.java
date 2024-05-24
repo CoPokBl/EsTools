@@ -44,7 +44,7 @@ public class BukkitItemStack implements EsItemStack {
 
     @Override
     public void addEnchantment(String enchantment, int level) {
-        bukkitItem.addUnsafeEnchantment(Objects.requireNonNull(Registry.ENCHANTMENT.match(enchantment)), level);
+        bukkitItem.addUnsafeEnchantment(BukkitHelper.getBukkitEnchantment(enchantment), level);
     }
 
     @Override

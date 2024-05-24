@@ -12,4 +12,7 @@ public interface EsServerSoftware {
     Collection<? extends EsPlayer> getOnlinePlayers();
     EsItemStack createItemStack(String material, int amount);
     EsInventory createInventory(EsPlayer owner, int size, String title);
+    String[] getPotionEffectTypes();
+    String[] getEnchantments();
+    boolean doesEnchantmentExist(String name);
 }

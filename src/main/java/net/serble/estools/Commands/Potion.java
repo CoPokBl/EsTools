@@ -106,7 +106,7 @@ public class Potion extends EntityCommand {
         switch (args.length) {
             case 1:
                 if (Main.majorVersion <= 8) {
-                    for (Map.Entry<String, PotionType> e : Effects.potionEntrySet()) {
+                    for (Map.Entry<String, PotionType> e : Effects.getPotionList()) {
                         tab.add(e.getKey().toLowerCase());
                     }
                 }

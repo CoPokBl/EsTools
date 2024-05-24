@@ -1,7 +1,6 @@
 package net.serble.estools.ServerApi.Interfaces;
 
 import net.serble.estools.ServerApi.EsGameMode;
-import org.bukkit.block.Block;
 
 public interface EsPlayer extends EsLivingEntity {
     int getFoodLevel();
@@ -16,5 +15,5 @@ public interface EsPlayer extends EsLivingEntity {
     EsWorld getWorld();
     void setGameMode(EsGameMode mode);
     EsGameMode getGameMode();
-    Block getTargetBlock();  // TODO: Implement own Block class
+    EsBlock getTargetBlock();  // TODO: Implement own Block class
 }

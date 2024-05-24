@@ -2,16 +2,11 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
-import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
-import net.serble.estools.ServerApi.Interfaces.EsPlayer;
-import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
-import org.bukkit.block.sign.SignSide;
+import net.serble.estools.ServerApi.Interfaces.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: Command incomplete
 public class EditSign extends EsToolsCommand {
 	private static final String usage = genUsage("/editsign <line number> [line]");
 
@@ -28,14 +23,14 @@ public class EditSign extends EsToolsCommand {
 		
 		EsPlayer p = (EsPlayer) sender;
 		
-		Block signB = p.getTargetBlock();
+		EsBlock signB = p.getTargetBlock();
 
-		if (signB == null || !(signB.getState() instanceof Sign)) {
+		if (!(signB instanceof EsSign)) {
 			send(sender, "&cYou must be looking at a sign!");
 			return false;
 		}
 		
-		Sign sign = (Sign) signB.getState();
+		EsSign sign = (EsSign) signB;
 
 		switch (args[0].toLowerCase()) {
 			case "glow":
@@ -77,10 +72,9 @@ public class EditSign extends EsToolsCommand {
 		String lineText = translate(lineTextBuilder.toString()).trim();
 
 		if (Main.minecraftVersion.getMinor() >= 20) {
-			SignSide side = sign.getTargetSide(p);
+			EsSignSide side = sign.getTargetSide(p);
 			side.setLine(lineNum - 1, lineText);
 		} else {
-            //noinspection deprecation
             sign.setLine(lineNum - 1, lineText);
 		}
 		sign.update();
@@ -113,10 +107,9 @@ public class EditSign extends EsToolsCommand {
 		return tab;
 	}
 
-	@SuppressWarnings("deprecation")
-    public boolean setGlow(Sign sign, Player p, boolean glow) {
-		if (Main.majorVersion >= 20) {
-			SignSide side = sign.getTargetSide(p);
+    public boolean setGlow(EsSign sign, EsPlayer p, boolean glow) {
+		if (Main.minecraftVersion.getMinor() >= 20) {
+			EsSignSide side = sign.getTargetSide(p);
 
 			if (side.isGlowingText() == glow) {
 				if (glow) {
@@ -130,7 +123,7 @@ public class EditSign extends EsToolsCommand {
 
 			side.setGlowingText(glow);
 		}
-		else if (Main.majorVersion >= 17) {
+		else if (Main.minecraftVersion.getMinor() >= 17) {
 			if (sign.isGlowingText() == glow) {
 				if (glow) {
 					send(p, "&cThis sign is already &6glowing!");

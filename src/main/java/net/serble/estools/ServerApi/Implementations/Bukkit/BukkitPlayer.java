@@ -2,15 +2,14 @@ package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsGameMode;
-import net.serble.estools.ServerApi.Interfaces.EsInventory;
-import net.serble.estools.ServerApi.Interfaces.EsItemStack;
-import net.serble.estools.ServerApi.Interfaces.EsPlayer;
-import net.serble.estools.ServerApi.Interfaces.EsWorld;
+import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.Objects;
 
 public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
     private final org.bukkit.entity.Player bukkitPlayer;
@@ -85,7 +84,11 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
     }
 
     @Override
-    public Block getTargetBlock() {
+    public @Nullable EsBlock getTargetBlock() {
+        return new BukkitBlock(Objects.requireNonNull(bukkitGetTargetBlock()).getState());
+    }
+
+    private Block bukkitGetTargetBlock() {
         if (Main.minecraftVersion.getMinor() > 12) {
             return bukkitPlayer.getTargetBlockExact(5);
         } else if (Main.minecraftVersion.getMinor() > 7) {

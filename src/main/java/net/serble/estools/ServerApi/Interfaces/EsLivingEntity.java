@@ -6,4 +6,6 @@ public interface EsLivingEntity extends EsEntity {
     double getHealth();
     void setHealth(double val);
     void sendMessage(String... msg);
+    void addPotionEffect(String effect, int duration, int amplifier);
+    void removePotionEffect(String effect);
 }

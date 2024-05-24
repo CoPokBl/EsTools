@@ -6,13 +6,12 @@ import java.util.Map;
 
 import net.serble.estools.Enchantments;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import net.serble.estools.EsToolsCommand;
 
@@ -20,13 +19,13 @@ public class Ench extends EsToolsCommand {
 	private static final String usage = genUsage("/ench <enchantment> [level] [player]");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (args.length == 0) {
 			send(sender, usage);
 			return false;
 		}
 		
-		ItemStack is;
+		EsItemStack is;
 		
 		int level = 1;
 		if (args.length > 1) {
@@ -43,32 +42,19 @@ public class Ench extends EsToolsCommand {
                 return false;
             }
 			
-			is = getMainHand(((Player) sender));
+			is = ((EsPlayer) sender).getMainHand();
 		} else {
-			Player p = getPlayer(sender, args[2]);
+			EsPlayer p = getPlayer(sender, args[2]);
 			
 			if (p == null) {
                 return false;
             }
 			
-			is = getMainHand(p);
+			is = p.getMainHand();
 		}
 		
-		Enchantment ench;
-		try {
-			if (Main.majorVersion > 12) {
-                ench = Registry.ENCHANTMENT.get(NamespacedKey.minecraft(args[0].toLowerCase()));
-            } else {
-                ench = Enchantments.getByName(args[0].toLowerCase());
-            }
-		} catch (IllegalArgumentException e) {
-			send(sender, usage);
-			return false;
-		}
-		
-		
-		if (ench != null && is != null) {
-			is.addUnsafeEnchantment(ench, level);
+		if (Main.server.doesEnchantmentExist(args[0].toLowerCase()) && is != null) {
+			is.addEnchantment(args[0].toLowerCase(), level);
 			send(sender, "&aEnchantment &6%s&a at level &6%s&a was added!", args[0].toLowerCase(), level);
 		}
 		else {
@@ -78,12 +64,12 @@ public class Ench extends EsToolsCommand {
 	}
 	
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+	public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
 		List<String> tab = new ArrayList<>();
 		
 		switch (args.length) {
 			case 1:
-				if (Main.majorVersion > 12) {
+				if (Main.minecraftVersion.getMinor() > 12) {
                     for (Enchantment e : Registry.ENCHANTMENT) {
 						tab.add(e.getKey().getKey());
 					}
@@ -96,7 +82,7 @@ public class Ench extends EsToolsCommand {
 				break;
 				
 			case 3:
-				for (Player p : getOnlinePlayers()) {
+				for (EsPlayer p : Main.server.getOnlinePlayers()) {
 					tab.add(p.getName());
 				}
 				break;

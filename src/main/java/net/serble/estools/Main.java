@@ -50,6 +50,8 @@ public class Main {
 
 		minecraftVersion = server.getVersion();
 
+		Effects.load();
+
 		if (platform == ServerPlatform.Bukkit) {
 			try {
 				Vault.setupEconomy();

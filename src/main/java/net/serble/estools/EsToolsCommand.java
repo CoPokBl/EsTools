@@ -117,8 +117,8 @@ public abstract class EsToolsCommand implements CommandExecutor, EsToolsTabCompl
 		return "&r&c&lUsage: &r&c" + use.replace("\n", "\n           ");
 	}
 	
-	public static Player getPlayer(EsCommandSender sender, String name) {
-		Player p = Bukkit.getPlayer(name);
+	public static EsPlayer getPlayer(EsCommandSender sender, String name) {
+		EsPlayer p = Main.server.getPlayer(name);
 		
 		if (p == null) {
 			send(sender, "&cPlayer not found.");

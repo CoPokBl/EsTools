@@ -3,11 +3,8 @@ package net.serble.estools.Commands;
 import net.serble.estools.Effects;
 import net.serble.estools.Main;
 import net.serble.estools.MultiPlayerCommand;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +14,13 @@ public class Eff extends MultiPlayerCommand {
     private static final String usage = genUsage("/eff <effect> [amplifier] [duration] [players]");
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(EsCommandSender sender, String[] args) {
         if (args.length == 0) {
             send(sender, usage);
             return false;
         }
 
-        PotionEffectType effect = Effects.getByName(args[0]);
+        String effect = Effects.getByName(args[0]);
 
         if (effect == null) {
             send(sender, "&cEffect not found!");
@@ -54,7 +51,7 @@ public class Eff extends MultiPlayerCommand {
             durationStr = String.format("%s seconds", duration / 20);
 
             if (duration == 32767) {
-                if (Main.majorVersion >= 19) {
+                if (Main.minecraftVersion.getMinor() >= 19) {
                     duration = -1;
                 }
 
@@ -62,14 +59,14 @@ public class Eff extends MultiPlayerCommand {
             }
         }
 
-        ArrayList<Player> players = new ArrayList<>();
+        ArrayList<EsPlayer> players = new ArrayList<>();
 
         if (args.length < 4) {
             if (isNotPlayer(sender, usage)) {
                 return false;
             }
 
-            players.add((Player)sender);
+            players.add((EsPlayer) sender);
         } else {
             players = getPlayers(sender, removeArgs(args, 3));
 
@@ -78,9 +75,9 @@ public class Eff extends MultiPlayerCommand {
             }
         }
 
-        for (Player p : players) {
+        for (EsPlayer p : players) {
             p.removePotionEffect(effect);
-            p.addPotionEffect(new PotionEffect(effect, duration, amplifier));
+            p.addPotionEffect(effect, duration, amplifier);
         }
 
         send(sender, "&aAdded effect &6%s&a at level &6%s&a for &6%s", Effects.getName(effect), amplifier + 1, durationStr);
@@ -106,12 +103,12 @@ public class Eff extends MultiPlayerCommand {
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+    public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
         List<String> tab = new ArrayList<>();
 
         switch (args.length) {
             case 1:
-                for (Map.Entry<String, PotionEffectType> e : Effects.entrySet()) {
+                for (Map.Entry<String, String> e : Effects.entrySet()) {
                     tab.add(e.getKey().toLowerCase());
                 }
                 break;

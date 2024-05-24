@@ -4,9 +4,12 @@ import net.serble.estools.Main;
 import net.serble.estools.SemanticVersion;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Registry;
 import org.bukkit.World;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -100,5 +103,38 @@ public class BukkitServer implements EsServerSoftware {
     public EsInventory createInventory(EsPlayer owner, int size, String title) {
         InventoryHolder holder = owner == null ? null : ((BukkitPlayer) owner).getBukkitPlayer();
         return new BukkitInventory(Bukkit.createInventory(holder, size, title));
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public String[] getPotionEffectTypes() {
+        // We need to use the deprecated .values() method because Registry doesn't exist in old versions
+        PotionEffectType[] effectTypes = PotionEffectType.values();
+        String[] out = new String[effectTypes.length];
+        for (int i = 0; i < effectTypes.length; i++) {
+            out[i] = effectTypes[i].getName();  // Same reason as above for deprecated method
+        }
+        return out;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public String[] getEnchantments() {
+        Enchantment[] enchantments = (Enchantment[]) Registry.ENCHANTMENT.stream().toArray();
+        String[] out = new String[enchantments.length];
+        for (int i = 0; i < enchantments.length; i++) {
+            Enchantment enchantment = enchantments[i];
+            out[i] = enchantment.getName();
+        }
+        return out;
+    }
+
+    @Override
+    public boolean doesEnchantmentExist(String name) {
+        try {
+            return BukkitHelper.getBukkitEnchantment(name) != null;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
