@@ -5,6 +5,7 @@ import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ConfigManager;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsGameMode;
+import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitInventory;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPlayer;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsInventory;
@@ -18,6 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -81,7 +83,7 @@ public class CChest extends EsToolsCommand implements Listener {
 		ItemStack currentItem = e.getCurrentItem();
 		
 		// Check if inventory is cChest
-        if (!cChests.containsKey(uid) || !cChests.get(uid).equals(e.getInventory()) || e.getClickedInventory() == null) {
+        if (!cChests.containsKey(uid) || !isSameInv(e.getInventory(), cChests.get(uid)) || e.getClickedInventory() == null) {
             return;
         }
 
@@ -116,7 +118,7 @@ public class CChest extends EsToolsCommand implements Listener {
         }
 
 		// If player inventory
-        if (!e.getClickedInventory().equals(cChests.get(uid))) {  // TODO: This comparison doesn't work
+        if (!e.getClickedInventory().equals(((BukkitInventory)cChests.get(uid)).getBukkitInventory())) {
 			// Shift click into cChest
 			if (equalsOr(e.getClick(), ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT) && currentItem != null) {
 				e.setCancelled(true);
@@ -163,18 +165,23 @@ public class CChest extends EsToolsCommand implements Listener {
 	private static void setItemTask(org.bukkit.inventory.Inventory inv, int slot, ItemStack item) {
 		Bukkit.getScheduler().runTask(EsToolsBukkit.plugin, () -> inv.setItem(slot, item));
 	}
+
+	// TODO: Remove reliance on Bukkit
+	private static boolean isSameInv(Inventory a, EsInventory b) {
+		return a.equals(((BukkitInventory) b).getBukkitInventory());
+	}
 	
 	// Cancel drag if inside cChest
 	@EventHandler
     public void onInventoryDrag(final InventoryDragEvent e) {
 		EsInventory inv = cChests.get(e.getWhoClicked().getUniqueId());
-        if (!e.getInventory().equals(inv)) {
+        if (!isSameInv(e.getInventory(), inv)) {
             return;
         }
 
         // Check if any of the slots dragged are in the cChest
         for (int slot : e.getRawSlots()) {
-            if (inv.equals(e.getView().getInventory(slot))) {
+            if (isSameInv(Objects.requireNonNull(e.getView().getInventory(slot)), inv)) {
                 e.setCancelled(true);
                 return;
             }
@@ -216,7 +223,7 @@ public class CChest extends EsToolsCommand implements Listener {
 	public void onClose(InventoryCloseEvent e) {
 		UUID uid = e.getPlayer().getUniqueId();
 
-		if (e.getInventory().equals(cChests.get(uid))) {
+		if (isSameInv(e.getInventory(), cChests.get(uid))) {
 			savePlayer((EsPlayer)e.getPlayer());
 		}
 	}

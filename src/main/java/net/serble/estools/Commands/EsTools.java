@@ -135,9 +135,9 @@ public class EsTools extends EsToolsCommand {
 
 	private void sendVersion(EsCommandSender sender) {
 		if (Main.newVersion == null) {
-			send(sender, "&aEsTools v" + Main.server.getPluginVersion());
+			send(sender, "&aEsTools v" + Main.server.getPluginVersion().getString());
 		} else {
-			send(sender, "&aEsTools &cv" + Main.server.getPluginVersion() + ".&c An update is available, use " +
+			send(sender, "&aEsTools &cv" + Main.server.getPluginVersion().getString() + ".&c An update is available, use " +
 					"&6/estools update&c to update to &6v" + Main.newVersion.getString());
 		}
 	}

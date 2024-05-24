@@ -4,11 +4,12 @@ import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
+
+// TODO: Remove these
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -77,7 +78,7 @@ public abstract class EsToolsCommand implements CommandExecutor, EsToolsTabCompl
 	}
 	
 	public static boolean isNotPlayer(EsCommandSender sender) {
-		if (!(sender instanceof Player)) {
+		if (!(sender instanceof EsPlayer)) {
 			send(sender, "&cYou must be a player to run this command!");
 			return true;
 		}

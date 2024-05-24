@@ -5,10 +5,7 @@ import net.serble.estools.Main;
 import net.serble.estools.SemanticVersion;
 import net.serble.estools.ServerApi.EsPotType;
 import net.serble.estools.ServerApi.Interfaces.*;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Registry;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.InventoryHolder;
@@ -165,15 +162,14 @@ public class BukkitServer implements EsServerSoftware {
         return out;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public String[] getEnchantments() {
         if (Main.minecraftVersion.getMinor() > 12) {
-            Enchantment[] enchantments = (Enchantment[]) Registry.ENCHANTMENT.stream().toArray();
-            String[] out = new String[enchantments.length];
-            for (int i = 0; i < enchantments.length; i++) {
-                Enchantment enchantment = enchantments[i];
-                out[i] = enchantment.getName();
+            String[] out = new String[(int) Registry.ENCHANTMENT.stream().count()];
+            int i = 0;
+            for (Enchantment e : Registry.ENCHANTMENT) {
+                out[i] = e.getKey().getKey();
+                i++;
             }
             return out;
         }
@@ -192,7 +188,12 @@ public class BukkitServer implements EsServerSoftware {
 
     @Override
     public String[] getSounds() {
-        return new String[0];
+        Sound[] sounds = Sound.values();
+        String[] strSounds = new String[sounds.length];
+        for (int i = 0; i < sounds.length; i++) {
+            strSounds[i] = sounds[i].name();
+        }
+        return strSounds;
     }
 
     @Override

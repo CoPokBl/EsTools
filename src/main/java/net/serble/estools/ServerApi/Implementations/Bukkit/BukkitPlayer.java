@@ -92,7 +92,7 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
 
     @Override
     public @Nullable EsBlock getTargetBlock() {
-        return new BukkitBlock(Objects.requireNonNull(bukkitGetTargetBlock()).getState());
+        return BukkitHelper.fromBukkitBlock(Objects.requireNonNull(bukkitGetTargetBlock()).getState());
     }
 
     @Override

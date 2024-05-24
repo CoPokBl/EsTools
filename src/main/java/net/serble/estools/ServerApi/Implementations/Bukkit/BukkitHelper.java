@@ -23,7 +23,11 @@ import org.bukkit.util.Vector;
 
 public class BukkitHelper {
     public static Location toBukkitLocation(EsLocation loc) {
-        return new Location(Bukkit.getWorld(loc.getWorld().getName()), loc.getX(), loc.getY(), loc.getZ());
+        Location bLoc = new Location(Bukkit.getWorld(loc.getWorld().getName()), loc.getX(), loc.getY(), loc.getZ());
+        if (loc.getDirection() != null) bLoc.setDirection(toVector(loc.getDirection()));
+        bLoc.setPitch((float) loc.getPitch());
+        bLoc.setYaw((float) loc.getYaw());
+        return bLoc;
     }
 
     public static EsLocation fromBukkitLocation(Location loc) {
@@ -39,6 +43,10 @@ public class BukkitHelper {
 
     public static Position fromVector(Vector vec) {
         return new Position(vec.getX(), vec.getY(), vec.getZ());
+    }
+
+    public static Vector toVector(Position pos) {
+        return new Vector(pos.getX(), pos.getY(), pos.getZ());
     }
 
     public static EsCommandSender fromBukkitCommandSender(org.bukkit.command.CommandSender sender) {
@@ -199,5 +207,13 @@ public class BukkitHelper {
         }
 
         return null;
+    }
+
+    public static EsBlock fromBukkitBlock(BlockState block) {
+        if (block instanceof Sign) {
+            return new BukkitSign((Sign) block);
+        }
+
+        return new BukkitBlock(block);
     }
 }
