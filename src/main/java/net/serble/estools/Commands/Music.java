@@ -2,6 +2,8 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+// TODO: Incomplete
 public class Music extends EsToolsCommand {
 	private static final String usage = genUsage("/music [song]");
 	private static final List<Sound> musics = new ArrayList<>();
@@ -19,7 +22,7 @@ public class Music extends EsToolsCommand {
 
 	@Override
 	public void onEnable() {
-		if (Main.majorVersion > 12) {
+		if (Main.minecraftVersion.getMinor() > 12) {
 			for (Sound s : Sound.values()) {
 				if (s.name().startsWith("MUSIC_DISC")) {
 					musics.add(s);
@@ -46,17 +49,17 @@ public class Music extends EsToolsCommand {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (isNotPlayer(sender)) {
             return false;
         }
 		
-		Player p = (Player) sender;
+		EsPlayer p = (EsPlayer) sender;
 
 		Sound sound;
 		if (args.length > 0 && !args[0].equalsIgnoreCase("random")) {
 			try {
-				if (Main.majorVersion > 12) {
+				if (Main.minecraftVersion.getMinor() > 12) {
 					sound = Sound.valueOf("MUSIC_DISC_" + args[0].toUpperCase());
 				}
 				else {
@@ -70,16 +73,11 @@ public class Music extends EsToolsCommand {
 			sound = musics.get(random.nextInt(musics.size()));
 		}
 
-		if (Main.majorVersion >= 11) {
-			p.playSound(p.getLocation().add(0, 1000, 0), sound, SoundCategory.RECORDS, 100000, 1);
-		}
-		else {
-			p.playSound(p.getLocation().add(0, 1000, 0), sound, 100000, 1);
-		}
+		p.playSound(sound, p.getLocation().add(0, 1000, 0), 100000, 1);
 
 		// Substring away the MUSIC_DISK_ or the RECORD_ depending on the version
 		// then reformat to be all lowercase except for the first character
-		String name = sound.name().toLowerCase().substring(Main.majorVersion > 12 ? 11 : 7);
+		String name = sound.name().toLowerCase().substring(Main.minecraftVersion.getMinor() > 12 ? 11 : 7);
 		name = String.valueOf(name.charAt(0)).toUpperCase() + name.substring(1);
 		
 		send(sender, "&aNow Playing: &6%s", name);

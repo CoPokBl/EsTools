@@ -162,23 +162,6 @@ public class GetPersistentData extends EsToolsCommand {
         return new Tuple<>(1, null);
     }
 
-    @SuppressWarnings("UnstableApiUsage")
-    public static NamespacedKey getNamespacedKey(String keyString) {
-        if (Main.minecraftVersion.getMinor() >= 16) {
-            return NamespacedKey.fromString(keyString, Main.bukkitPlugin);
-        }
-
-        String[] parts = keyString.split(":");
-        if (parts.length == 2) {
-            return new NamespacedKey(parts[0], parts[1]);
-        } else if (parts.length == 1) {  // Incorrectly formatted key
-            String pluginName = Main.server.getPluginName();
-            return new NamespacedKey(pluginName, parts[0]);
-        }
-
-        return null;
-    }
-
     private static <T> StringBuilder buildString(T[] values) {
         StringBuilder sb = new StringBuilder("[");
         for (T value : values) {

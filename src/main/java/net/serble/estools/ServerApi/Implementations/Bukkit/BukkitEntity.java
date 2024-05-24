@@ -115,4 +115,19 @@ public class BukkitEntity implements EsEntity {
     public boolean hasScoreboardTag(String tag) {
         return bukkitEntity.getScoreboardTags().contains(tag);
     }
+
+    @Override
+    public void setOnFireTicks(int ticks) {
+        bukkitEntity.setFireTicks(ticks);
+    }
+
+    @Override
+    public void addPassenger(EsEntity entity) {
+        if (Main.minecraftVersion.getMinor() > 11) {
+            bukkitEntity.addPassenger(((BukkitEntity) entity).getBukkitEntity());
+        } else {
+            //noinspection deprecation
+            bukkitEntity.setPassenger(((BukkitEntity) entity).getBukkitEntity());
+        }
+    }
 }

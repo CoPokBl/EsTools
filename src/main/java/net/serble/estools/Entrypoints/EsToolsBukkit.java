@@ -5,10 +5,12 @@ import net.serble.estools.ServerApi.ServerPlatform;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class EsToolsBukkit extends JavaPlugin {
+    /** Will be null if plugin is not Bukkit */
+    public static EsToolsBukkit plugin;
 
     @Override
     public void onEnable() {
-        Main.bukkitPlugin = this;
+        plugin = this;
         Main main = new Main(ServerPlatform.Bukkit, this);
         main.enable();
     }

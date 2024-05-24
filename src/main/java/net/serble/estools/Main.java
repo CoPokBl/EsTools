@@ -8,6 +8,7 @@ import net.serble.estools.Commands.MoveSpeed.WalkSpeed;
 import net.serble.estools.Commands.PowerPick.*;
 import net.serble.estools.Commands.Teleport.*;
 import net.serble.estools.Commands.Warps.*;
+import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.EsGameMode;
 import net.serble.estools.ServerApi.Interfaces.EsServerSoftware;
 import net.serble.estools.ServerApi.ServerPlatform;
@@ -37,7 +38,6 @@ public class Main {
 	public static SemanticVersion newVersion = null;  // The version available to download
 	public static boolean newVersionReady = false;
 	public static EsServerSoftware server;
-	@Deprecated public static JavaPlugin bukkitPlugin;  // TODO: Just here until we get everything to work
 	private final Object context;
 
 	private static final int bStatsId = 21760;
@@ -64,20 +64,20 @@ public class Main {
 		}
 
 		// Create config if not exists, saveDefaultConfig() doesn't exist in 1.0
-		File configFile = new File(bukkitPlugin.getDataFolder(), "config.yml");
+		File configFile = new File(EsToolsBukkit.plugin.getDataFolder(), "config.yml");
 		if (!configFile.exists()) {
 			saveResource("config.yml", false);
 		}
 		config = ConfigManager.load("config.yml");
 
 		// Add keys that don't exist from the default config
-		if (ConfigManager.patchDefaults(getConfig(), bukkitPlugin.getResource("config.yml"))) {
+		if (ConfigManager.patchDefaults(getConfig(), EsToolsBukkit.plugin.getResource("config.yml"))) {
 			ConfigManager.save("config.yml", getConfig());  // Only save if something changed
 		}
 
 		// Metrics
 		if (getConfig().getBoolean("metrics", true)) {
-			Metrics metrics = new Metrics(bukkitPlugin, bStatsId);
+			Metrics metrics = new Metrics(EsToolsBukkit.plugin, bStatsId);
 			metrics.addCustomChart(new SimplePie("vault_enabled", () -> String.valueOf(Vault.economy != null)));
 			Bukkit.getLogger().info("Started bStat metrics");
 		} else {
@@ -173,7 +173,7 @@ public class Main {
 	// Setup Command Overloads
 
 	public PluginCommand sc(String name, EsToolsCommand ce) {
-		PluginCommand cmd = bukkitPlugin.getCommand(name);
+		PluginCommand cmd = EsToolsBukkit.plugin.getCommand(name);
         assert cmd != null;
         cmd.setExecutor(ce);
 		ce.onEnable();
@@ -243,8 +243,8 @@ public class Main {
 
 	// Overriding because method doesn't exist in very early versions
     public void saveResource(String res, boolean replace) {
-		InputStream resource = bukkitPlugin.getResource(res);
-		File file = new File(bukkitPlugin.getDataFolder(), res);
+		InputStream resource = EsToolsBukkit.plugin.getResource(res);
+		File file = new File(EsToolsBukkit.plugin.getDataFolder(), res);
 
 		if (file.exists()) {
 			Bukkit.getLogger().info("Tried to copy resource but it already exists: " + res);

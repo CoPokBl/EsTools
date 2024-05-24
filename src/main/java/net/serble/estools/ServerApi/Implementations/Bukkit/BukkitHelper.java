@@ -1,7 +1,9 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
+import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsPersistentDataType;
 import net.serble.estools.ServerApi.Position;
 import net.serble.estools.ServerApi.EsGameMode;
 import net.serble.estools.ServerApi.Interfaces.*;
@@ -16,6 +18,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
 import java.util.Objects;
@@ -144,5 +147,51 @@ public class BukkitHelper {
 
         // We have to use deprecated method for pre 1.13
         return Enchantment.getByName(name);
+    }
+
+    public static PersistentDataType toBukkitPersistentDataType(EsPersistentDataType type) {
+        switch (type) {
+            case Byte:
+                return PersistentDataType.BYTE;
+            case Long:
+                return PersistentDataType.LONG;
+            case Float:
+                return PersistentDataType.FLOAT;
+            case Short:
+                return PersistentDataType.SHORT;
+            case Double:
+                return PersistentDataType.DOUBLE;
+            case String:
+                return PersistentDataType.STRING;
+            case Boolean:
+                return PersistentDataType.BOOLEAN;
+            case Integer:
+                return PersistentDataType.INTEGER;
+            case IntArray:
+                return PersistentDataType.INTEGER_ARRAY;
+            case ByteArray:
+                return PersistentDataType.BYTE_ARRAY;
+            case LongArray:
+                return PersistentDataType.LONG_ARRAY;
+        }
+
+        throw new RuntimeException("Unsupported data type");
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public static NamespacedKey getNamespacedKey(String keyString) {
+        if (Main.minecraftVersion.getMinor() >= 16) {
+            return NamespacedKey.fromString(keyString, EsToolsBukkit.plugin);
+        }
+
+        String[] parts = keyString.split(":");
+        if (parts.length == 2) {
+            return new NamespacedKey(parts[0], parts[1]);
+        } else if (parts.length == 1) {  // Incorrectly formatted key
+            String pluginName = Main.server.getPluginName();
+            return new NamespacedKey(pluginName, parts[0]);
+        }
+
+        return null;
     }
 }

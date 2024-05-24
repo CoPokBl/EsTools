@@ -1,6 +1,7 @@
 package net.serble.estools.ServerApi.Interfaces;
 
 import net.serble.estools.ServerApi.EsGameMode;
+import net.serble.estools.ServerApi.EsLocation;
 
 public interface EsPlayer extends EsLivingEntity {
     int getFoodLevel();
@@ -21,4 +22,5 @@ public interface EsPlayer extends EsLivingEntity {
     boolean getAllowFlight();
     void setAllowFlight(boolean val);
     boolean isFlying();
+    void playSound(String sound, EsLocation loc, int volume, int pitch);
 }

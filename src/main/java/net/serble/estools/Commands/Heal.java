@@ -1,22 +1,21 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EntityCommand;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.LivingEntity;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 
 public class Heal extends EntityCommand {
 	private static final String usage = genUsage("/heal [entity]");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		LivingEntity entity;
+	public boolean execute(EsCommandSender sender, String[] args) {
+		EsLivingEntity entity;
 		if (args.length == 0) {
 			if (isNotEntity(sender, usage)) {
                 return false;
             }
 			
-			entity = (LivingEntity) sender;
+			entity = (EsLivingEntity) sender;
 			send(sender, "&aHealed!");
 		} else {
 			entity = getEntity(sender, args[0]);
@@ -25,11 +24,11 @@ public class Heal extends EntityCommand {
                 return false;
             }
 			
-			send(sender, "&aHealed &6%s", getEntityName(entity));
+			send(sender, "&aHealed &6%s", entity.getName());
 		}
 
-		setHealth(entity, getMaxHealth(entity));
-		entity.setFireTicks(0);
+		entity.setHealth(entity.getMaxHealth());
+		entity.setOnFireTicks(0);
 		return true;
 	}
 

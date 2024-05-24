@@ -2,26 +2,26 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.ConfigManager;
 import net.serble.estools.EntityCommand;
-import net.serble.estools.Main;
+import net.serble.estools.Entrypoints.EsToolsBukkit;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.*;
 
+// TODO: Event command needs migrating
 public class God extends EntityCommand implements Listener {
 	private static final HashMap<UUID, Integer> currentPlayers = new HashMap<>();
 	private static final String usage = genUsage("/god [entity] [time]");
 
 	@Override
 	public void onEnable() {
-		Bukkit.getServer().getPluginManager().registerEvents(this, Main.plugin);
+		Bukkit.getServer().getPluginManager().registerEvents(this, EsToolsBukkit.plugin);
 
 		FileConfiguration f = ConfigManager.load("gods.yml");
 		List<String> godList = f.getStringList("gods");
@@ -29,8 +29,8 @@ public class God extends EntityCommand implements Listener {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		LivingEntity p;
+	public boolean execute(EsCommandSender sender, String[] args) {
+		EsLivingEntity p;
 		int timer = -1;
 		
 		if (args.length == 0) {
@@ -38,7 +38,7 @@ public class God extends EntityCommand implements Listener {
                 return false;
             }
 			
-			p = (LivingEntity) sender;
+			p = (EsLivingEntity) sender;
 		} else {
 			p = getEntity(sender, args[0]);
 			
@@ -68,7 +68,7 @@ public class God extends EntityCommand implements Listener {
 				Bukkit.getScheduler().cancelTask(taskId);
 			}
 
-			send(sender, "&aGod mode &6disabled&a for &6%s", getEntityName(p));
+			send(sender, "&aGod mode &6disabled&a for &6%s", p.getName());
 		}
 		else {
 			int taskId = -1;
@@ -77,7 +77,7 @@ public class God extends EntityCommand implements Listener {
 			if (timer >= 0) {
 				timerStr = timer / 20d + " seconds";
 
-				taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, () -> currentPlayers.remove(uid), timer);
+				taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(EsToolsBukkit.plugin, () -> currentPlayers.remove(uid), timer);
 			}
 
 			currentPlayers.put(uid, taskId);
@@ -85,7 +85,7 @@ public class God extends EntityCommand implements Listener {
 				save();
 			}
 
-			send(sender, "&aGod mode &6enabled&a for &6%s&a for &6%s", getEntityName(p), timerStr);
+			send(sender, "&aGod mode &6enabled&a for &6%s&a for &6%s", p.getName(), timerStr);
 		}
 
 		return true;

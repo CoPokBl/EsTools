@@ -17,4 +17,6 @@ public interface EsEntity extends EsCommandSender {
     Set<String> getScoreboardTags();
     void addScoreboardTag(String tag);
     boolean hasScoreboardTag(String tag);
+    void setOnFireTicks(int ticks);
+    void addPassenger(EsEntity entity);
 }

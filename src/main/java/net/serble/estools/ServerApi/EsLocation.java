@@ -70,4 +70,12 @@ public class EsLocation extends Position {
     public int getBlockZ() {
         return (int) Math.round(getZ());
     }
+
+    public EsLocation add(Position other) {
+        return add(other.getX(), other.getY(), other.getZ());
+    }
+
+    public EsLocation add(double x, double y, double z) {
+        return new EsLocation(world, getX() + x, getY() + y, getZ() + z);
+    }
 }
