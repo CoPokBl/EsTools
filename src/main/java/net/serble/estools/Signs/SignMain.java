@@ -2,7 +2,7 @@ package net.serble.estools.Signs;
 
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.EsToolsCommand;
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPlayer;
+import net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -45,7 +45,7 @@ public class SignMain implements Listener {
 
             if (signType != null) {
                 e.setCancelled(true);
-                signType.run(new BukkitPlayer(e.getPlayer()), state.getLines());
+                signType.run(new FoliaPlayer(e.getPlayer()), state.getLines());
             }
         }
     }

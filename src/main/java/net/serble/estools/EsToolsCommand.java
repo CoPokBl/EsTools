@@ -1,7 +1,7 @@
 package net.serble.estools;
 
 import net.serble.estools.ServerApi.EsLocation;
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
+import net.serble.estools.ServerApi.Implementations.Folia.FoliaHelper;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -28,8 +29,8 @@ public abstract class EsToolsCommand implements CommandExecutor, EsToolsTabCompl
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		return execute(BukkitHelper.fromBukkitCommandSender(sender), args);
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+		return execute(FoliaHelper.fromBukkitCommandSender(sender), args);  // TODO: This is dependent on Folia
 	}
 
 	public static List<String> fixTabComplete(List<String> inList, String arg) {

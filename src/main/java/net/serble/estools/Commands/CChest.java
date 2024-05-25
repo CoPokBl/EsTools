@@ -5,8 +5,8 @@ import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ConfigManager;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsGameMode;
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitInventory;
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPlayer;
+import net.serble.estools.ServerApi.Implementations.Folia.FoliaInventory;
+import net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayer;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsInventory;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
@@ -119,7 +119,7 @@ public class CChest extends EsToolsCommand implements Listener {
         }
 
 		// If player inventory
-        if (!e.getClickedInventory().equals(((BukkitInventory)cChests.get(uid)).getBukkitInventory())) {
+        if (!e.getClickedInventory().equals(((FoliaInventory)cChests.get(uid)).getBukkitInventory())) {  // TODO: Reliance
 			// Shift click into cChest
 			if (equalsOr(e.getClick(), ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT) && currentItem != null) {
 				e.setCancelled(true);
@@ -175,7 +175,7 @@ public class CChest extends EsToolsCommand implements Listener {
 		if (a == null || b == null) {
 			return false;
 		}
-		return a.equals(((BukkitInventory) b).getBukkitInventory());
+		return a.equals(((FoliaInventory) b).getBukkitInventory());
 	}
 	
 	// Cancel drag if inside cChest
@@ -231,19 +231,19 @@ public class CChest extends EsToolsCommand implements Listener {
 		UUID uid = e.getPlayer().getUniqueId();
 
 		if (isSameInv(e.getInventory(), cChests.get(uid))) {
-			savePlayer(new BukkitPlayer((Player) e.getPlayer()));
+			savePlayer(new FoliaPlayer((Player) e.getPlayer()));  // TODO: Fix
 		}
 	}
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
-		savePlayer(new BukkitPlayer(e.getPlayer()));
+		savePlayer(new FoliaPlayer(e.getPlayer()));
 		cChests.remove(e.getPlayer().getUniqueId());
 	}
 	
 	@EventHandler
 	public void onKick(PlayerKickEvent e) {
-		savePlayer(new BukkitPlayer(e.getPlayer()));
+		savePlayer(new FoliaPlayer(e.getPlayer()));
 		cChests.remove(e.getPlayer().getUniqueId());
 	}
 }

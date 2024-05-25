@@ -4,11 +4,13 @@ import net.serble.estools.ConfigManager;
 import net.serble.estools.EntityCommand;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.Implementations.Folia.FoliaLivingEntity;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -120,11 +122,11 @@ public class Buddha extends EntityCommand implements Listener {
 
 	@EventHandler
 	public void damage(EntityDamageEvent e) {
-		if (!(e.getEntity() instanceof EsLivingEntity) || !currentPlayers.containsKey(e.getEntity().getUniqueId())) {
+		if (!(e.getEntity() instanceof LivingEntity) || !currentPlayers.containsKey(e.getEntity().getUniqueId())) {
 			return;
 		}
 
-		EsLivingEntity entity = (EsLivingEntity) e.getEntity();
+		EsLivingEntity entity = new FoliaLivingEntity((LivingEntity) e.getEntity());
 
 		// Get all our vars since Minecraft broke everything in 1.6
 		double damage = getDamageFromEvent(e);

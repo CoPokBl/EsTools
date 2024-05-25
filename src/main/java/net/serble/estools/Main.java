@@ -51,6 +51,8 @@ public class Main {
 		server = platform.getServerInstance(context);
 		logger = server.getLogger();
 
+		logger.info("Starting EsTools on platform: " + platform.name());
+
 		minecraftVersion = server.getVersion();
 
 		Effects.load();

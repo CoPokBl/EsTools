@@ -1,7 +1,6 @@
-package net.serble.estools.ServerApi.Implementations.Bukkit;
+package net.serble.estools.ServerApi.Implementations.Folia;
 
 import net.serble.estools.Effects;
-import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.Main;
 import net.serble.estools.SemanticVersion;
 import net.serble.estools.ServerApi.EsPotType;
@@ -20,10 +19,10 @@ import org.bukkit.potion.PotionEffectType;
 import java.io.File;
 import java.util.*;
 
-public class BukkitServer implements EsServerSoftware {
+public class FoliaServer implements EsServerSoftware {
     private final JavaPlugin plugin;
 
-    public BukkitServer(Object pluginObj) {
+    public FoliaServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
     }
 
@@ -33,7 +32,7 @@ public class BukkitServer implements EsServerSoftware {
         if (p == null) {
             return null;
         }
-        return new BukkitPlayer(p);
+        return new FoliaPlayer(p);
     }
 
     @Override
@@ -43,13 +42,13 @@ public class BukkitServer implements EsServerSoftware {
             if (entity == null) {
                 return null;
             }
-            return new BukkitEntity(entity);
+            return new FoliaEntity(entity);
         }
 
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
                 if (entity.getUniqueId() == uuid) {
-                    return new BukkitEntity(entity);
+                    return new FoliaEntity(entity);
                 }
             }
         }
@@ -67,7 +66,7 @@ public class BukkitServer implements EsServerSoftware {
             int posOfMC = versionS.indexOf("(MC: ") + 5;
             versionS = versionS.substring(posOfMC, versionS.indexOf(')', posOfMC));
         } else {
-            Bukkit.getLogger().warning("Could not detect version from: " + versionS);
+            Main.logger.warning("Could not detect version from: " + versionS);
             throw new RuntimeException("Could not detect version");
         }
 
@@ -83,7 +82,7 @@ public class BukkitServer implements EsServerSoftware {
             }
         }
 
-        Bukkit.getLogger().info("Version detected as: 1." + minor + '.' + patch + " from: " + versionS);
+        Main.logger.info("Version detected as: 1." + minor + '.' + patch + " from: " + versionS);
         return new SemanticVersion(1, minor, patch);
     }
 
@@ -93,7 +92,7 @@ public class BukkitServer implements EsServerSoftware {
             if (Bukkit.class.getMethod("getOnlinePlayers").getReturnType() == Collection.class) {
                 List<EsPlayer> players = new ArrayList<>();
                 for (org.bukkit.entity.Player p : Bukkit.getOnlinePlayers()) {
-                    players.add(new BukkitPlayer(p));
+                    players.add(new FoliaPlayer(p));
                 }
                 return players;
             }
@@ -101,7 +100,7 @@ public class BukkitServer implements EsServerSoftware {
                 org.bukkit.entity.Player[] players = (org.bukkit.entity.Player[]) Bukkit.class.getMethod("getOnlinePlayers").invoke(null, new Object[0]);
                 List<EsPlayer> users = new ArrayList<>();
                 for (org.bukkit.entity.Player p : players) {
-                    users.add(new BukkitPlayer(p));
+                    users.add(new FoliaPlayer(p));
                 }
                 return users;
             }
@@ -114,7 +113,7 @@ public class BukkitServer implements EsServerSoftware {
 
     @Override
     public EsItemStack createItemStack(String material, int amount) {
-        return new BukkitItemStack(material, amount);
+        return new FoliaItemStack(material, amount);
     }
 
     @SuppressWarnings("deprecation")
@@ -137,7 +136,7 @@ public class BukkitServer implements EsServerSoftware {
             assert meta != null;
             meta.addCustomEffect(new PotionEffect(Objects.requireNonNull(Registry.EFFECT.match(effType)), duration, amp-1), true);
             pot.setItemMeta(meta);
-            return new BukkitItemStack(pot);
+            return new FoliaItemStack(pot);
         } else if (Main.minecraftVersion.getMinor() >= 4) {
             String effType;
             try {
@@ -148,7 +147,7 @@ public class BukkitServer implements EsServerSoftware {
 
             org.bukkit.potion.Potion potion = new org.bukkit.potion.Potion(Objects.requireNonNull(Registry.POTION.match(effType)), amp);
             potion.setSplash(potType == EsPotType.splash);
-            return new BukkitItemStack(potion.toItemStack(1));
+            return new FoliaItemStack(potion.toItemStack(1));
         } else {  // This isn't possible to get to because this class won't load on 1.3 and below
             return null;
         }
@@ -156,8 +155,8 @@ public class BukkitServer implements EsServerSoftware {
 
     @Override
     public EsInventory createInventory(EsPlayer owner, int size, String title) {
-        InventoryHolder holder = owner == null ? null : ((BukkitPlayer) owner).getBukkitPlayer();
-        return new BukkitInventory(Bukkit.createInventory(holder, size, title));
+        InventoryHolder holder = owner == null ? null : ((FoliaPlayer) owner).getBukkitPlayer();
+        return new FoliaInventory(Bukkit.createInventory(holder, size, title));
     }
 
     @SuppressWarnings("deprecation")
@@ -185,7 +184,7 @@ public class BukkitServer implements EsServerSoftware {
         }
 
         // Pre 1.13, we need to use the helper to get all the keys
-        Set<Map.Entry<String, String>> enchSet = BukkitEnchantmentsHelper.entrySet();
+        Set<Map.Entry<String, String>> enchSet = FoliaEnchantmentsHelper.entrySet();
         String[] enchs = new String[enchSet.size()];
         int i = 0;
         for (Map.Entry<String, String> enchEntry : enchSet) {
@@ -209,7 +208,7 @@ public class BukkitServer implements EsServerSoftware {
     @Override
     public boolean doesEnchantmentExist(String name) {
         try {
-            return BukkitHelper.getBukkitEnchantment(name) != null;
+            return FoliaHelper.getBukkitEnchantment(name) != null;
         } catch (Exception e) {
             return false;
         }
@@ -222,7 +221,7 @@ public class BukkitServer implements EsServerSoftware {
 
     @Override
     public void dispatchCommand(EsCommandSender sender, String cmd) {
-        Bukkit.dispatchCommand(BukkitHelper.toBukkitCommandSender(sender), cmd);
+        FoliaHelper.runSync(() -> Bukkit.dispatchCommand(FoliaHelper.toBukkitCommandSender(sender), cmd));
     }
 
     @Override
@@ -242,16 +241,16 @@ public class BukkitServer implements EsServerSoftware {
 
     @Override
     public void runTaskLater(Runnable task, long ticks) {
-        Bukkit.getScheduler().runTaskLater(EsToolsBukkit.plugin, task, ticks);
+        FoliaHelper.runTaskLater(task, ticks);
     }
 
     @Override
     public void runTask(Runnable task) {
-        Bukkit.getScheduler().runTask(EsToolsBukkit.plugin, task);
+        FoliaHelper.runTaskOnNextTick(task);
     }
 
     @Override
     public EsLogger getLogger() {
-        return new BukkitLogger();
+        return new FoliaLogger();
     }
 }

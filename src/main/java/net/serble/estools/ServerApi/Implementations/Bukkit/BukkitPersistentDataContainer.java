@@ -1,6 +1,7 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.ServerApi.EsPersistentDataType;
+import net.serble.estools.ServerApi.Implementations.Folia.FoliaHelper;
 import net.serble.estools.ServerApi.Interfaces.EsPersistentDataContainer;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -18,12 +19,12 @@ public class BukkitPersistentDataContainer implements EsPersistentDataContainer 
 
     @Override
     public void set(String key, EsPersistentDataType type, Object val) {
-        bukkitContainer.set(Objects.requireNonNull(getNamespacedKey(key)), BukkitHelper.toBukkitPersistentDataType(type), val);
+        bukkitContainer.set(Objects.requireNonNull(getNamespacedKey(key)), FoliaHelper.toBukkitPersistentDataType(type), val);
     }
 
     @Override
     public Object get(String key, EsPersistentDataType type) {
-        return null;
+        return bukkitContainer.get(Objects.requireNonNull(getNamespacedKey(key)), FoliaHelper.toBukkitPersistentDataType(type));
     }
 
     @Override

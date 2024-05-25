@@ -3,8 +3,8 @@ package net.serble.estools.Commands;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitItemStack;
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPlayer;
+import net.serble.estools.ServerApi.Implementations.Folia.FoliaItemStack;
+import net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayer;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
@@ -50,13 +50,14 @@ public class Infinite extends EsToolsCommand implements Listener {
             return;
         }
 
-        EsItemStack item = new BukkitItemStack(e.getItemInHand().clone());
-        EsPlayer p = new BukkitPlayer(e.getPlayer());
+        // TODO: Migrate
+        EsItemStack item = new FoliaItemStack(e.getItemInHand().clone());
+        EsPlayer p = new FoliaPlayer(e.getPlayer());
 
         // TODO: This is a terrible way of implementing this btw
-        Main.server.runTaskLater(() -> {
+        Main.server.runTask(() -> {
             p.setMainHand(item);
             p.updateInventory();  // A bug makes this necessary
-        }, 0);
+        });
     }
 }

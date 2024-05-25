@@ -2,10 +2,9 @@ package net.serble.estools;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPlayer;
+import net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayer;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class Vault {
@@ -42,12 +41,12 @@ public class Vault {
             return false;
         }
 
-        if (Vault.economy.getBalance(((BukkitPlayer) p).getBukkitPlayer()) < price) {
+        if (Vault.economy.getBalance(((FoliaPlayer) p).getBukkitPlayer()) < price) {
             EsToolsCommand.send(p, "&cYou do not have enough money to purchase this item.");
             return false;
         }
 
-        Vault.economy.withdrawPlayer(((BukkitPlayer) p).getBukkitPlayer(), price);
+        Vault.economy.withdrawPlayer(((FoliaPlayer) p).getBukkitPlayer(), price);
         return true;
     }
 
@@ -57,7 +56,7 @@ public class Vault {
             return false;
         }
 
-        EconomyResponse economyResponse = Vault.economy.depositPlayer(((BukkitPlayer) p).getBukkitPlayer(), price);
+        EconomyResponse economyResponse = Vault.economy.depositPlayer(((FoliaPlayer) p).getBukkitPlayer(), price);
         return economyResponse.transactionSuccess();
     }
 }
