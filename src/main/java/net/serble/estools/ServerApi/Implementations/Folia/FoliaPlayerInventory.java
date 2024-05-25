@@ -1,5 +1,6 @@
 package net.serble.estools.ServerApi.Implementations.Folia;
 
+import net.serble.estools.ServerApi.EsEquipmentSlot;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayerInventory;
 import org.bukkit.inventory.PlayerInventory;
@@ -45,5 +46,10 @@ public class FoliaPlayerInventory extends FoliaInventory implements EsPlayerInve
     @Override
     public EsItemStack getBoots() {
         return new net.serble.estools.ServerApi.Implementations.Folia.FoliaItemStack(bukkitInv.getBoots());
+    }
+
+    @Override
+    public void setItem(EsEquipmentSlot slot, EsItemStack item) {
+        bukkitInv.setItem(FoliaHelper.toBukkitEquipmentSlot(slot), ((FoliaItemStack) item).getBukkitItem());
     }
 }

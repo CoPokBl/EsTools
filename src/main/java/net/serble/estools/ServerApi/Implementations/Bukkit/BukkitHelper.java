@@ -1,11 +1,8 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.Entrypoints.EsToolsBukkit;
-import net.serble.estools.ServerApi.EsLocation;
+import net.serble.estools.ServerApi.*;
 import net.serble.estools.Main;
-import net.serble.estools.ServerApi.EsPersistentDataType;
-import net.serble.estools.ServerApi.Position;
-import net.serble.estools.ServerApi.EsGameMode;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -18,6 +15,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
@@ -135,6 +134,64 @@ public class BukkitHelper {
         throw new RuntimeException("Invalid GameMode");
     }
 
+    public static PlayerTeleportEvent.TeleportCause toBukkitTeleportCause(EsTeleportCause esCause) {
+        switch (esCause) {
+            case EnderPearl:
+                return PlayerTeleportEvent.TeleportCause.ENDER_PEARL;
+            case Command:
+                return PlayerTeleportEvent.TeleportCause.COMMAND;
+            case Plugin:
+                return PlayerTeleportEvent.TeleportCause.PLUGIN;
+            case NetherPortal:
+                return PlayerTeleportEvent.TeleportCause.NETHER_PORTAL;
+            case EndPortal:
+                return PlayerTeleportEvent.TeleportCause.END_PORTAL;
+            case Spectate:
+                return PlayerTeleportEvent.TeleportCause.SPECTATE;
+            case EndGateway:
+                return PlayerTeleportEvent.TeleportCause.END_GATEWAY;
+            case ChorusFruit:
+                return PlayerTeleportEvent.TeleportCause.CHORUS_FRUIT;
+            case Dismount:
+                return PlayerTeleportEvent.TeleportCause.DISMOUNT;
+            case ExitBed:
+                return PlayerTeleportEvent.TeleportCause.EXIT_BED;
+            case Unknown:
+                return PlayerTeleportEvent.TeleportCause.UNKNOWN;
+            default:
+                throw new IllegalArgumentException("Unknown EsTeleportCause: " + esCause);
+        }
+    }
+
+    public static EsTeleportCause fromBukkitTeleportCause(PlayerTeleportEvent.TeleportCause bukkitCause) {
+        switch (bukkitCause) {
+            case ENDER_PEARL:
+                return EsTeleportCause.EnderPearl;
+            case COMMAND:
+                return EsTeleportCause.Command;
+            case PLUGIN:
+                return EsTeleportCause.Plugin;
+            case NETHER_PORTAL:
+                return EsTeleportCause.NetherPortal;
+            case END_PORTAL:
+                return EsTeleportCause.EndPortal;
+            case SPECTATE:
+                return EsTeleportCause.Spectate;
+            case END_GATEWAY:
+                return EsTeleportCause.EndGateway;
+            case CHORUS_FRUIT:
+                return EsTeleportCause.ChorusFruit;
+            case DISMOUNT:
+                return EsTeleportCause.Dismount;
+            case EXIT_BED:
+                return EsTeleportCause.ExitBed;
+            case UNKNOWN:
+                return EsTeleportCause.Unknown;
+            default:
+                throw new IllegalArgumentException("Invalid TeleportCause");
+        }
+    }
+
     public static EsBlock fromBukkitBlock(Block block) {
         BlockState state = block.getState();
 
@@ -223,6 +280,44 @@ public class BukkitHelper {
             return true;
         } catch (ClassNotFoundException e) {
             return false;
+        }
+    }
+
+    public static EquipmentSlot toBukkitEquipmentSlot(EsEquipmentSlot slot) {
+        switch (slot) {
+            case Feet:
+                return EquipmentSlot.FEET;
+            case Hand:
+                return EquipmentSlot.HAND;
+            case Head:
+                return EquipmentSlot.HEAD;
+            case legs:
+                return EquipmentSlot.LEGS;
+            case Chest:
+                return EquipmentSlot.CHEST;
+            case OffHand:
+                return EquipmentSlot.OFF_HAND;
+        }
+
+        throw new RuntimeException("idfk");
+    }
+
+    public static EsEquipmentSlot fromBukkitEquipmentSlot(EquipmentSlot slot) {
+        switch (slot) {
+            case FEET:
+                return EsEquipmentSlot.Feet;
+            case HAND:
+                return EsEquipmentSlot.Hand;
+            case HEAD:
+                return EsEquipmentSlot.Head;
+            case LEGS:
+                return EsEquipmentSlot.legs;
+            case CHEST:
+                return EsEquipmentSlot.Chest;
+            case OFF_HAND:
+                return EsEquipmentSlot.OffHand;
+            default:
+                throw new IllegalArgumentException("Invalid EquipmentSlot");
         }
     }
 }

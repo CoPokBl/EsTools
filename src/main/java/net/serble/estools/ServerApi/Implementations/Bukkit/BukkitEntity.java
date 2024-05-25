@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper.toBukkitLocation;
-
 public class BukkitEntity implements EsEntity {
     private final org.bukkit.entity.Entity bukkitEntity;
 
@@ -130,5 +128,10 @@ public class BukkitEntity implements EsEntity {
             //noinspection deprecation
             bukkitEntity.setPassenger(((BukkitEntity) entity).getBukkitEntity());
         }
+    }
+
+    @Override
+    public void setFallDistance(float dis) {
+        bukkitEntity.setFallDistance(dis);
     }
 }

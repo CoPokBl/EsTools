@@ -4,26 +4,24 @@ import net.serble.estools.ConfigManager;
 import net.serble.estools.EntityCommand;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.Main;
-import net.serble.estools.ServerApi.Implementations.Folia.FoliaLivingEntity;
+import net.serble.estools.ServerApi.EsEventListener;
+import net.serble.estools.ServerApi.Events.EsEntityDamageEvent;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.*;
 
-public class Buddha extends EntityCommand implements Listener {
+public class Buddha extends EntityCommand implements EsEventListener {
 	private static final HashMap<UUID, Integer> currentPlayers = new HashMap<>();
 	private static final String usage = genUsage("/buddha [entity] [time]");
 
 	@Override
 	public void onEnable() {
-		Bukkit.getServer().getPluginManager().registerEvents(this, EsToolsBukkit.plugin);
+		Main.registerEvents(this);
 
 		FileConfiguration f = ConfigManager.load("gods.yml");
 		List<String> buddhas = f.getStringList("buddhas");
@@ -93,58 +91,6 @@ public class Buddha extends EntityCommand implements Listener {
 		return true;
 	}
 
-	private double getDamageFromEvent(EntityDamageEvent e) {
-		if (Main.minecraftVersion.getMinor() > 5) {
-			return e.getDamage();
-		}
-
-		try {
-			return (double)(int)EntityDamageEvent.class.getMethod("getDamage").invoke(e);
-		} catch (Exception ex) {
-			Bukkit.getLogger().severe(ex.toString());
-			return 0d;
-		}
-	}
-
-	private void setDamageFromEvent(EntityDamageEvent e, @SuppressWarnings("SameParameterValue") double d) {
-		if (Main.minecraftVersion.getMinor() > 5) {
-			e.setDamage(d);
-			return;
-		}
-
-		try {
-            //noinspection JavaReflectionMemberAccess, It's an int in older versions
-            EntityDamageEvent.class.getMethod("setDamage", int.class).invoke(e, (int) d);
-		} catch (Exception ex) {
-			Bukkit.getLogger().severe(ex.toString());
-		}
-	}
-
-	@EventHandler
-	public void damage(EntityDamageEvent e) {
-		if (!(e.getEntity() instanceof LivingEntity) || !currentPlayers.containsKey(e.getEntity().getUniqueId())) {
-			return;
-		}
-
-		EsLivingEntity entity = new FoliaLivingEntity((LivingEntity) e.getEntity());
-
-		// Get all our vars since Minecraft broke everything in 1.6
-		double damage = getDamageFromEvent(e);
-		double health = entity.getHealth();
-		double maxHealth = entity.getMaxHealth();
-
-		if (damage < health) {  // Not lethal
-			return;
-		}
-
-		// Lethal hit (lethal company reference)
-		double extraDamage = damage - health;
-		double resultingDamageTaken = extraDamage % maxHealth;
-
-		setDamageFromEvent(e, 0);
-		entity.setHealth(maxHealth - resultingDamageTaken);
-	}
-
 	private static void save() {
 		FileConfiguration f = new YamlConfiguration();
 
@@ -158,5 +104,34 @@ public class Buddha extends EntityCommand implements Listener {
 
 		f.set("buddhas", buddhas);
 		ConfigManager.save("gods.yml", f);
+	}
+
+	@Override
+	public void executeEvent(EsEvent event) {
+		if (!(event instanceof EsEntityDamageEvent)) {
+			return;
+		}
+		EsEntityDamageEvent e = (EsEntityDamageEvent) event;
+
+		if (!(e.getEntity() instanceof EsLivingEntity) || !currentPlayers.containsKey(e.getEntity().getUniqueId())) {
+			return;
+		}
+		EsLivingEntity entity = (EsLivingEntity) e.getEntity();
+
+		// Get all our vars since Minecraft broke everything in 1.6
+		double damage = e.getDamage();
+		double health = entity.getHealth();
+		double maxHealth = entity.getMaxHealth();
+
+		if (damage < health) {  // Not lethal
+			return;
+		}
+
+		// Lethal hit (lethal company reference)
+		double extraDamage = damage - health;
+		double resultingDamageTaken = extraDamage % maxHealth;
+
+		e.setDamage(0);
+		entity.setHealth(maxHealth - resultingDamageTaken);
 	}
 }

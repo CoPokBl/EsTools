@@ -3,25 +3,28 @@ package net.serble.estools.Commands;
 import net.serble.estools.ConfigManager;
 import net.serble.estools.EntityCommand;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
+import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsEventListener;
+import net.serble.estools.ServerApi.Events.EsEntityDamageEvent;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.*;
 
 // TODO: Event command needs migrating
-public class God extends EntityCommand implements Listener {
+public class God extends EntityCommand implements EsEventListener {
 	private static final HashMap<UUID, Integer> currentPlayers = new HashMap<>();
 	private static final String usage = genUsage("/god [entity] [time]");
 
 	@Override
 	public void onEnable() {
-		Bukkit.getServer().getPluginManager().registerEvents(this, EsToolsBukkit.plugin);
+		Main.registerEvents(this);
 
 		FileConfiguration f = ConfigManager.load("gods.yml");
 		List<String> godList = f.getStringList("gods");
@@ -91,13 +94,6 @@ public class God extends EntityCommand implements Listener {
 		return true;
 	}
 
-	@EventHandler
-	public void damage(EntityDamageEvent e) {
-		if (currentPlayers.containsKey(e.getEntity().getUniqueId())) {
-			e.setCancelled(true);
-		}
-	}
-
 	private static void save() {
 		FileConfiguration f = new YamlConfiguration();
 
@@ -111,5 +107,17 @@ public class God extends EntityCommand implements Listener {
 
 		f.set("gods", gods);
 		ConfigManager.save("gods.yml", f);
+	}
+
+	@Override
+	public void executeEvent(EsEvent event) {
+		if (!(event instanceof EsEntityDamageEvent)) {
+			return;
+		}
+		EsEntityDamageEvent e = (EsEntityDamageEvent) event;
+
+		if (currentPlayers.containsKey(e.getEntity().getUniqueId())) {
+			e.setCancelled(true);
+		}
 	}
 }

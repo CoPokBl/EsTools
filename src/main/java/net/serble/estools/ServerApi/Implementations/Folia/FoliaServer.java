@@ -1,6 +1,7 @@
 package net.serble.estools.ServerApi.Implementations.Folia;
 
 import net.serble.estools.Effects;
+import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.Main;
 import net.serble.estools.SemanticVersion;
 import net.serble.estools.ServerApi.EsPotType;
@@ -252,5 +253,10 @@ public class FoliaServer implements EsServerSoftware {
     @Override
     public EsLogger getLogger() {
         return new FoliaLogger();
+    }
+
+    @Override
+    public void startEvents() {
+        Bukkit.getPluginManager().registerEvents(new FoliaEventsListener(), EsToolsBukkit.plugin);
     }
 }

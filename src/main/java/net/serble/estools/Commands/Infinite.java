@@ -1,28 +1,24 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
-import net.serble.estools.ServerApi.Implementations.Folia.FoliaItemStack;
-import net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayer;
+import net.serble.estools.ServerApi.EsEquipmentSlot;
+import net.serble.estools.ServerApi.EsEventListener;
+import net.serble.estools.ServerApi.Events.EsBlockPlaceEvent;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-// TODO: Events command, need migrating
-public class Infinite extends EsToolsCommand implements Listener {
+public class Infinite extends EsToolsCommand implements EsEventListener {
     private static final ArrayList<UUID> currentPlayers = new ArrayList<>();
 
     @Override
     public void onEnable() {
-        Bukkit.getServer().getPluginManager().registerEvents(this, EsToolsBukkit.plugin);
+        Main.registerEvents(this);
     }
 
     @Override
@@ -44,20 +40,20 @@ public class Infinite extends EsToolsCommand implements Listener {
         return true;
     }
 
-    @EventHandler
-    public void blockPlace(BlockPlaceEvent e) {
+    @Override
+    public void executeEvent(EsEvent event) {
+        if (!(event instanceof EsBlockPlaceEvent)) {
+            return;
+        }
+        EsBlockPlaceEvent e = (EsBlockPlaceEvent) event;
+
         if (!currentPlayers.contains(e.getPlayer().getUniqueId())) {
             return;
         }
 
-        // TODO: Migrate
-        EsItemStack item = new FoliaItemStack(e.getItemInHand().clone());
-        EsPlayer p = new FoliaPlayer(e.getPlayer());
+        EsItemStack item = e.getPlacedItem().clone();
+        EsEquipmentSlot slot = e.getHand();
 
-        // TODO: This is a terrible way of implementing this btw
-        Main.server.runTask(() -> {
-            p.setMainHand(item);
-            p.updateInventory();  // A bug makes this necessary
-        });
+        Main.server.runTask(() -> e.getPlayer().getInventory().setItem(slot, item));
     }
 }

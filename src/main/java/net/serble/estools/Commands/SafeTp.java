@@ -3,20 +3,19 @@ package net.serble.estools.Commands;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsEventListener;
+import net.serble.estools.ServerApi.EsTeleportCause;
+import net.serble.estools.ServerApi.Events.EsPlayerTeleportEvent;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
-import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import net.serble.estools.ServerApi.Interfaces.EsEvent;
 
-// TODO: Events command, needs migrating
-public class SafeTp extends EsToolsCommand implements Listener {
+public class SafeTp extends EsToolsCommand implements EsEventListener {
     public static boolean enabled = true;
 
     @Override
     public void onEnable() {
         enabled = Main.plugin.getConfig().getBoolean("safetp", true);
-        Bukkit.getServer().getPluginManager().registerEvents(this, EsToolsBukkit.plugin);
+        Main.registerEvents(this);
     }
 
     @Override
@@ -34,10 +33,14 @@ public class SafeTp extends EsToolsCommand implements Listener {
         return true;
     }
 
-    @EventHandler
-    public void teleport(final PlayerTeleportEvent e) {
-        if (enabled && equalsOr(e.getCause(), PlayerTeleportEvent.TeleportCause.COMMAND,
-                PlayerTeleportEvent.TeleportCause.PLUGIN, PlayerTeleportEvent.TeleportCause.UNKNOWN)) {
+    @Override
+    public void executeEvent(EsEvent event) {
+        if (!(event instanceof EsPlayerTeleportEvent)) {
+            return;
+        }
+        EsPlayerTeleportEvent e = (EsPlayerTeleportEvent) event;
+
+        if (enabled && equalsOr(e.getCause(), EsTeleportCause.Command, EsTeleportCause.Plugin, EsTeleportCause.Unknown)) {
             e.getPlayer().setFallDistance(0);
         }
     }

@@ -27,4 +27,5 @@ public interface EsServerSoftware {
     void runTaskLater(Runnable task, long ticks);
     void runTask(Runnable task);
     EsLogger getLogger();
+    void startEvents();
 }

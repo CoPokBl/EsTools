@@ -2,6 +2,7 @@ package net.serble.estools.ServerApi.Implementations.Folia;
 
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Material;
 
 public class FoliaItemStack extends BukkitItemStack {
@@ -20,5 +21,10 @@ public class FoliaItemStack extends BukkitItemStack {
     @Override
     public EsItemMeta getItemMeta() {
         return new FoliaItemMeta(bukkitItem.getItemMeta());
+    }
+
+    @Override
+    public EsItemStack clone() {
+        return new FoliaItemStack(bukkitItem.clone());
     }
 }

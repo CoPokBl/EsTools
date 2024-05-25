@@ -45,7 +45,7 @@ public class FoliaWorld extends BukkitWorld {
 
     @Override
     public void setStorming(boolean val) {
-        FoliaHelper.runTaskOnNextTick(() -> bukkitWorld.setStorm(false));
+        FoliaHelper.runTaskOnNextTick(() -> bukkitWorld.setStorm(val));
     }
 
     @Override

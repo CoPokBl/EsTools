@@ -1,5 +1,6 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
+import net.serble.estools.ServerApi.EsEquipmentSlot;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayerInventory;
 import org.bukkit.inventory.PlayerInventory;
@@ -45,5 +46,10 @@ public class BukkitPlayerInventory extends BukkitInventory implements EsPlayerIn
     @Override
     public EsItemStack getBoots() {
         return new BukkitItemStack(bukkitInv.getBoots());
+    }
+
+    @Override
+    public void setItem(EsEquipmentSlot slot, EsItemStack item) {
+        bukkitInv.setItem(BukkitHelper.toBukkitEquipmentSlot(slot), ((BukkitItemStack) item).getBukkitItem());
     }
 }

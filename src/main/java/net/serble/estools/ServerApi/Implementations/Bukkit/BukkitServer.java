@@ -254,4 +254,9 @@ public class BukkitServer implements EsServerSoftware {
     public EsLogger getLogger() {
         return new BukkitLogger();
     }
+
+    @Override
+    public void startEvents() {
+        Bukkit.getPluginManager().registerEvents(new BukkitEventsListener(), EsToolsBukkit.plugin);
+    }
 }

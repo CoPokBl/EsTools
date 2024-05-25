@@ -9,7 +9,9 @@ import net.serble.estools.Commands.PowerPick.*;
 import net.serble.estools.Commands.Teleport.*;
 import net.serble.estools.Commands.Warps.*;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
+import net.serble.estools.ServerApi.EsEventListener;
 import net.serble.estools.ServerApi.EsGameMode;
+import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsLogger;
 import net.serble.estools.ServerApi.Interfaces.EsServerSoftware;
 import net.serble.estools.ServerApi.ServerPlatform;
@@ -25,6 +27,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("UnusedReturnValue")
 public class Main {
@@ -38,6 +42,7 @@ public class Main {
 	public static EsServerSoftware server;
 	public static EsLogger logger;
 	private final Object context;
+	private static final List<EsEventListener> eventListeners = new ArrayList<>();
 
 	private static final int bStatsId = 21760;
 
@@ -170,6 +175,18 @@ public class Main {
 
 		Give.enable();
 		Updater.checkForUpdate();
+
+		server.startEvents();  // Events will now trigger
+	}
+
+	public static void callEvent(EsEvent event) {
+		for (EsEventListener listener : eventListeners) {
+			listener.executeEvent(event);
+		}
+	}
+
+	public static void registerEvents(EsEventListener listener) {
+		eventListeners.add(listener);
 	}
 
 	// Setup Command Overloads
