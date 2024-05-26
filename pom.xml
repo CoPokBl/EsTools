@@ -38,6 +38,23 @@
                     <shadedPattern>net.serble.estools</shadedPattern>
                 </relocation>
             </relocations>
+            <filters>
+                <filter>
+                    <artifact>*:*</artifact>
+                    <excludes>
+                        <exclude>META-INF/*.SF</exclude>
+                        <exclude>META-INF/*.DSA</exclude>
+                        <exclude>META-INF/*.RSA</exclude>
+                        <exclude>META-INF/MANIFEST.MF</exclude>
+                    </excludes>
+                </filter>
+            </filters>
+            <artifactSet>
+                <excludes>
+                    <exclude>com.google.errorprone:error_prone_annotations</exclude>
+                    <exclude>com.google.code.gson:gson</exclude>
+                </excludes>
+            </artifactSet>
         </configuration>
         <executions>
           <execution>
