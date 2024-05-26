@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
+import net.serble.estools.ServerApi.ServerPlatform;
 import net.serble.estools.Tester;
 import net.serble.estools.Updater;
 
@@ -69,6 +70,11 @@ public class EsTools extends EsToolsCommand {
 
 			if (!(sender instanceof EsPlayer)) {
 				send(sender, "&cYou must be a player to use this command.");
+				return false;
+			}
+
+			if (Main.platform == ServerPlatform.Folia) {  // TODO: Fix
+				send(sender, "&cDue to scheduler limitations, /estools test is not currently supported on Folia");
 				return false;
 			}
 

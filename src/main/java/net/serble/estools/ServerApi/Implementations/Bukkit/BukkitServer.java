@@ -1,12 +1,11 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
-import net.serble.estools.Effects;
+import net.serble.estools.*;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
-import net.serble.estools.Main;
-import net.serble.estools.SemanticVersion;
 import net.serble.estools.ServerApi.EsPotType;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -23,9 +22,11 @@ import java.util.*;
 
 public class BukkitServer implements EsServerSoftware {
     private final JavaPlugin plugin;
+    private final BukkitEventsListener listener;
 
     public BukkitServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
+        listener = new BukkitEventsListener();
     }
 
     @Override
@@ -264,6 +265,36 @@ public class BukkitServer implements EsServerSoftware {
 
     @Override
     public void startEvents() {
-        Bukkit.getPluginManager().registerEvents(new BukkitEventsListener(), EsToolsBukkit.plugin);
+        Bukkit.getPluginManager().registerEvents(listener, EsToolsBukkit.plugin);
+    }
+
+    @Override
+    public void registerCommand(String cmd, EsToolsTabCompleter tab) {
+        PluginCommand command = Objects.requireNonNull(Bukkit.getPluginCommand(cmd));
+        if (command.getTabCompleter() == null) {
+            command.setExecutor(listener);
+        }
+        if (Main.tabCompleteEnabled) {
+            command.setTabCompleter(BukkitTabCompleteGenerator.generate(tab));
+        }
+    }
+
+    @Override
+    public void setTabCompleter(String cmd, EsToolsTabCompleter tab) {
+        PluginCommand command = Objects.requireNonNull(Bukkit.getPluginCommand(cmd));
+        if (Main.tabCompleteEnabled) {
+            command.setTabCompleter(BukkitTabCompleteGenerator.generate(tab));
+        }
+    }
+
+    @Override
+    public void setCommandPermission(String cmd, String perm) {
+        PluginCommand command = Objects.requireNonNull(Bukkit.getPluginCommand(cmd));
+        command.setPermission(perm);
+
+        if (Main.minecraftVersion.getMinor() > 0) {
+            //noinspection deprecation, is still useful in pre 1.13 and technically is useful in rare situations post 1.13
+            command.setPermissionMessage(EsToolsCommand.translate("&cYou do not have permission to run this command."));
+        }
     }
 }

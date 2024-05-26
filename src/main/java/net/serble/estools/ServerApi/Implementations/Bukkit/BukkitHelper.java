@@ -22,6 +22,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
+@SuppressWarnings("unused")
 public class BukkitHelper {
     public static Location toBukkitLocation(EsLocation loc) {
         Location bLoc = new Location(Bukkit.getWorld(loc.getWorld().getName()), loc.getX(), loc.getY(), loc.getZ());
@@ -196,12 +197,7 @@ public class BukkitHelper {
 
     public static EsBlock fromBukkitBlock(Block block) {
         BlockState state = block.getState();
-
-        if (state instanceof Sign) {
-            return new BukkitSign((Sign) state);
-        }
-
-        return new BukkitBlock(state);
+        return fromBukkitBlock(state);
     }
 
     @SuppressWarnings("deprecation")
@@ -222,6 +218,7 @@ public class BukkitHelper {
         return Enchantment.getByName(BukkitEnchantmentsHelper.getByName(name));
     }
 
+    @SuppressWarnings("rawtypes")
     public static PersistentDataType toBukkitPersistentDataType(EsPersistentDataType type) {
         switch (type) {
             case Byte:
@@ -480,6 +477,33 @@ public class BukkitHelper {
                 return InventoryAction.UNKNOWN;
             default:
                 throw new IllegalArgumentException("Invalid EsInventoryAction");
+        }
+    }
+
+    public static SoundCategory toBukkitSoundCategory(EsSoundCategory esSoundCategory) {
+        switch (esSoundCategory) {
+            case Master:
+                return SoundCategory.MASTER;
+            case Music:
+                return SoundCategory.MUSIC;
+            case Records:
+                return SoundCategory.RECORDS;
+            case Weather:
+                return SoundCategory.WEATHER;
+            case Blocks:
+                return SoundCategory.BLOCKS;
+            case Hostile:
+                return SoundCategory.HOSTILE;
+            case Neutral:
+                return SoundCategory.NEUTRAL;
+            case Players:
+                return SoundCategory.PLAYERS;
+            case Ambient:
+                return SoundCategory.AMBIENT;
+            case Voice:
+                return SoundCategory.VOICE;
+            default:
+                throw new IllegalArgumentException("Invalid EsSoundCategory");
         }
     }
 }

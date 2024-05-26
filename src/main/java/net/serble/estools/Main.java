@@ -11,6 +11,7 @@ import net.serble.estools.Commands.Warps.*;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.EsEventListener;
 import net.serble.estools.ServerApi.EsGameMode;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsLogger;
 import net.serble.estools.ServerApi.Interfaces.EsServerSoftware;
@@ -18,8 +19,7 @@ import net.serble.estools.ServerApi.ServerPlatform;
 import net.serble.estools.Signs.SignMain;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.FileConfiguration;  // TODO: The only remaining bukkit import in Main.java
 
 import net.serble.estools.Commands.*;
 
@@ -28,7 +28,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("UnusedReturnValue")
 public class Main {
@@ -43,6 +45,7 @@ public class Main {
 	public static EsLogger logger;
 	private final Object context;
 	private static final List<EsEventListener> eventListeners = new ArrayList<>();
+	private static final Map<String, EsToolsCommand> commands = new HashMap<>();
 
 	private static final int bStatsId = 21760;
 
@@ -185,74 +188,69 @@ public class Main {
 		}
 	}
 
+	public static boolean executeCommand(EsCommandSender sender, String cmd, String[] args) {
+		if (!commands.containsKey(cmd)) {
+			logger.severe("&cThe command: '" + cmd + "', does not exist");
+			return false;
+		}
+
+		return commands.get(cmd).execute(sender, args);
+	}
+
 	public static void registerEvents(EsEventListener listener) {
 		eventListeners.add(listener);
 	}
 
 	// Setup Command Overloads
 
-	public PluginCommand sc(String name, EsToolsCommand ce) {
-		PluginCommand cmd = EsToolsBukkit.plugin.getCommand(name);
-        assert cmd != null;
-        cmd.setExecutor(ce);
+	public void sc(String name, EsToolsCommand ce) {
+		server.registerCommand(name, ce);
+		commands.put(name, ce);
 		ce.onEnable();
-
-		if (tabCompleteEnabled && cmd.getTabCompleter() == null) {
-			ce.register(cmd);
-		}
-		return cmd;
 	}
 
-	public PluginCommand sc(String name, EsToolsCommand ce, int minVer) {
-		if (minecraftVersion.getMinor() >= minVer) return sc(name, ce);
-		else return sc(name, new WrongVersion(minVer));
+	public void sc(String name, EsToolsCommand ce, int minVer) {
+		if (minecraftVersion.getMinor() >= minVer) {
+            sc(name, ce);
+			return;
+        }
+		sc(name, new WrongVersion(minVer));
 	}
 	
-	public PluginCommand sc(String name, EsToolsCommand ce, EsToolsTabCompleter tc) {
-		PluginCommand cmd = sc(name, ce);
+	public void sc(String name, EsToolsCommand ce, EsToolsTabCompleter tc) {
+		sc(name, ce);
 		if (tabCompleteEnabled) {
-			tc.register(cmd);
+			server.setTabCompleter(name, tc);
 		}
-		return cmd;
 	}
 
-	public PluginCommand sc(String name, String perm, EsToolsCommand ce, EsToolsTabCompleter tc, int minMajor, int minMinor) {
+	public void sc(String name, String perm, EsToolsCommand ce, EsToolsTabCompleter tc, int minMajor, int minMinor) {
 		String versionName = minMajor + "." + minMinor;
 		if (minecraftVersion.getMinor() > minMajor || (minecraftVersion.getMinor() == minMajor && minecraftVersion.getPatch() >= minMinor)) {
 			if (tc == null) {
-				return sc(name, perm, ce);
+				sc(name, perm, ce);
+				return;
 			}
 
-            return sc(name, perm, ce, tc);
-        } else return sc(name, new WrongVersion(versionName), new WrongVersion(versionName));
+            sc(name, perm, ce, tc);
+        } else sc(name, new WrongVersion(versionName), new WrongVersion(versionName));
 	}
 
-	public PluginCommand sc(String name, String perm, EsToolsCommand ce) {
-		PluginCommand cmd = sc(name, ce);
-		cmd.setPermission("estools." + perm);
-
-		if (minecraftVersion.getMinor() > 0) {  // Permission errors weren't a thing in 1.0
-            //noinspection deprecation, is still useful in pre 1.13 and technically is useful in rare situations post 1.13
-            cmd.setPermissionMessage(EsToolsCommand.translate("&cYou do not have permission to run this command."));
-		}
-
-		if (tabCompleteEnabled && cmd.getTabCompleter() == null) {  // Give every command tab complete if they haven't already registered it
-			ce.register(cmd);
-		}
-		return cmd;
+	public void sc(String name, String perm, EsToolsCommand ce) {
+		sc(name, ce);
+		server.setCommandPermission(name, "estools." + perm);
 	}
 
-	public PluginCommand sc(String name, String perm, EsToolsCommand ce, int minVer) {
-		if (minecraftVersion.getMinor() >= minVer) return sc(name, perm, ce);
-		else return sc(name, perm, new WrongVersion(minVer));
+	public void sc(String name, String perm, EsToolsCommand ce, int minVer) {
+		if (minecraftVersion.getMinor() >= minVer) sc(name, perm, ce);
+		else sc(name, perm, new WrongVersion(minVer));
 	}
 	
-	public PluginCommand sc(String name, String perm, EsToolsCommand ce, EsToolsTabCompleter tc) {
-		PluginCommand cmd = sc(name, perm, ce);
+	public void sc(String name, String perm, EsToolsCommand ce, EsToolsTabCompleter tc) {
+		sc(name, perm, ce);
 		if (tabCompleteEnabled) {
-			tc.register(cmd);
+			server.setTabCompleter(name, tc);
 		}
-		return cmd;
 	}
 
 	// Overriding to create more predictable behaviour between versions
@@ -261,6 +259,7 @@ public class Main {
 	}
 
 	// Overriding because method doesn't exist in very early versions
+    @SuppressWarnings("unused")  // I might use it in the future
     public void saveResource(String res, boolean replace) {
 		InputStream resource = EsToolsBukkit.plugin.getResource(res);
 		File file = new File(EsToolsBukkit.plugin.getDataFolder(), res);
@@ -276,7 +275,6 @@ public class Main {
             Files.copy(resource, file.toPath());
 			logger.info("Copied " + res + " to " + file.toPath());
 		} catch (IOException e) {
-			e.printStackTrace();
 			logger.severe("Failed to save resource: " + e);
 		}
 	}

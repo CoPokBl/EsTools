@@ -71,6 +71,7 @@ public class BukkitItemStack implements EsItemStack {
             if (meta instanceof Damageable) {
                 ((Damageable) meta).setDamage(val);
             }
+            bukkitItem.setItemMeta(meta);
         } else {
             if (val > Short.MAX_VALUE) {
                 val = Short.MAX_VALUE;
@@ -94,6 +95,7 @@ public class BukkitItemStack implements EsItemStack {
         return 0;
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")  // I don't care, it doesn't work like that
     @Override
     public EsItemStack clone() {
         return new BukkitItemStack(bukkitItem.clone());

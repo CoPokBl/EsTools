@@ -10,6 +10,9 @@ import net.serble.estools.ServerApi.Interfaces.EsInventoryView;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,12 +25,13 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.Set;
 
-public class FoliaEventsListener implements Listener {
+public class FoliaEventsListener implements Listener, CommandExecutor {
 
     private double getDamageFromEvent(EntityDamageEvent e) {
         if (Main.minecraftVersion.getMinor() > 5) {
@@ -137,5 +141,10 @@ public class FoliaEventsListener implements Listener {
         EsInventoryDragEvent ee = new EsInventoryDragEvent(pl, inv, cs, view);
         Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        return Main.executeCommand(BukkitHelper.fromBukkitCommandSender(sender), command.getName(), args);
     }
 }

@@ -1,36 +1,23 @@
 package net.serble.estools;
 
 import net.serble.estools.ServerApi.EsLocation;
-import net.serble.estools.ServerApi.Implementations.Folia.FoliaHelper;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
-// TODO: Remove these
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
-public abstract class EsToolsCommand implements CommandExecutor, EsToolsTabCompleter {
+public abstract class EsToolsCommand implements EsToolsTabCompleter {
 
 	public void onEnable() { }
 
 	@Override
-	public List<String> onTabComplete(EsCommandSender sender, Command command, String alias, String[] args) {
+	public List<String> onTabComplete(EsCommandSender sender, String[] args) {
 		if (Main.minecraftVersion.getMinor() < 7) {
 			return new ArrayList<>();
 		}
 
 		String lArg = args[args.length - 1];
 		return fixTabComplete(tabComplete(sender, args, lArg), lArg);
-	}
-
-	@Override
-	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-		return execute(FoliaHelper.fromBukkitCommandSender(sender), args);  // TODO: This is dependent on Folia
 	}
 
 	public static List<String> fixTabComplete(List<String> inList, String arg) {
@@ -61,12 +48,7 @@ public abstract class EsToolsCommand implements CommandExecutor, EsToolsTabCompl
 	}
 	
 	public static String translate(String m, Object... a) {
-		if (Main.minecraftVersion.getMinor() > 1) {
-			return ChatColor.translateAlternateColorCodes('&', String.format(m, a));
-		}
-
-		// translateAlternateColorCodes doesn't exist in 1.1 and 1.0
-		// do it manually
+		// This works for every Minecraft :)
 		return String.format(m, a).replace('&', '§');
 	}
 	

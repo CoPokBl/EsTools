@@ -6,7 +6,6 @@ import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -31,7 +30,7 @@ public class Give implements EsToolsTabCompleter {
 	}
 
 	@Override
-	public List<String> onTabComplete(EsCommandSender sender, Command command, String alias, String[] args) {
+	public List<String> onTabComplete(EsCommandSender sender, String[] args) {
 		List<String> tab = new ArrayList<>();
 		
 		if (args.length == 1) {

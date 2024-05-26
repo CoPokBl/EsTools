@@ -2,6 +2,7 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsSoundCategory;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
@@ -74,7 +75,7 @@ public class Music extends EsToolsCommand {
 			return false;
 		}
 
-		p.playSound(sound, p.getLocation().add(0, 1000, 0), 100000, 1);
+		p.playSound(sound, EsSoundCategory.Records, p.getLocation().add(0, 1000, 0), 100000, 1);
 
 		// Substring away the MUSIC_DISK_ or the RECORD_ depending on the version
 		// then reformat to be all lowercase except for the first character

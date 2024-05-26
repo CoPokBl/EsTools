@@ -37,6 +37,10 @@
                     <pattern>org.bstats</pattern>
                     <shadedPattern>net.serble.estools</shadedPattern>
                 </relocation>
+                <relocation>
+                    <pattern>co.aikar.taskchain</pattern>
+                    <shadedPattern>net.serble.estools.taskchain</shadedPattern> <!-- Replace this -->
+                </relocation>
             </relocations>
             <filters>
                 <filter>
@@ -91,6 +95,10 @@
           <id>papermc</id>
           <url>https://repo.papermc.io/repository/maven-public/</url>
       </repository>
+      <repository>
+          <id>aikar</id>
+          <url>https://repo.aikar.co/content/groups/aikar/</url>
+      </repository>
   </repositories>
 
   <dependencies>
@@ -128,6 +136,11 @@
           <artifactId>folia-api</artifactId>
           <version>1.20.4-R0.1-SNAPSHOT</version>
           <scope>provided</scope>
+      </dependency>
+      <dependency>  <!-- Used for scheduling things to the main thread -->
+          <groupId>co.aikar</groupId>
+          <artifactId>taskchain-bukkit</artifactId>
+          <version>3.7.2</version>
       </dependency>
   </dependencies>
 </project>

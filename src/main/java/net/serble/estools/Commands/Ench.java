@@ -3,6 +3,7 @@ package net.serble.estools.Commands;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
@@ -39,6 +40,11 @@ public class Ench extends EsToolsCommand {
             }
 			
 			is = ((EsPlayer) sender).getMainHand();
+
+			if (is == null || Objects.equals(is.getType(), "AIR")) {
+				send(sender, "&cYou must be holding an item to enchant it");
+				return false;
+			}
 		} else {
 			EsPlayer p = getPlayer(sender, args[2]);
 			
@@ -47,9 +53,14 @@ public class Ench extends EsToolsCommand {
             }
 			
 			is = p.getMainHand();
+
+			if (is == null || Objects.equals(is.getType(), "AIR")) {
+				send(sender, "&c" + p.getName() + " isn't holding an item");
+				return false;
+			}
 		}
 		
-		if (Main.server.doesEnchantmentExist(args[0].toLowerCase()) && is != null) {
+		if (Main.server.doesEnchantmentExist(args[0].toLowerCase())) {
 			is.addEnchantment(args[0].toLowerCase(), level);
 			send(sender, "&aEnchantment &6%s&a at level &6%s&a was added!", args[0].toLowerCase(), level);
 		}

@@ -8,6 +8,7 @@ import net.serble.estools.ServerApi.EsTeleportCause;
 import net.serble.estools.ServerApi.Events.EsPlayerTeleportEvent;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsEvent;
+import net.serble.estools.ServerApi.ServerPlatform;
 
 public class SafeTp extends EsToolsCommand implements EsEventListener {
     public static boolean enabled = true;
@@ -20,6 +21,11 @@ public class SafeTp extends EsToolsCommand implements EsEventListener {
 
     @Override
     public boolean execute(EsCommandSender sender, String[] args) {
+        if (Main.platform == ServerPlatform.Folia) {
+            send(sender, "&cCurrently due to Folia issues SafeTP is not supported");
+            return false;
+        }
+
         if (enabled) {
             enabled = false;
             send(sender, "&aTeleporting now &6&lWILL&a make you take fall damage!");

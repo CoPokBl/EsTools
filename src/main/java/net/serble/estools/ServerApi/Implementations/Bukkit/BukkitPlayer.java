@@ -3,11 +3,13 @@ package net.serble.estools.ServerApi.Implementations.Bukkit;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsGameMode;
 import net.serble.estools.ServerApi.EsLocation;
+import net.serble.estools.ServerApi.EsSoundCategory;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -47,7 +49,11 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
 
     @Override
     public EsItemStack getMainHand() {
-        return new BukkitItemStack(bukkitGetMainHand());
+        ItemStack mainHand = bukkitGetMainHand();
+        if (mainHand == null) {
+            return null;
+        }
+        return new BukkitItemStack(mainHand);
     }
 
     @Override
@@ -111,8 +117,8 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
     }
 
     @Override
-    public void playSound(String sound, EsLocation loc, int volume, int pitch) {
-        bukkitPlayer.playSound(BukkitHelper.toBukkitLocation(loc), Sound.valueOf(sound), volume, pitch);
+    public void playSound(String sound, EsSoundCategory category, EsLocation loc, int volume, int pitch) {
+        bukkitPlayer.playSound(BukkitHelper.toBukkitLocation(loc), Sound.valueOf(sound), BukkitHelper.toBukkitSoundCategory(category), volume, pitch);
     }
 
     @SuppressWarnings("UnstableApiUsage")  // Yes I know it's a bug

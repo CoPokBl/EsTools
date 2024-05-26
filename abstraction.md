@@ -1,6 +1,4 @@
 # TODO
-- Events
 - Config
 - Fix testing
-- Fix /safetp
-- Fix weather commands
+- Fix teleport event not working on folia

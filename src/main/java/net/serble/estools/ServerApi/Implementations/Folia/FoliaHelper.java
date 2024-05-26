@@ -24,9 +24,10 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+@SuppressWarnings("unused")
 public class FoliaHelper extends BukkitHelper {
 
-    private static GlobalRegionScheduler getGlobalScheduler() {
+    public static GlobalRegionScheduler getGlobalScheduler() {
         GlobalRegionScheduler grs;
         try {
             Object serverInstance = EsToolsBukkit.plugin.getServer();
@@ -112,11 +113,7 @@ public class FoliaHelper extends BukkitHelper {
     }
 
     public static void runSync(Runnable task) {
-        //getGlobalScheduler().execute(EsToolsBukkit.plugin, task);
-        //Bukkit.getScheduler().runTask(EsToolsBukkit.plugin, task);
-        //runTaskLater(task, 1);
-        //getGlobalScheduler().run(EsToolsBukkit.plugin, (t) -> task.run());
-        Bukkit.getScheduler().scheduleSyncDelayedTask(EsToolsBukkit.plugin, task, 1);
+        FoliaServer.newChain().sync(task::run).sync(() -> Bukkit.getLogger().info("Main thread: " + Thread.currentThread().getName())).execute();
     }
 
     public static EsCommandSender fromBukkitCommandSender(org.bukkit.command.CommandSender sender) {

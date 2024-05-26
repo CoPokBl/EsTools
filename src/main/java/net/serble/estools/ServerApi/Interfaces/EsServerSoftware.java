@@ -1,5 +1,6 @@
 package net.serble.estools.ServerApi.Interfaces;
 
+import net.serble.estools.EsToolsTabCompleter;
 import net.serble.estools.SemanticVersion;
 import net.serble.estools.ServerApi.EsPotType;
 
@@ -7,6 +8,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public interface EsServerSoftware {
     EsPlayer getPlayer(String name);
     EsEntity getEntity(UUID uuid);
@@ -29,4 +31,7 @@ public interface EsServerSoftware {
     void cancelTask(int id);
     EsLogger getLogger();
     void startEvents();
+    void registerCommand(String cmd, EsToolsTabCompleter tab);
+    void setTabCompleter(String cmd, EsToolsTabCompleter tab);
+    void setCommandPermission(String cmd, String perm);
 }

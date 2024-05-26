@@ -1,21 +1,47 @@
 package net.serble.estools.ServerApi.Implementations.Folia;
 
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitItemStack;
+import net.serble.estools.Main;
+import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
-public class FoliaItemStack extends BukkitItemStack {
-    private final org.bukkit.inventory.ItemStack bukkitItem;
+public class FoliaItemStack implements EsItemStack {
+    private final ItemStack bukkitItem;
 
     public FoliaItemStack(String mat, int amount) {
-        super(mat, amount);
         bukkitItem = new org.bukkit.inventory.ItemStack(Material.valueOf(mat), amount);
     }
 
     public FoliaItemStack(org.bukkit.inventory.ItemStack child) {
-        super(child);
         bukkitItem = child;
+    }
+
+    public ItemStack getBukkitItem() {
+        return bukkitItem;
+    }
+
+    @Override
+    public int getAmount() {
+        return bukkitItem.getAmount();
+    }
+
+    @Override
+    public void setAmount(int val) {
+        bukkitItem.setAmount(val);
+    }
+
+    @Override
+    public String getType() {
+        return bukkitItem.getType().name();
+    }
+
+    @Override
+    public void setType(String val) {
+        bukkitItem.setType(Material.valueOf(val));
     }
 
     @Override
@@ -24,12 +50,65 @@ public class FoliaItemStack extends BukkitItemStack {
     }
 
     @Override
+    public void setItemMeta(EsItemMeta meta) {
+        bukkitItem.setItemMeta(((FoliaItemMeta) meta).getBukkitMeta());
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void setDamage(int val) {
+        if (Main.minecraftVersion.getMinor() > 12) {
+            ItemMeta meta = bukkitItem.getItemMeta();
+            if (meta instanceof Damageable) {
+                ((Damageable) meta).setDamage(val);
+            }
+            bukkitItem.setItemMeta(meta);
+        } else {
+            if (val > Short.MAX_VALUE) {
+                val = Short.MAX_VALUE;
+            }
+
+            bukkitItem.setDurability((short) val);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public int getDamage() {
+        if (Main.minecraftVersion.getMinor() > 12) {
+            return bukkitItem.getDurability();
+        }
+
+        ItemMeta meta = bukkitItem.getItemMeta();
+        if (meta instanceof Damageable) {
+            return ((Damageable) meta).getDamage();
+        }
+        return 0;
+    }
+
+    @SuppressWarnings("MethodDoesntCallSuperMethod")  // I don't care, it doesn't work like that
+    @Override
     public EsItemStack clone() {
         return new FoliaItemStack(bukkitItem.clone());
     }
 
     @Override
     public boolean isSimilar(EsItemStack stack) {
-        return ((FoliaItemStack) stack).getBukkitItem().isSimilar(bukkitItem);
+        return ((FoliaItemStack) stack).bukkitItem.isSimilar(bukkitItem);
+    }
+
+    @Override
+    public void addEnchantment(String enchantment, int level) {
+        bukkitItem.addUnsafeEnchantment(BukkitHelper.getBukkitEnchantment(enchantment), level);
+    }
+
+    @Override
+    public void removeEnchantment(String enchantment) {
+        bukkitItem.removeEnchantment(BukkitHelper.getBukkitEnchantment(enchantment));
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return bukkitItem.getMaxStackSize();
     }
 }

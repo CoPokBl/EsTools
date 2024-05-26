@@ -14,6 +14,7 @@ import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import net.serble.estools.EsToolsCommand;
+import net.serble.estools.ServerApi.ServerPlatform;
 
 public class Back extends EsToolsCommand implements EsEventListener {
 	private static final HashMap<UUID, EsLocation> prevLocations = new HashMap<>();
@@ -28,6 +29,10 @@ public class Back extends EsToolsCommand implements EsEventListener {
 		if (isNotPlayer(sender)) {
             return false;
         }
+
+		if (Main.platform == ServerPlatform.Folia) {
+			send(sender, "&cCurrently due to Folia issues /back only works for death locations");
+		}
 		
 		EsPlayer p = (EsPlayer) sender;
 		if (prevLocations.containsKey(p.getUniqueId())) {
@@ -44,11 +49,6 @@ public class Back extends EsToolsCommand implements EsEventListener {
 	public void executeEvent(EsEvent event) {
 		if (event instanceof EsPlayerDeathEvent) {
 			EsPlayerDeathEvent e = (EsPlayerDeathEvent) event;
-
-			if (Main.minecraftVersion.getMinor() > 1) {
-				prevLocations.put(e.getPlayer().getUniqueId(), e.getPlayer().getLocation());
-				return;
-			}
 
 			EsPlayer p = e.getPlayer();
 			prevLocations.put(p.getUniqueId(), p.getLocation());

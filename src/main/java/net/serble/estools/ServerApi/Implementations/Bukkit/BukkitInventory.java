@@ -17,7 +17,8 @@ public class BukkitInventory implements EsInventory {
 
     @Override
     public void setItem(int slot, EsItemStack item) {
-        bukkitInv.setItem(slot, ((BukkitItemStack) item).getBukkitItem());
+        ItemStack stack = item == null ? null : ((BukkitItemStack) item).getBukkitItem();
+        bukkitInv.setItem(slot, stack);
     }
 
     @Override
@@ -68,6 +69,9 @@ public class BukkitInventory implements EsInventory {
 
     @Override
     public boolean isEqualTo(EsInventory inv) {
+        if (inv == null) {
+            return false;
+        }
         return ((BukkitInventory) inv).getBukkitInventory().equals(bukkitInv);
     }
 
