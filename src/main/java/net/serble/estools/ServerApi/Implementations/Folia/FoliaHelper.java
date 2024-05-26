@@ -3,6 +3,7 @@ package net.serble.estools.ServerApi.Implementations.Folia;
 import io.papermc.paper.threadedregions.scheduler.EntityScheduler;
 import io.papermc.paper.threadedregions.scheduler.GlobalRegionScheduler;
 import io.papermc.paper.threadedregions.scheduler.RegionScheduler;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsLocation;
@@ -86,8 +87,8 @@ public class FoliaHelper extends BukkitHelper {
         return grs;
     }
 
-    public static void runTaskLater(Runnable task, long ticks) {
-        getGlobalScheduler().runDelayed(EsToolsBukkit.plugin, (t) -> task.run(), ticks);
+    public static ScheduledTask runTaskLater(Runnable task, long ticks) {
+        return getGlobalScheduler().runDelayed(EsToolsBukkit.plugin, (t) -> task.run(), ticks);
     }
 
     public static void runTaskOnNextTick(Runnable task) {

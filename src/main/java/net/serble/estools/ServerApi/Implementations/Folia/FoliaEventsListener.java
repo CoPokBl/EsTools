@@ -1,11 +1,14 @@
 package net.serble.estools.ServerApi.Implementations.Folia;
 
 import net.serble.estools.Main;
-import net.serble.estools.ServerApi.Events.EsBlockPlaceEvent;
-import net.serble.estools.ServerApi.Events.EsEntityDamageEvent;
-import net.serble.estools.ServerApi.Events.EsPlayerDeathEvent;
-import net.serble.estools.ServerApi.Events.EsPlayerTeleportEvent;
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
+import net.serble.estools.ServerApi.EsClickType;
+import net.serble.estools.ServerApi.EsInventoryAction;
+import net.serble.estools.ServerApi.Events.*;
+import net.serble.estools.ServerApi.Implementations.Bukkit.*;
+import net.serble.estools.ServerApi.Interfaces.EsInventory;
+import net.serble.estools.ServerApi.Interfaces.EsInventoryView;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,10 +17,15 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
+import java.util.Set;
 
 public class FoliaEventsListener implements Listener {
 
@@ -84,6 +92,50 @@ public class FoliaEventsListener implements Listener {
         EsEntityDamageEvent ee = new EsEntityDamageEvent(FoliaHelper.fromBukkitEntity(e.getEntity()), getDamageFromEvent(e));
         Main.callEvent(ee);
         setDamageFromEvent(e, ee.getDamage());
+        e.setCancelled(ee.isCancelled());
+    }
+
+    @EventHandler
+    public void onInvClick(InventoryClickEvent e) {
+        EsInventory clInv = new FoliaInventory(e.getClickedInventory());
+        EsInventory inv = new FoliaInventory(e.getInventory());
+        EsClickType ct = FoliaHelper.fromBukkitClickType(e.getClick());
+        EsInventoryAction ac = FoliaHelper.fromBukkitInventoryAction(e.getAction());
+        EsItemStack ci = new FoliaItemStack(e.getCurrentItem());
+        EsPlayer cl = new FoliaPlayer((Player) e.getWhoClicked());
+        EsItemStack cu = new FoliaItemStack(e.getCursor());
+        int sl = e.getSlot();
+        EsInventoryClickEvent ee = new EsInventoryClickEvent(cl, sl, cu, inv, clInv, ci, ac, ct);
+        Main.callEvent(ee);
+        e.setCancelled(ee.isCancelled());
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        Main.callEvent(new EsPlayerQuitEvent(new FoliaPlayer(e.getPlayer())));
+    }
+
+    @EventHandler
+    public void onKick(PlayerQuitEvent e) {
+        Main.callEvent(new EsPlayerQuitEvent(new FoliaPlayer(e.getPlayer())));
+    }
+
+    @EventHandler
+    public void onInvClose(InventoryCloseEvent e) {
+        EsInventory inv = new FoliaInventory(e.getInventory());
+        EsPlayer pl = new FoliaPlayer((Player) e.getPlayer());
+        EsInventoryCloseEvent ee = new EsInventoryCloseEvent(pl, inv);
+        Main.callEvent(ee);
+    }
+
+    @EventHandler
+    public void onDrag(InventoryDragEvent e) {
+        EsInventory inv = new FoliaInventory(e.getInventory());
+        EsPlayer pl = new FoliaPlayer((Player) e.getWhoClicked());
+        Set<Integer> cs = e.getRawSlots();
+        EsInventoryView view = new FoliaInventoryView(e.getView());
+        EsInventoryDragEvent ee = new EsInventoryDragEvent(pl, inv, cs, view);
+        Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());
     }
 }

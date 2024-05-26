@@ -12,4 +12,6 @@ public interface EsItemStack {
     void setDamage(int val);
     int getDamage();
     EsItemStack clone();
+    boolean isSimilar(EsItemStack stack);
+    int getMaxStackSize();
 }

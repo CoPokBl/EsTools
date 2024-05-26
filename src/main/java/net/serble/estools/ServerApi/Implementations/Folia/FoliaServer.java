@@ -1,5 +1,6 @@
 package net.serble.estools.ServerApi.Implementations.Folia;
 
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.serble.estools.Effects;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.Main;
@@ -22,6 +23,7 @@ import java.util.*;
 
 public class FoliaServer implements EsServerSoftware {
     private final JavaPlugin plugin;
+    private final Map<Integer, ScheduledTask> tasks = new HashMap<>();
 
     public FoliaServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
@@ -241,13 +243,34 @@ public class FoliaServer implements EsServerSoftware {
     }
 
     @Override
-    public void runTaskLater(Runnable task, long ticks) {
-        FoliaHelper.runTaskLater(task, ticks);
+    public int runTaskLater(Runnable task, long ticks) {
+        ScheduledTask foliaTask = FoliaHelper.runTaskLater(task, ticks);
+        int id = foliaTask.hashCode();
+        if (tasks.containsKey(id)) {
+            throw new RuntimeException("Hash collision?");
+        }
+
+        tasks.put(id, foliaTask);
+        return id;
     }
 
     @Override
     public void runTask(Runnable task) {
         FoliaHelper.runTaskOnNextTick(task);
+    }
+
+    @Override
+    public void cancelTask(int id) {
+        if (!tasks.containsKey(id)) {
+            throw new RuntimeException("That task doesn't exist");
+        }
+
+        ScheduledTask task = tasks.get(id);
+        if (task.isCancelled() || task.getExecutionState() == ScheduledTask.ExecutionState.FINISHED) {
+            return;
+        }
+
+        task.cancel();
     }
 
     @Override

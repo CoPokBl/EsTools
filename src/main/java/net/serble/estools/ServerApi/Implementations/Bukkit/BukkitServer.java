@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.*;
@@ -241,13 +242,19 @@ public class BukkitServer implements EsServerSoftware {
     }
 
     @Override
-    public void runTaskLater(Runnable task, long ticks) {
-        Bukkit.getScheduler().runTaskLater(EsToolsBukkit.plugin, task, ticks);
+    public int runTaskLater(Runnable task, long ticks) {
+        BukkitTask bukkitTask = Bukkit.getScheduler().runTaskLater(EsToolsBukkit.plugin, task, ticks);
+        return bukkitTask.getTaskId();
     }
 
     @Override
     public void runTask(Runnable task) {
         Bukkit.getScheduler().runTask(EsToolsBukkit.plugin, task);
+    }
+
+    @Override
+    public void cancelTask(int id) {
+        Bukkit.getScheduler().cancelTask(id);
     }
 
     @Override

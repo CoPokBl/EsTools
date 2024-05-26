@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.Map.Entry;
 
+// TODO: Config class
 public class Give implements EsToolsTabCompleter {
 	private static HashMap<String, String> materialNames;
 

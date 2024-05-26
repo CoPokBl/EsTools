@@ -1,39 +1,28 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ConfigManager;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsClickType;
+import net.serble.estools.ServerApi.EsEventListener;
 import net.serble.estools.ServerApi.EsGameMode;
-import net.serble.estools.ServerApi.Implementations.Folia.FoliaInventory;
-import net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayer;
-import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
-import net.serble.estools.ServerApi.Interfaces.EsInventory;
-import net.serble.estools.ServerApi.Interfaces.EsItemStack;
-import net.serble.estools.ServerApi.Interfaces.EsPlayer;
-import org.bukkit.Bukkit;
+import net.serble.estools.ServerApi.EsInventoryAction;
+import net.serble.estools.ServerApi.Events.*;
+import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-// TODO: This class has config and events
-public class CChest extends EsToolsCommand implements Listener {
+// TODO: This class has config
+public class CChest extends EsToolsCommand implements EsEventListener {
 
 	public static HashMap<UUID, EsInventory> cChests = new HashMap<>();
 
 	@Override
 	public void onEnable() {
 		if (Main.minecraftVersion.getMinor() > 4) {
-			Bukkit.getServer().getPluginManager().registerEvents(this, EsToolsBukkit.plugin);
+			Main.registerEvents(this);
 		}
 	}
 
@@ -77,28 +66,27 @@ public class CChest extends EsToolsCommand implements Listener {
 		cChests.put(uid, inv);
 		return true;
 	}
-	
-	@EventHandler
-	public void inventoryClick(final InventoryClickEvent e) {
-		UUID uid = e.getWhoClicked().getUniqueId();
-		ItemStack currentItem = e.getCurrentItem();
-		
+
+	private void onInventoryClick(final EsInventoryClickEvent e) {
+		UUID uid = e.getPlayer().getUniqueId();
+		EsItemStack currentItem = e.getCurrentItem();
+
 		// Check if inventory is cChest
-        if (!cChests.containsKey(uid) || !isSameInv(e.getInventory(), cChests.get(uid)) || e.getClickedInventory() == null) {
+        if (!cChests.containsKey(uid) || !e.getInventory().isEqualTo(cChests.get(uid)) || e.getClickedInventory() == null) {
             return;
         }
 
-        if (e.getAction().equals(InventoryAction.COLLECT_TO_CURSOR)) {
+        if (e.getAction().equals(EsInventoryAction.CollectToCursor)) {
             e.setCancelled(true);
 
-            ItemStack cursor = e.getCursor();
+            EsItemStack cursor = e.getCursor();
 			if (cursor == null) {
 				return;
 			}
 
-			org.bukkit.inventory.Inventory pInv = e.getWhoClicked().getInventory();
-            for (Map.Entry<Integer, ? extends ItemStack> i : pInv.all(cursor.getType()).entrySet()) {
-				ItemStack item = i.getValue();
+			EsInventory pInv = e.getPlayer().getInventory();
+            for (Map.Entry<Integer, EsItemStack> i : pInv.all(cursor.getType()).entrySet()) {
+				EsItemStack item = i.getValue();
 
 				if (item == null) {
 					continue;
@@ -119,9 +107,9 @@ public class CChest extends EsToolsCommand implements Listener {
         }
 
 		// If player inventory
-        if (!e.getClickedInventory().equals(((FoliaInventory)cChests.get(uid)).getBukkitInventory())) {  // TODO: Reliance
+        if (!e.getClickedInventory().isEqualTo(cChests.get(uid))) {
 			// Shift click into cChest
-			if (equalsOr(e.getClick(), ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT) && currentItem != null) {
+			if (equalsOr(e.getClick(), EsClickType.ShiftLeft, EsClickType.ShiftRight) && currentItem != null) {
 				e.setCancelled(true);
 
 				e.getInventory().addItem(currentItem.clone());
@@ -131,23 +119,23 @@ public class CChest extends EsToolsCommand implements Listener {
         }
 
 		// Right click in cChest (clear item)
-		if (e.getClick().equals(ClickType.RIGHT) && currentItem != null) {
+		if (e.getClick().equals(EsClickType.Right) && currentItem != null) {
 			e.setCancelled(true);
 			e.getClickedInventory().setItem(e.getSlot(), null);
 			return;
 		}
 
 		// Add to chest
-		if (equalsOr(e.getAction(), InventoryAction.PLACE_ALL, InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME)) {
+		if (equalsOr(e.getAction(), EsInventoryAction.PlaceAll, EsInventoryAction.PlaceOne, EsInventoryAction.PlaceSome)) {
 			e.setCancelled(true);
-			ItemStack item = e.getCursor();
+			EsItemStack item = e.getCursor();
 			if (item == null) {
 				return;
 			}
 
-			ItemStack finalItem = item.clone();
+			EsItemStack finalItem = item.clone();
 
-			if (equalsOr(e.getAction(), InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME)) {
+			if (equalsOr(e.getAction(), EsInventoryAction.PlaceOne, EsInventoryAction.PlaceSome)) {
 				finalItem.setAmount(1);
 			}
 
@@ -156,39 +144,27 @@ public class CChest extends EsToolsCommand implements Listener {
 		}
 
 		// Remove from cChest
-		if (equalsOr(e.getClick(), ClickType.LEFT, ClickType.DROP, ClickType.CONTROL_DROP,
-				ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT) && currentItem != null) {
-			ItemStack item = currentItem.clone();
+		if (equalsOr(e.getClick(), EsClickType.Left, EsClickType.Drop, EsClickType.ControlDrop,
+				EsClickType.ShiftLeft, EsClickType.ShiftRight) && currentItem != null) {
+			EsItemStack item = currentItem.clone();
 			setItemTask(e.getInventory(), e.getSlot(), item);
 		}
     }
 
-	private static void setItemTask(org.bukkit.inventory.Inventory inv, int slot, ItemStack item) {
-		Bukkit.getScheduler().runTask(EsToolsBukkit.plugin, () -> inv.setItem(slot, item));
-	}
-
-	// TODO: Remove reliance on Bukkit
-	private static boolean isSameInv(Inventory a, EsInventory b) {
-		if (a == null && b == null) {
-			return true;
-		}
-		if (a == null || b == null) {
-			return false;
-		}
-		return a.equals(((FoliaInventory) b).getBukkitInventory());
+	private static void setItemTask(EsInventory inv, int slot, EsItemStack item) {
+		Main.server.runTask(() -> inv.setItem(slot, item));
 	}
 	
 	// Cancel drag if inside cChest
-	@EventHandler
-    public void onInventoryDrag(final InventoryDragEvent e) {
-		EsInventory inv = cChests.get(e.getWhoClicked().getUniqueId());
-        if (!isSameInv(e.getInventory(), inv)) {
+    private void onInventoryDrag(final EsInventoryDragEvent e) {
+		EsInventory inv = cChests.get(e.getPlayer().getUniqueId());
+        if (!e.getInventory().isEqualTo(inv)) {
             return;
         }
 
         // Check if any of the slots dragged are in the cChest
-        for (int slot : e.getRawSlots()) {
-            if (isSameInv(Objects.requireNonNull(e.getView().getInventory(slot)), inv)) {
+        for (int slot : e.getChangedSlots()) {
+            if (e.getView().getInventory(slot).isEqualTo(inv)) {
                 e.setCancelled(true);
                 return;
             }
@@ -213,7 +189,8 @@ public class CChest extends EsToolsCommand implements Listener {
 
         return inv;
     }
-	
+
+	// TODO: Config
 	public static void savePlayer(EsPlayer p) {
 		UUID uid = p.getUniqueId();
 		
@@ -226,24 +203,48 @@ public class CChest extends EsToolsCommand implements Listener {
 		ConfigManager.save("cchests/" + uid + ".yml", f);
 	}
 
-	@EventHandler
-	public void onClose(InventoryCloseEvent e) {
+	private void onClose(EsInventoryCloseEvent e) {
 		UUID uid = e.getPlayer().getUniqueId();
 
-		if (isSameInv(e.getInventory(), cChests.get(uid))) {
-			savePlayer(new FoliaPlayer((Player) e.getPlayer()));  // TODO: Fix
+		if (e.getInventory().isEqualTo(cChests.get(uid))) {
+			savePlayer(e.getPlayer());
 		}
 	}
 
-	@EventHandler
-	public void onQuit(PlayerQuitEvent e) {
-		savePlayer(new FoliaPlayer(e.getPlayer()));
+	private void onQuit(EsPlayerQuitEvent e) {
+		savePlayer(e.getPlayer());
 		cChests.remove(e.getPlayer().getUniqueId());
 	}
-	
-	@EventHandler
-	public void onKick(PlayerKickEvent e) {
-		savePlayer(new FoliaPlayer(e.getPlayer()));
+
+	private void onKick(EsPlayerKickEvent e) {
+		savePlayer(e.getPlayer());
 		cChests.remove(e.getPlayer().getUniqueId());
+	}
+
+	@Override
+	public void executeEvent(EsEvent event) {
+		if (event instanceof EsPlayerQuitEvent) {
+			onQuit((EsPlayerQuitEvent) event);
+			return;
+		}
+
+		if (event instanceof EsPlayerKickEvent) {
+			onKick((EsPlayerKickEvent) event);
+			return;
+		}
+
+		if (event instanceof EsInventoryClickEvent) {
+			onInventoryClick((EsInventoryClickEvent) event);
+			return;
+		}
+
+		if (event instanceof EsInventoryCloseEvent) {
+			onClose((EsInventoryCloseEvent) event);
+			return;
+		}
+
+		if (event instanceof EsInventoryDragEvent) {
+			onInventoryDrag((EsInventoryDragEvent) event);
+		}
 	}
 }

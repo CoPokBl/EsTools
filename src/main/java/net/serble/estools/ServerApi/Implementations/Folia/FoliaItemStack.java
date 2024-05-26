@@ -27,4 +27,9 @@ public class FoliaItemStack extends BukkitItemStack {
     public EsItemStack clone() {
         return new FoliaItemStack(bukkitItem.clone());
     }
+
+    @Override
+    public boolean isSimilar(EsItemStack stack) {
+        return ((FoliaItemStack) stack).getBukkitItem().isSimilar(bukkitItem);
+    }
 }

@@ -12,8 +12,6 @@ import net.serble.estools.ServerApi.Events.EsPlayerTeleportEvent;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.event.entity.EntityEvent;
 
 import net.serble.estools.EsToolsCommand;
 
@@ -52,12 +50,8 @@ public class Back extends EsToolsCommand implements EsEventListener {
 				return;
 			}
 
-			try {
-				EsPlayer p = (EsPlayer)EntityEvent.class.getMethod("getEntity").invoke(e);
-				prevLocations.put(p.getUniqueId(), p.getLocation());
-			} catch (Exception ex) {
-				Bukkit.getLogger().severe(ex.toString());
-			}
+			EsPlayer p = e.getPlayer();
+			prevLocations.put(p.getUniqueId(), p.getLocation());
 			return;
 		}
 

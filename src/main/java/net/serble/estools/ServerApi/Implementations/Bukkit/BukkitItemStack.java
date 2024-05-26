@@ -4,6 +4,7 @@ import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -11,7 +12,7 @@ public class BukkitItemStack implements EsItemStack {
     private final org.bukkit.inventory.ItemStack bukkitItem;
 
     public BukkitItemStack(String mat, int amount) {
-        bukkitItem = new org.bukkit.inventory.ItemStack(Material.valueOf(mat), amount);
+        bukkitItem = new ItemStack(Material.valueOf(mat), amount);
     }
 
     public BukkitItemStack(org.bukkit.inventory.ItemStack child) {
@@ -96,5 +97,15 @@ public class BukkitItemStack implements EsItemStack {
     @Override
     public EsItemStack clone() {
         return new BukkitItemStack(bukkitItem.clone());
+    }
+
+    @Override
+    public boolean isSimilar(EsItemStack stack) {
+        return ((BukkitItemStack) stack).getBukkitItem().isSimilar(bukkitItem);
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return bukkitItem.getMaxStackSize();
     }
 }

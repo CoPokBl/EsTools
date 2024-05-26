@@ -2,18 +2,14 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.ConfigManager;
 import net.serble.estools.EntityCommand;
-import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsEventListener;
 import net.serble.estools.ServerApi.Events.EsEntityDamageEvent;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.*;
 
@@ -68,7 +64,7 @@ public class God extends EntityCommand implements EsEventListener {
 			if (taskId == -1) {
 				save();
 			} else {
-				Bukkit.getScheduler().cancelTask(taskId);
+				Main.server.cancelTask(taskId);
 			}
 
 			send(sender, "&aGod mode &6disabled&a for &6%s", p.getName());
@@ -80,7 +76,7 @@ public class God extends EntityCommand implements EsEventListener {
 			if (timer >= 0) {
 				timerStr = timer / 20d + " seconds";
 
-				taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(EsToolsBukkit.plugin, () -> currentPlayers.remove(uid), timer);
+				taskId = Main.server.runTaskLater(() -> currentPlayers.remove(uid), timer);
 			}
 
 			currentPlayers.put(uid, taskId);
