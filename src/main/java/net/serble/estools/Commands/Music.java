@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-// TODO: Incomplete
 public class Music extends EsToolsCommand {
 	private static final String usage = genUsage("/music [song]");
 	private static final List<String> musics = new ArrayList<>();
