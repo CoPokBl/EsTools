@@ -1,6 +1,5 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsEventListener;
@@ -15,7 +14,7 @@ public class SafeTp extends EsToolsCommand implements EsEventListener {
 
     @Override
     public void onEnable() {
-        enabled = Main.plugin.getConfig().getBoolean("safetp", true);
+        enabled = Main.plugin.getConfig().isSafeTp();
         Main.registerEvents(this);
     }
 
@@ -34,8 +33,8 @@ public class SafeTp extends EsToolsCommand implements EsEventListener {
             send(sender, "&aTeleporting now &6&lWILL NOT&a make you take fall damage!");
         }
 
-        Main.plugin.getConfig().set("safetp", enabled);
-        EsToolsBukkit.plugin.saveConfig();  // TODO: How does this work?
+        Main.plugin.getConfig().setSafeTp(enabled);
+        Main.plugin.saveConfig();
         return true;
     }
 

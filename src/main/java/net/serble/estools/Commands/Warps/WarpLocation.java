@@ -1,37 +1,33 @@
 package net.serble.estools.Commands.Warps;
 
 import net.serble.estools.ServerApi.EsLocation;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.SerializableAs;
 
-import java.util.Map;
-import java.util.HashMap;
+public class WarpLocation {
+    private EsLocation location;
+    private String name;
+    private boolean global;
 
-@SerializableAs("WarpLocation")
-public class WarpLocation implements ConfigurationSerializable {
-    public EsLocation location;
-    public String name;
-    public boolean global;
-
-    @Override
-    public Map<String, Object> serialize() {
-        Map<String, Object> result = new HashMap<>();
-
-        result.put("location", location);
-        result.put("name", name);
-        result.put("global", global);
-
-        return result;
+    public String getName() {
+        return name;
     }
 
-    @SuppressWarnings("unused")
-    public static WarpLocation deserialize(Map<String, Object> args) {
-        WarpLocation warp = new WarpLocation();
+    public EsLocation getLocation() {
+        return location;
+    }
 
-        warp.location = (EsLocation)args.get("location");
-        warp.name = (String)args.get("name");
-        warp.global = (boolean)args.get("global");
+    public boolean isGlobal() {
+        return global;
+    }
 
-        return warp;
+    public void setLocation(EsLocation location) {
+        this.location = location;
+    }
+
+    public void setGlobal(boolean global) {
+        this.global = global;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

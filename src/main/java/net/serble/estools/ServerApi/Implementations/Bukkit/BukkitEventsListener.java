@@ -1,13 +1,11 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsAction;
 import net.serble.estools.ServerApi.EsClickType;
 import net.serble.estools.ServerApi.EsInventoryAction;
 import net.serble.estools.ServerApi.Events.*;
-import net.serble.estools.ServerApi.Interfaces.EsInventory;
-import net.serble.estools.ServerApi.Interfaces.EsInventoryView;
-import net.serble.estools.ServerApi.Interfaces.EsItemStack;
-import net.serble.estools.ServerApi.Interfaces.EsPlayer;
+import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,12 +14,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
@@ -140,6 +140,28 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
         EsInventoryDragEvent ee = new EsInventoryDragEvent(pl, inv, cs, view);
         Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent e) {
+        EsBlock cb = e.getClickedBlock() == null ? null : new BukkitBlock(e.getClickedBlock().getState());
+        EsPlayer p = new BukkitPlayer(e.getPlayer());
+        EsAction ac = BukkitHelper.fromBukkitAction(e.getAction());
+        EsPlayerInteractEvent ee = new EsPlayerInteractEvent(p, cb, ac);
+        Main.callEvent(ee);
+        e.setCancelled(ee.isCancelled());
+    }
+
+    @EventHandler
+    public void onSignChange(SignChangeEvent e) {
+        EsPlayer p = new BukkitPlayer(e.getPlayer());
+        String[] lines = e.getLines();
+        EsSignChangeEvent ee = new EsSignChangeEvent(p, lines);
+        Main.callEvent(ee);
+        e.setCancelled(ee.isCancelled());
+        for (int i = 0; i < lines.length; i++) {
+            e.setLine(i, ee.getLine(i));
+        }
     }
 
     @Override

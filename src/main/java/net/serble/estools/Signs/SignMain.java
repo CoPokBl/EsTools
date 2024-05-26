@@ -1,20 +1,17 @@
 package net.serble.estools.Signs;
 
-import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.EsToolsCommand;
-import net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.block.Sign;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsAction;
+import net.serble.estools.ServerApi.EsEventListener;
+import net.serble.estools.ServerApi.Events.EsPlayerInteractEvent;
+import net.serble.estools.ServerApi.Events.EsSignChangeEvent;
+import net.serble.estools.ServerApi.Interfaces.EsEvent;
+import net.serble.estools.ServerApi.Interfaces.EsSign;
 
 import java.util.HashMap;
 
-// TODO: Migrate away from bukkit events
-public class SignMain implements Listener {
+public class SignMain implements EsEventListener {
     private static final HashMap<String, SignType> signs = new HashMap<>();
     private static final HashMap<String, String> signConversions = new HashMap<>();
 
@@ -27,7 +24,7 @@ public class SignMain implements Listener {
         addSign(new Repair(), "[repair]", EsToolsCommand.translate("&1[Repair]"));
         addSign(new Sell(), "[sell]", EsToolsCommand.translate("&1[Sell]"));
 
-        Bukkit.getServer().getPluginManager().registerEvents(new SignMain(), EsToolsBukkit.plugin);
+        Main.registerEvents(new SignMain());
     }
 
     public static void addSign(SignType signType, String conversion, String sign) {
@@ -35,23 +32,20 @@ public class SignMain implements Listener {
         signs.put(sign, signType);
     }
 
-    @SuppressWarnings("deprecation")
-    @EventHandler
-    public void interact(PlayerInteractEvent e) {
-        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().name().endsWith("SIGN")) {
-            Sign state = (Sign)e.getClickedBlock().getState();
+    public void interact(EsPlayerInteractEvent e) {
+        if (e.getAction().equals(EsAction.RightClickBlock) && e.getClickedBlock() instanceof EsSign) {
+            EsSign state = (EsSign) e.getClickedBlock();
 
             SignType signType = signs.get(state.getLine(0));
 
             if (signType != null) {
                 e.setCancelled(true);
-                signType.run(new FoliaPlayer(e.getPlayer()), state.getLines());
+                signType.run(e.getPlayer(), state.getLines());
             }
         }
     }
 
-    @EventHandler
-    public void changeSign(SignChangeEvent e) {
+    public void changeSign(EsSignChangeEvent e) {
         if (!e.getPlayer().hasPermission("estools.signs")) {
             return;
         }
@@ -60,6 +54,18 @@ public class SignMain implements Listener {
 
         if (str != null) {
             e.setLine(0, str);
+        }
+    }
+
+    @Override
+    public void executeEvent(EsEvent event) {
+        if (event instanceof EsPlayerInteractEvent) {
+            interact((EsPlayerInteractEvent) event);
+            return;
+        }
+
+        if (event instanceof EsSignChangeEvent) {
+            changeSign((EsSignChangeEvent) event);
         }
     }
 }

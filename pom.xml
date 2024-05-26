@@ -99,6 +99,11 @@
           <id>aikar</id>
           <url>https://repo.aikar.co/content/groups/aikar/</url>
       </repository>
+      <repository>
+          <id>Sonatype-public</id>
+          <name>SnakeYAML repository</name>
+          <url>http://oss.sonatype.org/content/groups/public/</url>
+      </repository>
   </repositories>
 
   <dependencies>
@@ -141,6 +146,11 @@
           <groupId>co.aikar</groupId>
           <artifactId>taskchain-bukkit</artifactId>
           <version>3.7.2</version>
+      </dependency>
+      <dependency>  <!-- 3rd party YAML parser for crossplatform support -->
+          <groupId>org.yaml</groupId>
+          <artifactId>snakeyaml</artifactId>
+          <version>2.2-SNAPSHOT</version>
       </dependency>
   </dependencies>
 </project>

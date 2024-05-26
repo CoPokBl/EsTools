@@ -1,14 +1,12 @@
 package net.serble.estools.ServerApi.Implementations.Folia;
 
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsAction;
 import net.serble.estools.ServerApi.EsClickType;
 import net.serble.estools.ServerApi.EsInventoryAction;
 import net.serble.estools.ServerApi.Events.*;
 import net.serble.estools.ServerApi.Implementations.Bukkit.*;
-import net.serble.estools.ServerApi.Interfaces.EsInventory;
-import net.serble.estools.ServerApi.Interfaces.EsInventoryView;
-import net.serble.estools.ServerApi.Interfaces.EsItemStack;
-import net.serble.estools.ServerApi.Interfaces.EsPlayer;
+import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,6 +21,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
@@ -139,6 +138,16 @@ public class FoliaEventsListener implements Listener, CommandExecutor {
         Set<Integer> cs = e.getRawSlots();
         EsInventoryView view = new FoliaInventoryView(e.getView());
         EsInventoryDragEvent ee = new EsInventoryDragEvent(pl, inv, cs, view);
+        Main.callEvent(ee);
+        e.setCancelled(ee.isCancelled());
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent e) {
+        EsBlock cb = e.getClickedBlock() == null ? null : new FoliaBlock(e.getClickedBlock().getState());
+        EsPlayer p = new FoliaPlayer(e.getPlayer());
+        EsAction ac = FoliaHelper.fromBukkitAction(e.getAction());
+        EsPlayerInteractEvent ee = new EsPlayerInteractEvent(p, cb, ac);
         Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());
     }

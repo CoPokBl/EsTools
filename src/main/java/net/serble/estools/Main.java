@@ -8,6 +8,8 @@ import net.serble.estools.Commands.MoveSpeed.WalkSpeed;
 import net.serble.estools.Commands.PowerPick.*;
 import net.serble.estools.Commands.Teleport.*;
 import net.serble.estools.Commands.Warps.*;
+import net.serble.estools.Config.ConfigManager;
+import net.serble.estools.Config.Schemas.GeneralConfig.EsToolsConfig;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.EsEventListener;
 import net.serble.estools.ServerApi.EsGameMode;
@@ -19,14 +21,9 @@ import net.serble.estools.ServerApi.ServerPlatform;
 import net.serble.estools.Signs.SignMain;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
-import org.bukkit.configuration.file.FileConfiguration;  // TODO: The only remaining bukkit import in Main.java
 
 import net.serble.estools.Commands.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +35,7 @@ public class Main {
 	public static ServerPlatform platform;
 	public static SemanticVersion minecraftVersion;
 	public static boolean tabCompleteEnabled = true;
-	private static FileConfiguration config;  // Get with overriden getConfig() method
+	private static EsToolsConfig config;  // Get with overriden getConfig() method
 	public static SemanticVersion newVersion = null;  // The version available to download
 	public static boolean newVersionReady = false;
 	public static EsServerSoftware server;
@@ -59,9 +56,8 @@ public class Main {
 		server = platform.getServerInstance(context);
 		logger = server.getLogger();
 
-		logger.info("Starting EsTools on platform: " + platform.name());
-
 		minecraftVersion = server.getVersion();
+		logger.info("Starting EsTools on platform: " + platform.name() + " (MC: " + minecraftVersion.getString() + ")");
 
 		Effects.load();
 
@@ -73,20 +69,12 @@ public class Main {
 			}
 		}
 
-		// Create config if not exists, saveDefaultConfig() doesn't exist in 1.0
-		File configFile = new File(EsToolsBukkit.plugin.getDataFolder(), "config.yml");
-		if (!configFile.exists()) {
-			saveResource("config.yml", false);
-		}
-		config = ConfigManager.load("config.yml");
-
-		// Add keys that don't exist from the default config
-		if (ConfigManager.patchDefaults(getConfig(), EsToolsBukkit.plugin.getResource("config.yml"))) {
-			ConfigManager.save("config.yml", getConfig());  // Only save if something changed
-		}
+		// Load the config
+		config = ConfigManager.load("config.yml", EsToolsConfig.class);
+		logger.info("Loaded github releases url: " + config.getUpdater().getGithubReleasesUrl());
 
 		// Metrics
-		if (getConfig().getBoolean("metrics", true)) {
+		if (config.isMetrics() && platform.supportsMetrics()) {
 			Metrics metrics = new Metrics(EsToolsBukkit.plugin, bStatsId);
 			metrics.addCustomChart(new SimplePie("vault_enabled", () -> String.valueOf(Vault.economy != null)));
 			logger.info("Started bStat metrics");
@@ -254,29 +242,8 @@ public class Main {
 	}
 
 	// Overriding to create more predictable behaviour between versions
-	public FileConfiguration getConfig() {
+	public EsToolsConfig getConfig() {
 		return config;
-	}
-
-	// Overriding because method doesn't exist in very early versions
-    @SuppressWarnings("unused")  // I might use it in the future
-    public void saveResource(String res, boolean replace) {
-		InputStream resource = EsToolsBukkit.plugin.getResource(res);
-		File file = new File(EsToolsBukkit.plugin.getDataFolder(), res);
-
-		if (file.exists()) {
-			logger.info("Tried to copy resource but it already exists: " + res);
-			return;
-		}
-
-		try {
-			Files.createDirectories(file.getParentFile().toPath());
-            asrt(resource != null);
-            Files.copy(resource, file.toPath());
-			logger.info("Copied " + res + " to " + file.toPath());
-		} catch (IOException e) {
-			logger.severe("Failed to save resource: " + e);
-		}
 	}
 
 	public static void asrt(boolean condition) {
@@ -295,6 +262,10 @@ public class Main {
 
 		logger.severe("Assertion failed: " + msg);
 		throw new AssertionError(msg);
+	}
+
+	public void saveConfig() {
+		ConfigManager.save("config.yml", config);
 	}
 }
 

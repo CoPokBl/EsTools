@@ -20,6 +20,13 @@ public interface EsServerSoftware {
     String[] getPotionEffectTypes();
     String[] getEnchantments();
     String[] getSounds();
+
+    /**
+     * @param onlyItems
+     * Whether to only include materials that are classified as items
+     * */
+    String[] getMaterials(boolean onlyItems);
+
     boolean doesEnchantmentExist(String name);
     File getDataFolder();
     void dispatchCommand(EsCommandSender sender, String cmd);
@@ -34,4 +41,7 @@ public interface EsServerSoftware {
     void registerCommand(String cmd, EsToolsTabCompleter tab);
     void setTabCompleter(String cmd, EsToolsTabCompleter tab);
     void setCommandPermission(String cmd, String perm);
+    void broadcast(String msg, String perm);
+    void broadcast(String msg);
+    EsWorld getWorld(String name);
 }

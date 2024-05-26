@@ -1,7 +1,7 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
-import net.serble.estools.ConfigManager;
+import net.serble.estools.Config.ConfigManager;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsClickType;
 import net.serble.estools.ServerApi.EsEventListener;
@@ -9,12 +9,10 @@ import net.serble.estools.ServerApi.EsGameMode;
 import net.serble.estools.ServerApi.EsInventoryAction;
 import net.serble.estools.ServerApi.Events.*;
 import net.serble.estools.ServerApi.Interfaces.*;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.*;
 
-// TODO: This class has config
+// TODO: Saving and loading data, can't instantiate EsInventory
 public class CChest extends EsToolsCommand implements EsEventListener {
 
 	public static HashMap<UUID, EsInventory> cChests = new HashMap<>();
@@ -174,14 +172,8 @@ public class CChest extends EsToolsCommand implements EsEventListener {
 	public static EsInventory loadPlayer(EsPlayer p) {
 		UUID uid = p.getUniqueId();
 		
-		FileConfiguration f = ConfigManager.load("cchests/" + uid + ".yml");
-
-        if (!f.contains("items")) {
-            return null;
-        }
-
-        @SuppressWarnings("unchecked")
-        EsItemStack[] content = ((ArrayList<EsItemStack>) Objects.requireNonNull(f.get("items"))).toArray(new EsItemStack[0]);
+		EsInventory f = ConfigManager.load("cchests/" + uid + ".yml", EsInventory.class);
+        EsItemStack[] content = f.getContents();
 
         EsInventory inv = Main.server.createInventory(null, 54, translate("&1Creative Chest"));
         inv.setContents(content);
@@ -190,17 +182,14 @@ public class CChest extends EsToolsCommand implements EsEventListener {
         return inv;
     }
 
-	// TODO: Config
 	public static void savePlayer(EsPlayer p) {
 		UUID uid = p.getUniqueId();
 		
 		if (!cChests.containsKey(uid)) {
 			return;
 		}
-		
-		FileConfiguration f = new YamlConfiguration();
-		f.set("items", cChests.get(uid).getContents());
-		ConfigManager.save("cchests/" + uid + ".yml", f);
+
+		ConfigManager.save("cchests/" + uid + ".yml", cChests.get(uid));
 	}
 
 	private void onClose(EsInventoryCloseEvent e) {

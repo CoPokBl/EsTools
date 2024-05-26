@@ -3,7 +3,6 @@ package net.serble.estools;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
-import org.bukkit.Bukkit;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -15,13 +14,13 @@ public class Updater {
 
     private static void checkForUpdateBlocking() {
         try {
-            URL url = new URL(Objects.requireNonNull(Main.plugin.getConfig().getString("updater.github-release-url")));
+            URL url = new URL(Objects.requireNonNull(Main.plugin.getConfig().getUpdater().getGithubReleasesUrl()));
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.connect();
 
             if (con.getResponseCode() != 200) {
-                Bukkit.getLogger().severe("[EsTools Updater] GitHub gave unsuccessful response code: " + con.getResponseCode());
+                Main.logger.severe("[EsTools Updater] GitHub gave unsuccessful response code: " + con.getResponseCode());
                 return;
             }
 
@@ -58,22 +57,22 @@ public class Updater {
             Main.newVersion = onlineVersion;
 
             // Announcements
-            if (Main.plugin.getConfig().getBoolean("updater.warn-on-outdated", false)) {
-                Bukkit.broadcast(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + currentVersion.getString() + " -> " + onlineVersion.getString()), "estools.update");
+            if (Main.plugin.getConfig().getUpdater().isWarnOnOutdated()) {
+                Main.server.broadcast(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + currentVersion.getString() + " -> " + onlineVersion.getString()), "estools.update");
             }
-            if (Main.plugin.getConfig().getBoolean("updater.log-on-outdated", false)) {
-                Bukkit.getLogger().info(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + currentVersion.getString() + " -> " + onlineVersion.getString()));
+            if (Main.plugin.getConfig().getUpdater().isLogOnOutdated()) {
+                Main.logger.info(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + currentVersion.getString() + " -> " + onlineVersion.getString()));
             }
 
-            if (!Main.plugin.getConfig().getBoolean("updater.auto-update", false)) {
+            if (!Main.plugin.getConfig().getUpdater().isAutoUpdate()) {
                 return;
             }
 
             downloadNewUpdate();
-            Bukkit.getLogger().info("[EsTools Updater] Downloaded latest plugin version");
+            Main.logger.info("[EsTools Updater] Downloaded latest plugin version");
             Main.newVersionReady = true;
         } catch (IOException e) {
-            Bukkit.getLogger().severe("[EsTools Updater] Failed to check for updates, invalid releases URL configured");
+            Main.logger.severe("[EsTools Updater] Failed to check for updates, invalid releases URL configured");
         }
     }
 
@@ -90,7 +89,7 @@ public class Updater {
             downloadFile(waitingDownloadUrl);
             Main.newVersionReady = true;
         } catch (IOException e) {
-            Bukkit.getLogger().severe("Failed to update: " + e);
+            Main.logger.severe("Failed to update: " + e);
             return;
         }
 
@@ -116,7 +115,7 @@ public class Updater {
             InputStream inputStream = httpConn.getInputStream();
             String saveFilePath = Main.plugin.getClass().getProtectionDomain()
                     .getCodeSource().getLocation().getFile().replace("%20", " ");
-            Bukkit.getLogger().info("Save file path: " + saveFilePath);
+            Main.logger.info("Save file path: " + saveFilePath);
 
             FileOutputStream outputStream = new FileOutputStream(saveFilePath);
 

@@ -1,6 +1,6 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.ConfigManager;
+import net.serble.estools.Config.ConfigManager;
 import net.serble.estools.EntityCommand;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsEventListener;
@@ -8,22 +8,21 @@ import net.serble.estools.ServerApi.Events.EsEntityDamageEvent;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.*;
 
 public class Buddha extends EntityCommand implements EsEventListener {
 	private static final HashMap<UUID, Integer> currentPlayers = new HashMap<>();
 	private static final String usage = genUsage("/buddha [entity] [time]");
+	private static final String configFile = "buddhas.yml";
 
-	@Override
+	@SuppressWarnings("unchecked")  // I'm right, trust me
+    @Override
 	public void onEnable() {
 		Main.registerEvents(this);
 
-		FileConfiguration f = ConfigManager.load("gods.yml");
-		List<String> buddhas = f.getStringList("buddhas");
-		buddhas.forEach(w -> currentPlayers.put(UUID.fromString(w), -1));
+		List<String> f = (List<String>) ConfigManager.load(configFile, ArrayList.class);
+		f.forEach(w -> currentPlayers.put(UUID.fromString(w), -1));
 	}
 
 	@Override
@@ -90,8 +89,6 @@ public class Buddha extends EntityCommand implements EsEventListener {
 	}
 
 	private static void save() {
-		FileConfiguration f = new YamlConfiguration();
-
 		List<String> buddhas = new ArrayList<>();
 		for (Map.Entry<UUID, Integer> kv : currentPlayers.entrySet()) {
 			// only save if there isn't a time limit!
@@ -100,8 +97,7 @@ public class Buddha extends EntityCommand implements EsEventListener {
 			}
 		}
 
-		f.set("buddhas", buddhas);
-		ConfigManager.save("gods.yml", f);
+		ConfigManager.save(configFile, buddhas);
 	}
 
 	@Override

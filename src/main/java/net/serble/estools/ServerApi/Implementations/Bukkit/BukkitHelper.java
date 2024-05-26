@@ -15,6 +15,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -504,6 +505,23 @@ public class BukkitHelper {
                 return SoundCategory.VOICE;
             default:
                 throw new IllegalArgumentException("Invalid EsSoundCategory");
+        }
+    }
+
+    public static EsAction fromBukkitAction(Action action) {
+        switch (action) {
+            case LEFT_CLICK_BLOCK:
+                return EsAction.LeftClickBlock;
+            case RIGHT_CLICK_BLOCK:
+                return EsAction.RightClickBlock;
+            case LEFT_CLICK_AIR:
+                return EsAction.LeftClickAir;
+            case RIGHT_CLICK_AIR:
+                return EsAction.RightClickAir;
+            case PHYSICAL:
+                return EsAction.Physical;
+            default:
+                throw new IllegalArgumentException("Invalid Action");
         }
     }
 }

@@ -11,6 +11,9 @@ public class EsToolsBukkit extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // This is needed for SnakeYAML to work on Spigot, see https://www.spigotmc.org/threads/cannot-use-shaded-snakeyaml-to-construct-class-object.136707/#post-4329381
+        Thread.currentThread().setContextClassLoader(this.getClassLoader());
+
         plugin = this;
 
         ServerPlatform platform = isFolia() ? ServerPlatform.Folia : ServerPlatform.Bukkit;

@@ -96,7 +96,6 @@ public class FoliaServer implements EsServerSoftware {
             }
         }
 
-        Main.logger.info("Version detected as: 1." + minor + '.' + patch + " from: " + versionS);
         return new SemanticVersion(1, minor, patch);
     }
 
@@ -220,6 +219,19 @@ public class FoliaServer implements EsServerSoftware {
     }
 
     @Override
+    public String[] getMaterials(boolean onlyItems) {
+        Material[] materials = Material.values();
+        String[] strMaterials = new String[materials.length];
+        for (int i = 0; i < materials.length; i++) {
+            if (onlyItems && Main.minecraftVersion.getMinor() >= 12 && !materials[i].isItem()) {
+                continue;
+            }
+            strMaterials[i] = materials[i].name();
+        }
+        return strMaterials;
+    }
+
+    @Override
     public boolean doesEnchantmentExist(String name) {
         try {
             return FoliaHelper.getBukkitEnchantment(name) != null;
@@ -329,5 +341,20 @@ public class FoliaServer implements EsServerSoftware {
             //noinspection deprecation, is still useful in pre 1.13 and technically is useful in rare situations post 1.13
             command.setPermissionMessage(EsToolsCommand.translate("&cYou do not have permission to run this command."));
         }
+    }
+
+    @Override
+    public void broadcast(String msg, String perm) {
+        Bukkit.broadcast(msg, perm);
+    }
+
+    @Override
+    public void broadcast(String msg) {
+        Bukkit.broadcastMessage(msg);
+    }
+
+    @Override
+    public EsWorld getWorld(String name) {
+        return new FoliaWorld(Bukkit.getWorld(name));
     }
 }

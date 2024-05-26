@@ -27,6 +27,18 @@ public class Position {
         return z;
     }
 
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setZ(double z) {
+        this.z = z;
+    }
+
     public double distanceTo(Position other) {
         return Math.sqrt(distanceSquared(other));
     }
@@ -58,5 +70,9 @@ public class Position {
 
     public double dot(Position other) {
         return x * other.x + y * other.y + z * other.z;
+    }
+
+    public Position toPosition() {
+        return this;
     }
 }

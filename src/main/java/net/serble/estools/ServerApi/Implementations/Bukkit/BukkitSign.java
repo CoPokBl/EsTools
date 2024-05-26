@@ -40,4 +40,16 @@ public class BukkitSign extends BukkitBlock implements EsSign {
     public EsSignSide getTargetSide(EsPlayer player) {
         return new BukkitSignSide(bukkitSign.getTargetSide(((BukkitPlayer) player).getBukkitPlayer()));
     }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public String getLine(int line) {
+        return bukkitSign.getLine(line);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public String[] getLines() {
+        return bukkitSign.getLines();
+    }
 }

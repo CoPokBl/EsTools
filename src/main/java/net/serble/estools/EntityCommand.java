@@ -71,15 +71,15 @@ public abstract class EntityCommand extends EsToolsCommand {
         final double threshold = 1;
         for (final T other : entities) {
             final Position n = other.getLocation()
-                    .subtract(entity.getLocation());
+                    .subtract(entity.getLocation()).toPosition();
             if (entity.getLocation().getDirection().normalise().crossProduct(n)
                     .lengthSquared() < threshold
                     && n.normalise().dot(
                             entity.getLocation().getDirection().normalise()) >= 0) {
                 if (target == null
                         || target.getLocation().distanceSquared(
-                                entity.getLocation()) > other.getLocation()
-                                .distanceSquared(entity.getLocation()))
+                                entity.getLocation().toPosition()) > other.getLocation()
+                                .distanceSquared(entity.getLocation().toPosition()))
                     target = other;
             }
         }

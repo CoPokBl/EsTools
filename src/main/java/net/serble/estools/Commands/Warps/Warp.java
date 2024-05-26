@@ -36,7 +36,7 @@ public class Warp extends EsToolsCommand {
             return false;
         }
 
-        p.teleport(warp.location);
+        p.teleport(warp.getLocation());
         send(p, "&aTeleported to warp &6%s&a.", warpName);
         return true;
     }
@@ -48,10 +48,10 @@ public class Warp extends EsToolsCommand {
 
         boolean hasManage = p.hasPermission("estools.warps.manage");
         boolean hasDefault = p.hasPermission("estools.warps.default");
-        String warpPermission = "estools.warp." + warp.name;
+        String warpPermission = "estools.warp." + warp.getName();
 
         // you can only use global warps if you are in the same world, or have manage permission
-        if (!warp.global && !hasManage && !p.getWorld().equals(warp.location.getWorld())) {
+        if (!warp.isGlobal() && !hasManage && !p.getWorld().equals(warp.getLocation().getWorld())) {
             return false;
         }
 
@@ -68,10 +68,10 @@ public class Warp extends EsToolsCommand {
 
         if (args.length == 1) {
             for (WarpLocation warp : WarpManager.warps.values()) {
-                boolean inSameWorld = p.getWorld().equals(warp.location.getWorld());
+                boolean inSameWorld = p.getWorld().equals(warp.getLocation().getWorld());
 
-                if (canUseWarp(p, warp) && (warp.global || inSameWorld)) {
-                    tab.add(warp.name);
+                if (canUseWarp(p, warp) && (warp.isGlobal() || inSameWorld)) {
+                    tab.add(warp.getName());
                 }
             }
         }

@@ -1,7 +1,7 @@
 # Go to https://estools.serble.net/configuration.html for information on configuring the plugin
 
 # Stops players taking fall damage when they teleport
-safetp: true
+safeTp: true
 
 # Toggle bStats metrics
 metrics: true
@@ -10,14 +10,14 @@ metrics: true
 updater:
 
   # The GitHub API path to query for the latest version, change if you want to use a fork
-  github-release-url: "https://api.github.com/repos/CoPokBl/EsTools/releases/latest"
+  githubReleasesUrl: "https://api.github.com/repos/CoPokBl/EsTools/releases/latest"
 
   # Whether to automatically install updates if they are available
-  auto-update: false
+  autoUpdate: false
 
   # Whether to notify operators when they join the server if the plugin is outdated
   # Leave this off if you enable auto-update, this will prompt user to type /estools update
-  warn-on-outdated: false
+  warnOnOutdated: false
 
   # Log to the console when the plugin is out of date
-  log-on-outdated: true
+  logOnOutdated: true

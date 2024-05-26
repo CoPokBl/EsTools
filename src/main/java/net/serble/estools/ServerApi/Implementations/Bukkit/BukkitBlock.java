@@ -34,4 +34,9 @@ public class BukkitBlock implements EsBlock {
     public int getZ() {
         return getBukkitBlock().getZ();
     }
+
+    @Override
+    public String getType() {
+        return bukkitState.getType().name();
+    }
 }
