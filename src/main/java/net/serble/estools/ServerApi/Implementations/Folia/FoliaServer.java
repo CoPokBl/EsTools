@@ -357,4 +357,16 @@ public class FoliaServer implements EsServerSoftware {
     public EsWorld getWorld(String name) {
         return new FoliaWorld(Bukkit.getWorld(name));
     }
+
+    @Override
+    public EsItemStack createItemStack(Object internalObject) {
+        return new FoliaItemStack(internalObject);
+    }
+
+    @Override
+    public String[] getRelevantInternalTypes() {
+        return new String[] {
+                "CraftItemStack"  // CChest config files
+        };
+    }
 }

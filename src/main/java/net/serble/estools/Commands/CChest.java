@@ -172,8 +172,18 @@ public class CChest extends EsToolsCommand implements EsEventListener {
 	public static EsInventory loadPlayer(EsPlayer p) {
 		UUID uid = p.getUniqueId();
 		
-		EsInventory f = ConfigManager.load("cchests/" + uid + ".yml", EsInventory.class);
-        EsItemStack[] content = f.getContents();
+		@SuppressWarnings("unchecked")
+		List<Object> f = (List<Object>) ConfigManager.load(
+				"cchests/" + uid + ".yml",
+				ArrayList.class);
+        EsItemStack[] content = new EsItemStack[f.size()];
+		for (int i = 0; i < content.length; i++) {
+			if (f.get(i) == null) {
+				content[i] = null;
+				continue;
+			}
+			content[i] = Main.server.createItemStack(f.get(i));
+		}
 
         EsInventory inv = Main.server.createInventory(null, 54, translate("&1Creative Chest"));
         inv.setContents(content);
@@ -189,7 +199,14 @@ public class CChest extends EsToolsCommand implements EsEventListener {
 			return;
 		}
 
-		ConfigManager.save("cchests/" + uid + ".yml", cChests.get(uid));
+		EsInventory inv = cChests.get(uid);
+		Object[] contents = new Object[inv.getContents().length];
+		for (int i = 0; i < inv.getContents().length; i++) {
+			EsItemStack stack = inv.getContents()[i];
+			contents[i] = stack == null ? null : stack.getInternalObject();
+		}
+
+		ConfigManager.save("cchests/" + uid + ".yml", contents);
 	}
 
 	private void onClose(EsInventoryCloseEvent e) {

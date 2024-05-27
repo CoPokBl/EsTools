@@ -44,4 +44,8 @@ public interface EsServerSoftware {
     void broadcast(String msg, String perm);
     void broadcast(String msg);
     EsWorld getWorld(String name);
+    EsItemStack createItemStack(Object internalObject);
+
+    /** Get a list of classes that SnakeYAML needs to accept for proper config serialisation */
+    String[] getRelevantInternalTypes();
 }

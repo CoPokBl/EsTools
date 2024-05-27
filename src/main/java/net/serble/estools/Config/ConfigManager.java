@@ -47,7 +47,8 @@ public class ConfigManager {
 		LoaderOptions options = new LoaderOptions();
 		TagInspector taginspector = tag ->
 				tag.getClassName().equals(base.getName()) ||
-				Arrays.stream(allowedClasses).anyMatch(c -> c.equals(tag.getClassName()));
+				Arrays.stream(allowedClasses).anyMatch(c -> c.equals(tag.getClassName())) ||
+				Arrays.stream(Main.server.getRelevantInternalTypes()).anyMatch(c -> tag.getClassName().endsWith(c));
 		options.setTagInspector(taginspector);
 		Yaml yaml = new Yaml(new Constructor(base, options));
 		try {

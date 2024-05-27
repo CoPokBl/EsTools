@@ -14,4 +14,5 @@ public interface EsItemStack {
     EsItemStack clone();
     boolean isSimilar(EsItemStack stack);
     int getMaxStackSize();
+    Object getInternalObject();
 }

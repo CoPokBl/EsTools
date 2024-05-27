@@ -16,6 +16,10 @@ public class FoliaItemStack implements EsItemStack {
         bukkitItem = new org.bukkit.inventory.ItemStack(Material.valueOf(mat), amount);
     }
 
+    public FoliaItemStack(Object internalObject) {
+        bukkitItem = (ItemStack) internalObject;
+    }
+
     public FoliaItemStack(org.bukkit.inventory.ItemStack child) {
         bukkitItem = child;
     }
@@ -110,5 +114,10 @@ public class FoliaItemStack implements EsItemStack {
     @Override
     public int getMaxStackSize() {
         return bukkitItem.getMaxStackSize();
+    }
+
+    @Override
+    public Object getInternalObject() {
+        return bukkitItem;
     }
 }

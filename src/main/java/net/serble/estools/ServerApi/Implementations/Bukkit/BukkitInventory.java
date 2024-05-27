@@ -13,6 +13,13 @@ public class BukkitInventory implements EsInventory {
 
     public BukkitInventory(Inventory inv) {
         bukkitInv = inv;
+        if (inv == null) {
+            throw new NullPointerException("inv");
+        }
+    }
+
+    public BukkitInventory() {
+        bukkitInv = null;
     }
 
     @Override

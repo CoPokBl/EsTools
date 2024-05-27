@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class BukkitItemStack implements EsItemStack {
-    private final org.bukkit.inventory.ItemStack bukkitItem;
+    private final ItemStack bukkitItem;
 
     public BukkitItemStack(String mat, int amount) {
         bukkitItem = new ItemStack(Material.valueOf(mat), amount);
@@ -19,8 +19,12 @@ public class BukkitItemStack implements EsItemStack {
         bukkitItem = child;
     }
 
-    public org.bukkit.inventory.ItemStack getBukkitItem() {
+    public ItemStack getBukkitItem() {
         return bukkitItem;
+    }
+
+    public BukkitItemStack(Object internalObject) {
+        bukkitItem = (ItemStack) internalObject;
     }
 
     @Override
@@ -109,5 +113,10 @@ public class BukkitItemStack implements EsItemStack {
     @Override
     public int getMaxStackSize() {
         return bukkitItem.getMaxStackSize();
+    }
+
+    @Override
+    public Object getInternalObject() {
+        return bukkitItem;
     }
 }
