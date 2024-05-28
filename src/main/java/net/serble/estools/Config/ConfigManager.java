@@ -2,8 +2,12 @@ package net.serble.estools.Config;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.Set;
 
+import javassist.*;
 import net.serble.estools.Main;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -43,6 +47,22 @@ public class ConfigManager {
 				throw new RuntimeException("Bug with saving default config: " + e);
 			}
         }
+
+		// Patch object so it can be constructed, this is hacky but it should work
+		try {
+			Reflections reflections = new Reflections("", new SubTypesScanner(false));
+			Set<Class<?>> allClasses =
+					reflections.getSubTypesOf(Object.class);
+
+			ClassPool pool = ClassPool.getDefault();
+			CtClass cc = pool.get("path.to.your.class");
+
+			for (CtConstructor constructor: cc.getDeclaredConstructors()) {
+				constructor.setModifiers(Modifier.PUBLIC);
+			}
+		} catch (NotFoundException e) {
+			Main.logger.severe("Failed to patch loading class, configs may not work properly");
+		}
 
 		LoaderOptions options = new LoaderOptions();
 		TagInspector taginspector = tag ->
