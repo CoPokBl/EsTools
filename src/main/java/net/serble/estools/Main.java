@@ -13,6 +13,7 @@ import net.serble.estools.Config.Schemas.GeneralConfig.EsToolsConfig;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.EsEventListener;
 import net.serble.estools.ServerApi.EsGameMode;
+import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitConfigMigrator;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsLogger;
@@ -62,6 +63,9 @@ public class Main {
 		Effects.load();
 
 		if (platform == ServerPlatform.Bukkit) {
+			// We have to support old configs
+			BukkitConfigMigrator.checkPerformMigration();
+
 			try {
 				Vault.setupEconomy();
 			} catch (Exception e) {
@@ -71,7 +75,6 @@ public class Main {
 
 		// Load the config
 		config = ConfigManager.load("config.yml", EsToolsConfig.class);
-		logger.info("Loaded github releases url: " + config.getUpdater().getGithubReleasesUrl());
 
 		// Metrics
 		if (config.isMetrics() && platform.supportsMetrics()) {
@@ -246,7 +249,8 @@ public class Main {
 		return config;
 	}
 
-	public static void asrt(boolean condition) {
+	@SuppressWarnings("unused")
+    public static void asrt(boolean condition) {
 		asrt(condition, "Condition is false");
 	}
 
