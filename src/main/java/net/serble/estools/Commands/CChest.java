@@ -3,16 +3,12 @@ package net.serble.estools.Commands;
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Config.ConfigManager;
 import net.serble.estools.Main;
-import net.serble.estools.ServerApi.EsClickType;
-import net.serble.estools.ServerApi.EsEventListener;
-import net.serble.estools.ServerApi.EsGameMode;
-import net.serble.estools.ServerApi.EsInventoryAction;
+import net.serble.estools.ServerApi.*;
 import net.serble.estools.ServerApi.Events.*;
 import net.serble.estools.ServerApi.Interfaces.*;
 
 import java.util.*;
 
-// TODO: Saving and loading data, can't instantiate EsInventory
 public class CChest extends EsToolsCommand implements EsEventListener {
 
 	public static HashMap<UUID, EsInventory> cChests = new HashMap<>();
@@ -173,16 +169,17 @@ public class CChest extends EsToolsCommand implements EsEventListener {
 		UUID uid = p.getUniqueId();
 		
 		@SuppressWarnings("unchecked")
-		List<Object> f = (List<Object>) ConfigManager.load(
+		List<EsSerialisableItemStack> f = (List<EsSerialisableItemStack>) ConfigManager.load(
 				"cchests/" + uid + ".yml",
-				ArrayList.class);
+				ArrayList.class,
+				EsSerialisableItemStack.class);
         EsItemStack[] content = new EsItemStack[f.size()];
 		for (int i = 0; i < content.length; i++) {
 			if (f.get(i) == null) {
 				content[i] = null;
 				continue;
 			}
-			content[i] = Main.server.createItemStack(f.get(i));
+			content[i] = f.get(i).toItemStack();
 		}
 
         EsInventory inv = Main.server.createInventory(null, 54, translate("&1Creative Chest"));
@@ -200,10 +197,10 @@ public class CChest extends EsToolsCommand implements EsEventListener {
 		}
 
 		EsInventory inv = cChests.get(uid);
-		Object[] contents = new Object[inv.getContents().length];
+		EsSerialisableItemStack[] contents = new EsSerialisableItemStack[inv.getContents().length];
 		for (int i = 0; i < inv.getContents().length; i++) {
 			EsItemStack stack = inv.getContents()[i];
-			contents[i] = stack == null ? null : stack.getInternalObject();
+			contents[i] = stack == null ? null : EsSerialisableItemStack.generate(stack);
 		}
 
 		ConfigManager.save("cchests/" + uid + ".yml", contents);

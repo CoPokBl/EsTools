@@ -219,6 +219,16 @@ public class BukkitHelper {
         return Enchantment.getByName(BukkitEnchantmentsHelper.getByName(name));
     }
 
+    public static String fromBukkitEnchantment(Enchantment ench) {
+        if (Main.minecraftVersion.getMinor() >= 13) {
+            return ench.getKey().getKey();
+        }
+
+        // We have to use deprecated method for pre 1.13
+        //noinspection deprecation
+        return BukkitEnchantmentsHelper.getNameFromValue(ench.getName());
+    }
+
     @SuppressWarnings("rawtypes")
     public static PersistentDataType toBukkitPersistentDataType(EsPersistentDataType type) {
         switch (type) {

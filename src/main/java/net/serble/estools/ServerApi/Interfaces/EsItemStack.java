@@ -1,5 +1,7 @@
 package net.serble.estools.ServerApi.Interfaces;
 
+import java.util.Map;
+
 public interface EsItemStack {
     String getType();
     void setType(String val);
@@ -15,4 +17,5 @@ public interface EsItemStack {
     boolean isSimilar(EsItemStack stack);
     int getMaxStackSize();
     Object getInternalObject();
+    Map<String, Integer> getEnchantments();
 }

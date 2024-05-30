@@ -5,9 +5,13 @@ import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FoliaItemStack implements EsItemStack {
     private final ItemStack bukkitItem;
@@ -119,5 +123,15 @@ public class FoliaItemStack implements EsItemStack {
     @Override
     public Object getInternalObject() {
         return bukkitItem;
+    }
+
+    @Override
+    public Map<String, Integer> getEnchantments() {
+        Map<String, Integer> enchs = new HashMap<>();
+        for (Map.Entry<Enchantment, Integer> ench : bukkitItem.getEnchantments().entrySet()) {
+            enchs.put(FoliaHelper.fromBukkitEnchantment(ench.getKey()), ench.getValue());
+        }
+
+        return enchs;
     }
 }

@@ -17,6 +17,16 @@ public class BukkitEnchantmentsHelper {
         return ENCHANTMENTS.get(name.toLowerCase(Locale.ENGLISH));
     }
 
+    public static String getNameFromValue(String val) {
+        for (Map.Entry<String, String> entry : ENCHANTMENTS.entrySet()) {
+            if (val.toLowerCase().equals(entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+
+        return null;
+    }
+
     public static Set<Map.Entry<String, String>> entrySet() {
         return ENCHANTMENTS.entrySet();
     }
