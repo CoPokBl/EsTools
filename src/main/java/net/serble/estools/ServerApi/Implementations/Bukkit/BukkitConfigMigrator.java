@@ -1,22 +1,24 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
+import net.serble.estools.Commands.Warps.WarpLocation;
 import net.serble.estools.Config.ConfigManager;
 import net.serble.estools.Config.Schemas.GeneralConfig.EsToolsConfig;
 import net.serble.estools.Config.Schemas.GeneralConfig.UpdaterConfig;
 import net.serble.estools.Config.Schemas.Give.GiveConfig;
 import net.serble.estools.Config.Schemas.Give.GiveSettings;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsSerialisableItemStack;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Tool for migrating from legacy Bukkit configs to v5 compatible configs.
@@ -28,6 +30,8 @@ public class BukkitConfigMigrator {
     private static final String giveConfig = "give.yml";
     private static final String godsConfig = "gods.yml";
     private static final String buddhaConfig = "buddhas.yml";
+    private static final String warpsConfig = "warps.yml";
+    private static final String cchestsFolder = "cchests";
 
     public static void checkPerformMigration() {
         File migratedAlreadyFile = new File(Main.server.getDataFolder(), migratedFile);
@@ -52,6 +56,8 @@ public class BukkitConfigMigrator {
         migrateMainConfig();
         migrateGiveConfig();
         migrateGodsConfig();
+        migrateWarpsConfig();
+        migrateCChestsConfig();
 
         Main.logger.info("[EsTools] Successfully migrated all existing config files");
         try {
@@ -168,6 +174,112 @@ public class BukkitConfigMigrator {
             Main.logger.severe("[EsTools] Failed to migrate config, it might be invalid");
             Main.logger.severe("[EsTools] You may need to delete " + godsConfig + " for it to function again");
             Main.logger.severe("[EsTools] Your current setting ARE NOT BEING RESPECTED");
+        }
+    }
+
+    private static void migrateWarpsConfig() {  // config.yml
+        File file = new File(Main.server.getDataFolder(), warpsConfig);
+        if (!file.exists()) {
+            return;
+        }
+
+        try {  // We will now try to get all the values, defaulting to their current defaults
+            // Register the old WarpLocation class, so it can be parsed
+            ConfigurationSerialization.registerClass(OldWarpLocation.class, "WarpLocation");
+            FileConfiguration config = new YamlConfiguration();
+            config.load(file);
+
+            Map<String, WarpLocation> newConfig = new HashMap<>();
+
+            List<?> warpList = config.getList("warps");
+            if (warpList == null) {
+                return;
+            }
+
+            warpList.sort((w1, w2) -> {
+                if (w1 instanceof OldWarpLocation && w2 instanceof OldWarpLocation) {
+                    OldWarpLocation warp1 = (OldWarpLocation)w1;
+                    OldWarpLocation warp2 = (OldWarpLocation)w1;
+
+                    return warp1.name.compareTo(warp2.name);
+                }
+
+                return 0;
+            });
+
+            warpList.forEach(w -> {
+                if (w instanceof OldWarpLocation) {
+                    OldWarpLocation warp = (OldWarpLocation)w;
+                    WarpLocation loc = new WarpLocation();
+                    loc.setGlobal(warp.global);
+                    loc.setName(warp.name);
+                    loc.setLocation(BukkitHelper.fromBukkitLocation(warp.location));
+                    newConfig.put(warp.name, loc);
+                }
+            });
+
+            // Move file to file.old
+            File oldFile = new File(Main.server.getDataFolder(), warpsConfig + ".old");
+            if (!file.renameTo(oldFile)) {
+                throw new FileNotFoundException("Failed to rename old config file");
+            }
+
+            // Save new config
+            ConfigManager.save(file, newConfig);
+
+            Main.logger.info("[EsTools] Successfully migrated " + warpsConfig);
+        } catch (IOException | InvalidConfigurationException e) {
+            Main.logger.severe("[EsTools] Failed to migrate config, it might be invalid");
+            Main.logger.severe("[EsTools] You may need to delete " + warpsConfig + " for it to function again");
+            Main.logger.severe("[EsTools] Your current setting ARE NOT BEING RESPECTED");
+        }
+    }
+
+    private static void migrateCChestsConfig() {  // config.yml
+        File folder = new File(Main.server.getDataFolder(), cchestsFolder);
+
+        File[] savedPlayers = folder.listFiles();
+
+        if (savedPlayers == null) {
+            return;
+        }
+
+        Main.logger.warning("[EsTools] Now migrating CChest config files, this may take a while");
+
+        for (File file : savedPlayers) {
+            try {  // We will now try to get all the values, defaulting to their current defaults
+                FileConfiguration config = new YamlConfiguration();
+                config.load(file);
+
+                if (!config.contains("items")) {
+                    continue;
+                }
+
+                @SuppressWarnings("unchecked")
+                ItemStack[] content = ((ArrayList<ItemStack>) Objects.requireNonNull(config.get("items"))).toArray(new ItemStack[0]);
+
+                EsSerialisableItemStack[] newConfig = new EsSerialisableItemStack[content.length];
+                for (int i = 0; i < content.length; i++) {
+                    if (content[i] == null) {
+                        newConfig[i] = null;
+                        continue;
+                    }
+                    newConfig[i] = EsSerialisableItemStack.generate(Main.server.createItemStack(content[i]));
+                }
+
+                // Move file to file.old
+                File oldFile = new File(file.getName() + ".old");
+                if (!file.renameTo(oldFile)) {
+                    throw new FileNotFoundException("Failed to rename old config file");
+                }
+
+                // Save new config
+                ConfigManager.save(file, newConfig);
+
+                Main.logger.info("[EsTools] Successfully migrated CChest: " + file.getName());
+            } catch (IOException | InvalidConfigurationException e) {
+                Main.logger.severe("[EsTools] Failed to migrate CChest config, data may be lost");
+            }
         }
     }
 }

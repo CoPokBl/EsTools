@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 
-// TODO: NBT
+// TODO: NBT, Potions
 public class EsSerialisableItemStack {
     private String material;
     private int amount;
