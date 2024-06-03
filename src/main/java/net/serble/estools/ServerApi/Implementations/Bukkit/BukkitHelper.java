@@ -20,8 +20,15 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.util.Vector;
+
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class BukkitHelper {
@@ -282,6 +289,55 @@ public class BukkitHelper {
         }
 
         return new BukkitBlock(block);
+    }
+
+    public static EsItemStack fromBukkitItem(ItemStack item) {
+        if (Main.minecraftVersion.getMinor() >= 9) {
+            if (item.getItemMeta() instanceof PotionMeta) {
+                return new BukkitPotion(item);
+            }
+            
+            return new BukkitItemStack(item);
+        } else if (Main.minecraftVersion.getMinor() >= 4) {
+            if (item.getType().name().endsWith("POTION")) {
+                return new BukkitItemStack(item);
+            }
+
+            return new BukkitItemStack(item);
+        } else {
+            throw new RuntimeException("Potions aren't support in this Minecraft version");
+        }
+    }
+
+    public static EsPotType fromBukkitPotType(Material type) {
+        return fromBukkitPotType(type.name());
+    }
+
+    public static EsPotType fromBukkitPotType(String type) {
+        switch (type) {
+            case "SPLASH_POTION":
+                return EsPotType.splash;
+            case "POTION":
+                return EsPotType.drink;
+            case "LINGERING_POTION":
+                return EsPotType.lingering;
+        }
+
+        return null;
+    }
+
+    public static PotionEffect toBukkitPotionEffect(EsPotionEffect effect) {
+        return new PotionEffect(toBukkitPotionEffectType(effect.getType()), effect.getDuration(), effect.getAmp());
+    }
+
+    // TODO: Backwards compat?
+    public static PotionEffectType toBukkitPotionEffectType(String type) {
+        return Objects.requireNonNull(Registry.EFFECT.match(type));
+    }
+
+    // TODO: Backwards compat?
+    public static PotionType toBukkitPotionType(String type) {
+        return Objects.requireNonNull(Registry.POTION.match(type));
     }
 
     public static boolean isFolia() {

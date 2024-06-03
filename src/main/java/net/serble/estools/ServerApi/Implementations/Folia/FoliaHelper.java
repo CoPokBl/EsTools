@@ -20,6 +20,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -180,6 +182,24 @@ public class FoliaHelper extends BukkitHelper {
         }
 
         return new net.serble.estools.ServerApi.Implementations.Folia.FoliaBlock(state);
+    }
+
+    public static EsItemStack fromBukkitItem(ItemStack item) {
+        if (Main.minecraftVersion.getMinor() >= 9) {
+            if (item.getItemMeta() instanceof PotionMeta) {
+                return new FoliaPotion(item);
+            }
+
+            return new FoliaItemStack(item);
+        } else if (Main.minecraftVersion.getMinor() >= 4) {
+            if (item.getType().name().endsWith("POTION")) {
+                return new FoliaPotion(item);
+            }
+
+            return new FoliaItemStack(item);
+        } else {
+            throw new RuntimeException("Potions aren't support in this Minecraft version");
+        }
     }
 
     @SuppressWarnings("deprecation")

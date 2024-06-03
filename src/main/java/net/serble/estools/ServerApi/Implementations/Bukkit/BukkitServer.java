@@ -13,6 +13,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
@@ -120,7 +121,7 @@ public class BukkitServer implements EsServerSoftware {
 
     @SuppressWarnings("deprecation")
     @Override
-    public EsItemStack createPotion(EsPotType potType, String effect, int duration, int amp, int amount) {
+    public EsPotion createPotion(EsPotType potType, String effect, int duration, int amp, int amount) {
         if (Main.minecraftVersion.getMinor() >= 9) {
             String type = potType == EsPotType.drink ?
                     "POTION" :
@@ -136,9 +137,9 @@ public class BukkitServer implements EsServerSoftware {
 
             PotionMeta meta = (PotionMeta) pot.getItemMeta();
             assert meta != null;
-            meta.addCustomEffect(new PotionEffect(Objects.requireNonNull(Registry.EFFECT.match(effType)), duration, amp-1), true);
+            meta.addCustomEffect(new PotionEffect(BukkitHelper.toBukkitPotionEffectType(effType), duration, amp-1), true);
             pot.setItemMeta(meta);
-            return new BukkitItemStack(pot);
+            return new BukkitPotion(pot);
         } else if (Main.minecraftVersion.getMinor() >= 4) {
             String effType;
             try {
@@ -147,9 +148,27 @@ public class BukkitServer implements EsServerSoftware {
                 return null;
             }
 
-            org.bukkit.potion.Potion potion = new org.bukkit.potion.Potion(Objects.requireNonNull(Registry.POTION.match(effType)), amp);
+            Potion potion = new Potion(Objects.requireNonNull(Registry.POTION.match(effType)), amp);
             potion.setSplash(potType == EsPotType.splash);
-            return new BukkitItemStack(potion.toItemStack(1));
+            return new BukkitPotion(potion.toItemStack(1));
+        } else {  // This isn't possible to get to because this class won't load on 1.3 and below
+            return null;
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public EsPotion createPotion(EsPotType potType) {
+        if (Main.minecraftVersion.getMinor() >= 9) {
+            String type = potType == EsPotType.drink ?
+                    "POTION" :
+                    potType.toString().toUpperCase() + "_POTION";
+            ItemStack pot = new ItemStack(Material.valueOf(type), 1);
+            return new BukkitPotion(pot);
+        } else if (Main.minecraftVersion.getMinor() >= 4) {
+            Potion potion = Potion.fromItemStack(new ItemStack(Material.valueOf("POTION")));
+            potion.setSplash(potType == EsPotType.splash);
+            return new BukkitPotion(potion.toItemStack(1));
         } else {  // This isn't possible to get to because this class won't load on 1.3 and below
             return null;
         }

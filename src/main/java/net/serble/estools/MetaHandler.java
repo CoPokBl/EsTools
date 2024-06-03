@@ -8,6 +8,7 @@ import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import java.util.List;
 import java.util.Objects;
 
+// TODO: This is Bukkit specific (But still works on other platforms), migrate commands away from using it
 // This class exists because Minecraft < 1.4 doesn't have ItemMeta. It just encapsulates all ItemMeta methods.
 public class MetaHandler {
 

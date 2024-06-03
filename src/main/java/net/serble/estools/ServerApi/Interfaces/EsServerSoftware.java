@@ -15,7 +15,8 @@ public interface EsServerSoftware {
     SemanticVersion getVersion();
     Collection<? extends EsPlayer> getOnlinePlayers();
     EsItemStack createItemStack(String material, int amount);
-    EsItemStack createPotion(EsPotType potType, String effect, int duration, int amp, int amount);
+    EsPotion createPotion(EsPotType potType, String effect, int duration, int amp, int amount);
+    EsPotion createPotion(EsPotType potType);
     EsInventory createInventory(EsPlayer owner, int size, String title);
     String[] getPotionEffectTypes();
     String[] getEnchantments();

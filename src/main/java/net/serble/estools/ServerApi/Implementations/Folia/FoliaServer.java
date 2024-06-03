@@ -18,6 +18,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -131,7 +132,7 @@ public class FoliaServer implements EsServerSoftware {
 
     @SuppressWarnings("deprecation")
     @Override
-    public EsItemStack createPotion(EsPotType potType, String effect, int duration, int amp, int amount) {
+    public EsPotion createPotion(EsPotType potType, String effect, int duration, int amp, int amount) {
         if (Main.minecraftVersion.getMinor() >= 9) {
             String type = potType == EsPotType.drink ?
                     "POTION" :
@@ -149,7 +150,7 @@ public class FoliaServer implements EsServerSoftware {
             assert meta != null;
             meta.addCustomEffect(new PotionEffect(Objects.requireNonNull(Registry.EFFECT.match(effType)), duration, amp-1), true);
             pot.setItemMeta(meta);
-            return new FoliaItemStack(pot);
+            return new FoliaPotion(pot);
         } else if (Main.minecraftVersion.getMinor() >= 4) {
             String effType;
             try {
@@ -160,7 +161,25 @@ public class FoliaServer implements EsServerSoftware {
 
             org.bukkit.potion.Potion potion = new org.bukkit.potion.Potion(Objects.requireNonNull(Registry.POTION.match(effType)), amp);
             potion.setSplash(potType == EsPotType.splash);
-            return new FoliaItemStack(potion.toItemStack(1));
+            return new FoliaPotion(potion.toItemStack(1));
+        } else {  // This isn't possible to get to because this class won't load on 1.3 and below
+            return null;
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public EsPotion createPotion(EsPotType potType) {
+        if (Main.minecraftVersion.getMinor() >= 9) {
+            String type = potType == EsPotType.drink ?
+                    "POTION" :
+                    potType.toString().toUpperCase() + "_POTION";
+            ItemStack pot = new ItemStack(Material.valueOf(type), 1);
+            return new FoliaPotion(pot);
+        } else if (Main.minecraftVersion.getMinor() >= 4) {
+            Potion potion = Potion.fromItemStack(new ItemStack(Material.valueOf("POTION")));
+            potion.setSplash(potType == EsPotType.splash);
+            return new FoliaPotion(potion.toItemStack(1));
         } else {  // This isn't possible to get to because this class won't load on 1.3 and below
             return null;
         }
