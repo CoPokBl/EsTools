@@ -62,6 +62,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         EsBlockPlaceEvent ee = new EsBlockPlaceEvent(new BukkitPlayer(e.getPlayer()), BukkitHelper.fromBukkitItem(e.getItemInHand()), BukkitHelper.fromBukkitEquipmentSlot(e.getHand()));
+        ee.setCancelled(e.isCancelled());
         Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());
     }
@@ -72,6 +73,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
                 new BukkitPlayer(e.getPlayer()),
                 BukkitHelper.fromBukkitTeleportCause(e.getCause()),
                 BukkitHelper.fromBukkitLocation(Objects.requireNonNull(e.getTo())));
+        ee.setCancelled(e.isCancelled());
         Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());
     }
@@ -93,6 +95,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
     @EventHandler
     public void onEntityDamage(EntityDamageEvent e) {
         EsEntityDamageEvent ee = new EsEntityDamageEvent(BukkitHelper.fromBukkitEntity(e.getEntity()), getDamageFromEvent(e));
+        ee.setCancelled(e.isCancelled());
         Main.callEvent(ee);
         setDamageFromEvent(e, ee.getDamage());
         e.setCancelled(ee.isCancelled());
@@ -109,6 +112,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
         EsItemStack cu = BukkitHelper.fromBukkitItem(e.getCursor());
         int sl = e.getSlot();
         EsInventoryClickEvent ee = new EsInventoryClickEvent(cl, sl, cu, inv, clInv, ci, ac, ct);
+        ee.setCancelled(e.isCancelled());
         Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());
     }
@@ -138,6 +142,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
         Set<Integer> cs = e.getRawSlots();
         EsInventoryView view = new BukkitInventoryView(e.getView());
         EsInventoryDragEvent ee = new EsInventoryDragEvent(pl, inv, cs, view);
+        ee.setCancelled(e.isCancelled());
         Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());
     }
@@ -148,6 +153,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
         EsPlayer p = new BukkitPlayer(e.getPlayer());
         EsAction ac = BukkitHelper.fromBukkitAction(e.getAction());
         EsPlayerInteractEvent ee = new EsPlayerInteractEvent(p, cb, ac);
+        ee.setCancelled(e.isCancelled());
         Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());
     }
@@ -157,6 +163,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
         EsPlayer p = new BukkitPlayer(e.getPlayer());
         String[] lines = e.getLines();
         EsSignChangeEvent ee = new EsSignChangeEvent(p, lines);
+        ee.setCancelled(e.isCancelled());
         Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());
         for (int i = 0; i < lines.length; i++) {
