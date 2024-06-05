@@ -346,7 +346,7 @@ public class BukkitServer implements EsServerSoftware {
 
     @Override
     public EsItemStack createItemStack(Object internalObject) {
-        return new BukkitItemStack(internalObject);
+        return BukkitHelper.fromBukkitItem((ItemStack) internalObject);
     }
 
     @Override

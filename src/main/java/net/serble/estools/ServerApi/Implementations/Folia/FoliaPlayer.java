@@ -54,7 +54,7 @@ public class FoliaPlayer extends FoliaLivingEntity implements EsPlayer {
         if (mainHand == null) {
             return null;
         }
-        return new FoliaItemStack(mainHand);
+        return FoliaHelper.fromBukkitItem(mainHand);
     }
 
     @Override

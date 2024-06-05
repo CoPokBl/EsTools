@@ -19,16 +19,12 @@ public class BukkitItemStack implements EsItemStack {
         bukkitItem = new ItemStack(Material.valueOf(mat), amount);
     }
 
-    public BukkitItemStack(org.bukkit.inventory.ItemStack child) {
+    public BukkitItemStack(ItemStack child) {
         bukkitItem = child;
     }
 
     public ItemStack getBukkitItem() {
         return bukkitItem;
-    }
-
-    public BukkitItemStack(Object internalObject) {
-        bukkitItem = (ItemStack) internalObject;
     }
 
     @Override

@@ -24,32 +24,32 @@ public class BukkitPlayerInventory extends BukkitInventory implements EsPlayerIn
 
     @Override
     public EsItemStack getOffHand() {
-        return new BukkitItemStack(bukkitInv.getItemInOffHand());
+        return BukkitHelper.fromBukkitItem(bukkitInv.getItemInOffHand());
     }
 
     @Override
     public EsItemStack getMainHand() {
-        return new BukkitItemStack(bukkitInv.getItemInMainHand());
+        return BukkitHelper.fromBukkitItem(bukkitInv.getItemInMainHand());
     }
 
     @Override
     public EsItemStack getHelmet() {
-        return new BukkitItemStack(bukkitInv.getHelmet());
+        return BukkitHelper.fromBukkitItem(bukkitInv.getHelmet());
     }
 
     @Override
     public EsItemStack getLeggings() {
-        return new BukkitItemStack(bukkitInv.getLeggings());
+        return BukkitHelper.fromBukkitItem(bukkitInv.getLeggings());
     }
 
     @Override
     public EsItemStack getChestplate() {
-        return new BukkitItemStack(bukkitInv.getChestplate());
+        return BukkitHelper.fromBukkitItem(bukkitInv.getChestplate());
     }
 
     @Override
     public EsItemStack getBoots() {
-        return new BukkitItemStack(bukkitInv.getBoots());
+        return BukkitHelper.fromBukkitItem(bukkitInv.getBoots());
     }
 
     @Override

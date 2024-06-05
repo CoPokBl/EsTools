@@ -20,32 +20,32 @@ public class FoliaPlayerInventory extends FoliaInventory implements EsPlayerInve
 
     @Override
     public EsItemStack getOffHand() {
-        return new net.serble.estools.ServerApi.Implementations.Folia.FoliaItemStack(bukkitInv.getItemInOffHand());
+        return FoliaHelper.fromBukkitItem(bukkitInv.getItemInOffHand());
     }
 
     @Override
     public EsItemStack getMainHand() {
-        return new net.serble.estools.ServerApi.Implementations.Folia.FoliaItemStack(bukkitInv.getItemInMainHand());
+        return FoliaHelper.fromBukkitItem(bukkitInv.getItemInMainHand());
     }
 
     @Override
     public EsItemStack getHelmet() {
-        return new net.serble.estools.ServerApi.Implementations.Folia.FoliaItemStack(bukkitInv.getHelmet());
+        return FoliaHelper.fromBukkitItem(bukkitInv.getHelmet());
     }
 
     @Override
     public EsItemStack getLeggings() {
-        return new net.serble.estools.ServerApi.Implementations.Folia.FoliaItemStack(bukkitInv.getLeggings());
+        return FoliaHelper.fromBukkitItem(bukkitInv.getLeggings());
     }
 
     @Override
     public EsItemStack getChestplate() {
-        return new net.serble.estools.ServerApi.Implementations.Folia.FoliaItemStack(bukkitInv.getChestplate());
+        return FoliaHelper.fromBukkitItem(bukkitInv.getChestplate());
     }
 
     @Override
     public EsItemStack getBoots() {
-        return new net.serble.estools.ServerApi.Implementations.Folia.FoliaItemStack(bukkitInv.getBoots());
+        return FoliaHelper.fromBukkitItem(bukkitInv.getBoots());
     }
 
     @Override

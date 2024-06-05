@@ -61,7 +61,7 @@ public class FoliaEventsListener implements Listener, CommandExecutor {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
-        EsBlockPlaceEvent ee = new EsBlockPlaceEvent(new FoliaPlayer(e.getPlayer()), new FoliaItemStack(e.getItemInHand()), BukkitHelper.fromBukkitEquipmentSlot(e.getHand()));
+        EsBlockPlaceEvent ee = new EsBlockPlaceEvent(new FoliaPlayer(e.getPlayer()), FoliaHelper.fromBukkitItem(e.getItemInHand()), BukkitHelper.fromBukkitEquipmentSlot(e.getHand()));
         Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());
     }
@@ -104,9 +104,9 @@ public class FoliaEventsListener implements Listener, CommandExecutor {
         EsInventory inv = new FoliaInventory(e.getInventory());
         EsClickType ct = FoliaHelper.fromBukkitClickType(e.getClick());
         EsInventoryAction ac = FoliaHelper.fromBukkitInventoryAction(e.getAction());
-        EsItemStack ci = new FoliaItemStack(e.getCurrentItem());
+        EsItemStack ci = FoliaHelper.fromBukkitItem(e.getCurrentItem());
         EsPlayer cl = new FoliaPlayer((Player) e.getWhoClicked());
-        EsItemStack cu = new FoliaItemStack(e.getCursor());
+        EsItemStack cu = FoliaHelper.fromBukkitItem(e.getCursor());
         int sl = e.getSlot();
         EsInventoryClickEvent ee = new EsInventoryClickEvent(cl, sl, cu, inv, clInv, ci, ac, ct);
         Main.callEvent(ee);

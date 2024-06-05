@@ -61,7 +61,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
-        EsBlockPlaceEvent ee = new EsBlockPlaceEvent(new BukkitPlayer(e.getPlayer()), new BukkitItemStack(e.getItemInHand()), BukkitHelper.fromBukkitEquipmentSlot(e.getHand()));
+        EsBlockPlaceEvent ee = new EsBlockPlaceEvent(new BukkitPlayer(e.getPlayer()), BukkitHelper.fromBukkitItem(e.getItemInHand()), BukkitHelper.fromBukkitEquipmentSlot(e.getHand()));
         Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());
     }
@@ -104,9 +104,9 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
         EsInventory inv = new BukkitInventory(e.getInventory());
         EsClickType ct = BukkitHelper.fromBukkitClickType(e.getClick());
         EsInventoryAction ac = BukkitHelper.fromBukkitInventoryAction(e.getAction());
-        EsItemStack ci = new BukkitItemStack(e.getCurrentItem());
+        EsItemStack ci = BukkitHelper.fromBukkitItem(e.getCurrentItem());
         EsPlayer cl = new BukkitPlayer((Player) e.getWhoClicked());
-        EsItemStack cu = new BukkitItemStack(e.getCursor());
+        EsItemStack cu = BukkitHelper.fromBukkitItem(e.getCursor());
         int sl = e.getSlot();
         EsInventoryClickEvent ee = new EsInventoryClickEvent(cl, sl, cu, inv, clInv, ci, ac, ct);
         Main.callEvent(ee);

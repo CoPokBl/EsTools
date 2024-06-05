@@ -29,14 +29,14 @@ public class FoliaInventory implements EsInventory {
                 items[i] = null;
                 continue;
             }
-            items[i] = new FoliaItemStack(bukkitItems[i]);
+            items[i] = FoliaHelper.fromBukkitItem(bukkitItems[i]);
         }
         return items;
     }
 
     @Override
     public EsItemStack getItem(int slot) {
-        return new FoliaItemStack(bukkitInv.getItem(slot));
+        return FoliaHelper.fromBukkitItem(bukkitInv.getItem(slot));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class FoliaInventory implements EsInventory {
         Map<Integer, EsItemStack> out = new HashMap<>();
 
         for (Map.Entry<Integer, ? extends ItemStack> entry : bukkitInv.all(mat).entrySet()) {
-            out.put(entry.getKey(), new FoliaItemStack(entry.getValue()));
+            out.put(entry.getKey(), FoliaHelper.fromBukkitItem(entry.getValue()));
         }
 
         return out;

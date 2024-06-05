@@ -20,11 +20,7 @@ public class FoliaItemStack implements EsItemStack {
         bukkitItem = new org.bukkit.inventory.ItemStack(Material.valueOf(mat), amount);
     }
 
-    public FoliaItemStack(Object internalObject) {
-        bukkitItem = (ItemStack) internalObject;
-    }
-
-    public FoliaItemStack(org.bukkit.inventory.ItemStack child) {
+    public FoliaItemStack(ItemStack child) {
         bukkitItem = child;
     }
 

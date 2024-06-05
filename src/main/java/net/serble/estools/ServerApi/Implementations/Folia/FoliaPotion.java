@@ -9,6 +9,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("deprecation")  // This whole class depends on the deprecated Potion class
 public class FoliaPotion extends FoliaItemStack implements EsPotion {
@@ -43,7 +47,12 @@ public class FoliaPotion extends FoliaItemStack implements EsPotion {
         if (old) {
             in = bukkitPotion.getEffects().toArray(new PotionEffect[0]);
         } else {
-            in = bukkitMeta.getCustomEffects().toArray(new PotionEffect[0]);
+            PotionType baseType = bukkitMeta.getBasePotionType();
+            List<PotionEffect> baseEffects = new ArrayList<>(baseType.getPotionEffects());  // What's the difference between base and custom effects?
+            if (bukkitMeta.hasCustomEffects()) {  // The docs say to do this
+                baseEffects.addAll(bukkitMeta.getCustomEffects());
+            }
+            in = baseEffects.toArray(new PotionEffect[0]);
         }
 
         EsPotionEffect[] out = new EsPotionEffect[in.length];

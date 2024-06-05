@@ -53,7 +53,7 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
         if (mainHand == null) {
             return null;
         }
-        return new BukkitItemStack(mainHand);
+        return BukkitHelper.fromBukkitItem(mainHand);
     }
 
     @Override

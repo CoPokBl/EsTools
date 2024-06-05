@@ -30,7 +30,7 @@ public class BukkitInventory implements EsInventory {
 
     @Override
     public EsItemStack getItem(int slot) {
-        return new BukkitItemStack(bukkitInv.getItem(slot));
+        return BukkitHelper.fromBukkitItem(bukkitInv.getItem(slot));
     }
 
     @Override
@@ -60,7 +60,7 @@ public class BukkitInventory implements EsInventory {
                 items[i] = null;
                 continue;
             }
-            items[i] = new BukkitItemStack(bukkitItems[i]);
+            items[i] = BukkitHelper.fromBukkitItem(bukkitItems[i]);
         }
         return items;
     }
@@ -88,7 +88,7 @@ public class BukkitInventory implements EsInventory {
         Map<Integer, EsItemStack> out = new HashMap<>();
 
         for (Map.Entry<Integer, ? extends ItemStack> entry : bukkitInv.all(mat).entrySet()) {
-            out.put(entry.getKey(), new BukkitItemStack(entry.getValue()));
+            out.put(entry.getKey(), BukkitHelper.fromBukkitItem(entry.getValue()));
         }
 
         return out;

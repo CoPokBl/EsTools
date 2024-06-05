@@ -379,7 +379,7 @@ public class FoliaServer implements EsServerSoftware {
 
     @Override
     public EsItemStack createItemStack(Object internalObject) {
-        return new FoliaItemStack(internalObject);
+        return FoliaHelper.fromBukkitItem((ItemStack) internalObject);
     }
 
     @Override

@@ -292,15 +292,19 @@ public class BukkitHelper {
     }
 
     public static EsItemStack fromBukkitItem(ItemStack item) {
+        if (item == null) {
+            return null;
+        }
+
         if (Main.minecraftVersion.getMinor() >= 9) {
-            if (item.getItemMeta() instanceof PotionMeta) {
+            if (item.getItemMeta() != null && item.getItemMeta() instanceof PotionMeta) {
                 return new BukkitPotion(item);
             }
-            
+
             return new BukkitItemStack(item);
         } else if (Main.minecraftVersion.getMinor() >= 4) {
             if (item.getType().name().endsWith("POTION")) {
-                return new BukkitItemStack(item);
+                return new BukkitPotion(item);
             }
 
             return new BukkitItemStack(item);
