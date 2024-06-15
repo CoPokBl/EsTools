@@ -4,6 +4,8 @@ import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -60,6 +62,26 @@ public class BukkitItemStack implements EsItemStack {
     @Override
     public EsItemMeta getItemMeta() {
         return new BukkitItemMeta(bukkitItem.getItemMeta());
+    }
+
+    @Override
+    public String exportItemMeta() {
+        YamlConfiguration config = new YamlConfiguration();
+        config.set("item", bukkitItem.getItemMeta());
+        return config.saveToString();
+    }
+
+    @Override
+    public void importItemMeta(String meta) {
+        YamlConfiguration config = new YamlConfiguration();
+        try {
+            config.loadFromString(meta);
+        } catch (InvalidConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+
+        ItemMeta itemMeta = (ItemMeta)config.get("item");
+        bukkitItem.setItemMeta(itemMeta);
     }
 
     @Override

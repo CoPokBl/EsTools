@@ -103,8 +103,8 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
 
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
-        EsInventory clInv = new BukkitInventory(e.getClickedInventory());
-        EsInventory inv = new BukkitInventory(e.getInventory());
+        EsInventory clInv = BukkitHelper.fromBukkitInventory(e.getClickedInventory());
+        EsInventory inv = BukkitHelper.fromBukkitInventory(e.getInventory());
         EsClickType ct = BukkitHelper.fromBukkitClickType(e.getClick());
         EsInventoryAction ac = BukkitHelper.fromBukkitInventoryAction(e.getAction());
         EsItemStack ci = BukkitHelper.fromBukkitItem(e.getCurrentItem());
@@ -129,7 +129,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
 
     @EventHandler
     public void onInvClose(InventoryCloseEvent e) {
-        EsInventory inv = new BukkitInventory(e.getInventory());
+        EsInventory inv = BukkitHelper.fromBukkitInventory(e.getInventory());
         EsPlayer pl = new BukkitPlayer((Player) e.getPlayer());
         EsInventoryCloseEvent ee = new EsInventoryCloseEvent(pl, inv);
         Main.callEvent(ee);
@@ -137,7 +137,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
 
     @EventHandler
     public void onDrag(InventoryDragEvent e) {
-        EsInventory inv = new BukkitInventory(e.getInventory());
+        EsInventory inv = BukkitHelper.fromBukkitInventory(e.getInventory());
         EsPlayer pl = new BukkitPlayer((Player) e.getWhoClicked());
         Set<Integer> cs = e.getRawSlots();
         EsInventoryView view = new BukkitInventoryView(e.getView());
@@ -153,9 +153,12 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
         EsPlayer p = new BukkitPlayer(e.getPlayer());
         EsAction ac = BukkitHelper.fromBukkitAction(e.getAction());
         EsPlayerInteractEvent ee = new EsPlayerInteractEvent(p, cb, ac);
-        ee.setCancelled(e.isCancelled());
+
+        ee.setUseInteractedBlock(BukkitHelper.fromBukkitEventResult(e.useInteractedBlock()));
+        ee.setUseItemInHand(BukkitHelper.fromBukkitEventResult(e.useItemInHand()));
         Main.callEvent(ee);
-        e.setCancelled(ee.isCancelled());
+        e.setUseInteractedBlock(BukkitHelper.toBukkitEventResult(ee.getUseInteractedBlock()));
+        e.setUseItemInHand(BukkitHelper.toBukkitEventResult(ee.getUseItemInHand()));
     }
 
     @EventHandler

@@ -4,6 +4,7 @@ import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsAction;
 import net.serble.estools.ServerApi.EsEventListener;
+import net.serble.estools.ServerApi.EsEventResult;
 import net.serble.estools.ServerApi.Events.EsPlayerInteractEvent;
 import net.serble.estools.ServerApi.Events.EsSignChangeEvent;
 import net.serble.estools.ServerApi.Interfaces.EsEvent;
@@ -39,7 +40,7 @@ public class SignMain implements EsEventListener {
             SignType signType = signs.get(state.getLine(0));
 
             if (signType != null) {
-                e.setCancelled(true);
+                e.setUseInteractedBlock(EsEventResult.DENY);
                 signType.run(e.getPlayer(), state.getLines());
             }
         }

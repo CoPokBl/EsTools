@@ -10,6 +10,8 @@ public interface EsItemStack {
     void addEnchantment(String enchantment, int level);
     void removeEnchantment(String enchantment);
     EsItemMeta getItemMeta();
+    String exportItemMeta();
+    void importItemMeta(String meta);
     void setItemMeta(EsItemMeta meta);
     void setDamage(int val);
     int getDamage();

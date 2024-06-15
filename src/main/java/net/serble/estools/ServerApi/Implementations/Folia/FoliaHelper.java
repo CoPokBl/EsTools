@@ -20,6 +20,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 
@@ -235,5 +236,13 @@ public class FoliaHelper extends BukkitHelper {
         } catch (ClassNotFoundException e) {
             return false;
         }
+    }
+
+    public static EsInventory fromBukkitInventory(Inventory inv) {
+        if (inv == null) {
+            return null;
+        }
+
+        return new FoliaInventory(inv);
     }
 }

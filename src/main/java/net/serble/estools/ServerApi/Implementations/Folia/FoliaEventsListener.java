@@ -103,8 +103,8 @@ public class FoliaEventsListener implements Listener, CommandExecutor {
 
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
-        EsInventory clInv = new FoliaInventory(e.getClickedInventory());
-        EsInventory inv = new FoliaInventory(e.getInventory());
+        EsInventory clInv = FoliaHelper.fromBukkitInventory(e.getClickedInventory());
+        EsInventory inv = FoliaHelper.fromBukkitInventory(e.getInventory());
         EsClickType ct = FoliaHelper.fromBukkitClickType(e.getClick());
         EsInventoryAction ac = FoliaHelper.fromBukkitInventoryAction(e.getAction());
         EsItemStack ci = FoliaHelper.fromBukkitItem(e.getCurrentItem());
@@ -129,7 +129,7 @@ public class FoliaEventsListener implements Listener, CommandExecutor {
 
     @EventHandler
     public void onInvClose(InventoryCloseEvent e) {
-        EsInventory inv = new FoliaInventory(e.getInventory());
+        EsInventory inv = FoliaHelper.fromBukkitInventory(e.getInventory());
         EsPlayer pl = new FoliaPlayer((Player) e.getPlayer());
         EsInventoryCloseEvent ee = new EsInventoryCloseEvent(pl, inv);
         Main.callEvent(ee);
@@ -137,7 +137,7 @@ public class FoliaEventsListener implements Listener, CommandExecutor {
 
     @EventHandler
     public void onDrag(InventoryDragEvent e) {
-        EsInventory inv = new FoliaInventory(e.getInventory());
+        EsInventory inv = FoliaHelper.fromBukkitInventory(e.getInventory());
         EsPlayer pl = new FoliaPlayer((Player) e.getWhoClicked());
         Set<Integer> cs = e.getRawSlots();
         EsInventoryView view = new FoliaInventoryView(e.getView());
@@ -153,13 +153,16 @@ public class FoliaEventsListener implements Listener, CommandExecutor {
         EsPlayer p = new FoliaPlayer(e.getPlayer());
         EsAction ac = FoliaHelper.fromBukkitAction(e.getAction());
         EsPlayerInteractEvent ee = new EsPlayerInteractEvent(p, cb, ac);
-        ee.setCancelled(e.isCancelled());
+
+        ee.setUseInteractedBlock(FoliaHelper.fromBukkitEventResult(e.useInteractedBlock()));
+        ee.setUseItemInHand(FoliaHelper.fromBukkitEventResult(e.useItemInHand()));
         Main.callEvent(ee);
-        e.setCancelled(ee.isCancelled());
+        e.setUseInteractedBlock(FoliaHelper.toBukkitEventResult(ee.getUseInteractedBlock()));
+        e.setUseItemInHand(FoliaHelper.toBukkitEventResult(ee.getUseItemInHand()));
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        return Main.executeCommand(BukkitHelper.fromBukkitCommandSender(sender), command.getName(), args);
+        return Main.executeCommand(FoliaHelper.fromBukkitCommandSender(sender), command.getName(), args);
     }
 }

@@ -1,11 +1,9 @@
 package net.serble.estools.ServerApi;
 
 import net.serble.estools.Main;
-import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPotion;
 
-import java.util.List;
 import java.util.Map;
 
 
@@ -14,11 +12,9 @@ import java.util.Map;
 public class EsSerialisableItemStack {
     private String material;
     private int amount;
-    private String customName;
-    private List<String> lore;
+    private String itemMeta;
     private Map<String, Integer> enchantments;
-    private EsItemFlag[] flags;
-    private EsPotionEffect[] potionEffects;
+    private boolean isPotion;
     private EsPotType potType;
 
     /** Public constructor for serialiser */
@@ -28,38 +24,27 @@ public class EsSerialisableItemStack {
         EsSerialisableItemStack result = new EsSerialisableItemStack();
         result.setMaterial(stack.getType());
         result.setAmount(stack.getAmount());
-        result.setLore(stack.getItemMeta().getLore());
-        result.setCustomName(stack.getItemMeta().getDisplayName());
         result.setEnchantments(stack.getEnchantments());
-        result.setFlags(stack.getItemMeta().getItemFlags().toArray(new EsItemFlag[0]));
+        result.setItemMeta(stack.exportItemMeta());
 
         if (stack instanceof EsPotion) {
             EsPotion pot = (EsPotion) stack;
-            result.setPotionEffects(pot.getEffects());
             result.setPotType(pot.getPotionType());
+            result.setIsPotion(true);
+        } else {
+            result.setIsPotion(false);
         }
+
         return result;
     }
 
     public EsItemStack toItemStack() {
-        EsItemStack stack = potionEffects == null ?
-                Main.server.createItemStack(material, amount) :
-                Main.server.createPotion(potType);
-        EsItemMeta meta = stack.getItemMeta();
-        meta.setLore(lore);
-        meta.setDisplayName(customName);
-        meta.addItemFlags(flags);
-        stack.setItemMeta(meta);
-        for (Map.Entry<String, Integer> ench : enchantments.entrySet()) {
-            stack.addEnchantment(ench.getKey(), ench.getValue());
-        }
+        EsItemStack stack = isPotion ?
+                Main.server.createPotion(potType) :
+                Main.server.createItemStack(material, 1);
 
-        if (potionEffects != null) {
-            EsPotion pot = (EsPotion) stack;
-            for (EsPotionEffect effect : potionEffects) {
-                pot.addEffect(effect);
-            }
-        }
+        stack.setAmount(amount);
+        stack.importItemMeta(itemMeta);
         return stack;
     }
 
@@ -79,22 +64,6 @@ public class EsSerialisableItemStack {
         this.material = material;
     }
 
-    public String getCustomName() {
-        return customName;
-    }
-
-    public List<String> getLore() {
-        return lore;
-    }
-
-    public void setCustomName(String customName) {
-        this.customName = customName;
-    }
-
-    public void setLore(List<String> lore) {
-        this.lore = lore;
-    }
-
     public Map<String, Integer> getEnchantments() {
         return enchantments;
     }
@@ -103,20 +72,20 @@ public class EsSerialisableItemStack {
         this.enchantments = enchantments;
     }
 
-    public EsItemFlag[] getFlags() {
-        return flags;
+    public String getItemMeta() {
+        return itemMeta;
     }
 
-    public void setFlags(EsItemFlag[] flags) {
-        this.flags = flags;
+    public void setItemMeta(String itemMeta) {
+        this.itemMeta = itemMeta;
     }
 
-    public EsPotionEffect[] getPotionEffects() {
-        return potionEffects;
+    public boolean isPotion() {
+        return isPotion;
     }
 
-    public void setPotionEffects(EsPotionEffect[] potionEffects) {
-        this.potionEffects = potionEffects;
+    public void setIsPotion(boolean isPotion) {
+        this.isPotion = isPotion;
     }
 
     public EsPotType getPotType() {

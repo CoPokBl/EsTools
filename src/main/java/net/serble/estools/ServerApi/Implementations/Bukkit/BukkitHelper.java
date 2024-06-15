@@ -15,11 +15,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -592,6 +594,40 @@ public class BukkitHelper {
                 return EsAction.Physical;
             default:
                 throw new IllegalArgumentException("Invalid Action");
+        }
+    }
+
+    public static EsInventory fromBukkitInventory(Inventory inv) {
+        if (inv == null) {
+            return null;
+        }
+
+        return new BukkitInventory(inv);
+    }
+
+    public static EsEventResult fromBukkitEventResult(Event.Result result) {
+        switch (result) {
+            case ALLOW:
+                return EsEventResult.ALLOW;
+            case DENY:
+                return EsEventResult.DENY;
+            case DEFAULT:
+                return EsEventResult.DEFAULT;
+            default:
+                throw new IllegalArgumentException("Invalid Event.Result");
+        }
+    }
+
+    public static Event.Result toBukkitEventResult(EsEventResult result) {
+        switch (result) {
+            case ALLOW:
+                return Event.Result.ALLOW;
+            case DENY:
+                return Event.Result.DENY;
+            case DEFAULT:
+                return Event.Result.DEFAULT;
+            default:
+                throw new IllegalArgumentException("Invalid EsEventResult");
         }
     }
 }
