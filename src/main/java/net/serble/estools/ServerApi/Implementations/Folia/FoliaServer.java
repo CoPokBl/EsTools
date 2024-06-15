@@ -385,7 +385,8 @@ public class FoliaServer implements EsServerSoftware {
     @Override
     public String[] getRelevantInternalTypes() {
         return new String[] {
-                "CraftItemStack"  // CChest config files
+                "CraftItemStack",  // CChest config files
+                "net.serble.estools.ServerApi.EsSerialisableItemStack"
         };
     }
 }

@@ -120,6 +120,10 @@ public class FoliaHelper extends BukkitHelper {
     }
 
     public static EsCommandSender fromBukkitCommandSender(org.bukkit.command.CommandSender sender) {
+        if (sender == null) {
+            return null;
+        }
+
         if (sender instanceof Player) {
             return new net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayer((Player) sender);
         }
@@ -186,6 +190,10 @@ public class FoliaHelper extends BukkitHelper {
     }
 
     public static EsItemStack fromBukkitItem(ItemStack item) {
+        if (item == null) {
+            return null;
+        }
+
         if (Main.minecraftVersion.getMinor() >= 9) {
             if (item.getItemMeta() instanceof PotionMeta) {
                 return new FoliaPotion(item);

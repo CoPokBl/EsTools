@@ -80,7 +80,7 @@ public class EsSerialisableItemStack {
         this.itemMeta = itemMeta;
     }
 
-    public boolean isPotion() {
+    public boolean getIsPotion() {
         return isPotion;
     }
 

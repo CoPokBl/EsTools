@@ -39,7 +39,11 @@
                 </relocation>
                 <relocation>
                     <pattern>co.aikar.taskchain</pattern>
-                    <shadedPattern>net.serble.estools.taskchain</shadedPattern> <!-- Replace this -->
+                    <shadedPattern>net.serble.taskchain</shadedPattern>
+                </relocation>
+                <relocation>
+                    <pattern>org.yaml.snakeyaml</pattern>
+                    <shadedPattern>net.serble.snakeyaml</shadedPattern>
                 </relocation>
             </relocations>
             <filters>

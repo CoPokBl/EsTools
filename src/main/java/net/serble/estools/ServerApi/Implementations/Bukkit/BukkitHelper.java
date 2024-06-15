@@ -62,6 +62,10 @@ public class BukkitHelper {
     }
 
     public static EsCommandSender fromBukkitCommandSender(org.bukkit.command.CommandSender sender) {
+        if (sender == null) {
+            return null;
+        }
+
         if (sender instanceof Player) {
             return new BukkitPlayer((Player) sender);
         }
