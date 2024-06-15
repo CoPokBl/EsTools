@@ -47,7 +47,7 @@ public class BukkitWorld implements EsWorld {
 
     @Override
     public void setStorming(boolean val) {
-        bukkitWorld.setStorm(false);
+        bukkitWorld.setStorm(val);
     }
 
     @Override

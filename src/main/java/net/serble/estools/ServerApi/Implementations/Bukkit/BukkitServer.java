@@ -195,13 +195,12 @@ public class BukkitServer implements EsServerSoftware {
     @Override
     public String[] getEnchantments() {
         if (Main.minecraftVersion.getMinor() > 12) {
-            String[] out = new String[(int) Registry.ENCHANTMENT.stream().count()];
-            int i = 0;
+            List<String> out = new ArrayList<>();
             for (Enchantment e : Registry.ENCHANTMENT) {
-                out[i] = e.getKey().getKey();
-                i++;
+                out.add(e.getKey().getKey());
             }
-            return out;
+
+            return out.toArray(new String[0]);
         }
 
         // Pre 1.13, we need to use the helper to get all the keys

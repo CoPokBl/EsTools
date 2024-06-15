@@ -4,7 +4,6 @@ import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 import net.serble.estools.ServerApi.Interfaces.EsWorld;
 import org.bukkit.Bukkit;
-import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
@@ -99,12 +98,12 @@ public class BukkitLivingEntity extends BukkitEntity implements EsLivingEntity {
 
     @Override
     public void addPotionEffect(String effect, int duration, int amplifier) {
-        bukkitEntity.addPotionEffect(new PotionEffect(Objects.requireNonNull(Registry.EFFECT.match(effect)), duration, amplifier));
+        bukkitEntity.addPotionEffect(new PotionEffect(BukkitHelper.toBukkitPotionEffectType(effect), duration, amplifier));
     }
 
     @Override
     public void removePotionEffect(String effect) {
-        bukkitEntity.removePotionEffect(Objects.requireNonNull(Registry.EFFECT.match(effect)));
+        bukkitEntity.removePotionEffect(BukkitHelper.toBukkitPotionEffectType(effect));
     }
 
     @SuppressWarnings("deprecation")  // Gotta love backwards compatibility

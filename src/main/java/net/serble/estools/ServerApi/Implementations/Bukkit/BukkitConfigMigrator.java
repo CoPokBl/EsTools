@@ -73,6 +73,11 @@ public class BukkitConfigMigrator {
             return;
         }
 
+        if (file.length() == 0) {
+            file.delete();
+            return;
+        }
+
         try {  // We will now try to get all the values, defaulting to their current defaults
             FileConfiguration config = new YamlConfiguration();
             config.load(file);
@@ -107,6 +112,11 @@ public class BukkitConfigMigrator {
     private static void migrateGiveConfig() {  // config.yml
         File file = new File(Main.server.getDataFolder(), giveConfig);
         if (!file.exists()) {
+            return;
+        }
+
+        if (file.length() == 0) {
+            file.delete();
             return;
         }
 
@@ -152,6 +162,11 @@ public class BukkitConfigMigrator {
             return;
         }
 
+        if (file.length() == 0) {
+            file.delete();
+            return;
+        }
+
         try {  // We will now try to get all the values, defaulting to their current defaults
             FileConfiguration config = new YamlConfiguration();
             config.load(file);
@@ -180,6 +195,11 @@ public class BukkitConfigMigrator {
     private static void migrateWarpsConfig() {  // config.yml
         File file = new File(Main.server.getDataFolder(), warpsConfig);
         if (!file.exists()) {
+            return;
+        }
+
+        if (file.length() == 0) {
+            file.delete();
             return;
         }
 
@@ -238,11 +258,20 @@ public class BukkitConfigMigrator {
     private static void migrateCChestsConfig() {  // config.yml
         File folder = new File(Main.server.getDataFolder(), cchestsFolder);
 
-        File[] savedPlayers = folder.listFiles();
-
-        if (savedPlayers == null) {
+        File[] files = folder.listFiles();
+        if (files == null) {
             return;
         }
+
+        List<File> savedPlayers = new ArrayList<>(Arrays.asList(files));
+        savedPlayers.removeIf(file -> {
+            if (file.length() == 0) {
+                file.delete();
+                return true;
+            }
+
+            return false;
+        });
 
         Main.logger.warning("[EsTools] Now migrating CChest config files, this may take a while");
 

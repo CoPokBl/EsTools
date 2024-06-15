@@ -111,7 +111,7 @@ public class Main {
 		sc("setstack", "setstack", new SetStack());
 		sc("ci", "clearinv", new ClearInv());
 		sc("day", "time", new Day());
-		sc("moon", "time", new Night());
+		sc("night", "time", new Night());
 		sc("noon", "time", new Noon());
 		sc("midnight", "time", new Midnight());
 		sc("sun", "weather", new Sun());

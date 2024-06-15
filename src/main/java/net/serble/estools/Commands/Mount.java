@@ -37,6 +37,11 @@ public class Mount extends EntityCommand {
 		}
 
 		for (EsEntity entity : riders) {
+			if (entity.getUniqueId() == target.getUniqueId()) {
+				send(sender, "&cSorry, but you cant ride yourself! (the world ends)");
+				return false;
+			}
+
 			target.addPassenger(entity);
 			target = entity;
 		}

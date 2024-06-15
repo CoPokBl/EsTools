@@ -1,5 +1,6 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
+import net.serble.estools.Effects;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.*;
 import net.serble.estools.Main;
@@ -342,6 +343,10 @@ public class BukkitHelper {
 
     // TODO: Backwards compat?
     public static PotionEffectType toBukkitPotionEffectType(String type) {
+        if (Main.minecraftVersion.getMinor() < 20) {
+            return PotionEffectType.getByName(Effects.getByName(type));
+        }
+
         return Objects.requireNonNull(Registry.EFFECT.match(type));
     }
 

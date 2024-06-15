@@ -40,22 +40,23 @@ public class BukkitItemMeta implements EsItemMeta {
 
     @Override
     public void addItemFlags(EsItemFlag... flags) {
-        ItemFlag[] bukkitFlags = new ItemFlag[flags.length];
-        for (int i = 0; i < flags.length; i++) {
-            EsItemFlag flag = flags[i];
-            bukkitFlags[i] = ItemFlag.valueOf(flag.name());
-        }
-        bukkitMeta.addItemFlags(bukkitFlags);
+        bukkitMeta.addItemFlags(convertFlags(flags));
     }
 
     @Override
     public void removeItemFlags(EsItemFlag... flags) {
-        ItemFlag[] bukkitFlags = new ItemFlag[flags.length];
-        for (int i = 0; i < flags.length; i++) {
-            EsItemFlag flag = flags[i];
-            bukkitFlags[i] = ItemFlag.valueOf(flag.name());
+        bukkitMeta.removeItemFlags(convertFlags(flags));
+    }
+
+    private ItemFlag[] convertFlags(EsItemFlag[] flags) {
+        List<ItemFlag> bukkitFlags = new ArrayList<>(flags.length);
+        for (EsItemFlag flag : flags) {
+            try {
+                bukkitFlags.add(ItemFlag.valueOf(flag.name()));
+            } catch (IllegalArgumentException ignored) {} // doesnt exist, dont add
         }
-        bukkitMeta.removeItemFlags(bukkitFlags);
+
+        return bukkitFlags.toArray(new ItemFlag[0]);
     }
 
     @Override
