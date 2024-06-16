@@ -52,7 +52,8 @@ public class Give implements EsToolsTabCompleter {
 		Map<String, String> materials = config.getItems();
 
 		// Load normal items
-		for (String mat : Main.server.getMaterials(true)) {
+		String[] builtinMats = Main.server.getMaterials(true);
+		for (String mat : builtinMats) {
 			if (mat == null) {
 				continue;
 			}
@@ -70,7 +71,13 @@ public class Give implements EsToolsTabCompleter {
 
 		// Load custom items
 		for (Entry<String, String> s : materials.entrySet()) {
-			materialNames.put(s.getKey().toUpperCase(), s.getValue().toUpperCase());  // Assume it exists, we trust our users = )
+			if (s == null) {
+				continue;
+			}
+			if (Arrays.stream(builtinMats).noneMatch(b -> b != null && b.equalsIgnoreCase(s.getValue()))) {
+				continue;  // Don't trust users, if it doesn't exist then skip
+			}
+			materialNames.put(s.getKey().toUpperCase(), s.getValue().toUpperCase());
 		}
 	}
 

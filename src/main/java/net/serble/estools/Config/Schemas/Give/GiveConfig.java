@@ -9,7 +9,7 @@ public class GiveConfig {
     private Map<String, String> items = new HashMap<String, String>() {{
         put("boat", "oak_boat");
         put("pearl", "ender_pearl");
-        put("sign", "oak_sign");  // TODO: Keys like this don't work in old versions, they need to not be used on old
+        put("sign", "oak_sign");
         put("button", "stone_button");
         put("sapling", "oak_sapling");
         put("log", "oak_log");
