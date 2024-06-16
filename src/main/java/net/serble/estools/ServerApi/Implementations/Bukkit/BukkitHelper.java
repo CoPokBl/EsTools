@@ -217,7 +217,7 @@ public class BukkitHelper {
 
     @SuppressWarnings("deprecation")
     public static Enchantment getBukkitEnchantment(String name) {
-        if (Main.minecraftVersion.getMinor() >= 13) {
+        if (Main.minecraftVersion.getMinor() >= 14) {
             Enchantment ench = Registry.ENCHANTMENT.get(NamespacedKey.minecraft(name));
             if (ench == null) {
                 // Dump info and throw
@@ -275,7 +275,7 @@ public class BukkitHelper {
 
     @SuppressWarnings("UnstableApiUsage")
     public static NamespacedKey getNamespacedKey(String keyString) {
-        if (Main.minecraftVersion.getMinor() >= 16) {
+        if (Main.minecraftVersion.getMinor() >= 17) {
             return NamespacedKey.fromString(keyString, EsToolsBukkit.plugin);
         }
 
@@ -345,7 +345,6 @@ public class BukkitHelper {
         return new PotionEffect(toBukkitPotionEffectType(effect.getType()), effect.getDuration(), effect.getAmp());
     }
 
-    // TODO: Backwards compat?
     public static PotionEffectType toBukkitPotionEffectType(String type) {
         if (Main.minecraftVersion.getMinor() < 20) {
             return PotionEffectType.getByName(Effects.getByName(type));
@@ -354,8 +353,11 @@ public class BukkitHelper {
         return Objects.requireNonNull(Registry.EFFECT.match(type));
     }
 
-    // TODO: Backwards compat?
     public static PotionType toBukkitPotionType(String type) {
+        if (Main.minecraftVersion.getMinor() < 20) {
+            return PotionType.valueOf(Effects.getPotionByName(type));
+        }
+
         return Objects.requireNonNull(Registry.POTION.match(type));
     }
 
