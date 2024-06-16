@@ -230,6 +230,10 @@ public class FoliaHelper extends BukkitHelper {
     }
 
     public static EsBlock fromBukkitBlock(BlockState block) {
+        if (block == null) {
+            return null;
+        }
+
         if (block instanceof Sign) {
             return new FoliaSign((Sign) block);
         }

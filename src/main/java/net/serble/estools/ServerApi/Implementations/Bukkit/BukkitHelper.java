@@ -291,6 +291,10 @@ public class BukkitHelper {
     }
 
     public static EsBlock fromBukkitBlock(BlockState block) {
+        if (block == null) {
+            return null;
+        }
+
         if (block instanceof Sign) {
             return new BukkitSign((Sign) block);
         }

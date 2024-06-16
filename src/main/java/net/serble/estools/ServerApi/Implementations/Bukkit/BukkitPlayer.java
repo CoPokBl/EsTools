@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
-import java.util.Objects;
 
 public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
     private final org.bukkit.entity.Player bukkitPlayer;
@@ -98,7 +97,11 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
 
     @Override
     public @Nullable EsBlock getTargetBlock() {
-        return BukkitHelper.fromBukkitBlock(Objects.requireNonNull(bukkitGetTargetBlock()).getState());
+        Block target = bukkitGetTargetBlock();
+        if (target == null) {
+            return null;
+        }
+        return BukkitHelper.fromBukkitBlock(target.getState());
     }
 
     @Override

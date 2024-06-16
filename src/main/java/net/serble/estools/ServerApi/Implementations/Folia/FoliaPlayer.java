@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
-import java.util.Objects;
 
 // Can't extend BukkitEntity because it needs to extend FoliaLivingEntity for it to work
 public class FoliaPlayer extends FoliaLivingEntity implements EsPlayer {
@@ -99,7 +98,12 @@ public class FoliaPlayer extends FoliaLivingEntity implements EsPlayer {
 
     @Override
     public @Nullable EsBlock getTargetBlock() {
-        return FoliaHelper.fromBukkitBlock(Objects.requireNonNull(bukkitGetTargetBlock()).getState());
+        Block target = bukkitGetTargetBlock();
+        if (target == null) {
+            return null;
+        }
+
+        return FoliaHelper.fromBukkitBlock(target.getState());
     }
 
     @Override
