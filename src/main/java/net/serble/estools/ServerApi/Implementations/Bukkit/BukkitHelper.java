@@ -378,7 +378,7 @@ public class BukkitHelper {
                 return EquipmentSlot.HAND;
             case Head:
                 return EquipmentSlot.HEAD;
-            case legs:
+            case Legs:
                 return EquipmentSlot.LEGS;
             case Chest:
                 return EquipmentSlot.CHEST;
@@ -398,7 +398,7 @@ public class BukkitHelper {
             case HEAD:
                 return EsEquipmentSlot.Head;
             case LEGS:
-                return EsEquipmentSlot.legs;
+                return EsEquipmentSlot.Legs;
             case CHEST:
                 return EsEquipmentSlot.Chest;
             case OFF_HAND:

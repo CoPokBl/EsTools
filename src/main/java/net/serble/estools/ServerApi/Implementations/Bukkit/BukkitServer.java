@@ -185,11 +185,14 @@ public class BukkitServer implements EsServerSoftware {
     public String[] getPotionEffectTypes() {
         // We need to use the deprecated .values() method because Registry doesn't exist in old versions
         PotionEffectType[] effectTypes = PotionEffectType.values();
-        String[] out = new String[effectTypes.length];
-        for (int i = 0; i < effectTypes.length; i++) {
-            out[i] = effectTypes[i].getName();  // Same reason as above for deprecated method
+        List<String> out = new ArrayList<>();
+        for (PotionEffectType effectType : effectTypes) {
+            if (effectType == null) {
+                continue;
+            }
+            out.add(effectType.getName());  // Same reason as above for deprecated method
         }
-        return out;
+        return out.toArray(new String[0]);
     }
 
     @Override

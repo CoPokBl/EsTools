@@ -1,8 +1,10 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
+import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsEquipmentSlot;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayerInventory;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
 
 public class BukkitPlayerInventory extends BukkitInventory implements EsPlayerInventory {
@@ -54,6 +56,39 @@ public class BukkitPlayerInventory extends BukkitInventory implements EsPlayerIn
 
     @Override
     public void setItem(EsEquipmentSlot slot, EsItemStack item) {
+        if (Main.minecraftVersion.getMinor() <= 12) {
+            int slotId;
+            switch (slot) {
+                case Head:
+                    slotId = 5;
+                    break;
+
+                case Chest:
+                    slotId = 6;
+                    break;
+
+                case Legs:
+                    slotId = 7;
+                    break;
+
+                case Feet:
+                    slotId = 8;
+                    break;
+
+                case Hand:
+                    slotId = bukkitInv.getHeldItemSlot();
+                    break;
+
+                case OffHand:
+                    slotId = 40;
+                    break;
+
+                default:
+                    throw new IllegalStateException("Unexpected value: " + slot);
+            }
+            ((Inventory) bukkitInv).setItem(slotId, ((BukkitItemStack) item).getBukkitItem());
+            return;
+        }
         bukkitInv.setItem(BukkitHelper.toBukkitEquipmentSlot(slot), ((BukkitItemStack) item).getBukkitItem());
     }
 }

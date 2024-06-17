@@ -4,7 +4,7 @@ public enum EsEquipmentSlot {
     Hand,
     OffHand,
     Feet,
-    legs,
+    Legs,
     Chest,
     Head
 }
