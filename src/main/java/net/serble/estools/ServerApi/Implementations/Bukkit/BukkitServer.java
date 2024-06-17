@@ -141,14 +141,7 @@ public class BukkitServer implements EsServerSoftware {
             pot.setItemMeta(meta);
             return new BukkitPotion(pot);
         } else if (Main.minecraftVersion.getMinor() >= 4) {
-            String effType;
-            try {
-                effType = Effects.getPotionByName(effect);
-            } catch (IllegalArgumentException e) {
-                return null;
-            }
-
-            Potion potion = new Potion(Objects.requireNonNull(Registry.POTION.match(effType)), amp);
+            Potion potion = new Potion(BukkitHelper.toBukkitPotionType(effect), amp);
             potion.setSplash(potType == EsPotType.splash);
             return new BukkitPotion(potion.toItemStack(1));
         } else {  // This isn't possible to get to because this class won't load on 1.3 and below
