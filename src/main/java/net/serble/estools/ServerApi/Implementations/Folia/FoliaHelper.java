@@ -6,6 +6,7 @@ import io.papermc.paper.threadedregions.scheduler.RegionScheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsEquipmentSlot;
 import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.*;
@@ -20,6 +21,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -256,5 +258,43 @@ public class FoliaHelper extends BukkitHelper {
         }
 
         return new FoliaInventory(inv);
+    }
+
+    public static EquipmentSlot toBukkitEquipmentSlot(EsEquipmentSlot slot) {
+        switch (slot) {
+            case Feet:
+                return EquipmentSlot.FEET;
+            case Hand:
+                return EquipmentSlot.HAND;
+            case Head:
+                return EquipmentSlot.HEAD;
+            case Legs:
+                return EquipmentSlot.LEGS;
+            case Chest:
+                return EquipmentSlot.CHEST;
+            case OffHand:
+                return EquipmentSlot.OFF_HAND;
+        }
+
+        throw new RuntimeException("idfk");
+    }
+
+    public static EsEquipmentSlot fromBukkitEquipmentSlot(EquipmentSlot slot) {
+        switch (slot) {
+            case FEET:
+                return EsEquipmentSlot.Feet;
+            case HAND:
+                return EsEquipmentSlot.Hand;
+            case HEAD:
+                return EsEquipmentSlot.Head;
+            case LEGS:
+                return EsEquipmentSlot.Legs;
+            case CHEST:
+                return EsEquipmentSlot.Chest;
+            case OFF_HAND:
+                return EsEquipmentSlot.OffHand;
+            default:
+                throw new IllegalArgumentException("Invalid EquipmentSlot");
+        }
     }
 }

@@ -5,7 +5,6 @@ import net.serble.estools.ServerApi.EsAction;
 import net.serble.estools.ServerApi.EsClickType;
 import net.serble.estools.ServerApi.EsInventoryAction;
 import net.serble.estools.ServerApi.Events.*;
-import net.serble.estools.ServerApi.Implementations.Bukkit.*;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -61,7 +60,7 @@ public class FoliaEventsListener implements Listener, CommandExecutor {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
-        EsBlockPlaceEvent ee = new EsBlockPlaceEvent(new FoliaPlayer(e.getPlayer()), FoliaHelper.fromBukkitItem(e.getItemInHand()), BukkitHelper.fromBukkitEquipmentSlot(e.getHand()));
+        EsBlockPlaceEvent ee = new EsBlockPlaceEvent(new FoliaPlayer(e.getPlayer()), FoliaHelper.fromBukkitItem(e.getItemInHand()), FoliaHelper.fromBukkitEquipmentSlot(e.getHand()));
         ee.setCancelled(e.isCancelled());
         Main.callEvent(ee);
         e.setCancelled(ee.isCancelled());

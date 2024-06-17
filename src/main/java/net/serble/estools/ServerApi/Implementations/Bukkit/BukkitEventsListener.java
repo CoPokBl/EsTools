@@ -6,6 +6,7 @@ import net.serble.estools.ServerApi.EsClickType;
 import net.serble.estools.ServerApi.EsEquipmentSlot;
 import net.serble.estools.ServerApi.EsInventoryAction;
 import net.serble.estools.ServerApi.Events.*;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Encapsulation.BukkitEquipmentSlotHelper;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -64,7 +65,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
     public void onBlockPlace(BlockPlaceEvent e) {
         EsEquipmentSlot slot = EsEquipmentSlot.Hand;
         if (Main.minecraftVersion.getMinor() > 8) {
-            slot = BukkitHelper.fromBukkitEquipmentSlot(e.getHand());
+            slot = BukkitEquipmentSlotHelper.fromBukkitEquipmentSlot(e.getHand());
         }
         EsBlockPlaceEvent ee = new EsBlockPlaceEvent(new BukkitPlayer(e.getPlayer()), BukkitHelper.fromBukkitItem(e.getItemInHand()), slot);
         ee.setCancelled(e.isCancelled());

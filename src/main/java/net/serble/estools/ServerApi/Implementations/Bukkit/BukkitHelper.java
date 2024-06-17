@@ -21,7 +21,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -30,6 +29,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.util.Vector;
+
+// DO NOT IMPORT THE FOLLOWING BECAUSE THEY BREAK OLDER VERSIONS BECAUSE THEY DON'T EXIST
+// org.bukkit.inventory.EquipmentSlot
 
 import java.util.Objects;
 
@@ -367,44 +369,6 @@ public class BukkitHelper {
             return true;
         } catch (ClassNotFoundException e) {
             return false;
-        }
-    }
-
-    public static EquipmentSlot toBukkitEquipmentSlot(EsEquipmentSlot slot) {
-        switch (slot) {
-            case Feet:
-                return EquipmentSlot.FEET;
-            case Hand:
-                return EquipmentSlot.HAND;
-            case Head:
-                return EquipmentSlot.HEAD;
-            case Legs:
-                return EquipmentSlot.LEGS;
-            case Chest:
-                return EquipmentSlot.CHEST;
-            case OffHand:
-                return EquipmentSlot.OFF_HAND;
-        }
-
-        throw new RuntimeException("idfk");
-    }
-
-    public static EsEquipmentSlot fromBukkitEquipmentSlot(EquipmentSlot slot) {
-        switch (slot) {
-            case FEET:
-                return EsEquipmentSlot.Feet;
-            case HAND:
-                return EsEquipmentSlot.Hand;
-            case HEAD:
-                return EsEquipmentSlot.Head;
-            case LEGS:
-                return EsEquipmentSlot.Legs;
-            case CHEST:
-                return EsEquipmentSlot.Chest;
-            case OFF_HAND:
-                return EsEquipmentSlot.OffHand;
-            default:
-                throw new IllegalArgumentException("Invalid EquipmentSlot");
         }
     }
 

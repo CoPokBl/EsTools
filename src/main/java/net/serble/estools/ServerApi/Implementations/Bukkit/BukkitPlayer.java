@@ -168,4 +168,19 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
             p.getInventory().setItemInHand(is);
         }
     }
+
+    @Override
+    public boolean hasPermission(String node) {
+        return bukkitPlayer.hasPermission(node);
+    }
+
+    @Override
+    public void sendMessage(String... args) {
+        bukkitPlayer.sendMessage(args);
+    }
+
+    @Override
+    public boolean isPermissionSet(String node) {
+        return bukkitPlayer.isPermissionSet(node);
+    }
 }

@@ -10,6 +10,7 @@ public interface EsInventory {
     EsItemStack[] getContents();
     void clear();
     boolean isEqualTo(EsInventory inv);
+    int getSize();
 
     /**
      * Gets a list of slots and the items in those slots that are of a specific material.

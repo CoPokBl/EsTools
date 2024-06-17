@@ -1,5 +1,6 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
+import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsInventory;
 import net.serble.estools.ServerApi.Interfaces.EsInventoryView;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
@@ -25,6 +26,12 @@ public class BukkitInventoryView implements EsInventoryView {
 
     @Override
     public EsInventory getInventory(int slot) {
+        if (Main.minecraftVersion.getMinor() <= 7) {  // .getInventory(slot) doesn't exist
+            if (slot >= getTopInventory().getSize()) {  // Bottom inv
+                return getBottomInventory();
+            }
+            return getTopInventory();
+        }
         return new BukkitInventory(bukkitView.getInventory(slot));
     }
 

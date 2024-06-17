@@ -83,6 +83,11 @@ public class BukkitInventory implements EsInventory {
     }
 
     @Override
+    public int getSize() {
+        return bukkitInv.getSize();
+    }
+
+    @Override
     public Map<Integer, EsItemStack> all(String material) {
         Material mat = Material.valueOf(material);
         Map<Integer, EsItemStack> out = new HashMap<>();
