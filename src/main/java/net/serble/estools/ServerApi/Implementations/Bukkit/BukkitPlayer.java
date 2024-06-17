@@ -121,6 +121,10 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
 
     @Override
     public void playSound(String sound, EsSoundCategory category, EsLocation loc, int volume, int pitch) {
+        if (Main.minecraftVersion.getMinor() < 11) {
+            bukkitPlayer.playSound(BukkitHelper.toBukkitLocation(loc), Sound.valueOf(sound), volume, pitch);
+            return;
+        }
         bukkitPlayer.playSound(BukkitHelper.toBukkitLocation(loc), Sound.valueOf(sound), BukkitHelper.toBukkitSoundCategory(category), volume, pitch);
     }
 

@@ -7,7 +7,6 @@ import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class SetUnbreakable extends EsToolsCommand {
@@ -35,10 +34,10 @@ public class SetUnbreakable extends EsToolsCommand {
                 message = "&aSet item to &6Unbreakable!";
             }
         } else {
-            if (Arrays.stream(Main.server.getEnchantments()).anyMatch(c -> c.equalsIgnoreCase("DURABILITY"))) {
-                item.removeEnchantment("DURABILITY");
+            if (item.getEnchantments().keySet().stream().anyMatch(c -> c != null && c.equalsIgnoreCase("unbreaking"))) {
+                item.removeEnchantment("unbreaking");
             } else {
-                item.addEnchantment("DURABILITY", 32767);
+                item.addEnchantment("unbreaking", 32767);  // ID is unbreaking because it is translated
                 message = "&aSet item to &6Unbreakable!";
             }
         }

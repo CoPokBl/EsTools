@@ -19,7 +19,7 @@ public class BukkitEnchantmentsHelper {
 
     public static String getNameFromValue(String val) {
         for (Map.Entry<String, String> entry : ENCHANTMENTS.entrySet()) {
-            if (val.toLowerCase().equals(entry.getValue())) {
+            if (val.equalsIgnoreCase(entry.getValue())) {
                 return entry.getKey();
             }
         }

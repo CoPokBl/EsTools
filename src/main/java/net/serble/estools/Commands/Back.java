@@ -6,7 +6,6 @@ import java.util.UUID;
 import net.serble.estools.ServerApi.EsEventListener;
 import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.Main;
-import net.serble.estools.ServerApi.EsTeleportCause;
 import net.serble.estools.ServerApi.Events.EsPlayerDeathEvent;
 import net.serble.estools.ServerApi.Events.EsPlayerTeleportEvent;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
@@ -57,10 +56,7 @@ public class Back extends EsToolsCommand implements EsEventListener {
 
 		if (event instanceof EsPlayerTeleportEvent) {
 			EsPlayerTeleportEvent e = (EsPlayerTeleportEvent) event;
-
-			if (equalsOr(e.getCause(), EsTeleportCause.Command, EsTeleportCause.Plugin)) {
-				prevLocations.put(e.getPlayer().getUniqueId(), e.getPlayer().getLocation());
-			}
+			prevLocations.put(e.getPlayer().getUniqueId(), e.getPlayer().getLocation());
 		}
 	}
 }
