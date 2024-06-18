@@ -1,6 +1,6 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.Effects;
+import net.serble.estools.ServerApi.EsPotionEffect;
 import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
@@ -10,7 +10,9 @@ import net.serble.estools.ServerApi.Interfaces.EsEntity;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GetInfo extends EntityCommand {
 	private static final String usage = genUsage("/getinfo <entity>");
@@ -72,17 +74,14 @@ public class GetInfo extends EntityCommand {
 
 			StringBuilder potionEffects = new StringBuilder();
 			{
-				String[] pos = le.getActivePotionEffects().toArray(new String[0]);
+				List<EsPotionEffect> potions = le.getActivePotionEffects();
 
-				if (pos.length == 0) {
+				if (potions.isEmpty()) {
 					potionEffects.append("None");
 				} else {
-					for (int i = 0; i < pos.length - 1; i++) {
-						String po = pos[i];
-						potionEffects.append(Effects.getName(po)).append(", ");
-					}
-
-					potionEffects.append(Effects.getName(pos[pos.length - 1]));
+					potionEffects.append(potions.stream()
+							.map(pot -> String.format("%s at %s for %s seconds", pot.getType(), pot.getAmp(), pot.getDuration()/20))
+							.collect(Collectors.joining(", ")));
 				}
 			}
 

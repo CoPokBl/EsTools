@@ -1,6 +1,7 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.Effects;
+import net.serble.estools.ServerApi.EsPotionEffect;
+import net.serble.estools.ServerApi.EsPotionEffectType;
 import net.serble.estools.Main;
 import net.serble.estools.MultiPlayerCommand;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
@@ -8,7 +9,6 @@ import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Eff extends MultiPlayerCommand {
     private static final String usage = genUsage("/eff <effect> [amplifier] [duration] [players]");
@@ -20,9 +20,8 @@ public class Eff extends MultiPlayerCommand {
             return false;
         }
 
-        String effect = Effects.getByName(args[0]);
-
-        if (effect == null) {
+        EsPotionEffectType effectType = EsPotionEffectType.fromKey(args[0]);
+        if (effectType == null) {
             send(sender, "&cEffect not found!");
             return false;
         }
@@ -76,11 +75,11 @@ public class Eff extends MultiPlayerCommand {
         }
 
         for (EsPlayer p : players) {
-            p.removePotionEffect(effect);
-            p.addPotionEffect(effect, duration, amplifier);
+            p.removePotionEffect(effectType);
+            p.addPotionEffect(new EsPotionEffect(effectType, amplifier, duration));
         }
 
-        send(sender, "&aAdded effect &6%s&a at level &6%s&a for &6%s", Effects.getName(effect), amplifier + 1, durationStr);
+        send(sender, "&aAdded effect &6%s&a at level &6%s&a for &6%s", effectType.getKey(), amplifier + 1, durationStr);
         return true;
     }
 
@@ -108,7 +107,7 @@ public class Eff extends MultiPlayerCommand {
 
         switch (args.length) {
             case 1:
-                for (Map.Entry<String, String> e : Effects.entrySet()) {
+                for (EsPotionEffectType e : Main.server.getPotionEffectTypes()) {
                     tab.add(e.getKey().toLowerCase());
                 }
                 break;

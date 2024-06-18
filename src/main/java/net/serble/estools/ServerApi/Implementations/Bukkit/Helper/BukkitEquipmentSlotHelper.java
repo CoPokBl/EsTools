@@ -1,4 +1,4 @@
-package net.serble.estools.ServerApi.Implementations.Bukkit.Encapsulation;
+package net.serble.estools.ServerApi.Implementations.Bukkit.Helper;
 
 import net.serble.estools.ServerApi.EsEquipmentSlot;
 

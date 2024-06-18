@@ -2,6 +2,8 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsEnchantment;
+import net.serble.estools.ServerApi.EsMaterial;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
@@ -18,7 +20,7 @@ public class SetUnbreakable extends EsToolsCommand {
         }
 
         EsItemStack item = ((EsPlayer) sender).getMainHand();
-        if (item == null || Objects.equals(item.getType(), "AIR") || (Main.minecraftVersion.getMinor() > 10 && item.getItemMeta() == null)) {
+        if (item == null || Objects.equals(item.getType(), EsMaterial.createUnchecked("AIR")) || (Main.minecraftVersion.getMinor() > 10 && item.getItemMeta() == null)) {
             send(sender, "&cMust be a damageable item");
             return false;
         }
@@ -34,10 +36,11 @@ public class SetUnbreakable extends EsToolsCommand {
                 message = "&aSet item to &6Unbreakable!";
             }
         } else {
-            if (item.getEnchantments().keySet().stream().anyMatch(c -> c != null && c.equalsIgnoreCase("unbreaking"))) {
-                item.removeEnchantment("unbreaking");
+            if (item.getEnchantments().keySet().stream()
+                    .anyMatch(c -> c != null && c.getKey().equalsIgnoreCase("unbreaking"))) {
+                item.removeEnchantment(EsEnchantment.createUnchecked("unbreaking"));
             } else {
-                item.addEnchantment("unbreaking", 32767);  // ID is unbreaking because it is translated
+                item.addEnchantment(EsEnchantment.createUnchecked("unbreaking"), 32767);
                 message = "&aSet item to &6Unbreakable!";
             }
         }

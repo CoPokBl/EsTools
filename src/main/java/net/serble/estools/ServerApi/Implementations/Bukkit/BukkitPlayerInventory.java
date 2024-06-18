@@ -2,7 +2,8 @@ package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsEquipmentSlot;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Encapsulation.BukkitEquipmentSlotHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitEquipmentSlotHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayerInventory;
 import org.bukkit.inventory.Inventory;

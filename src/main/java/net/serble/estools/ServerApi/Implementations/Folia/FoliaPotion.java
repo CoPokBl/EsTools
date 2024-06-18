@@ -3,7 +3,7 @@ package net.serble.estools.ServerApi.Implementations.Folia;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsPotType;
 import net.serble.estools.ServerApi.EsPotionEffect;
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitEffectHelper;
 import net.serble.estools.ServerApi.Interfaces.EsPotion;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -58,7 +58,7 @@ public class FoliaPotion extends FoliaItemStack implements EsPotion {
         EsPotionEffect[] out = new EsPotionEffect[in.length];
         for (int i = 0; i < out.length; i++) {
             PotionEffect effect = in[i];
-            out[i] = new EsPotionEffect(effect.getType().getName(), effect.getAmplifier(), effect.getDuration());
+            out[i] = new EsPotionEffect(BukkitEffectHelper.fromBukkitEffectType(effect.getType()), effect.getAmplifier(), effect.getDuration());
         }
         return out;
     }
@@ -75,9 +75,9 @@ public class FoliaPotion extends FoliaItemStack implements EsPotion {
     @Override
     public void addEffect(EsPotionEffect effect) {
         if (old) {
-            bukkitPotion.getEffects().add(BukkitHelper.toBukkitPotionEffect(effect));
+            bukkitPotion.getEffects().add(FoliaHelper.toBukkitPotionEffect(effect));
         } else {
-            bukkitMeta.addCustomEffect(BukkitHelper.toBukkitPotionEffect(effect), true);
+            bukkitMeta.addCustomEffect(FoliaHelper.toBukkitPotionEffect(effect), true);
         }
     }
 }

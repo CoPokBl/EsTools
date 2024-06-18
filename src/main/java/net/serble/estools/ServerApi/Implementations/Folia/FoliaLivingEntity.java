@@ -1,10 +1,12 @@
 package net.serble.estools.ServerApi.Implementations.Folia;
 
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsPotionEffect;
+import net.serble.estools.ServerApi.EsPotionEffectType;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitEffectHelper;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 import net.serble.estools.ServerApi.Interfaces.EsWorld;
 import org.bukkit.Bukkit;
-import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
@@ -99,23 +101,23 @@ public class FoliaLivingEntity extends FoliaEntity implements EsLivingEntity {
     }
 
     @Override
-    public void addPotionEffect(String effect, int duration, int amplifier) {
-        bukkitEntity.addPotionEffect(new PotionEffect(Objects.requireNonNull(Registry.EFFECT.match(effect)), duration, amplifier));
+    public void addPotionEffect(EsPotionEffect effect) {
+        bukkitEntity.addPotionEffect(FoliaHelper.toBukkitPotionEffect(effect));
     }
 
     @Override
-    public void removePotionEffect(String effect) {
-        bukkitEntity.removePotionEffect(Objects.requireNonNull(Registry.EFFECT.match(effect)));
+    public void removePotionEffect(EsPotionEffectType effect) {
+        bukkitEntity.removePotionEffect(BukkitEffectHelper.toBukkitEffectType(effect));
     }
 
-    @SuppressWarnings("deprecation")  // Gotta love backwards compatibility
     @Override
-    public List<String> getActivePotionEffects() {
+    public List<EsPotionEffect> getActivePotionEffects() {
         Collection<PotionEffect> bukkitEffects = bukkitEntity.getActivePotionEffects();
-        List<String> out = new ArrayList<>();
+        List<EsPotionEffect> out = new ArrayList<>(bukkitEffects.size());
         for (PotionEffect eff : bukkitEffects) {
-            out.add(eff.getType().getName());
+            out.add(FoliaHelper.fromBukkitPotionEffect(eff));
         }
+
         return out;
     }
 

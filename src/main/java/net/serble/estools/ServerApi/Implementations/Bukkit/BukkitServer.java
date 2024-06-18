@@ -2,11 +2,13 @@ package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.*;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
-import net.serble.estools.ServerApi.EsPotType;
+import net.serble.estools.ServerApi.*;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitEffectHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitEnchantmentHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
@@ -14,20 +16,41 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.Potion;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.*;
 
-public class BukkitServer implements EsServerSoftware {
+public class BukkitServer implements EsServer {
     private final JavaPlugin plugin;
     private final BukkitEventsListener listener;
+    private static final Set<EsMaterial> materials = new HashSet<>();
+    private static final Set<EsMaterial> itemMaterials = new HashSet<>();
 
     public BukkitServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
         listener = new BukkitEventsListener();
+    }
+
+    @Override
+    public void initialise() {
+        for (Material mat : Material.values()) {
+            EsMaterial esMat;
+            if (Main.minecraftVersion.getMinor() > 12) {
+                esMat = EsMaterial.createUnchecked(mat.getKey().getKey().toLowerCase());
+
+                if (mat.isItem()) {
+                    itemMaterials.add(esMat);
+                }
+            } else {
+                esMat = EsMaterial.createUnchecked(mat.name().toLowerCase());
+
+                itemMaterials.add(esMat);
+            }
+
+            materials.add(esMat);
+        }
     }
 
     @Override
@@ -115,35 +138,35 @@ public class BukkitServer implements EsServerSoftware {
     }
 
     @Override
-    public EsItemStack createItemStack(String material, int amount) {
+    public EsItemStack createItemStack(EsMaterial material, int amount) {
         return new BukkitItemStack(material, amount);
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public EsPotion createPotion(EsPotType potType, String effect, int duration, int amp, int amount) {
+    public EsPotion createPotion(EsPotType potType, EsPotionEffect effect, int amount) {
         if (Main.minecraftVersion.getMinor() >= 9) {
             String type = potType == EsPotType.drink ?
                     "POTION" :
                     potType.toString().toUpperCase() + "_POTION";
             ItemStack pot = new ItemStack(Material.valueOf(type), amount);
 
-            String effType;
-            try {
-                effType = Effects.getByName(effect);
-            } catch (IllegalArgumentException e) {
+            PotionMeta meta = (PotionMeta) pot.getItemMeta();
+            assert meta != null;
+            meta.addCustomEffect(BukkitHelper.toBukkitPotionEffect(effect), true);
+            pot.setItemMeta(meta);
+
+            return new BukkitPotion(pot);
+        } else if (Main.minecraftVersion.getMinor() >= 4) {
+            PotionType type = BukkitEffectHelper.getPotionFromEffectType(effect.getType());
+            if (type == null) { // This can fail if the effect doesn't have a potion for it
                 return null;
             }
 
-            PotionMeta meta = (PotionMeta) pot.getItemMeta();
-            assert meta != null;
-            meta.addCustomEffect(new PotionEffect(BukkitHelper.toBukkitPotionEffectType(effType), duration, amp-1), true);
-            pot.setItemMeta(meta);
-            return new BukkitPotion(pot);
-        } else if (Main.minecraftVersion.getMinor() >= 4) {
-            Potion potion = new Potion(BukkitHelper.toBukkitPotionType(effect), amp);
+            Potion potion = new Potion(type, effect.getAmp());
             potion.setSplash(potType == EsPotType.splash);
-            return new BukkitPotion(potion.toItemStack(1));
+
+            return new BukkitPotion(potion.toItemStack(amount));
         } else {  // This isn't possible to get to because this class won't load on 1.3 and below
             return null;
         }
@@ -156,11 +179,14 @@ public class BukkitServer implements EsServerSoftware {
             String type = potType == EsPotType.drink ?
                     "POTION" :
                     potType.toString().toUpperCase() + "_POTION";
+
             ItemStack pot = new ItemStack(Material.valueOf(type), 1);
+
             return new BukkitPotion(pot);
         } else if (Main.minecraftVersion.getMinor() >= 4) {
             Potion potion = Potion.fromItemStack(new ItemStack(Material.valueOf("POTION")));
             potion.setSplash(potType == EsPotType.splash);
+
             return new BukkitPotion(potion.toItemStack(1));
         } else {  // This isn't possible to get to because this class won't load on 1.3 and below
             return null;
@@ -173,42 +199,19 @@ public class BukkitServer implements EsServerSoftware {
         return new BukkitInventory(Bukkit.createInventory(holder, size, title));
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public String[] getPotionEffectTypes() {
-        // We need to use the deprecated .values() method because Registry doesn't exist in old versions
-        PotionEffectType[] effectTypes = PotionEffectType.values();
-        List<String> out = new ArrayList<>();
-        for (PotionEffectType effectType : effectTypes) {
-            if (effectType == null) {
-                continue;
-            }
-            out.add(effectType.getName());  // Same reason as above for deprecated method
-        }
-        return out.toArray(new String[0]);
+    public Set<EsPotionEffectType> getPotionEffectTypes() {
+        return BukkitEffectHelper.getEffectList();
     }
 
     @Override
-    public String[] getEnchantments() {
-        if (Main.minecraftVersion.getMinor() > 12) {
-            List<String> out = new ArrayList<>();
-            for (Enchantment e : Registry.ENCHANTMENT) {
-                out.add(e.getKey().getKey());
-            }
+    public Set<EsPotionEffectType> getOldPotionTypes() {
+        return BukkitEffectHelper.getPotionList();
+    }
 
-            return out.toArray(new String[0]);
-        }
-
-        // Pre 1.13, we need to use the helper to get all the keys
-        Set<Map.Entry<String, String>> enchSet = BukkitEnchantmentsHelper.entrySet();
-        String[] enchs = new String[enchSet.size()];
-        int i = 0;
-        for (Map.Entry<String, String> enchEntry : enchSet) {
-            enchs[i] = enchEntry.getKey();
-            i++;
-        }
-
-        return enchs;
+    @Override
+    public Set<EsEnchantment> getEnchantments() {
+        return BukkitEnchantmentHelper.getEnchantmentList();
     }
 
     @Override
@@ -219,15 +222,6 @@ public class BukkitServer implements EsServerSoftware {
             strSounds[i] = sounds[i].name();
         }
         return strSounds;
-    }
-
-    @Override
-    public boolean doesEnchantmentExist(String name) {
-        try {
-            return BukkitHelper.getBukkitEnchantment(name) != null;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     @Override
@@ -322,16 +316,8 @@ public class BukkitServer implements EsServerSoftware {
     }
 
     @Override
-    public String[] getMaterials(boolean onlyItems) {
-        Material[] materials = Material.values();
-        String[] strMaterials = new String[materials.length];
-        for (int i = 0; i < materials.length; i++) {
-            if (onlyItems && Main.minecraftVersion.getMinor() >= 12 && !materials[i].isItem()) {
-                continue;
-            }
-            strMaterials[i] = materials[i].name();
-        }
-        return strMaterials;
+    public Set<EsMaterial> getMaterials(boolean onlyItems) {
+        return onlyItems ? itemMaterials : materials;
     }
 
     @Override
@@ -340,14 +326,7 @@ public class BukkitServer implements EsServerSoftware {
     }
 
     @Override
-    public EsItemStack createItemStack(Object internalObject) {
-        return BukkitHelper.fromBukkitItem((ItemStack) internalObject);
-    }
-
-    @Override
     public String[] getRelevantInternalTypes() {
-        return new String[] {
-                "CraftItemStack"  // CChest config files
-        };
+        return new String[] {};
     }
 }

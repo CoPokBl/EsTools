@@ -3,6 +3,7 @@ package net.serble.estools.Commands.Give;
 import net.serble.estools.*;
 import net.serble.estools.Config.ConfigManager;
 import net.serble.estools.Config.Schemas.Give.GiveConfig;
+import net.serble.estools.ServerApi.EsMaterial;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 
@@ -10,11 +11,11 @@ import java.util.*;
 import java.util.Map.Entry;
 
 public class Give implements EsToolsTabCompleter {
-	private static HashMap<String, String> materialNames;
+	private static HashMap<String, EsMaterial> materialNames;
 
     public static EsItemStack getItem(String name, int amount) {
-		name = name.toUpperCase();
-		String mat = materialNames.get(name);
+		name = name.toLowerCase();
+		EsMaterial mat = materialNames.get(name);
 		
 		if (mat == null) {
 			return null;
@@ -43,7 +44,7 @@ public class Give implements EsToolsTabCompleter {
     public static void enable() {
 		// initialise hashmaps
         //noinspection Convert2Diamond
-        materialNames = new HashMap<String, String>();
+        materialNames = new HashMap<String, EsMaterial>();
 
 		// Load config
 		GiveConfig config = ConfigManager.load("give.yml", GiveConfig.class);
@@ -52,12 +53,13 @@ public class Give implements EsToolsTabCompleter {
 		Map<String, String> materials = config.getItems();
 
 		// Load normal items
-		String[] builtinMats = Main.server.getMaterials(true);
-		for (String mat : builtinMats) {
+		Set<EsMaterial> builtinMats = Main.server.getMaterials(true);
+		for (EsMaterial mat : builtinMats) {
 			if (mat == null) {
 				continue;
 			}
-			String name = mat.toUpperCase();
+
+			String name = mat.getKey().toLowerCase();
 			if (name.contains("_") && config.getSettings().isAddWithoutUnderscores()) {
 				materialNames.put(name.replace("_",""), mat);
 
@@ -74,10 +76,13 @@ public class Give implements EsToolsTabCompleter {
 			if (s == null) {
 				continue;
 			}
-			if (Arrays.stream(builtinMats).noneMatch(b -> b != null && b.equalsIgnoreCase(s.getValue()))) {
+
+			EsMaterial material = EsMaterial.fromKey(s.getValue().toLowerCase());
+			if (material == null) {
 				continue;  // Don't trust users, if it doesn't exist then skip
 			}
-			materialNames.put(s.getKey().toUpperCase(), s.getValue().toUpperCase());
+
+			materialNames.put(s.getKey().toLowerCase(), material);
 		}
 	}
 

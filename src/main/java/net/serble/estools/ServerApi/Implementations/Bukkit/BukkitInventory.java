@@ -1,5 +1,7 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
+import net.serble.estools.ServerApi.EsMaterial;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsInventory;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Material;
@@ -88,10 +90,11 @@ public class BukkitInventory implements EsInventory {
     }
 
     @Override
-    public Map<Integer, EsItemStack> all(String material) {
-        Material mat = Material.valueOf(material);
+    public Map<Integer, EsItemStack> all(EsMaterial material) {
+        Material mat = BukkitHelper.toBukkitMaterial(material);
         Map<Integer, EsItemStack> out = new HashMap<>();
 
+        assert bukkitInv != null;
         for (Map.Entry<Integer, ? extends ItemStack> entry : bukkitInv.all(mat).entrySet()) {
             out.put(entry.getKey(), BukkitHelper.fromBukkitItem(entry.getValue()));
         }

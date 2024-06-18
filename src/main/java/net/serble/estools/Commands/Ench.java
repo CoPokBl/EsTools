@@ -1,11 +1,11 @@
 package net.serble.estools.Commands;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsEnchantment;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
@@ -21,8 +21,12 @@ public class Ench extends EsToolsCommand {
 			send(sender, usage);
 			return false;
 		}
-		
-		EsItemStack is;
+
+		EsEnchantment enchantment = EsEnchantment.fromKey(args[0]);
+		if (enchantment == null) {
+			send(sender, "&cEnchantment does not exist!");
+			return false;
+		}
 		
 		int level = 1;
 		if (args.length > 1) {
@@ -33,7 +37,8 @@ public class Ench extends EsToolsCommand {
 				return false;
 			}
 		}
-		
+
+		EsItemStack is;
 		if (args.length <= 2) {
 			if (isNotPlayer(sender, usage)) {
                 return false;
@@ -59,14 +64,9 @@ public class Ench extends EsToolsCommand {
 				return false;
 			}
 		}
-		
-		if (Main.server.doesEnchantmentExist(args[0].toLowerCase())) {
-			is.addEnchantment(args[0].toLowerCase(), level);
-			send(sender, "&aEnchantment &6%s&a at level &6%s&a was added!", args[0].toLowerCase(), level);
-		}
-		else {
-			send(sender, usage);
-		}
+
+		is.addEnchantment(enchantment, level);
+		send(sender, "&aEnchantment &6%s&a at level &6%s&a was added!", args[0].toLowerCase(), level);
 		return true;
 	}
 	
@@ -76,7 +76,9 @@ public class Ench extends EsToolsCommand {
 		
 		switch (args.length) {
 			case 1:
-				tab.addAll(Arrays.asList(Main.server.getEnchantments()));
+				for (EsEnchantment enchantment : Main.server.getEnchantments()) {
+					tab.add(enchantment.getKey());
+				}
 				break;
 				
 			case 3:

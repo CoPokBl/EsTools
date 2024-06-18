@@ -10,10 +10,10 @@ import java.util.Map;
 // TODO: NBT
 @SuppressWarnings("unused")  // Needs the methods for YAML serialiser
 public class EsSerialisableItemStack {
-    private String material;
+    private EsMaterial material;
     private int amount;
     private String itemMeta;
-    private Map<String, Integer> enchantments;
+    private Map<EsEnchantment, Integer> enchantments;
     private boolean isPotion;
     private EsPotType potType;
 
@@ -52,7 +52,7 @@ public class EsSerialisableItemStack {
         return amount;
     }
 
-    public String getMaterial() {
+    public EsMaterial getMaterial() {
         return material;
     }
 
@@ -60,15 +60,15 @@ public class EsSerialisableItemStack {
         this.amount = amount;
     }
 
-    public void setMaterial(String material) {
+    public void setMaterial(EsMaterial material) {
         this.material = material;
     }
 
-    public Map<String, Integer> getEnchantments() {
+    public Map<EsEnchantment, Integer> getEnchantments() {
         return enchantments;
     }
 
-    public void setEnchantments(Map<String, Integer> enchantments) {
+    public void setEnchantments(Map<EsEnchantment, Integer> enchantments) {
         this.enchantments = enchantments;
     }
 

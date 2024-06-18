@@ -14,10 +14,11 @@ import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.EsEventListener;
 import net.serble.estools.ServerApi.EsGameMode;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitConfigMigrator;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitEffectHelper;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsLogger;
-import net.serble.estools.ServerApi.Interfaces.EsServerSoftware;
+import net.serble.estools.ServerApi.Interfaces.EsServer;
 import net.serble.estools.ServerApi.ServerPlatform;
 import net.serble.estools.Signs.SignMain;
 import org.bstats.bukkit.Metrics;
@@ -39,7 +40,7 @@ public class Main {
 	private static EsToolsConfig config;  // Get with overriden getConfig() method
 	public static SemanticVersion newVersion = null;  // The version available to download
 	public static boolean newVersionReady = false;
-	public static EsServerSoftware server;
+	public static EsServer server;
 	public static EsLogger logger;
 	private final Object context;
 	private static final List<EsEventListener> eventListeners = new ArrayList<>();
@@ -58,9 +59,10 @@ public class Main {
 		logger = server.getLogger();
 
 		minecraftVersion = server.getVersion();
+		server.initialise();
 		logger.info("Starting EsTools on platform: " + platform.name() + " (MC: " + minecraftVersion.getString() + ")");
 
-		Effects.load();
+		BukkitEffectHelper.load();
 
 		if (platform == ServerPlatform.Bukkit) {
 			// We have to support old configs

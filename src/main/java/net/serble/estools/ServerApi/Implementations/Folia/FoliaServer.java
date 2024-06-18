@@ -6,12 +6,14 @@ import co.aikar.taskchain.TaskChainFactory;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.serble.estools.*;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
-import net.serble.estools.ServerApi.EsPotType;
+import net.serble.estools.ServerApi.*;
+import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPotion;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitTabCompleteGenerator;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitEffectHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
@@ -19,22 +21,43 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.Potion;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.io.File;
 import java.util.*;
 
-public class FoliaServer implements EsServerSoftware {
+public class FoliaServer implements EsServer {
     private final JavaPlugin plugin;
     private final FoliaEventsListener listener;
     private final Map<Integer, ScheduledTask> tasks = new HashMap<>();
     private static TaskChainFactory taskChainFactory;
+    private static final Set<EsMaterial> materials = new HashSet<>();
+    private static final Set<EsMaterial> itemMaterials = new HashSet<>();
 
     public FoliaServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
         taskChainFactory = BukkitTaskChainFactory.create(plugin);
         listener = new FoliaEventsListener();
+    }
+
+    @Override
+    public void initialise() {
+        for (Material mat : Material.values()) {
+            EsMaterial esMat;
+            if (Main.minecraftVersion.getMinor() > 12) {
+                esMat = EsMaterial.createUnchecked(mat.getKey().getKey().toLowerCase());
+
+                if (mat.isItem()) {
+                    itemMaterials.add(esMat);
+                }
+            } else {
+                esMat = EsMaterial.createUnchecked(mat.name().toLowerCase());
+
+                itemMaterials.add(esMat);
+            }
+
+            materials.add(esMat);
+        }
     }
 
     public static <T> TaskChain<T> newChain() {
@@ -126,42 +149,35 @@ public class FoliaServer implements EsServerSoftware {
     }
 
     @Override
-    public EsItemStack createItemStack(String material, int amount) {
+    public EsItemStack createItemStack(EsMaterial material, int amount) {
         return new FoliaItemStack(material, amount);
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public EsPotion createPotion(EsPotType potType, String effect, int duration, int amp, int amount) {
+    public EsPotion createPotion(EsPotType potType, EsPotionEffect effect, int amount) {
         if (Main.minecraftVersion.getMinor() >= 9) {
             String type = potType == EsPotType.drink ?
                     "POTION" :
                     potType.toString().toUpperCase() + "_POTION";
             ItemStack pot = new ItemStack(Material.valueOf(type), amount);
 
-            String effType;
-            try {
-                effType = Effects.getByName(effect);
-            } catch (IllegalArgumentException e) {
-                return null;
-            }
-
             PotionMeta meta = (PotionMeta) pot.getItemMeta();
             assert meta != null;
-            meta.addCustomEffect(new PotionEffect(Objects.requireNonNull(Registry.EFFECT.match(effType)), duration, amp-1), true);
+            meta.addCustomEffect(BukkitHelper.toBukkitPotionEffect(effect), true);
             pot.setItemMeta(meta);
-            return new FoliaPotion(pot);
+
+            return new BukkitPotion(pot);
         } else if (Main.minecraftVersion.getMinor() >= 4) {
-            String effType;
-            try {
-                effType = Effects.getPotionByName(effect);
-            } catch (IllegalArgumentException e) {
+            PotionType type = BukkitEffectHelper.getPotionFromEffectType(effect.getType());
+            if (type == null) { // This can fail if the effect doesn't have a potion for it
                 return null;
             }
 
-            org.bukkit.potion.Potion potion = new org.bukkit.potion.Potion(Objects.requireNonNull(Registry.POTION.match(effType)), amp);
+            Potion potion = new Potion(type, effect.getAmp());
             potion.setSplash(potType == EsPotType.splash);
-            return new FoliaPotion(potion.toItemStack(1));
+
+            return new BukkitPotion(potion.toItemStack(amount));
         } else {  // This isn't possible to get to because this class won't load on 1.3 and below
             return null;
         }
@@ -174,12 +190,15 @@ public class FoliaServer implements EsServerSoftware {
             String type = potType == EsPotType.drink ?
                     "POTION" :
                     potType.toString().toUpperCase() + "_POTION";
+
             ItemStack pot = new ItemStack(Material.valueOf(type), 1);
-            return new FoliaPotion(pot);
+
+            return new BukkitPotion(pot);
         } else if (Main.minecraftVersion.getMinor() >= 4) {
             Potion potion = Potion.fromItemStack(new ItemStack(Material.valueOf("POTION")));
             potion.setSplash(potType == EsPotType.splash);
-            return new FoliaPotion(potion.toItemStack(1));
+
+            return new BukkitPotion(potion.toItemStack(1));
         } else {  // This isn't possible to get to because this class won't load on 1.3 and below
             return null;
         }
@@ -191,40 +210,19 @@ public class FoliaServer implements EsServerSoftware {
         return new FoliaInventory(Bukkit.createInventory(holder, size, title));
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public String[] getPotionEffectTypes() {
-        // We need to use the deprecated .values() method because Registry doesn't exist in old versions
-        PotionEffectType[] effectTypes = PotionEffectType.values();
-        String[] out = new String[effectTypes.length];
-        for (int i = 0; i < effectTypes.length; i++) {
-            out[i] = effectTypes[i].getName();  // Same reason as above for deprecated method
-        }
-        return out;
+    public Set<EsPotionEffectType> getPotionEffectTypes() {
+        return BukkitEffectHelper.getEffectList();
     }
 
     @Override
-    public String[] getEnchantments() {
-        if (Main.minecraftVersion.getMinor() > 12) {
-            String[] out = new String[(int) Registry.ENCHANTMENT.stream().count()];
-            int i = 0;
-            for (Enchantment e : Registry.ENCHANTMENT) {
-                out[i] = e.getKey().getKey();
-                i++;
-            }
-            return out;
-        }
+    public Set<EsPotionEffectType> getOldPotionTypes() {
+        return BukkitEffectHelper.getPotionList();
+    }
 
-        // Pre 1.13, we need to use the helper to get all the keys
-        Set<Map.Entry<String, String>> enchSet = FoliaEnchantmentsHelper.entrySet();
-        String[] enchs = new String[enchSet.size()];
-        int i = 0;
-        for (Map.Entry<String, String> enchEntry : enchSet) {
-            enchs[i] = enchEntry.getKey();
-            i++;
-        }
-
-        return enchs;
+    @Override
+    public Set<EsEnchantment> getEnchantments() {
+        return FoliaEnchantmentHelper.getEnchantmentList();
     }
 
     @Override
@@ -238,25 +236,8 @@ public class FoliaServer implements EsServerSoftware {
     }
 
     @Override
-    public String[] getMaterials(boolean onlyItems) {
-        Material[] materials = Material.values();
-        String[] strMaterials = new String[materials.length];
-        for (int i = 0; i < materials.length; i++) {
-            if (onlyItems && Main.minecraftVersion.getMinor() >= 12 && !materials[i].isItem()) {
-                continue;
-            }
-            strMaterials[i] = materials[i].name();
-        }
-        return strMaterials;
-    }
-
-    @Override
-    public boolean doesEnchantmentExist(String name) {
-        try {
-            return FoliaHelper.getBukkitEnchantment(name) != null;
-        } catch (Exception e) {
-            return false;
-        }
+    public Set<EsMaterial> getMaterials(boolean onlyItems) {
+        return onlyItems ? itemMaterials : materials;
     }
 
     @Override
@@ -378,15 +359,7 @@ public class FoliaServer implements EsServerSoftware {
     }
 
     @Override
-    public EsItemStack createItemStack(Object internalObject) {
-        return FoliaHelper.fromBukkitItem((ItemStack) internalObject);
-    }
-
-    @Override
     public String[] getRelevantInternalTypes() {
-        return new String[] {
-                "CraftItemStack",  // CChest config files
-                "net.serble.estools.ServerApi.EsSerialisableItemStack"
-        };
+        return new String[] {};
     }
 }

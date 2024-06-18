@@ -96,7 +96,8 @@ public class Tester {
             new Tuple<>("getpersistentdata estools:hello string", 2),
             new Tuple<>("removepersistentdata estools:hello", 2),
             new Tuple<>("getpersistentdata estools:hello string", 2),
-            new Tuple<>("suicide", 4)
+            new Tuple<>("buddha", -1),
+            new Tuple<>("suicide", 4),
     };
 
     public Tester(EsPlayer p) {

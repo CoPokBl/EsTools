@@ -1,9 +1,9 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.Effects;
+import net.serble.estools.ServerApi.EsPotionEffect;
+import net.serble.estools.ServerApi.EsPotionEffectType;
 import net.serble.estools.EntityCommand;
 import net.serble.estools.Main;
-import net.serble.estools.MetaHandler;
 import net.serble.estools.ServerApi.EsPotType;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
@@ -11,7 +11,6 @@ import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Potion extends EntityCommand {
     private static final String usage = genUsage("/potion <potion> [amplifier] [duration] [amount] [drink/splash/lingering] [player]");
@@ -23,19 +22,26 @@ public class Potion extends EntityCommand {
             return false;
         }
 
+        EsPotionEffectType type = EsPotionEffectType.fromKey(args[0]);
+        if (type == null) {
+            send(sender, "Potion type does not exist!");
+            return false;
+        }
+
         int amount = 1;
         if (args.length >= 4) {
             amount = tryParseInt(args[3], 1);
         }
 
-        int amp = 1;
+        int amp = 0;
         if (args.length >= 2) {
-            amp = tryParseInt(args[1], 1);
+            // amp 0 is level 1, so subtract 1 from player input
+            amp = tryParseInt(args[1], 1) - 1;
         }
 
         int duration = 60*20*5;
         if (args.length >= 3) {
-            duration = tryParseInt(args[2], 60*5)*20;
+            duration = (int) (tryParseDouble(args[2], 60d*5d)*20d);
         }
 
         EsPotType potType = EsPotType.drink;
@@ -43,7 +49,12 @@ public class Potion extends EntityCommand {
             try {
                 potType = EsPotType.valueOf(args[4].toLowerCase());
             } catch (IllegalArgumentException ignored) {
-                send(sender, "&cInvalid potion type, must be drink, splash, or lingering (if on 1.9+)");
+                if (Main.minecraftVersion.getMinor() >= 9) {
+                    send(sender, "&cInvalid potion type, must be drink, splash, or lingering");
+                } else {
+                    send(sender, "&cInvalid potion type, must be drink or splash");
+                }
+
                 return false;
             }
 
@@ -75,8 +86,9 @@ public class Potion extends EntityCommand {
             return false;
         }
 
-        EsItemStack pot = MetaHandler.getPotion(sender, potType, args[0], duration, amp, amount);
+        EsItemStack pot = Main.server.createPotion(potType, new EsPotionEffect(type, amp, duration), amount);
         if (pot == null) {
+            send(sender, "&cInvalid potion effect!");
             return false;
         }
 
@@ -98,12 +110,12 @@ public class Potion extends EntityCommand {
         switch (args.length) {
             case 1:
                 if (Main.minecraftVersion.getMinor() <= 8) {
-                    for (Map.Entry<String, String> e : Effects.getPotionList()) {
+                    for (EsPotionEffectType e : Main.server.getOldPotionTypes()) {
                         tab.add(e.getKey().toLowerCase());
                     }
                 }
                 else {
-                    for (Map.Entry<String, String> e : Effects.entrySet()) {
+                    for (EsPotionEffectType e : Main.server.getPotionEffectTypes()) {
                         tab.add(e.getKey().toLowerCase());
                     }
                 }

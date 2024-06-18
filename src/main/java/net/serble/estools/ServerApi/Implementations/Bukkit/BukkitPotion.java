@@ -3,6 +3,8 @@ package net.serble.estools.ServerApi.Implementations.Bukkit;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsPotType;
 import net.serble.estools.ServerApi.EsPotionEffect;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitEffectHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsPotion;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;  // TODO: pre 1.9 errors because no PotionMeta and pre 1.4 errors
@@ -60,7 +62,7 @@ public class BukkitPotion extends BukkitItemStack implements EsPotion {
         EsPotionEffect[] out = new EsPotionEffect[in.length];
         for (int i = 0; i < out.length; i++) {
             PotionEffect effect = in[i];
-            out[i] = new EsPotionEffect(effect.getType().getName(), effect.getAmplifier(), effect.getDuration());
+            out[i] = new EsPotionEffect(BukkitEffectHelper.fromBukkitEffectType(effect.getType()), effect.getAmplifier(), effect.getDuration());
         }
         return out;
     }

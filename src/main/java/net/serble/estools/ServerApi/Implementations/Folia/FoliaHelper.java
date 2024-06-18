@@ -8,7 +8,7 @@ import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsEquipmentSlot;
 import net.serble.estools.ServerApi.EsLocation;
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -17,7 +17,6 @@ import org.bukkit.block.Sign;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -211,24 +210,6 @@ public class FoliaHelper extends BukkitHelper {
         } else {
             throw new RuntimeException("Potions aren't support in this Minecraft version");
         }
-    }
-
-    @SuppressWarnings("deprecation")
-    public static Enchantment getBukkitEnchantment(String name) {
-        if (Main.minecraftVersion.getMinor() >= 13) {
-            Enchantment ench = Registry.ENCHANTMENT.get(NamespacedKey.minecraft(name));
-            if (ench == null) {
-                // Dump info and throw
-                Bukkit.getLogger().severe("Failed to find enchantment: " + name);
-                for (Enchantment e : Registry.ENCHANTMENT) {
-                    Bukkit.getLogger().severe("This exists: " + e.getName());
-                }
-                throw new RuntimeException("Could not find enchantment: " + name);
-            }
-        }
-
-        // We have to use deprecated method for pre 1.13
-        return Enchantment.getByName(FoliaEnchantmentsHelper.getByName(name));
     }
 
     public static EsBlock fromBukkitBlock(BlockState block) {

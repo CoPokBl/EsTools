@@ -1,14 +1,17 @@
 package net.serble.estools.ServerApi.Interfaces;
 
+import net.serble.estools.ServerApi.EsEnchantment;
+import net.serble.estools.ServerApi.EsMaterial;
+
 import java.util.Map;
 
 public interface EsItemStack {
-    String getType();
-    void setType(String val);
+    EsMaterial getType();
+    void setType(EsMaterial val);
     int getAmount();
     void setAmount(int amount);
-    void addEnchantment(String enchantment, int level);
-    void removeEnchantment(String enchantment);
+    void addEnchantment(EsEnchantment enchantment, int level);
+    void removeEnchantment(EsEnchantment enchantment);
     EsItemMeta getItemMeta();
     String exportItemMeta();
     void importItemMeta(String meta);
@@ -19,5 +22,5 @@ public interface EsItemStack {
     boolean isSimilar(EsItemStack stack);
     int getMaxStackSize();
     Object getInternalObject();
-    Map<String, Integer> getEnchantments();
+    Map<EsEnchantment, Integer> getEnchantments();
 }

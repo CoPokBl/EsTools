@@ -2,6 +2,7 @@ package net.serble.estools.Commands.PowerPick;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsEnchantment;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
@@ -16,7 +17,7 @@ public class PowerTool {
         PowerSword.init();
     }
 
-    public static void setupItem(EsItemStack item, String enchantment) {
+    public static void setupItem(EsItemStack item, EsEnchantment enchantment) {
         item.addEnchantment(enchantment, 32767);
 
         if (Main.minecraftVersion.getMinor() > 10) {
@@ -24,7 +25,7 @@ public class PowerTool {
             im.setUnbreakable(true);
             item.setItemMeta(im);
         } else {
-            item.addEnchantment("unbreaking", 32767);
+            item.addEnchantment(EsEnchantment.createUnchecked("unbreaking"), 32767);
         }
     }
 

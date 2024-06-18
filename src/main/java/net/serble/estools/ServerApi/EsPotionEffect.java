@@ -2,11 +2,11 @@ package net.serble.estools.ServerApi;
 
 @SuppressWarnings("unused")  // Needs the methods for serialiser
 public class EsPotionEffect {
-    private String type;
+    private EsPotionEffectType type;
     private int amp;
     private int duration;
 
-    public EsPotionEffect(String type, int amp, int duration) {
+    public EsPotionEffect(EsPotionEffectType type, int amp, int duration) {
         this.type = type;
         this.amp = amp;
         this.duration = duration;
@@ -24,7 +24,7 @@ public class EsPotionEffect {
         return duration;
     }
 
-    public String getType() {
+    public EsPotionEffectType getType() {
         return type;
     }
 
@@ -36,7 +36,7 @@ public class EsPotionEffect {
         this.duration = duration;
     }
 
-    public void setType(String type) {
+    public void setType(EsPotionEffectType type) {
         this.type = type;
     }
 }

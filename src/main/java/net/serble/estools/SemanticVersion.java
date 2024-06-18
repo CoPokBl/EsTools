@@ -52,4 +52,20 @@ public class SemanticVersion {
 
         return getPatch() < other.getPatch();
     }
+
+    public boolean isAtLeast(SemanticVersion other) {
+        if (getMajor() < other.getMajor()) {
+            return false;
+        } else if (getMajor() > other.getMajor()) {
+            return true;
+        }
+
+        if (getMinor() < other.getMinor()) {
+            return false;
+        } else if (getMinor() > other.getMinor()) {
+            return true;
+        }
+
+        return getPatch() >= other.getPatch();
+    }
 }

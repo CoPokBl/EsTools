@@ -1,6 +1,10 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsPotionEffect;
+import net.serble.estools.ServerApi.EsPotionEffectType;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitEffectHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 import net.serble.estools.ServerApi.Interfaces.EsWorld;
 import org.bukkit.Bukkit;
@@ -97,23 +101,23 @@ public class BukkitLivingEntity extends BukkitEntity implements EsLivingEntity {
     }
 
     @Override
-    public void addPotionEffect(String effect, int duration, int amplifier) {
-        bukkitEntity.addPotionEffect(new PotionEffect(BukkitHelper.toBukkitPotionEffectType(effect), duration, amplifier));
+    public void addPotionEffect(EsPotionEffect effect) {
+        bukkitEntity.addPotionEffect(BukkitHelper.toBukkitPotionEffect(effect));
     }
 
     @Override
-    public void removePotionEffect(String effect) {
-        bukkitEntity.removePotionEffect(BukkitHelper.toBukkitPotionEffectType(effect));
+    public void removePotionEffect(EsPotionEffectType effect) {
+        bukkitEntity.removePotionEffect(BukkitEffectHelper.toBukkitEffectType(effect));
     }
 
-    @SuppressWarnings("deprecation")  // Gotta love backwards compatibility
     @Override
-    public List<String> getActivePotionEffects() {
+    public List<EsPotionEffect> getActivePotionEffects() {
         Collection<PotionEffect> bukkitEffects = bukkitEntity.getActivePotionEffects();
-        List<String> out = new ArrayList<>();
+        List<EsPotionEffect> out = new ArrayList<>(bukkitEffects.size());
         for (PotionEffect eff : bukkitEffects) {
-            out.add(eff.getType().getName());
+            out.add(BukkitHelper.fromBukkitPotionEffect(eff));
         }
+
         return out;
     }
 

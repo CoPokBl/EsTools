@@ -1,5 +1,7 @@
 package net.serble.estools.ServerApi.Interfaces;
 
+import net.serble.estools.ServerApi.EsMaterial;
+
 import java.util.Map;
 
 public interface EsInventory {
@@ -21,5 +23,5 @@ public interface EsInventory {
      * @return
      * A list of slot to item mappings.
      */
-    Map<Integer, EsItemStack> all(String material);
+    Map<Integer, EsItemStack> all(EsMaterial material);
 }

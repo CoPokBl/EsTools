@@ -1,9 +1,9 @@
-package net.serble.estools.ServerApi.Implementations.Bukkit;
+package net.serble.estools.ServerApi.Implementations.Bukkit.Helper;
 
-import net.serble.estools.Effects;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.*;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.Implementations.Bukkit.*;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -12,7 +12,6 @@ import org.bukkit.block.Sign;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -26,14 +25,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 import org.bukkit.util.Vector;
 
 // DO NOT IMPORT THE FOLLOWING BECAUSE THEY BREAK OLDER VERSIONS BECAUSE THEY DON'T EXIST
 // org.bukkit.inventory.EquipmentSlot
 
-import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class BukkitHelper {
@@ -217,34 +213,6 @@ public class BukkitHelper {
         return fromBukkitBlock(state);
     }
 
-    @SuppressWarnings("deprecation")
-    public static Enchantment getBukkitEnchantment(String name) {
-        if (Main.minecraftVersion.getMinor() >= 14) {
-            Enchantment ench = Registry.ENCHANTMENT.get(NamespacedKey.minecraft(name));
-            if (ench == null) {
-                // Dump info and throw
-                Bukkit.getLogger().severe("Failed to find enchantment: " + name);
-                for (Enchantment e : Registry.ENCHANTMENT) {
-                    Bukkit.getLogger().severe("This exists: " + e.getName());
-                }
-                throw new RuntimeException("Could not find enchantment: " + name);
-            }
-        }
-
-        // We have to use deprecated method for pre 1.13
-        return Enchantment.getByName(BukkitEnchantmentsHelper.getByName(name));
-    }
-
-    public static String fromBukkitEnchantment(Enchantment ench) {
-        if (Main.minecraftVersion.getMinor() >= 13) {
-            return ench.getKey().getKey();
-        }
-
-        // We have to use deprecated method for pre 1.13
-        //noinspection deprecation
-        return BukkitEnchantmentsHelper.getNameFromValue(ench.getName());
-    }
-
     @SuppressWarnings("rawtypes")
     public static PersistentDataType toBukkitPersistentDataType(EsPersistentDataType type) {
         switch (type) {
@@ -344,23 +312,27 @@ public class BukkitHelper {
     }
 
     public static PotionEffect toBukkitPotionEffect(EsPotionEffect effect) {
-        return new PotionEffect(toBukkitPotionEffectType(effect.getType()), effect.getDuration(), effect.getAmp());
+        return new PotionEffect(BukkitEffectHelper.toBukkitEffectType(effect.getType()), effect.getDuration(), effect.getAmp());
     }
 
-    public static PotionEffectType toBukkitPotionEffectType(String type) {
-        if (Main.minecraftVersion.getMinor() < 20) {
-            return PotionEffectType.getByName(Effects.getByName(type));
-        }
-
-        return Objects.requireNonNull(Registry.EFFECT.match(type));
+    public static EsPotionEffect fromBukkitPotionEffect(PotionEffect effect) {
+        return new EsPotionEffect(BukkitEffectHelper.fromBukkitEffectType(effect.getType()), effect.getAmplifier(), effect.getDuration());
     }
 
-    public static PotionType toBukkitPotionType(String type) {
-        if (Main.minecraftVersion.getMinor() < 20) {
-            return PotionType.valueOf(Effects.getPotionByName(type));
+    public static Material toBukkitMaterial(EsMaterial mat) {
+        if (Main.minecraftVersion.getMinor() > 12) {
+            return Registry.MATERIAL.get(NamespacedKey.minecraft(mat.getKey()));
         }
 
-        return Objects.requireNonNull(Registry.POTION.match(type));
+        return Material.valueOf(mat.getKey().toUpperCase());
+    }
+
+    public static EsMaterial fromBukkitMaterial(Material mat) {
+        if (Main.minecraftVersion.getMinor() > 12) {
+            return EsMaterial.createUnchecked(mat.getKey().getKey());
+        }
+
+        return EsMaterial.createUnchecked(mat.name());
     }
 
     public static boolean isFolia() {

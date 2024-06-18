@@ -1,10 +1,12 @@
 package net.serble.estools.ServerApi.Implementations.Folia;
 
 import net.serble.estools.Main;
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitHelper;
+import net.serble.estools.ServerApi.EsEnchantment;
+import net.serble.estools.ServerApi.EsMaterial;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitEnchantmentHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
-import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -14,12 +16,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class FoliaItemStack implements EsItemStack {
     private final ItemStack bukkitItem;
 
-    public FoliaItemStack(String mat, int amount) {
-        bukkitItem = new org.bukkit.inventory.ItemStack(Material.valueOf(mat), amount);
+    public FoliaItemStack(EsMaterial mat, int amount) {
+        bukkitItem = new org.bukkit.inventory.ItemStack(BukkitHelper.toBukkitMaterial(mat), amount);
     }
 
     public FoliaItemStack(ItemStack child) {
@@ -41,13 +44,13 @@ public class FoliaItemStack implements EsItemStack {
     }
 
     @Override
-    public String getType() {
-        return bukkitItem.getType().name();
+    public EsMaterial getType() {
+        return BukkitHelper.fromBukkitMaterial(bukkitItem.getType());
     }
 
     @Override
-    public void setType(String val) {
-        bukkitItem.setType(Material.valueOf(val));
+    public void setType(EsMaterial val) {
+        bukkitItem.setType(BukkitHelper.toBukkitMaterial(val));
     }
 
     @Override
@@ -124,13 +127,13 @@ public class FoliaItemStack implements EsItemStack {
     }
 
     @Override
-    public void addEnchantment(String enchantment, int level) {
-        bukkitItem.addUnsafeEnchantment(BukkitHelper.getBukkitEnchantment(enchantment), level);
+    public void addEnchantment(EsEnchantment enchantment, int level) {
+        bukkitItem.addUnsafeEnchantment(FoliaEnchantmentHelper.toBukkitEnchantment(enchantment), level);
     }
 
     @Override
-    public void removeEnchantment(String enchantment) {
-        bukkitItem.removeEnchantment(BukkitHelper.getBukkitEnchantment(enchantment));
+    public void removeEnchantment(EsEnchantment enchantment) {
+        bukkitItem.removeEnchantment(FoliaEnchantmentHelper.toBukkitEnchantment(enchantment));
     }
 
     @Override
@@ -144,10 +147,11 @@ public class FoliaItemStack implements EsItemStack {
     }
 
     @Override
-    public Map<String, Integer> getEnchantments() {
-        Map<String, Integer> enchs = new HashMap<>();
-        for (Map.Entry<Enchantment, Integer> ench : bukkitItem.getEnchantments().entrySet()) {
-            enchs.put(FoliaHelper.fromBukkitEnchantment(ench.getKey()), ench.getValue());
+    public Map<EsEnchantment, Integer> getEnchantments() {
+        Set<Map.Entry<Enchantment, Integer>> bEnchs = bukkitItem.getEnchantments().entrySet();
+        Map<EsEnchantment, Integer> enchs = new HashMap<>(bEnchs.size());
+        for (Map.Entry<Enchantment, Integer> ench : bEnchs) {
+            enchs.put(BukkitEnchantmentHelper.fromBukkitEnchantment(ench.getKey()), ench.getValue());
         }
 
         return enchs;

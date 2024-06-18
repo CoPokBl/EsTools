@@ -2,33 +2,35 @@ package net.serble.estools.ServerApi.Interfaces;
 
 import net.serble.estools.EsToolsTabCompleter;
 import net.serble.estools.SemanticVersion;
-import net.serble.estools.ServerApi.EsPotType;
+import net.serble.estools.ServerApi.*;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
-public interface EsServerSoftware {
+public interface EsServer {
     EsPlayer getPlayer(String name);
     EsEntity getEntity(UUID uuid);
     SemanticVersion getVersion();
     Collection<? extends EsPlayer> getOnlinePlayers();
-    EsItemStack createItemStack(String material, int amount);
-    EsPotion createPotion(EsPotType potType, String effect, int duration, int amp, int amount);
+    EsItemStack createItemStack(EsMaterial material, int amount);
+    EsPotion createPotion(EsPotType potType, EsPotionEffect effect, int amount);
     EsPotion createPotion(EsPotType potType);
     EsInventory createInventory(EsPlayer owner, int size, String title);
-    String[] getPotionEffectTypes();
-    String[] getEnchantments();
+    Set<EsPotionEffectType> getPotionEffectTypes();
+    Set<EsPotionEffectType> getOldPotionTypes();
+    Set<EsEnchantment> getEnchantments();
     String[] getSounds();
+    void initialise();
 
     /**
      * @param onlyItems
      * Whether to only include materials that are classified as items
      * */
-    String[] getMaterials(boolean onlyItems);
+    Set<EsMaterial> getMaterials(boolean onlyItems);
 
-    boolean doesEnchantmentExist(String name);
     File getDataFolder();
     void dispatchCommand(EsCommandSender sender, String cmd);
     EsCommandSender getConsoleSender();
@@ -45,7 +47,6 @@ public interface EsServerSoftware {
     void broadcast(String msg, String perm);
     void broadcast(String msg);
     EsWorld getWorld(String name);
-    EsItemStack createItemStack(Object internalObject);
 
     /** Get a list of classes that SnakeYAML needs to accept for proper config serialisation */
     String[] getRelevantInternalTypes();

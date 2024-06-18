@@ -8,6 +8,7 @@ import net.serble.estools.Config.Schemas.Give.GiveConfig;
 import net.serble.estools.Config.Schemas.Give.GiveSettings;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsSerialisableItemStack;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -285,15 +286,16 @@ public class BukkitConfigMigrator {
                 }
 
                 @SuppressWarnings("unchecked")
-                ItemStack[] content = ((ArrayList<ItemStack>) Objects.requireNonNull(config.get("items"))).toArray(new ItemStack[0]);
+                ArrayList<ItemStack> content = (ArrayList<ItemStack>) Objects.requireNonNull(config.get("items"));
 
-                EsSerialisableItemStack[] newConfig = new EsSerialisableItemStack[content.length];
-                for (int i = 0; i < content.length; i++) {
-                    if (content[i] == null) {
+                EsSerialisableItemStack[] newConfig = new EsSerialisableItemStack[content.size()];
+                for (int i = 0; i < content.size(); i++) {
+                    if (content.get(i) == null) {
                         newConfig[i] = null;
                         continue;
                     }
-                    newConfig[i] = EsSerialisableItemStack.generate(Main.server.createItemStack(content[i]));
+
+                    newConfig[i] = EsSerialisableItemStack.generate(new BukkitItemStack(content.get(i)));
                 }
 
                 // Move file to file.old
