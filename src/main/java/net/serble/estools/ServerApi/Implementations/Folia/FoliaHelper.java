@@ -8,7 +8,7 @@ import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsEquipmentSlot;
 import net.serble.estools.ServerApi.EsLocation;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;

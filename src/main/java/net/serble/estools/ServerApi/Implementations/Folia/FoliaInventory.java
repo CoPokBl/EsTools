@@ -1,7 +1,7 @@
 package net.serble.estools.ServerApi.Implementations.Folia;
 
 import net.serble.estools.ServerApi.EsMaterial;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsInventory;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Material;

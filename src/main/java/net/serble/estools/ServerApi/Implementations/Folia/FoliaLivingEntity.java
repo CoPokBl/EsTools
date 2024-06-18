@@ -3,7 +3,7 @@ package net.serble.estools.ServerApi.Implementations.Folia;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsPotionEffect;
 import net.serble.estools.ServerApi.EsPotionEffectType;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitEffectHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEffectHelper;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 import net.serble.estools.ServerApi.Interfaces.EsWorld;
 import org.bukkit.Bukkit;

@@ -7,7 +7,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.Objects;
 
-import static net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper.*;
+import static net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper.*;
 
 @SuppressWarnings("unchecked")  // Trust me bro
 public class BukkitPersistentDataContainer implements EsPersistentDataContainer {

@@ -8,7 +8,7 @@ import net.serble.estools.Config.Schemas.Give.GiveConfig;
 import net.serble.estools.Config.Schemas.Give.GiveSettings;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsSerialisableItemStack;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;

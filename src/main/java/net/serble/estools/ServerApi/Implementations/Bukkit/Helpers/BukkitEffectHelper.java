@@ -1,4 +1,4 @@
-package net.serble.estools.ServerApi.Implementations.Bukkit.Helper;
+package net.serble.estools.ServerApi.Implementations.Bukkit.Helpers;
 
 import net.serble.estools.Main;
 import net.serble.estools.SemanticVersion;

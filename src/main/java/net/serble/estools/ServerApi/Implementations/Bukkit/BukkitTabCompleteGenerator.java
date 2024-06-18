@@ -1,7 +1,7 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.EsToolsTabCompleter;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;

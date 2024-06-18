@@ -3,8 +3,8 @@ package net.serble.estools.ServerApi.Implementations.Bukkit;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsPotType;
 import net.serble.estools.ServerApi.EsPotionEffect;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitEffectHelper;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helper.BukkitHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEffectHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsPotion;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;  // TODO: pre 1.9 errors because no PotionMeta and pre 1.4 errors
