@@ -5,12 +5,12 @@ import net.serble.estools.ServerApi.EsSound;
 
 /**
  *  This class converts the Sound.name() to an EsSound, EsSounds use the sound key and Sound.name() is a semi arbitrary
- *  name, since there is no way to differenciate between underscores and dots in Sound.name() names,
+ *  name, since there is no way to differentiate between underscores and dots in Sound.name() names,
  *  I generated a switch statement that converts between them.
  * <p>
  *  This was generated from minecraft 1.16.5, newer versions can use Sound.getKey().getKey() to get this info.
  * <p>
- *  Unfortunately, some old keys will be different, but i made Records convert to the new types.
+ *  Unfortunately, some old keys will be different, but I made Records convert to the new types.
  */
 public class BukkitSoundEnumConverter {
     public static String convertKeyToEnum(EsSound sound) {
