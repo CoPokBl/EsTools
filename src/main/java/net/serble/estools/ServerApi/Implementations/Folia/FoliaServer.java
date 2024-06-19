@@ -33,6 +33,7 @@ public class FoliaServer implements EsServer {
     private static TaskChainFactory taskChainFactory;
     private static final Set<EsMaterial> materials = new HashSet<>();
     private static final Set<EsMaterial> itemMaterials = new HashSet<>();
+    private static final Set<EsSound> sounds = new HashSet<>();
 
     public FoliaServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
@@ -43,20 +44,17 @@ public class FoliaServer implements EsServer {
     @Override
     public void initialise() {
         for (Material mat : Material.values()) {
-            EsMaterial esMat;
-            if (Main.minecraftVersion.getMinor() > 12) {
-                esMat = EsMaterial.createUnchecked(mat.getKey().getKey().toLowerCase());
-
-                if (mat.isItem()) {
-                    itemMaterials.add(esMat);
-                }
-            } else {
-                esMat = EsMaterial.createUnchecked(mat.name().toLowerCase());
-
+            EsMaterial esMat = EsMaterial.createUnchecked(mat.getKey().getKey().toLowerCase());
+            if (mat.isItem()) {
                 itemMaterials.add(esMat);
             }
 
             materials.add(esMat);
+        }
+
+        for (Sound sound : Registry.SOUNDS) {
+            EsSound esSound = EsSound.createUnchecked(sound.getKey().getKey());
+            sounds.add(esSound);
         }
     }
 
@@ -226,13 +224,8 @@ public class FoliaServer implements EsServer {
     }
 
     @Override
-    public String[] getSounds() {
-        Sound[] sounds = Sound.values();
-        String[] strSounds = new String[sounds.length];
-        for (int i = 0; i < sounds.length; i++) {
-            strSounds[i] = sounds[i].name();
-        }
-        return strSounds;
+    public Set<EsSound> getSounds() {
+        return sounds;
     }
 
     @Override

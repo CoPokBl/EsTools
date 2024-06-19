@@ -85,6 +85,10 @@ public class BukkitEffectHelper {
             }
         } else {
             for (PotionEffectType type : PotionEffectType.values()) {
+                if (type == null) {
+                    continue;
+                }
+
                 String name;
                 if (Main.minecraftVersion.getMinor() >= 18) {
                     name = type.getKey().getKey();

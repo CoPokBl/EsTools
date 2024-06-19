@@ -6,6 +6,7 @@ import net.serble.estools.ServerApi.*;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEffectHelper;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEnchantmentHelper;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitSoundEnumConverter;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
 import org.bukkit.command.PluginCommand;
@@ -27,6 +28,7 @@ public class BukkitServer implements EsServer {
     private final BukkitEventsListener listener;
     private static final Set<EsMaterial> materials = new HashSet<>();
     private static final Set<EsMaterial> itemMaterials = new HashSet<>();
+    private static final Set<EsSound> sounds = new HashSet<>();
 
     public BukkitServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
@@ -50,6 +52,18 @@ public class BukkitServer implements EsServer {
             }
 
             materials.add(esMat);
+        }
+
+        if (Main.minecraftVersion.isAtLeast(new SemanticVersion(1, 16, 4))) {
+            for (Sound sound : Registry.SOUNDS) {
+                EsSound esSound = EsSound.createUnchecked(sound.getKey().getKey());
+                sounds.add(esSound);
+            }
+        } else {
+            for (Sound sound : Sound.values()) {
+                EsSound esSound = BukkitSoundEnumConverter.convertEnumToKey(sound.name());
+                sounds.add(esSound);
+            }
         }
     }
 
@@ -215,13 +229,8 @@ public class BukkitServer implements EsServer {
     }
 
     @Override
-    public String[] getSounds() {
-        Sound[] sounds = Sound.values();
-        String[] strSounds = new String[sounds.length];
-        for (int i = 0; i < sounds.length; i++) {
-            strSounds[i] = sounds[i].name();
-        }
-        return strSounds;
+    public Set<EsSound> getSounds() {
+        return sounds;
     }
 
     @Override

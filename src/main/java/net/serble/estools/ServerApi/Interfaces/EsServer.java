@@ -22,7 +22,7 @@ public interface EsServer {
     Set<EsPotionEffectType> getPotionEffectTypes();
     Set<EsPotionEffectType> getOldPotionTypes();
     Set<EsEnchantment> getEnchantments();
-    String[] getSounds();
+    Set<EsSound> getSounds();
     void initialise();
 
     /**

@@ -4,20 +4,20 @@ import net.serble.estools.Main;
 import net.serble.estools.Utils;
 import org.jetbrains.annotations.Nullable;
 
-public class EsPotionEffectType {
+public class EsSound {
     private String key;
 
-    public static EsPotionEffectType createUnchecked(String key) {
-        EsPotionEffectType type = new EsPotionEffectType();
+    public static EsSound createUnchecked(String key) {
+        EsSound type = new EsSound();
         type.key = key.toLowerCase();
 
         return type;
     }
 
-    public static @Nullable EsPotionEffectType fromKey(String key) {
-        EsPotionEffectType type = EsPotionEffectType.createUnchecked(key);
+    public static @Nullable EsSound fromKey(String key) {
+        EsSound type = EsSound.createUnchecked(key);
 
-        if (Main.server.getPotionEffectTypes().contains(type)) {
+        if (Main.server.getSounds().contains(type)) {
             return type;
         }
 
@@ -30,8 +30,8 @@ public class EsPotionEffectType {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof EsPotionEffectType) {
-            return ((EsPotionEffectType) obj).getKey().equals(key);
+        if (obj instanceof EsSound) {
+            return ((EsSound) obj).getKey().equals(key);
         }
 
         return false;

@@ -9,13 +9,13 @@ public class EsEnchantment {
 
     public static EsEnchantment createUnchecked(String key) {
         EsEnchantment type = new EsEnchantment();
-        type.key = key;
+        type.key = key.toLowerCase();
 
         return type;
     }
 
     public static @Nullable EsEnchantment fromKey(String key) {
-        EsEnchantment type = EsEnchantment.createUnchecked(key.toLowerCase());
+        EsEnchantment type = EsEnchantment.createUnchecked(key);
 
         if (Main.server.getEnchantments().contains(type)) {
             return type;

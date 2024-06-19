@@ -9,13 +9,13 @@ public class EsMaterial {
 
     public static EsMaterial createUnchecked(String key) {
         EsMaterial type = new EsMaterial();
-        type.key = key;
+        type.key = key.toLowerCase();
 
         return type;
     }
 
     public static @Nullable EsMaterial fromKey(String key) {
-        EsMaterial type = EsMaterial.createUnchecked(key.toLowerCase());
+        EsMaterial type = EsMaterial.createUnchecked(key);
 
         if (Main.server.getMaterials(false).contains(type)) {
             return type;

@@ -2,6 +2,7 @@ package net.serble.estools.ServerApi.Interfaces;
 
 import net.serble.estools.ServerApi.EsGameMode;
 import net.serble.estools.ServerApi.EsLocation;
+import net.serble.estools.ServerApi.EsSound;
 import net.serble.estools.ServerApi.EsSoundCategory;
 
 @SuppressWarnings("unused")
@@ -23,7 +24,7 @@ public interface EsPlayer extends EsLivingEntity {
     boolean getAllowFlight();
     void setAllowFlight(boolean val);
     boolean isFlying();
-    void playSound(String sound, EsSoundCategory category, EsLocation loc, int volume, int pitch);
+    void playSound(EsSound sound, EsSoundCategory category, EsLocation loc, int volume, int pitch);
     void updateInventory();
     boolean hasPermission(String node);
     boolean isPermissionSet(String node);

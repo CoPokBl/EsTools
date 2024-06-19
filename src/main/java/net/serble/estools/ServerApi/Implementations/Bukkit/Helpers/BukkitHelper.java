@@ -1,6 +1,7 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit.Helpers;
 
 import net.serble.estools.Entrypoints.EsToolsBukkit;
+import net.serble.estools.SemanticVersion;
 import net.serble.estools.ServerApi.*;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Implementations.Bukkit.*;
@@ -50,6 +51,22 @@ public class BukkitHelper {
                 loc.getZ(),
                 loc.getYaw(),
                 loc.getPitch());
+    }
+
+    public static Sound toBukkitSound(EsSound sound) {
+        if (Main.minecraftVersion.isAtLeast(new SemanticVersion(1, 16, 4))) {
+            return Registry.SOUNDS.get(NamespacedKey.minecraft(sound.getKey()));
+        } else {
+            return Sound.valueOf(BukkitSoundEnumConverter.convertKeyToEnum(sound));
+        }
+    }
+
+    public static EsSound fromBukkitSound(Sound sound) {
+        if (Main.minecraftVersion.isAtLeast(new SemanticVersion(1, 16, 4))) {
+            return EsSound.createUnchecked(sound.getKey().getKey());
+        } else {
+            return BukkitSoundEnumConverter.convertEnumToKey(sound.name());
+        }
     }
 
     public static Position fromVector(Vector vec) {
