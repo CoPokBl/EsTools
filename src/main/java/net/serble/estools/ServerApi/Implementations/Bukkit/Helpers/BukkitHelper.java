@@ -5,7 +5,6 @@ import net.serble.estools.SemanticVersion;
 import net.serble.estools.ServerApi.*;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Implementations.Bukkit.*;
-import net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayerInventory;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -577,7 +576,7 @@ public class BukkitHelper {
         }
 
         if (inv instanceof PlayerInventory) {
-            return new FoliaPlayerInventory((PlayerInventory) inv);
+            return new BukkitPlayerInventory((PlayerInventory) inv);
         }
 
         return new BukkitInventory(inv);

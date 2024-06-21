@@ -229,15 +229,6 @@ public class FoliaHelper extends BukkitHelper {
         return new FoliaBlock(block);
     }
 
-    public static boolean isFolia() {
-        try {
-            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-
     public static EsInventory fromBukkitInventory(Inventory inv) {
         if (inv == null) {
             return null;
