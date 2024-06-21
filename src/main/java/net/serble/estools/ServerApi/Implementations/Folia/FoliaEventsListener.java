@@ -148,7 +148,7 @@ public class FoliaEventsListener implements Listener, CommandExecutor {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
-        EsBlock cb = e.getClickedBlock() == null ? null : new FoliaBlock(e.getClickedBlock().getState());
+        EsBlock cb = FoliaHelper.fromBukkitBlock(e.getClickedBlock());
         EsPlayer p = new FoliaPlayer(e.getPlayer());
         EsAction ac = FoliaHelper.fromBukkitAction(e.getAction());
         EsPlayerInteractEvent ee = new EsPlayerInteractEvent(p, cb, ac);

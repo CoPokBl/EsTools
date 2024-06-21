@@ -104,7 +104,7 @@ public class FoliaPlayer extends FoliaLivingEntity implements EsPlayer {
             return null;
         }
 
-        return FoliaHelper.fromBukkitBlock(target.getState());
+        return FoliaHelper.fromBukkitBlock(target);
     }
 
     @Override

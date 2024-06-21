@@ -156,7 +156,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
-        EsBlock cb = e.getClickedBlock() == null ? null : new BukkitBlock(e.getClickedBlock().getState());
+        EsBlock cb = BukkitHelper.fromBukkitBlock(e.getClickedBlock());
         EsPlayer p = new BukkitPlayer(e.getPlayer());
         EsAction ac = BukkitHelper.fromBukkitAction(e.getAction());
         EsPlayerInteractEvent ee = new EsPlayerInteractEvent(p, cb, ac);

@@ -186,6 +186,10 @@ public class FoliaHelper extends BukkitHelper {
     }
 
     public static EsBlock fromBukkitBlock(Block block) {
+        if (block == null) {
+            return null;
+        }
+
         BlockState state = block.getState();
 
         if (state instanceof Sign) {

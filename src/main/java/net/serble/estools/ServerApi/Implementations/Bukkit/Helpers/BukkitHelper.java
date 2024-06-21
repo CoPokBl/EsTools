@@ -231,6 +231,10 @@ public class BukkitHelper {
     }
 
     public static EsBlock fromBukkitBlock(Block block) {
+        if (block == null) {
+            return null;
+        }
+
         BlockState state = block.getState();
         return fromBukkitBlock(state);
     }
