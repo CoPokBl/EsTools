@@ -21,9 +21,7 @@ public class SignMain implements EsEventListener {
         addSign(new Give(), "[give]", EsToolsCommand.translate("&1[Give]"));
         addSign(new Heal(), "[heal]", EsToolsCommand.translate("&1[Heal]"));
         addSign(new Feed(), "[feed]", EsToolsCommand.translate("&1[Feed]"));
-        addSign(new Balance(), "[balance]", EsToolsCommand.translate("&1[Balance]"));
         addSign(new Repair(), "[repair]", EsToolsCommand.translate("&1[Repair]"));
-        addSign(new Sell(), "[sell]", EsToolsCommand.translate("&1[Sell]"));
 
         Main.registerEvents(new SignMain());
     }

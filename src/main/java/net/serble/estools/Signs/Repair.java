@@ -8,10 +8,6 @@ public class Repair extends SignType {
 
     @Override
     public void run(EsPlayer p, String[] lines) {
-        if (!takeMoney(lines[1], p)) {
-            return;
-        }
-
         EsItemStack item = p.getMainHand();
         Fix.repair(item);
     }

@@ -6,10 +6,6 @@ public class Feed extends SignType {
 
     @Override
     public void run(EsPlayer p, String[] lines) {
-        if (!takeMoney(lines[1], p)) {
-            return;
-        }
-
         p.setFoodLevel(20);
         p.setSaturation(6);
     }

@@ -67,12 +67,6 @@ public class Main {
 		if (platform == ServerPlatform.Bukkit) {
 			// We have to support old configs
 			BukkitConfigMigrator.checkPerformMigration();
-
-			try {
-				Vault.setupEconomy();
-			} catch (Exception e) {
-				logger.warning("No Vault plugin found, please install vault for economy functionality.");
-			}
 		}
 
 		// Load the config
@@ -81,7 +75,7 @@ public class Main {
 		// Metrics
 		if (config.isMetrics() && platform.supportsMetrics()) {
 			Metrics metrics = new Metrics(EsToolsBukkit.plugin, bStatsId);
-			metrics.addCustomChart(new SimplePie("vault_enabled", () -> String.valueOf(Vault.economy != null)));
+			metrics.addCustomChart(new SimplePie("vault_enabled", () -> "false"));
 			logger.info("Started bStat metrics");
 		} else {
 			logger.info("Metrics are disabled");
