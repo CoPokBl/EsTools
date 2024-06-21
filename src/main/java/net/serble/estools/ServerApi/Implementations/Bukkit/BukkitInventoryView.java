@@ -27,7 +27,7 @@ public class BukkitInventoryView implements EsInventoryView {
 
     @Override
     public EsInventory getInventory(int slot) {
-        if (Main.minecraftVersion.getMinor() <= 7) {  // .getInventory(slot) doesn't exist
+        if (Main.minecraftVersion.getMinor() <= 10) {  // .getInventory(slot) doesn't exist
             if (slot >= getTopInventory().getSize()) {  // Bottom inv
                 return getBottomInventory();
             }
