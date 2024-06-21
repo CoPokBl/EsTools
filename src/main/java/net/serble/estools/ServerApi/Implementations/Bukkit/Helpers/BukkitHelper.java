@@ -37,7 +37,6 @@ import org.bukkit.util.Vector;
 public class BukkitHelper {
     public static Location toBukkitLocation(EsLocation loc) {
         Location bLoc = new Location(Bukkit.getWorld(loc.getWorld().getName()), loc.getX(), loc.getY(), loc.getZ());
-        if (loc.getDirection() != null) bLoc.setDirection(toVector(loc.getDirection()));
         bLoc.setPitch((float) loc.getPitch());
         bLoc.setYaw((float) loc.getYaw());
         return bLoc;
