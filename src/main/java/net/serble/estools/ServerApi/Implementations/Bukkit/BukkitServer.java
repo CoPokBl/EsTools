@@ -54,7 +54,7 @@ public class BukkitServer implements EsServer {
             materials.add(esMat);
         }
 
-        if (Main.minecraftVersion.isAtLeast(new SemanticVersion(1, 16, 4))) {
+        if (Main.minecraftVersion.isAtLeast(1, 16, 4)) {
             for (Sound sound : Registry.SOUNDS) {
                 EsSound esSound = EsSound.createUnchecked(sound.getKey().getKey());
                 sounds.add(esSound);

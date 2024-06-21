@@ -1,7 +1,6 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit.Helpers;
 
 import net.serble.estools.Main;
-import net.serble.estools.SemanticVersion;
 import net.serble.estools.ServerApi.EsPotionEffectType;
 import org.bukkit.Registry;
 import org.bukkit.potion.PotionEffectType;
@@ -36,6 +35,7 @@ public class BukkitEffectHelper {
         return OLD_POTIONS.keySet();
     }
 
+    @SuppressWarnings("deprecation")  // It's for old versions
     public static void load() {
         // in 1.8 and below, there were no custom potions, just some hardcoded ones.
         // these are PotionTypes, and we need to generate them based on EsPotionEffectTypes
@@ -77,7 +77,7 @@ public class BukkitEffectHelper {
         }};
 
         // Registry.EFFECT was added in 1.20.3...
-        if (Main.minecraftVersion.isAtLeast(new SemanticVersion(1, 20, 3))) {
+        if (Main.minecraftVersion.isAtLeast(1, 20, 3)) {
             for (PotionEffectType type : Registry.EFFECT) {
                 EsPotionEffectType esType = EsPotionEffectType.createUnchecked(type.getKey().getKey());
                 ES_TO_BUKKIT.put(esType, type);

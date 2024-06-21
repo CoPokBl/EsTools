@@ -38,34 +38,43 @@ public class SemanticVersion {
     }
 
     public boolean isLowerThan(SemanticVersion other) {
-        if (getMajor() < other.getMajor()) {
-            return true;
-        } else if (getMajor() > other.getMajor()) {
-            return false;
-        }
-
-        if (getMinor() < other.getMinor()) {
-            return true;
-        } else if (getMinor() > other.getMinor()) {
-            return false;
-        }
-
-        return getPatch() < other.getPatch();
+        return isLowerThan(other.major, other.minor, other.patch);
     }
 
+    public boolean isLowerThan(int major, int minor, int patch) {
+        if (getMajor() < major) {
+            return true;
+        } else if (getMajor() > major) {
+            return false;
+        }
+
+        if (getMinor() < minor) {
+            return true;
+        } else if (getMinor() > minor) {
+            return false;
+        }
+
+        return getPatch() < patch;
+    }
+
+    @SuppressWarnings("unused")  // Future-proof
     public boolean isAtLeast(SemanticVersion other) {
-        if (getMajor() < other.getMajor()) {
+        return isAtLeast(other.major, other.minor, other.patch);
+    }
+
+    public boolean isAtLeast(int major, int minor, int patch) {
+        if (getMajor() < major) {
             return false;
-        } else if (getMajor() > other.getMajor()) {
+        } else if (getMajor() > major) {
             return true;
         }
 
-        if (getMinor() < other.getMinor()) {
+        if (getMinor() < minor) {
             return false;
-        } else if (getMinor() > other.getMinor()) {
+        } else if (getMinor() > minor) {
             return true;
         }
 
-        return getPatch() >= other.getPatch();
+        return getPatch() >= patch;
     }
 }
