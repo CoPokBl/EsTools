@@ -15,9 +15,9 @@ import java.util.Set;
 import java.util.UUID;
 
 public class BukkitEntity implements EsEntity {
-    private final org.bukkit.entity.Entity bukkitEntity;
+    private final Entity bukkitEntity;
 
-    public BukkitEntity(org.bukkit.entity.Entity bukkitEntity) {
+    public BukkitEntity(Entity bukkitEntity) {
         this.bukkitEntity = bukkitEntity;
     }
 
@@ -46,7 +46,8 @@ public class BukkitEntity implements EsEntity {
         }
 
         if (bukkitEntity instanceof LivingEntity) {
-            String name = ((LivingEntity)bukkitEntity).getCustomName();
+            // Cast isn't redundant because that method is only in LivingEntity in old versions
+            @SuppressWarnings("RedundantCast") String name = ((LivingEntity)bukkitEntity).getCustomName();
             if (name != null) {
                 return name;
             }
@@ -96,7 +97,7 @@ public class BukkitEntity implements EsEntity {
         List<Entity> bukkitList = bukkitEntity.getPassengers();
         List<EsEntity> list = new ArrayList<>();
         for (Entity entity : bukkitList) {
-            list.add(new BukkitEntity(entity));
+            list.add(BukkitHelper.fromBukkitEntity(entity));
         }
         return list;
     }

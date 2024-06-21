@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class FoliaWorld extends BukkitWorld {
-    private final org.bukkit.World bukkitWorld;
+    private final World bukkitWorld;
 
     public FoliaWorld(World world) {
         super(world);
@@ -20,9 +20,9 @@ public class FoliaWorld extends BukkitWorld {
 
     @Override
     public List<EsEntity> getEntities() {
-        List<org.bukkit.entity.Entity> bEntities = bukkitWorld.getEntities();
+        List<Entity> bEntities = bukkitWorld.getEntities();
         List<EsEntity> entities = new ArrayList<>();
-        for (org.bukkit.entity.Entity bEntity : bEntities) {
+        for (Entity bEntity : bEntities) {
             entities.add(FoliaHelper.fromBukkitEntity(bEntity));
         }
         return entities;
@@ -32,7 +32,7 @@ public class FoliaWorld extends BukkitWorld {
     public List<EsEntity> getNearbyEntities(EsLocation loc, double xoff, double yoff, double zoff) {
         Collection<Entity> bEntities = bukkitWorld.getNearbyEntities(FoliaHelper.toBukkitLocation(loc), xoff, yoff, zoff);
         List<EsEntity> entities = new ArrayList<>();
-        for (org.bukkit.entity.Entity bEntity : bEntities) {
+        for (Entity bEntity : bEntities) {
             entities.add(FoliaHelper.fromBukkitEntity(bEntity));
         }
         return entities;

@@ -16,17 +16,17 @@ public class FoliaInventoryView extends BukkitInventoryView {
 
     @Override
     public EsInventory getTopInventory() {
-        return new FoliaInventory(bukkitView.getTopInventory());
+        return FoliaHelper.fromBukkitInventory(bukkitView.getTopInventory());
     }
 
     @Override
     public EsInventory getBottomInventory() {
-        return new FoliaInventory(bukkitView.getBottomInventory());
+        return FoliaHelper.fromBukkitInventory(bukkitView.getBottomInventory());
     }
 
     @Override
     public EsInventory getInventory(int slot) {
-        return new FoliaInventory(bukkitView.getInventory(slot));
+        return FoliaHelper.fromBukkitInventory(bukkitView.getInventory(slot));
     }
 
     @Override

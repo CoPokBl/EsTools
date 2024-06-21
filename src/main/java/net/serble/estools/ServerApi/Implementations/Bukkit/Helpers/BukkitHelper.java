@@ -5,6 +5,7 @@ import net.serble.estools.SemanticVersion;
 import net.serble.estools.ServerApi.*;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Implementations.Bukkit.*;
+import net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayerInventory;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -23,6 +24,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -77,7 +79,7 @@ public class BukkitHelper {
         return new Vector(pos.getX(), pos.getY(), pos.getZ());
     }
 
-    public static EsCommandSender fromBukkitCommandSender(org.bukkit.command.CommandSender sender) {
+    public static EsCommandSender fromBukkitCommandSender(CommandSender sender) {
         if (sender == null) {
             return null;
         }
@@ -87,11 +89,11 @@ public class BukkitHelper {
         }
 
         if (sender instanceof LivingEntity) {
-            return new BukkitLivingEntity((org.bukkit.entity.LivingEntity) sender);
+            return new BukkitLivingEntity((LivingEntity) sender);
         }
 
         if (sender instanceof Entity) {
-            return new BukkitEntity((org.bukkit.entity.Entity) sender);
+            return new BukkitEntity((Entity) sender);
         }
 
         if (sender instanceof ConsoleCommandSender) {
@@ -129,8 +131,12 @@ public class BukkitHelper {
         throw new RuntimeException("Unrecognised command sender");
     }
 
-    public static EsEntity fromBukkitEntity(org.bukkit.entity.Entity entity) {
-        if (entity instanceof org.bukkit.entity.LivingEntity) {
+    public static EsEntity fromBukkitEntity(Entity entity) {
+        if (entity instanceof Player) {
+            return new BukkitPlayer((Player) entity);
+        }
+
+        if (entity instanceof LivingEntity) {
             return new BukkitLivingEntity((LivingEntity) entity);
         }
 
@@ -568,6 +574,10 @@ public class BukkitHelper {
     public static EsInventory fromBukkitInventory(Inventory inv) {
         if (inv == null) {
             return null;
+        }
+
+        if (inv instanceof PlayerInventory) {
+            return new FoliaPlayerInventory((PlayerInventory) inv);
         }
 
         return new BukkitInventory(inv);

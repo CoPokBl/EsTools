@@ -128,7 +128,7 @@ public class BukkitItemStack implements EsItemStack {
     @SuppressWarnings("MethodDoesntCallSuperMethod")  // I don't care, it doesn't work like that
     @Override
     public EsItemStack clone() {
-        return new BukkitItemStack(bukkitItem.clone());
+        return BukkitHelper.fromBukkitItem(bukkitItem.clone());
     }
 
     @Override

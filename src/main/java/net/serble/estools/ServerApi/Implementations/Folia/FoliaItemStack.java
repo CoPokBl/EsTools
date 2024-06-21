@@ -22,7 +22,7 @@ public class FoliaItemStack implements EsItemStack {
     private final ItemStack bukkitItem;
 
     public FoliaItemStack(EsMaterial mat, int amount) {
-        bukkitItem = new org.bukkit.inventory.ItemStack(BukkitHelper.toBukkitMaterial(mat), amount);
+        bukkitItem = new ItemStack(BukkitHelper.toBukkitMaterial(mat), amount);
     }
 
     public FoliaItemStack(ItemStack child) {
@@ -118,7 +118,7 @@ public class FoliaItemStack implements EsItemStack {
     @SuppressWarnings("MethodDoesntCallSuperMethod")  // I don't care, it doesn't work like that
     @Override
     public EsItemStack clone() {
-        return new FoliaItemStack(bukkitItem.clone());
+        return FoliaHelper.fromBukkitItem(bukkitItem.clone());
     }
 
     @Override

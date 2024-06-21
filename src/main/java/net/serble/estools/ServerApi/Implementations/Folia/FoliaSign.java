@@ -50,6 +50,6 @@ public class FoliaSign extends FoliaBlock implements EsSign {
 
     @Override
     public EsSignSide getTargetSide(EsPlayer player) {
-        return new net.serble.estools.ServerApi.Implementations.Folia.FoliaSignSide(bukkitSign.getTargetSide(((net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayer) player).getBukkitPlayer()));
+        return new FoliaSignSide(bukkitSign.getTargetSide(((FoliaPlayer) player).getBukkitPlayer()));
     }
 }

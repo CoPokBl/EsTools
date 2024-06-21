@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.PotionMeta;
 
 import java.lang.reflect.InvocationTargetException;
@@ -126,23 +127,23 @@ public class FoliaHelper extends BukkitHelper {
         }
 
         if (sender instanceof Player) {
-            return new net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayer((Player) sender);
+            return new FoliaPlayer((Player) sender);
         }
 
         if (sender instanceof LivingEntity) {
-            return new net.serble.estools.ServerApi.Implementations.Folia.FoliaLivingEntity((org.bukkit.entity.LivingEntity) sender);
+            return new FoliaLivingEntity((org.bukkit.entity.LivingEntity) sender);
         }
 
         if (sender instanceof Entity) {
-            return new net.serble.estools.ServerApi.Implementations.Folia.FoliaEntity((org.bukkit.entity.Entity) sender);
+            return new FoliaEntity((org.bukkit.entity.Entity) sender);
         }
 
         if (sender instanceof ConsoleCommandSender) {
-            return new net.serble.estools.ServerApi.Implementations.Folia.FoliaConsoleSender((ConsoleCommandSender) sender);
+            return new FoliaConsoleSender((ConsoleCommandSender) sender);
         }
 
         if (sender instanceof BlockCommandSender) {
-            return new net.serble.estools.ServerApi.Implementations.Folia.FoliaCommandBlockSender((BlockCommandSender) sender);
+            return new FoliaCommandBlockSender((BlockCommandSender) sender);
         }
 
         throw new RuntimeException("Unrecognised command sender");
@@ -150,15 +151,15 @@ public class FoliaHelper extends BukkitHelper {
 
     public static CommandSender toBukkitCommandSender(EsCommandSender sender) {
         if (sender instanceof EsPlayer) {
-            return ((net.serble.estools.ServerApi.Implementations.Folia.FoliaPlayer) sender).getBukkitPlayer();
+            return ((FoliaPlayer) sender).getBukkitPlayer();
         }
 
         if (sender instanceof EsLivingEntity) {
-            return ((net.serble.estools.ServerApi.Implementations.Folia.FoliaLivingEntity) sender).getBukkitEntity();
+            return ((FoliaLivingEntity) sender).getBukkitEntity();
         }
 
         if (sender instanceof EsEntity) {
-            return ((net.serble.estools.ServerApi.Implementations.Folia.FoliaEntity) sender).getBukkitEntity();
+            return ((FoliaEntity) sender).getBukkitEntity();
         }
 
         if (sender instanceof EsConsoleSender) {
@@ -166,28 +167,32 @@ public class FoliaHelper extends BukkitHelper {
         }
 
         if (sender instanceof EsCommandBlockSender) {
-            return ((net.serble.estools.ServerApi.Implementations.Folia.FoliaCommandBlockSender) sender).getBukkitSender();
+            return ((FoliaCommandBlockSender) sender).getBukkitSender();
         }
 
         throw new RuntimeException("Unrecognised command sender");
     }
 
-    public static EsEntity fromBukkitEntity(org.bukkit.entity.Entity entity) {
-        if (entity instanceof org.bukkit.entity.LivingEntity) {
-            return new net.serble.estools.ServerApi.Implementations.Folia.FoliaLivingEntity((LivingEntity) entity);
+    public static EsEntity fromBukkitEntity(Entity entity) {
+        if (entity instanceof Player) {
+            return new FoliaPlayer((Player) entity);
         }
 
-        return new net.serble.estools.ServerApi.Implementations.Folia.FoliaEntity(entity);
+        if (entity instanceof LivingEntity) {
+            return new FoliaLivingEntity((LivingEntity) entity);
+        }
+
+        return new FoliaEntity(entity);
     }
 
     public static EsBlock fromBukkitBlock(Block block) {
         BlockState state = block.getState();
 
         if (state instanceof Sign) {
-            return new net.serble.estools.ServerApi.Implementations.Folia.FoliaSign((Sign) state);
+            return new FoliaSign((Sign) state);
         }
 
-        return new net.serble.estools.ServerApi.Implementations.Folia.FoliaBlock(state);
+        return new FoliaBlock(state);
     }
 
     public static EsItemStack fromBukkitItem(ItemStack item) {
@@ -236,6 +241,10 @@ public class FoliaHelper extends BukkitHelper {
     public static EsInventory fromBukkitInventory(Inventory inv) {
         if (inv == null) {
             return null;
+        }
+
+        if (inv instanceof PlayerInventory) {
+            return new FoliaPlayerInventory((PlayerInventory) inv);
         }
 
         return new FoliaInventory(inv);

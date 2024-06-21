@@ -83,13 +83,13 @@ public class BukkitServer implements EsServer {
             if (entity == null) {
                 return null;
             }
-            return new BukkitEntity(entity);
+            return BukkitHelper.fromBukkitEntity(entity);
         }
 
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
                 if (entity.getUniqueId() == uuid) {
-                    return new BukkitEntity(entity);
+                    return BukkitHelper.fromBukkitEntity(entity);
                 }
             }
         }
@@ -131,15 +131,15 @@ public class BukkitServer implements EsServer {
         try {
             if (Bukkit.class.getMethod("getOnlinePlayers").getReturnType() == Collection.class) {
                 List<EsPlayer> players = new ArrayList<>();
-                for (org.bukkit.entity.Player p : Bukkit.getOnlinePlayers()) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
                     players.add(new BukkitPlayer(p));
                 }
                 return players;
             }
             else {
-                org.bukkit.entity.Player[] players = (org.bukkit.entity.Player[]) Bukkit.class.getMethod("getOnlinePlayers").invoke(null, new Object[0]);
+                Player[] players = (Player[]) Bukkit.class.getMethod("getOnlinePlayers").invoke(null, new Object[0]);
                 List<EsPlayer> users = new ArrayList<>();
-                for (org.bukkit.entity.Player p : players) {
+                for (Player p : players) {
                     users.add(new BukkitPlayer(p));
                 }
                 return users;

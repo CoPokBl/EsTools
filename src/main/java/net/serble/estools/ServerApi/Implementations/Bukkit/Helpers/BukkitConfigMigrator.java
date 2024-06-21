@@ -1,4 +1,4 @@
-package net.serble.estools.ServerApi.Implementations.Bukkit;
+package net.serble.estools.ServerApi.Implementations.Bukkit.Helpers;
 
 import net.serble.estools.Commands.Warps.WarpLocation;
 import net.serble.estools.Config.ConfigManager;
@@ -8,7 +8,7 @@ import net.serble.estools.Config.Schemas.Give.GiveConfig;
 import net.serble.estools.Config.Schemas.Give.GiveSettings;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsSerialisableItemStack;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitItemStack;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -75,7 +75,7 @@ public class BukkitConfigMigrator {
         }
 
         if (file.length() == 0) {
-            file.delete();
+            boolean ignored = file.delete();
             return;
         }
 
@@ -117,7 +117,7 @@ public class BukkitConfigMigrator {
         }
 
         if (file.length() == 0) {
-            file.delete();
+            boolean ignored = file.delete();
             return;
         }
 
@@ -164,7 +164,7 @@ public class BukkitConfigMigrator {
         }
 
         if (file.length() == 0) {
-            file.delete();
+            boolean ignored = file.delete();
             return;
         }
 
@@ -200,7 +200,7 @@ public class BukkitConfigMigrator {
         }
 
         if (file.length() == 0) {
-            file.delete();
+            boolean ignored = file.delete();
             return;
         }
 
@@ -267,7 +267,7 @@ public class BukkitConfigMigrator {
         List<File> savedPlayers = new ArrayList<>(Arrays.asList(files));
         savedPlayers.removeIf(file -> {
             if (file.length() == 0) {
-                file.delete();
+                boolean ignored = file.delete();
                 return true;
             }
 

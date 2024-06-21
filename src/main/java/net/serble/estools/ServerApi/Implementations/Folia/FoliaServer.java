@@ -78,7 +78,7 @@ public class FoliaServer implements EsServer {
             if (entity == null) {
                 return null;
             }
-            return new FoliaEntity(entity);
+            return FoliaHelper.fromBukkitEntity(entity);
         }
 
         for (World world : Bukkit.getWorlds()) {
@@ -126,15 +126,15 @@ public class FoliaServer implements EsServer {
         try {
             if (Bukkit.class.getMethod("getOnlinePlayers").getReturnType() == Collection.class) {
                 List<EsPlayer> players = new ArrayList<>();
-                for (org.bukkit.entity.Player p : Bukkit.getOnlinePlayers()) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
                     players.add(new FoliaPlayer(p));
                 }
                 return players;
             }
             else {
-                org.bukkit.entity.Player[] players = (org.bukkit.entity.Player[]) Bukkit.class.getMethod("getOnlinePlayers").invoke(null, new Object[0]);
+                Player[] players = (Player[]) Bukkit.class.getMethod("getOnlinePlayers").invoke(null, new Object[0]);
                 List<EsPlayer> users = new ArrayList<>();
-                for (org.bukkit.entity.Player p : players) {
+                for (Player p : players) {
                     users.add(new FoliaPlayer(p));
                 }
                 return users;

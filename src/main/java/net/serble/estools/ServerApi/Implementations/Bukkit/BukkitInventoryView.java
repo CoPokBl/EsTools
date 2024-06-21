@@ -1,6 +1,7 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsInventory;
 import net.serble.estools.ServerApi.Interfaces.EsInventoryView;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
@@ -16,12 +17,12 @@ public class BukkitInventoryView implements EsInventoryView {
 
     @Override
     public EsInventory getTopInventory() {
-        return new BukkitInventory(bukkitView.getTopInventory());
+        return BukkitHelper.fromBukkitInventory(bukkitView.getTopInventory());
     }
 
     @Override
     public EsInventory getBottomInventory() {
-        return new BukkitInventory(bukkitView.getBottomInventory());
+        return BukkitHelper.fromBukkitInventory(bukkitView.getBottomInventory());
     }
 
     @Override
@@ -32,7 +33,7 @@ public class BukkitInventoryView implements EsInventoryView {
             }
             return getTopInventory();
         }
-        return new BukkitInventory(bukkitView.getInventory(slot));
+        return BukkitHelper.fromBukkitInventory(bukkitView.getInventory(slot));
     }
 
     @Override

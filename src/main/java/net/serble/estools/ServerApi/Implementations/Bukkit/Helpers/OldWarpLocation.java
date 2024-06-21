@@ -1,4 +1,4 @@
-package net.serble.estools.ServerApi.Implementations.Bukkit;
+package net.serble.estools.ServerApi.Implementations.Bukkit.Helpers;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class exists for the BukkitConfigMigrator so that it can parse the old warps.yml file.
+ */
 @SerializableAs("WarpLocation")
 public class OldWarpLocation implements ConfigurationSerializable {
     public Location location;

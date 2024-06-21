@@ -5,6 +5,7 @@ import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsEntity;
 import net.serble.estools.ServerApi.Interfaces.EsWorld;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 public class BukkitWorld implements EsWorld {
     private final org.bukkit.World bukkitWorld;
 
-    public BukkitWorld(org.bukkit.World world) {
+    public BukkitWorld(World world) {
         bukkitWorld = world;
     }
 
@@ -26,9 +27,9 @@ public class BukkitWorld implements EsWorld {
 
     @Override
     public List<EsEntity> getEntities() {
-        List<org.bukkit.entity.Entity> bEntities = bukkitWorld.getEntities();
+        List<Entity> bEntities = bukkitWorld.getEntities();
         List<EsEntity> entities = new ArrayList<>();
-        for (org.bukkit.entity.Entity bEntity : bEntities) {
+        for (Entity bEntity : bEntities) {
             entities.add(BukkitHelper.fromBukkitEntity(bEntity));
         }
         return entities;
