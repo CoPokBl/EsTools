@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Arrays;
 
 import net.serble.estools.Main;
+import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -44,19 +45,24 @@ public class ConfigManager {
 			}
         }
 
-		LoaderOptions options = new LoaderOptions();
-		TagInspector taginspector = tag ->
-				tag.getClassName().equals(base.getName()) ||
-				Arrays.stream(allowedClasses).anyMatch(c -> c.equals(tag.getClassName())) ||
-				Arrays.stream(Main.server.getRelevantInternalTypes()).anyMatch(c -> tag.getClassName().endsWith(c));
-		options.setTagInspector(taginspector);
-		Yaml yaml = new Yaml(new Constructor(base, options));
+		Yaml yaml = createYamlLoader(base, allowedClasses);
 		try {
 			return yaml.load(new FileInputStream(configFile));
 		} catch (FileNotFoundException e) {
 			Main.logger.severe("Impossible situation reached, files that we created don't exist");
 			throw new RuntimeException("Impossible");
 		}
+	}
+
+	private static <T> @NotNull Yaml createYamlLoader(Class<? extends T> base, String[] allowedClasses) {
+		LoaderOptions options = new LoaderOptions();
+		TagInspector taginspector = tag ->
+				tag.getClassName().equals(base.getName()) ||
+				Arrays.stream(allowedClasses).anyMatch(c -> c.equals(tag.getClassName())) ||
+				Arrays.stream(Main.server.getRelevantInternalTypes()).anyMatch(c -> tag.getClassName().endsWith(c) ||
+				tag.getClassName().startsWith("net.serble.estools.ServerApi"));  // Allow all server api classes (Stuff like EsMaterial)
+		options.setTagInspector(taginspector);
+        return new Yaml(new Constructor(base, options));
 	}
 
 	public static void save(String file, Object obj) {

@@ -28,6 +28,11 @@ public class EsMaterial {
         return key;
     }
 
+    /** This exists for YAML serialisation only, DO NOT USE, use EsMaterial.fromKey(String) instead. */
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof EsMaterial) {

@@ -28,6 +28,11 @@ public class EsPotionEffectType {
         return key;
     }
 
+    /** This exists for YAML serialisation only, DO NOT USE, use EsPotionEffectType.fromKey(String) instead. */
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof EsPotionEffectType) {
