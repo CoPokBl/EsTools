@@ -1,6 +1,7 @@
 package net.serble.estools;
 
 import net.serble.estools.Commands.SafeTp;
+import net.serble.estools.ServerApi.Interfaces.EsEntity;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.io.PrintWriter;
@@ -16,6 +17,7 @@ public class Tester {
 
     @SuppressWarnings("unchecked")  // It doesn't allow specifying type
     private static final Tuple<String, Double>[] routine = new Tuple[] {
+            new Tuple<>("music", 1),
             new Tuple<>("gmsp", 1.5),
             new Tuple<>("gmc", 1.5),
             new Tuple<>("gma", 1.5),
@@ -80,8 +82,12 @@ public class Tester {
             new Tuple<>("lore add Silly &ldirt", 4),
             new Tuple<>("lore insert 1 &cNot very", 2),
             new Tuple<>("lore remove 1", 2),
-            new Tuple<>("music", 3),
+            new Tuple<>("rain", 3),
+            new Tuple<>("sun", 3),
+            new Tuple<>("thunder", 3),
             new Tuple<>("night", 1),
+            new Tuple<>("noon", 1),
+            new Tuple<>("midnight", 1),
             new Tuple<>("day", 1),
             new Tuple<>("potion speed", 2),
             new Tuple<>("rename &6This dirt is special", 4),
@@ -96,8 +102,15 @@ public class Tester {
             new Tuple<>("getpersistentdata estools:hello string", 2),
             new Tuple<>("removepersistentdata estools:hello", 2),
             new Tuple<>("getpersistentdata estools:hello string", 2),
+            new Tuple<>("mount {entity}", 2),
+            new Tuple<>("dismount", 1),
+            new Tuple<>("dismount", 1),
+            new Tuple<>("mount {player}", 1),
+            new Tuple<>("mount {player} {entity}", 2),
+            new Tuple<>("dismount {entity}", 1),
+            new Tuple<>("sethealth 1", 0.1),
             new Tuple<>("buddha", -1),
-            new Tuple<>("suicide", 4),
+            new Tuple<>("suicide", 1),
     };
 
     public Tester(EsPlayer p) {
@@ -144,6 +157,31 @@ public class Tester {
 
             cmd = cmd.replace("{randomplayer}", randomPlayer.getName());
         }
+
+        if (cmd.contains("{entity}")) {
+            // Find the nearest entity
+            EsEntity nearestEntity = null;
+            double nearestDistance = 60000000;
+
+            for (EsEntity en : player.getWorld().getEntities()) {
+                if (en instanceof EsPlayer) {
+                    continue;
+                }
+
+                double distance = player.getLocation().distanceTo(en.getLocation());
+                if (distance < nearestDistance) {
+                    nearestDistance = distance;
+                    nearestEntity = en;
+                }
+            }
+
+            if (nearestEntity == null) {
+                nearestEntity = player;
+            }
+
+            cmd = cmd.replace("{entity}", nearestEntity.getUniqueId().toString());
+        }
+
         cmd = cmd.replace("{player}", player.getName());
 
         try {
