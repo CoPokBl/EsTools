@@ -80,7 +80,7 @@ public class GetInfo extends EntityCommand {
 					potionEffects.append("None");
 				} else {
 					potionEffects.append(potions.stream()
-							.map(pot -> String.format("%s at %s for %s seconds", pot.getType(), pot.getAmp(), pot.getDuration()/20))
+							.map(pot -> String.format("%s at %s for %s seconds", pot.getType(), pot.getAmp()+1, pot.getDuration()/20))
 							.collect(Collectors.joining(", ")));
 				}
 			}
