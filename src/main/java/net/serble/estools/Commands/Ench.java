@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsEnchantment;
+import net.serble.estools.ServerApi.EsMaterial;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
@@ -46,7 +47,7 @@ public class Ench extends EsToolsCommand {
 			
 			is = ((EsPlayer) sender).getMainHand();
 
-			if (is == null || Objects.equals(is.getType(), "AIR")) {
+			if (is == null || Objects.equals(is.getType(), EsMaterial.createUnchecked("AIR"))) {
 				send(sender, "&cYou must be holding an item to enchant it");
 				return false;
 			}
@@ -59,7 +60,7 @@ public class Ench extends EsToolsCommand {
 			
 			is = p.getMainHand();
 
-			if (is == null || Objects.equals(is.getType(), "AIR")) {
+			if (is == null || Objects.equals(is.getType(), EsMaterial.createUnchecked("AIR"))) {
 				send(sender, "&c" + p.getName() + " isn't holding an item");
 				return false;
 			}
