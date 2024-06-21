@@ -58,7 +58,7 @@ public class Back extends EsToolsCommand implements EsEventListener {
 		if (event instanceof EsPlayerTeleportEvent) {
 			EsPlayerTeleportEvent e = (EsPlayerTeleportEvent) event;
 			if (Main.minecraftVersion.getMinor() > 9 &&
-					!equalsOr(e.getCause(), EsTeleportCause.Command, EsTeleportCause.Plugin)) {
+					!equalsOr(e.getCause(), EsTeleportCause.Command, EsTeleportCause.Plugin, EsTeleportCause.Unknown)) {
 				return;
 			}
 			prevLocations.put(e.getPlayer().getUniqueId(), e.getPlayer().getLocation());
