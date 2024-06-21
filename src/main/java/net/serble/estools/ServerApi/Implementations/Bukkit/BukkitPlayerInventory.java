@@ -58,7 +58,7 @@ public class BukkitPlayerInventory extends BukkitInventory implements EsPlayerIn
 
     @Override
     public void setItem(EsEquipmentSlot slot, EsItemStack item) {
-        if (Main.minecraftVersion.getMinor() <= 12) {
+        if (Main.minecraftVersion.getMinor() <= 14) {
             int slotId;
             switch (slot) {
                 case Head:

@@ -346,7 +346,7 @@ public class BukkitHelper {
     }
 
     public static Material toBukkitMaterial(EsMaterial mat) {
-        if (Main.minecraftVersion.getMinor() > 12) {
+        if (Main.minecraftVersion.getMinor() > 13) {
             return Registry.MATERIAL.get(NamespacedKey.minecraft(mat.getKey()));
         }
 
@@ -354,7 +354,7 @@ public class BukkitHelper {
     }
 
     public static EsMaterial fromBukkitMaterial(Material mat) {
-        if (Main.minecraftVersion.getMinor() > 12) {
+        if (Main.minecraftVersion.getMinor() > 13) {
             return EsMaterial.createUnchecked(mat.getKey().getKey());
         }
 
