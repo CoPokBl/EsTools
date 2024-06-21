@@ -88,7 +88,7 @@ public class BukkitServer implements EsServer {
 
         for (World world : Bukkit.getWorlds()) {
             for (Entity entity : world.getEntities()) {
-                if (entity.getUniqueId() == uuid) {
+                if (entity.getUniqueId().equals(uuid)) {
                     return BukkitHelper.fromBukkitEntity(entity);
                 }
             }
