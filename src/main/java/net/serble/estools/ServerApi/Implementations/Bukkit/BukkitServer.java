@@ -177,7 +177,16 @@ public class BukkitServer implements EsServer {
                 return null;
             }
 
-            Potion potion = new Potion(type, effect.getAmp());
+            // in 1.7 and below potions start at amplifier 1, and can only be 1 or 2, after that it starts at 0
+            int amplifier = effect.getAmp();
+            if (Main.minecraftVersion.getMinor() <= 7) {
+                amplifier++;
+                if (amplifier < 1 || amplifier > 2) {
+                    return null;
+                }
+            }
+
+            Potion potion = new Potion(type, amplifier);
             potion.setSplash(potType == EsPotType.splash);
 
             return new BukkitPotion(potion.toItemStack(amount));
