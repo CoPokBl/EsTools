@@ -61,7 +61,7 @@ public class BukkitEnchantmentHelper {
                 if (Main.minecraftVersion.getMinor() >= 13) {
                     name = ench.getKey().getKey();
                 } else {
-                    name = ench.getName();
+                    name = ench.getName().toLowerCase();
 
                     if (nameReplacers.containsKey(name)) {
                         name = nameReplacers.get(name);
