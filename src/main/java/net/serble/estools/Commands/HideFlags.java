@@ -2,6 +2,7 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ServerApi.EsItemFlag;
+import net.serble.estools.ServerApi.EsMaterial;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
@@ -19,7 +20,7 @@ public class HideFlags extends EsToolsCommand {
 
         EsItemStack is = ((EsPlayer) sender).getMainHand();
 
-        if (is == null || Objects.equals(is.getType(), "AIR") || is.getItemMeta() == null) {
+        if (is == null || Objects.equals(is.getType(), EsMaterial.createUnchecked("AIR")) || is.getItemMeta() == null) {
             send(sender, "&cMust be a damageable item");
             return false;
         }
