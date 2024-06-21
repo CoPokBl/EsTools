@@ -25,7 +25,11 @@ public class Mount extends EntityCommand {
 
 		List<EsEntity> riders = new ArrayList<>();
 		for (int i = 1; i < args.length; i++) {
-			riders.add(getNonLivingEntity(sender, args[i]));
+			EsEntity rider = getNonLivingEntity(sender, args[i]);
+			if (rider == null) {
+				return false;
+			}
+			riders.add(rider);
 		}
 
 		if (riders.isEmpty()) {
