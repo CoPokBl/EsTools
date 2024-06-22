@@ -16,7 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.*;
@@ -26,7 +25,7 @@ public class BukkitServer implements EsServer {
     private final BukkitEventsListener listener;
     private static final Set<EsMaterial> materials = new HashSet<>();
     private static final Set<EsMaterial> itemMaterials = new HashSet<>();
-    private static final Set<EsSound> sounds = new HashSet<>();
+    private static Set<EsSound> sounds = new HashSet<>();
 
     public BukkitServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
@@ -56,17 +55,7 @@ public class BukkitServer implements EsServer {
             materials.add(esMat);
         }
 
-        if (Main.minecraftVersion.isAtLeast(1, 16, 4)) {
-            for (Sound sound : Registry.SOUNDS) {
-                EsSound esSound = EsSound.createUnchecked(sound.getKey().getKey());
-                sounds.add(esSound);
-            }
-        } else {
-            for (Sound sound : Sound.values()) {
-                EsSound esSound = BukkitSoundEnumConverter.convertEnumToKey(sound.name());
-                sounds.add(esSound);
-            }
-        }
+        sounds = BukkitSoundHelper.getSounds();
     }
 
     @Override
@@ -268,13 +257,12 @@ public class BukkitServer implements EsServer {
 
     @Override
     public int runTaskLater(Runnable task, long ticks) {
-        BukkitTask bukkitTask = Bukkit.getScheduler().runTaskLater(EsToolsBukkit.plugin, task, ticks);
-        return bukkitTask.getTaskId();
+        return Bukkit.getScheduler().scheduleSyncDelayedTask(EsToolsBukkit.plugin, task, ticks);
     }
 
     @Override
     public void runTask(Runnable task) {
-        Bukkit.getScheduler().runTask(EsToolsBukkit.plugin, task);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(EsToolsBukkit.plugin, task);
     }
 
     @Override
@@ -295,7 +283,7 @@ public class BukkitServer implements EsServer {
     @Override
     public void registerCommand(String cmd, EsToolsTabCompleter tab) {
         PluginCommand command = Objects.requireNonNull(Bukkit.getPluginCommand(cmd));
-        if (command.getTabCompleter() == null) {
+        if (!Main.tabCompleteEnabled || command.getTabCompleter() == null) {
             command.setExecutor(listener);
         }
         if (Main.tabCompleteEnabled) {
