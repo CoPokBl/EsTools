@@ -12,7 +12,6 @@ import net.serble.estools.Signs.SignMain;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -75,10 +74,10 @@ public class Main extends JavaPlugin {
 		}
 
 		// Commands
-		sc("gms", "gamemode.survival", new GameModeCommand(GameMode.SURVIVAL));
-		sc("gmc", "gamemode.creative", new GameModeCommand(GameMode.CREATIVE));
-		sc("gma", "gamemode.adventure", new GameModeCommand(GameMode.ADVENTURE), 3);
-		sc("gmsp", "gamemode.spectator", new GameModeCommand(GameMode.SPECTATOR), 8);
+		sc("gms", "gamemode.survival", new GameModeCommand("SURVIVAL"));
+		sc("gmc", "gamemode.creative", new GameModeCommand("CREATIVE"));
+		sc("gma", "gamemode.adventure", new GameModeCommand("ADVENTURE"), 3);
+		sc("gmsp", "gamemode.spectator", new GameModeCommand("SPECTATOR"), 8);
 		sc("tphere", "tp", new TpHere());
 		sc("tpall", "tp", new TpAll());
 		sc("feed", "feed", new Feed());
@@ -124,7 +123,7 @@ public class Main extends JavaPlugin {
 		sc("heal", "heal", new Heal());
 		sc("suicide", "suicide", new Suicide());
 		sc("sethealth", "sethealth", new SetHealth());
-		sc("setmaxhealth", "setmaxhealth", new SetMaxHealth(), 3);
+		sc("setmaxhealth", "setmaxhealth", new SetMaxHealth(), 4);
 		sc("getinfo", "getinfo", new GetInfo());
 
 		sc("editsign", "editsign", new EditSign());

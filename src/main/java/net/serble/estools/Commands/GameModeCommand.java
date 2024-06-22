@@ -9,10 +9,13 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 
 public class GameModeCommand extends MultiPlayerCommand {
-    private final GameMode gameMode;
+    private GameMode gameMode;
 
-    public GameModeCommand(GameMode gameMode) {
-        this.gameMode = gameMode;
+    public GameModeCommand(String gameMode) {
+        // If it's an old version it will throw when trying to get Enum Value, so we ignore it.
+        try {
+            this.gameMode = GameMode.valueOf(gameMode);
+        } catch (IllegalArgumentException ignored) {}
     }
 
     @Override
