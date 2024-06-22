@@ -5,10 +5,7 @@ import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.*;
 import net.serble.estools.ServerApi.Implementations.Bukkit.EventHandlers.BukkitEventsListener;
 import net.serble.estools.ServerApi.Implementations.Bukkit.EventHandlers.BukkitEventsListenerPost1_4;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEffectHelper;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEnchantmentHelper;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitSoundEnumConverter;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.*;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
 import org.bukkit.command.PluginCommand;
@@ -16,7 +13,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
@@ -171,10 +167,7 @@ public class BukkitServer implements EsServer {
                     potType.toString().toUpperCase() + "_POTION";
             ItemStack pot = new ItemStack(Material.valueOf(type), amount);
 
-            PotionMeta meta = (PotionMeta) pot.getItemMeta();
-            assert meta != null;
-            meta.addCustomEffect(BukkitHelper.toBukkitPotionEffect(effect), true);
-            pot.setItemMeta(meta);
+            BukkitMetaHelper.setPotionType(pot, effect);  // No ItemMeta allowed
 
             return new BukkitPotion(pot);
         } else if (Main.minecraftVersion.getMinor() >= 4) {

@@ -5,6 +5,9 @@ import net.serble.estools.ServerApi.EsInventoryAction;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 
+/**
+ * Min version: 1.5
+ */
 @SuppressWarnings("unused")
 public class BukkitInventoryClickHelper {
     public static EsInventoryAction fromBukkitInventoryAction(InventoryAction action) {

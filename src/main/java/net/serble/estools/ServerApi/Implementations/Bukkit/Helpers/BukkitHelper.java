@@ -29,7 +29,9 @@ import org.bukkit.util.Vector;
 // DO NOT IMPORT THE FOLLOWING BECAUSE THEY BREAK OLDER VERSIONS BECAUSE THEY DON'T EXIST
 // org.bukkit.inventory.EquipmentSlot
 
-
+/**
+ * Min version: 1.0
+ */
 @SuppressWarnings("unused")
 public class BukkitHelper {
     public static Location toBukkitLocation(EsLocation loc) {
@@ -312,7 +314,7 @@ public class BukkitHelper {
 
             return new BukkitItemStack(item);
         } else {
-            throw new RuntimeException("Potions aren't support in this Minecraft version");
+            return new BukkitItemStack(item);  // Not a potion
         }
     }
 

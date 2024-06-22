@@ -136,7 +136,7 @@ public class Main {
 		sc("heal", "heal", new Heal());
 		sc("suicide", "suicide", new Suicide());
 		sc("sethealth", "sethealth", new SetHealth());
-		sc("setmaxhealth", "setmaxhealth", new SetMaxHealth(), 3);
+		sc("setmaxhealth", "setmaxhealth", new SetMaxHealth(), 4);
 		sc("getinfo", "getinfo", new GetInfo());
 
 		sc("editsign", "editsign", new EditSign());
