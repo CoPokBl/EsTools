@@ -1,4 +1,4 @@
-package net.serble.estools.ServerApi.Implementations.Bukkit;
+package net.serble.estools.ServerApi.Implementations.Bukkit.EventHandlers;
 
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsAction;
@@ -6,8 +6,10 @@ import net.serble.estools.ServerApi.EsClickType;
 import net.serble.estools.ServerApi.EsEquipmentSlot;
 import net.serble.estools.ServerApi.EsInventoryAction;
 import net.serble.estools.ServerApi.Events.*;
+import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPlayer;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEquipmentSlotHelper;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitInventoryClickHelper;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -23,7 +25,6 @@ import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -31,7 +32,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
-import java.util.Set;
 
 public class BukkitEventsListener implements Listener, CommandExecutor {
 
@@ -110,10 +110,29 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
 
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
-        EsInventory clInv = BukkitHelper.fromBukkitInventory(e.getClickedInventory());
+        EsInventory clInv;
+        if (Main.minecraftVersion.isAtLeast(1, 6, 0)) {
+            clInv = BukkitHelper.fromBukkitInventory(e.getClickedInventory());
+        } else {
+            clInv = BukkitHelper.fromBukkitInventory(e.getInventory());  // Get clicked inv doesn't exist
+        }
+
         EsInventory inv = BukkitHelper.fromBukkitInventory(e.getInventory());
-        EsClickType ct = BukkitHelper.fromBukkitClickType(e.getClick());
-        EsInventoryAction ac = BukkitHelper.fromBukkitInventoryAction(e.getAction());
+
+        EsClickType ct;
+        if (Main.minecraftVersion.isAtLeast(1, 5, 0)) {
+            ct = BukkitInventoryClickHelper.fromBukkitClickType(e.getClick());
+        } else {
+            ct = EsClickType.Unknown;  // getClick() doesn't exist in 1.4.x
+        }
+
+        EsInventoryAction ac;
+        if (Main.minecraftVersion.isAtLeast(1, 5, 0)) {
+            ac = BukkitInventoryClickHelper.fromBukkitInventoryAction(e.getAction());
+        } else {
+            ac = EsInventoryAction.Unknown;  // getAction() doesn't exist in 1.4.x
+        }
+
         EsItemStack ci = BukkitHelper.fromBukkitItem(e.getCurrentItem());
         EsPlayer cl = new BukkitPlayer((Player) e.getWhoClicked());
         EsItemStack cu = BukkitHelper.fromBukkitItem(e.getCursor());
@@ -140,18 +159,6 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
         EsPlayer pl = new BukkitPlayer((Player) e.getPlayer());
         EsInventoryCloseEvent ee = new EsInventoryCloseEvent(pl, inv);
         Main.callEvent(ee);
-    }
-
-    @EventHandler
-    public void onDrag(InventoryDragEvent e) {
-        EsInventory inv = BukkitHelper.fromBukkitInventory(e.getInventory());
-        EsPlayer pl = new BukkitPlayer((Player) e.getWhoClicked());
-        Set<Integer> cs = e.getRawSlots();
-        EsInventoryView view = new BukkitInventoryView(e.getView());
-        EsInventoryDragEvent ee = new EsInventoryDragEvent(pl, inv, cs, view);
-        ee.setCancelled(e.isCancelled());
-        Main.callEvent(ee);
-        e.setCancelled(ee.isCancelled());
     }
 
     @EventHandler

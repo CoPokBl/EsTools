@@ -3,6 +3,8 @@ package net.serble.estools.ServerApi.Implementations.Bukkit;
 import net.serble.estools.*;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.*;
+import net.serble.estools.ServerApi.Implementations.Bukkit.EventHandlers.BukkitEventsListener;
+import net.serble.estools.ServerApi.Implementations.Bukkit.EventHandlers.BukkitEventsListenerPost1_4;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEffectHelper;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEnchantmentHelper;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
@@ -32,7 +34,11 @@ public class BukkitServer implements EsServer {
 
     public BukkitServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
-        listener = new BukkitEventsListener();
+        if (getVersion().isAtLeast(1, 5, 0)) {
+            listener = new BukkitEventsListenerPost1_4();
+        } else {
+            listener = new BukkitEventsListener();
+        }
     }
 
     @Override
