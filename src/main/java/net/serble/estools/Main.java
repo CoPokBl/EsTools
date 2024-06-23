@@ -59,7 +59,7 @@ public class Main {
 
 		minecraftVersion = server.getVersion();
 		server.initialise();
-		logger.info("Starting EsTools on platform: " + platform.name() + " (MC: " + minecraftVersion.getString() + ")");
+		logger.info("Starting EsTools on platform: " + platform.name() + " (MC: " + minecraftVersion.toString() + ")");
 
 		if (platform == ServerPlatform.Bukkit) {
 			// We have to support old configs

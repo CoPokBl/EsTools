@@ -34,7 +34,8 @@ public class SemanticVersion {
         return patch;
     }
 
-    public String getString() {
+    @Override
+    public String toString() {
         return string;
     }
 

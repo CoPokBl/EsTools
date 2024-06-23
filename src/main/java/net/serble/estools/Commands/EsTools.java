@@ -110,7 +110,7 @@ public class EsTools extends EsToolsCommand {
 				return false;
 			}
 
-			send(sender, "&aDownloading version: &6" + Main.newVersion.getString());
+			send(sender, "&aDownloading version: &6" + Main.newVersion);
 			Updater.downloadNewUpdate(sender);
 		} else if (args[0].equalsIgnoreCase("forceupdate")) {
 			send(sender, "&aForce updating &c(This might downgrade your plugin)");
@@ -142,10 +142,10 @@ public class EsTools extends EsToolsCommand {
 
 	private void sendVersion(EsCommandSender sender) {
 		if (Main.newVersion == null) {
-			send(sender, "&aEsTools v" + Main.server.getPluginVersion().getString());
+			send(sender, "&aEsTools v" + Main.server.getPluginVersion().toString());
 		} else {
-			send(sender, "&aEsTools &cv" + Main.server.getPluginVersion().getString() + ".&c An update is available, use " +
-					"&6/estools update&c to update to &6v" + Main.newVersion.getString());
+			send(sender, "&aEsTools &cv" + Main.server.getPluginVersion().toString() + ".&c An update is available, use " +
+					"&6/estools update&c to update to &6v" + Main.newVersion.toString());
 		}
 	}
 

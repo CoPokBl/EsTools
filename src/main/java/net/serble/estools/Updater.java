@@ -58,10 +58,10 @@ public class Updater {
 
             // Announcements
             if (Main.plugin.getConfig().getUpdater().isWarnOnOutdated()) {
-                Main.server.broadcast(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + currentVersion.getString() + " -> " + onlineVersion.getString()), "estools.update");
+                Main.server.broadcast(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + currentVersion + " -> " + onlineVersion), "estools.update");
             }
             if (Main.plugin.getConfig().getUpdater().isLogOnOutdated()) {
-                Main.logger.info(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + currentVersion.getString() + " -> " + onlineVersion.getString()));
+                Main.logger.info(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + currentVersion + " -> " + onlineVersion));
             }
 
             if (!Main.plugin.getConfig().getUpdater().isAutoUpdate()) {
