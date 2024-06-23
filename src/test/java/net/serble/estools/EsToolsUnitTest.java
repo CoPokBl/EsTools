@@ -19,6 +19,7 @@ public class EsToolsUnitTest {
     public static SemanticVersion minecraftVersion = new SemanticVersion(1, 21, 0);
     public static SemanticVersion pluginVersion = new SemanticVersion(999, 999, 999);  // Large so it doesn't update
     private static final List<String> console = new ArrayList<>();
+    public static final List<TestPlayer> players = new ArrayList<>();
 
     public @NotNull String[] executeCommand(String label, String... args) {
         int initialPlayerChatIndex = player.getChatMessages().size();
@@ -48,7 +49,9 @@ public class EsToolsUnitTest {
         main.enable();
 
         world = new TestWorld("testingworld");
-        player = new TestPlayer(world);
+        player = new TestPlayer(world, playerName);
+
+        players.add(player);
     }
 
     public static void consolePrint(String line) {
@@ -66,5 +69,12 @@ public class EsToolsUnitTest {
 
     public String stripColour(String msg) {
         return msg.replaceAll("§[0-9a-fA-F]", "");
+    }
+
+    public TestPlayer createPlayer() {  // With random name
+        TestPlayer p = new TestPlayer(world, "Player" + (int) (Math.random() * 1000));
+        players.add(p);
+        world.addEntity(p);
+        return p;
     }
 }

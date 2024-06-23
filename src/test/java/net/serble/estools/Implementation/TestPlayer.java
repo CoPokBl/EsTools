@@ -1,12 +1,12 @@
 package net.serble.estools.Implementation;
 
-import net.serble.estools.EsToolsUnitTest;
 import net.serble.estools.ServerApi.*;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")  // For when tests are added
 public class TestPlayer extends TestLivingEntity implements EsPlayer {
+    private final String name;
     private int foodLevel = 20;
     private double saturation = 20;
     private float flySpeed = 2;
@@ -16,8 +16,14 @@ public class TestPlayer extends TestLivingEntity implements EsPlayer {
     private static final boolean flying = false;
     private EsSound playingSound = null;
 
-    public TestPlayer(EsWorld world) {
+    public TestPlayer(EsWorld world, String name) {
         super(world);
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 
     // TESTING METHODS
@@ -143,6 +149,6 @@ public class TestPlayer extends TestLivingEntity implements EsPlayer {
 
     @Override
     public String getName() {
-        return EsToolsUnitTest.playerName;
+        return name;
     }
 }

@@ -22,7 +22,11 @@ public class TestServer implements EsServer {
             return EsToolsUnitTest.player;
         }
 
-        return null;
+        return (EsPlayer) EsToolsUnitTest.world.getEntities()
+                .stream()
+                .filter(e -> e instanceof TestPlayer && Objects.equals(e.getName(), name))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -31,7 +35,11 @@ public class TestServer implements EsServer {
             return EsToolsUnitTest.player;
         }
 
-        return null;
+        return EsToolsUnitTest.world.getEntities()
+                .stream()
+                .filter(e -> Objects.equals(e.getUniqueId(), uuid))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -41,7 +49,7 @@ public class TestServer implements EsServer {
 
     @Override
     public Collection<? extends EsPlayer> getOnlinePlayers() {
-        return Collections.singletonList(EsToolsUnitTest.player);
+        return EsToolsUnitTest.players;
     }
 
     @Override

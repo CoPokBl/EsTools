@@ -5,11 +5,11 @@ import net.serble.estools.ServerApi.Interfaces.EsEntity;
 import net.serble.estools.ServerApi.Interfaces.EsWorld;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("unused")  // For future
 public class TestWorld implements EsWorld {
+    private final List<EsEntity> entities = new ArrayList<>();
     private final String name;
     private long time;
     private boolean storming = false;
@@ -38,6 +38,10 @@ public class TestWorld implements EsWorld {
         return lightningBolts;
     }
 
+    public void addEntity(EsEntity entity) {
+        entities.add(entity);
+    }
+
     // IMPLEMENTATIONS
 
     @Override
@@ -47,12 +51,21 @@ public class TestWorld implements EsWorld {
 
     @Override
     public List<EsEntity> getEntities() {
-        return Collections.emptyList();
+        return entities;
     }
 
     @Override
-    public List<EsEntity> getNearbyEntities(EsLocation loc, double xoff, double yoff, double zoff) {
-        return Collections.emptyList();
+    public List<EsEntity> getNearbyEntities(EsLocation loc, double xoff, double yoff, double zoff) {  // Check each entity.getLocation()
+        List<EsEntity> nearby = new ArrayList<>();
+        for (EsEntity entity : entities) {
+            EsLocation enLoc = entity.getLocation();
+            if (Math.abs(enLoc.getX() - loc.getX()) <= xoff &&
+                    Math.abs(enLoc.getY() - loc.getY()) <= yoff &&
+                    Math.abs(enLoc.getZ() - loc.getZ()) <= zoff) {
+                nearby.add(entity);
+            }
+        }
+        return nearby;
     }
 
     @Override

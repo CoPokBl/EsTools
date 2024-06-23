@@ -102,4 +102,22 @@ public class EsLocation extends Position {
     public EsLocation add(double x, double y, double z) {
         return new EsLocation(world, getX() + x, getY() + y, getZ() + z);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof EsLocation)) {
+            return false;
+        }
+        return toString().equals(obj.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("EsLocation{world=%s, x=%f, y=%f, z=%f, yaw=%f, pitch=%f}", worldName, getX(), getY(), getZ(), getYaw(), getPitch());
+    }
 }

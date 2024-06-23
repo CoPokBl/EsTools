@@ -57,6 +57,10 @@ public class TestEntity implements EsEntity {
         return fallDistance;
     }
 
+    public void teleportRandom() {
+        location = new EsLocation(location.getWorld(), Math.random() * 100, Math.random() * 100, Math.random() * 100);
+    }
+
     // IMPLEMENTATION METHODS
 
     @Override
