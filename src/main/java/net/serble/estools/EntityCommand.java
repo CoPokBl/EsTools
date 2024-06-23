@@ -1,71 +1,56 @@
 package net.serble.estools;
 
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsEntity;
+import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
+import net.serble.estools.ServerApi.Position;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
-
 public abstract class EntityCommand extends EsToolsCommand {
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+	public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
 		List<String> tab = new ArrayList<>();
 		
-		if (sender instanceof Player) {
-			Player p = (Player) sender;
+		if (sender instanceof EsPlayer) {
+			EsPlayer p = (EsPlayer) sender;
 			
-			List<Entity> ens = p.getNearbyEntities(5, 5, 5);
+			List<EsEntity> ens = p.getWorld().getNearbyEntities(p.getLocation(), 5, 5, 5);
 			
-			Entity en = getTarget(p, ens);
+			EsEntity en = getTarget(p, ens);
 			
-			if (en != null && !(en instanceof Player)) {
+			if (en != null && !(en instanceof EsPlayer)) {
 				String eu = en.getUniqueId().toString();
 				tab.add(eu);
 			}
 		}
 		
-		for (Player p : Bukkit.getOnlinePlayers()) {
+		for (EsPlayer p : Main.server.getOnlinePlayers()) {
 			tab.add(p.getName());
 		}
 		
 		return tab;
 	}
 	
-	public static LivingEntity getEntity(CommandSender sender, String name) {
-		Entity entity = getNonLivingEntity(sender, name);
-		if (entity instanceof LivingEntity) return (LivingEntity) entity;
+	public static EsLivingEntity getEntity(EsCommandSender sender, String name) {
+		EsEntity entity = getNonLivingEntity(sender, name);
+		if (entity instanceof EsLivingEntity) return (EsLivingEntity) entity;
 		if (entity != null) {
 			send(sender, "&cPlayer/Entity not found.");
 		}
 		return null;
 	}
 
-	public static Entity getNonLivingEntity(CommandSender sender, String name) {
-		Entity p = Bukkit.getPlayer(name);
+	public static EsEntity getNonLivingEntity(EsCommandSender sender, String name) {
+		EsEntity p = Main.server.getPlayer(name);
 
 		if (p == null) {
 			try {
 				UUID uid = UUID.fromString(name);
-
-				if (Main.majorVersion > 11) {
-					p = Bukkit.getEntity(uid);
-				} else {
-					if (sender instanceof Player) {
-						List<Entity> entities = ((Player)sender).getWorld().getEntities();
-
-						for (Entity e : entities) {
-							if (e.getUniqueId().equals(uid)) {
-								p = e;
-								break;
-							}
-						}
-					}
-				}
+				p = Main.server.getEntity(uid);
 
 				if (p != null) {
                     return p;
@@ -78,39 +63,39 @@ public abstract class EntityCommand extends EsToolsCommand {
 		return p;
 	}
 	
-    public static <T extends Entity> T getTarget(final Entity entity,
-            final Iterable<T> entities) {
+    public static <T extends EsEntity> T getTarget(final EsEntity entity,
+												   final Iterable<T> entities) {
         if (entity == null)
             return null;
         T target = null;
         final double threshold = 1;
         for (final T other : entities) {
-            final Vector n = other.getLocation().toVector()
-                    .subtract(entity.getLocation().toVector());
-            if (entity.getLocation().getDirection().normalize().crossProduct(n)
+            final Position n = other.getLocation()
+                    .subtract(entity.getLocation()).toPosition();
+            if (entity.getLocation().getDirection().normalise().crossProduct(n)
                     .lengthSquared() < threshold
-                    && n.normalize().dot(
-                            entity.getLocation().getDirection().normalize()) >= 0) {
+                    && n.normalise().dot(
+                            entity.getLocation().getDirection().normalise()) >= 0) {
                 if (target == null
                         || target.getLocation().distanceSquared(
-                                entity.getLocation()) > other.getLocation()
-                                .distanceSquared(entity.getLocation()))
+                                entity.getLocation().toPosition()) > other.getLocation()
+                                .distanceSquared(entity.getLocation().toPosition()))
                     target = other;
             }
         }
         return target;
     }
     
-    public static boolean isNotEntity(CommandSender sender, String usage, Object... a) {
-		if (!(sender instanceof LivingEntity)) {
+    public static boolean isNotEntity(EsCommandSender sender, String usage, Object... a) {
+		if (!(sender instanceof EsLivingEntity)) {
 			send(sender, usage, a);
 			return true;
 		}
 		return false;
 	}
 	
-	public static boolean isNotEntity(CommandSender sender) {
-		if (!(sender instanceof LivingEntity)) {
+	public static boolean isNotEntity(EsCommandSender sender) {
+		if (!(sender instanceof EsLivingEntity)) {
 			send(sender, "&cYou must be a player to run this command!");
 			return true;
 		}

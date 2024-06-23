@@ -4,13 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.serble.estools.Main;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
+import net.serble.estools.ServerApi.Interfaces.*;
 
 import net.serble.estools.PlayerCommand;
 
@@ -18,15 +12,15 @@ public class Fix extends PlayerCommand {
 	private static final String usage = genUsage("/fix [hand/offhand/helmet/chestplate/leggings/boots/all] [player]");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		Player p;
+	public boolean execute(EsCommandSender sender, String[] args) {
+		EsPlayer p;
 		
 		if (args.length < 2) {
 			if (isNotPlayer(sender, usage)) {
                 return false;
             }
 			
-			p = (Player) sender;
+			p = (EsPlayer) sender;
 		} else {
 			p = getPlayer(sender, args[1]);
 			
@@ -35,16 +29,16 @@ public class Fix extends PlayerCommand {
             }
 		}
 		
-		PlayerInventory pInv = p.getInventory();
-		ItemStack is = getMainHand(p);
+		EsPlayerInventory pInv = p.getInventory();
+		EsItemStack is = p.getMainHand();
 
 		boolean all = false;
 		
 		if (args.length > 0) {
 			switch (args[0].toLowerCase()) {					
 				case "offhand":
-				    if (Main.majorVersion > 8) {
-                        is = pInv.getItemInOffHand();
+				    if (Main.minecraftVersion.getMinor() > 8) {
+                        is = pInv.getOffHand();
                     }
 					break;
 					
@@ -71,8 +65,8 @@ public class Fix extends PlayerCommand {
 		}
 
 		if (all) {
-			ItemStack[] contents = p.getInventory().getContents();
-			for (ItemStack i : contents) {
+			EsItemStack[] contents = p.getInventory().getContents();
+			for (EsItemStack i : contents) {
 				repair(i);
 			}
 
@@ -81,37 +75,27 @@ public class Fix extends PlayerCommand {
             repair(is);
         }
 
-		send(sender, "&aRepaired &6%s's &aitem(s)!", getEntityName(p));
+		send(sender, "&aRepaired &6%s's &aitem(s)!", p.getName());
 		return true;
 	}
 
-	public static void repair(ItemStack is) {
+	public static void repair(EsItemStack is) {
 		if (is == null) {
 			return;
 		}
 
-		if (Main.majorVersion > 12) {
-			ItemMeta im = is.getItemMeta();
-			if (im == null) return;
-
-			((Damageable) im).setDamage(0);
-
-			is.setItemMeta(im);
-		} else {
-			//noinspection deprecation
-			is.setDurability((short) 0);
-		}
+		is.setDamage(0);
 	}
 
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+	public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
 		List<String> tab = new ArrayList<>();
 		
 		if (args.length == 1) {
 			tab.add("hand"); tab.add("helmet"); tab.add("chestplate");
 			tab.add("leggings"); tab.add("boots"); tab.add("all");
 
-			if (Main.majorVersion > 8) {
+			if (Main.minecraftVersion.getMinor() > 8) {
                 tab.add("offhand");
             }
 		} else if (args.length == 2) {

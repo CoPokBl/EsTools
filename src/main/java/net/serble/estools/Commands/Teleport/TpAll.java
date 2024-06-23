@@ -1,19 +1,19 @@
 package net.serble.estools.Commands.Teleport;
 
 import net.serble.estools.EntityCommand;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.LivingEntity;
+import net.serble.estools.Main;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 
 public class TpAll extends EntityCommand {
     private static final String usage = genUsage("/tpall [entity]");
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        LivingEntity p;
+    public boolean execute(EsCommandSender sender, String[] args) {
+        EsLivingEntity p;
 
         if (args.length == 0) {
-            p = (LivingEntity) sender;
+            p = (EsLivingEntity) sender;
 
             if (isNotEntity(sender, usage)) {
                 return false;
@@ -22,13 +22,13 @@ public class TpAll extends EntityCommand {
             p = getEntity(sender, args[0]);
         }
 
-        for (LivingEntity t : getOnlinePlayers()) {
+        for (EsLivingEntity t : Main.server.getOnlinePlayers()) {
             assert p != null;
-            t.teleport(p);
+            t.teleport(p.getLocation());
         }
 
         assert p != null;
-        send(sender, "&aTeleported all players to &6%s", getEntityName(p));
+        send(sender, "&aTeleported all players to &6%s", p.getName());
         return true;
     }
 }

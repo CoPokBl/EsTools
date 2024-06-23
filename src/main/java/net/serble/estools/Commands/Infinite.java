@@ -2,33 +2,32 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.inventory.ItemStack;
+import net.serble.estools.ServerApi.EsEquipmentSlot;
+import net.serble.estools.ServerApi.EsEventListener;
+import net.serble.estools.ServerApi.Events.EsBlockPlaceEvent;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsEvent;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Infinite extends EsToolsCommand implements Listener {
+public class Infinite extends EsToolsCommand implements EsEventListener {
     private static final ArrayList<UUID> currentPlayers = new ArrayList<>();
 
     @Override
     public void onEnable() {
-        Bukkit.getServer().getPluginManager().registerEvents(this, Main.plugin);
+        Main.registerEvents(this);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(EsCommandSender sender, String[] args) {
         if (isNotPlayer(sender)) {
             return false;
         }
 
-        UUID pu = ((Player)sender).getUniqueId();
+        UUID pu = ((EsPlayer) sender).getUniqueId();
 
         if (!currentPlayers.contains(pu)) {
             currentPlayers.add(pu);
@@ -41,19 +40,20 @@ public class Infinite extends EsToolsCommand implements Listener {
         return true;
     }
 
-    @EventHandler
-    public void blockPlace(BlockPlaceEvent e) {
+    @Override
+    public void executeEvent(EsEvent event) {
+        if (!(event instanceof EsBlockPlaceEvent)) {
+            return;
+        }
+        EsBlockPlaceEvent e = (EsBlockPlaceEvent) event;
+
         if (!currentPlayers.contains(e.getPlayer().getUniqueId())) {
             return;
         }
 
-        ItemStack item = e.getItemInHand().clone();
+        EsItemStack item = e.getPlacedItem().clone();
+        EsEquipmentSlot slot = e.getHand();
 
-        Bukkit.getScheduler().runTask(Main.plugin, () -> {
-            setMainHand(e.getPlayer(), item);
-            // A bug exists where the item is not updated in the player's inventory, this is needed for that
-            //noinspection UnstableApiUsage
-            e.getPlayer().updateInventory();
-        });
+        Main.server.runTask(() -> e.getPlayer().getInventory().setItem(slot, item));
     }
 }

@@ -2,8 +2,7 @@ package net.serble.estools;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -15,13 +14,13 @@ public class Updater {
 
     private static void checkForUpdateBlocking() {
         try {
-            URL url = new URL(Objects.requireNonNull(Main.plugin.getConfig().getString("updater.github-release-url")));
+            URL url = new URL(Objects.requireNonNull(Main.plugin.getConfig().getUpdater().getGithubReleasesUrl()));
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.connect();
 
             if (con.getResponseCode() != 200) {
-                Bukkit.getLogger().severe("[EsTools Updater] GitHub gave unsuccessful response code: " + con.getResponseCode());
+                Main.logger.severe("[EsTools Updater] GitHub gave unsuccessful response code: " + con.getResponseCode());
                 return;
             }
 
@@ -44,14 +43,8 @@ public class Updater {
                     .get("browser_download_url")
                     .getAsString();
 
-            PluginVersion onlineVersion = new PluginVersion(response.get("tag_name").getAsString());
-            String cVersion = Main.plugin.getDescription().getVersion();
-
-            if (cVersion.contains("-")) {
-                cVersion = cVersion.substring(0, cVersion.indexOf("-"));
-            }
-
-            PluginVersion currentVersion = new PluginVersion(cVersion);
+            SemanticVersion onlineVersion = new SemanticVersion(response.get("tag_name").getAsString());
+            SemanticVersion currentVersion = Main.server.getPluginVersion();
 
             // Provide download URL just in case we force update
             waitingDownloadUrl = downloadUrl;
@@ -64,22 +57,22 @@ public class Updater {
             Main.newVersion = onlineVersion;
 
             // Announcements
-            if (Main.plugin.getConfig().getBoolean("updater.warn-on-outdated", false)) {
-                Bukkit.broadcast(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + cVersion + " -> " + onlineVersion.getString()), "estools.update");
+            if (Main.plugin.getConfig().getUpdater().isWarnOnOutdated()) {
+                Main.server.broadcast(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + currentVersion + " -> " + onlineVersion), "estools.update");
             }
-            if (Main.plugin.getConfig().getBoolean("updater.log-on-outdated", false)) {
-                Bukkit.getLogger().info(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + cVersion + " -> " + onlineVersion.getString()));
+            if (Main.plugin.getConfig().getUpdater().isLogOnOutdated()) {
+                Main.logger.info(EsToolsCommand.translate("&a[EsTools] &cAn update is available, &6" + currentVersion + " -> " + onlineVersion));
             }
 
-            if (!Main.plugin.getConfig().getBoolean("updater.auto-update", false)) {
+            if (!Main.plugin.getConfig().getUpdater().isAutoUpdate()) {
                 return;
             }
 
             downloadNewUpdate();
-            Bukkit.getLogger().info("[EsTools Updater] Downloaded latest plugin version");
+            Main.logger.info("[EsTools Updater] Downloaded latest plugin version");
             Main.newVersionReady = true;
         } catch (IOException e) {
-            Bukkit.getLogger().severe("[EsTools Updater] Failed to check for updates, invalid releases URL configured");
+            Main.logger.severe("[EsTools Updater] Failed to check for updates, invalid releases URL configured");
         }
     }
 
@@ -87,7 +80,7 @@ public class Updater {
         downloadNewUpdate(null);
     }
 
-    public static void downloadNewUpdate(CommandSender reportTo) {
+    public static void downloadNewUpdate(EsCommandSender reportTo) {
         if (waitingDownloadUrl == null) {
             throw new RuntimeException("We aren't waiting for an update");
         }
@@ -96,7 +89,7 @@ public class Updater {
             downloadFile(waitingDownloadUrl);
             Main.newVersionReady = true;
         } catch (IOException e) {
-            Bukkit.getLogger().severe("Failed to update: " + e);
+            Main.logger.severe("Failed to update: " + e);
             return;
         }
 
@@ -122,7 +115,7 @@ public class Updater {
             InputStream inputStream = httpConn.getInputStream();
             String saveFilePath = Main.plugin.getClass().getProtectionDomain()
                     .getCodeSource().getLocation().getFile().replace("%20", " ");
-            Bukkit.getLogger().info("Save file path: " + saveFilePath);
+            Main.logger.info("Save file path: " + saveFilePath);
 
             FileOutputStream outputStream = new FileOutputStream(saveFilePath);
 

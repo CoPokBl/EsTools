@@ -23,7 +23,9 @@ To find out what versions have been tested look at TestedVersions.txt in the pro
 We will likely be slow to test new Minecraft versions, but you can probably assume 
 that EsTools will be fully functional on new versions.
 
-**We officially support Spigot/Bukkit/Paper 1.0.0 and above.**
+**We officially support the following:**  
+- Bukkit/Spigot/Paper 1.0.0+
+- Folia Latest Build
 
 For support DM us at: Discord: @copokbl and @calcilore. Or email support@serble.net.
 

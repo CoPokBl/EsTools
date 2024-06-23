@@ -1,9 +1,8 @@
 package net.serble.estools.Commands.Warps;
 
 import net.serble.estools.EsToolsCommand;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +11,12 @@ public class Warp extends EsToolsCommand {
     private static final String usage = genUsage("/warp <warp>");
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(EsCommandSender sender, String[] args) {
         if (isNotPlayer(sender)) {
             return false;
         }
 
-        Player p = (Player)sender;
+        EsPlayer p = (EsPlayer) sender;
 
         if (args.length == 0) {
             send(p, usage);
@@ -37,22 +36,22 @@ public class Warp extends EsToolsCommand {
             return false;
         }
 
-        p.teleport(warp.location);
+        p.teleport(warp.getLocation());
         send(p, "&aTeleported to warp &6%s&a.", warpName);
         return true;
     }
 
-    private static boolean canUseWarp(Player p, WarpLocation warp) {
+    private static boolean canUseWarp(EsPlayer p, WarpLocation warp) {
         if (warp == null) {
             return false;
         }
 
         boolean hasManage = p.hasPermission("estools.warps.manage");
         boolean hasDefault = p.hasPermission("estools.warps.default");
-        String warpPermission = "estools.warp." + warp.name;
+        String warpPermission = "estools.warp." + warp.getName();
 
         // you can only use global warps if you are in the same world, or have manage permission
-        if (!warp.global && !hasManage && !p.getWorld().equals(warp.location.getWorld())) {
+        if (!warp.isGlobal() && !hasManage && !p.getWorld().equals(warp.getLocation().getWorld())) {
             return false;
         }
 
@@ -62,17 +61,17 @@ public class Warp extends EsToolsCommand {
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+    public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
         List<String> tab = new ArrayList<>();
 
-        Player p = (Player)sender;
+        EsPlayer p = (EsPlayer)sender;
 
         if (args.length == 1) {
             for (WarpLocation warp : WarpManager.warps.values()) {
-                boolean inSameWorld = p.getWorld().equals(warp.location.getWorld());
+                boolean inSameWorld = p.getWorld().equals(warp.getLocation().getWorld());
 
-                if (canUseWarp(p, warp) && (warp.global || inSameWorld)) {
-                    tab.add(warp.name);
+                if (canUseWarp(p, warp) && (warp.isGlobal() || inSameWorld)) {
+                    tab.add(warp.getName());
                 }
             }
         }

@@ -8,76 +8,86 @@ import net.serble.estools.Commands.MoveSpeed.WalkSpeed;
 import net.serble.estools.Commands.PowerPick.*;
 import net.serble.estools.Commands.Teleport.*;
 import net.serble.estools.Commands.Warps.*;
+import net.serble.estools.Config.ConfigManager;
+import net.serble.estools.Config.Schemas.GeneralConfig.EsToolsConfig;
+import net.serble.estools.Entrypoints.EsToolsBukkit;
+import net.serble.estools.ServerApi.EsEventListener;
+import net.serble.estools.ServerApi.EsGameMode;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitConfigMigrator;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsEvent;
+import net.serble.estools.ServerApi.Interfaces.EsLogger;
+import net.serble.estools.ServerApi.Interfaces.EsServer;
+import net.serble.estools.ServerApi.ServerPlatform;
 import net.serble.estools.Signs.SignMain;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
-import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import net.serble.estools.Commands.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("UnusedReturnValue")
-public class Main extends JavaPlugin {
+public class Main {
 	public static Main plugin;
-	public static int majorVersion;
-	public static int minorVersion;
+	public static ServerPlatform platform;
+	public static SemanticVersion minecraftVersion;
 	public static boolean tabCompleteEnabled = true;
-	private static FileConfiguration config;  // Get with overriden getConfig() method
-	public static PluginVersion newVersion = null;  // The version available to download
+	private static EsToolsConfig config;  // Get with overriden getConfig() method
+	public static SemanticVersion newVersion = null;  // The version available to download
 	public static boolean newVersionReady = false;
+	public static EsServer server;
+	public static EsLogger logger;
+	private final Object context;
+	private static final List<EsEventListener> eventListeners = new ArrayList<>();
+	private static final Map<String, EsToolsCommand> commands = new HashMap<>();
 
 	private static final int bStatsId = 21760;
-	
-	@Override
-	public void onEnable() {
+
+	public Main(ServerPlatform plat, Object context) {
+		platform = plat;
+		this.context = context;
+	}
+
+	public void enable() {
 		plugin = this;
+		server = platform.getServerInstance(context);
+		logger = server.getLogger();
 
-		try {
-			Vault.setupEconomy();
-		} catch (Exception e) {
-			Bukkit.getLogger().warning("No Vault plugin found, please install vault for economy functionality.");
+		minecraftVersion = server.getVersion();
+		server.initialise();
+		logger.info("Starting EsTools on platform: " + platform.name() + " (MC: " + minecraftVersion.toString() + ")");
+
+		if (platform == ServerPlatform.Bukkit) {
+			// We have to support old configs
+			BukkitConfigMigrator.checkPerformMigration();
 		}
 
-		getVersion();  // Set the major and minor version variables
-
-		// Create config if not exists, saveDefaultConfig() doesn't exist in 1.0
-		File configFile = new File(plugin.getDataFolder(), "config.yml");
-		if (!configFile.exists()) {
-			saveResource("config.yml", false);
-		}
-		config = ConfigManager.load("config.yml");
-
-		// Add keys that don't exist from the default config
-		if (ConfigManager.patchDefaults(getConfig(), getResource("config.yml"))) {
-			ConfigManager.save("config.yml", getConfig());  // Only save if something changed
-		}
+		// Load the config
+		config = ConfigManager.load("config.yml", EsToolsConfig.class);
 
 		// Metrics
-		if (getConfig().getBoolean("metrics", true)) {
-			Metrics metrics = new Metrics(this, bStatsId);
-			metrics.addCustomChart(new SimplePie("vault_enabled", () -> String.valueOf(Vault.economy != null)));
-			Bukkit.getLogger().info("Started bStat metrics");
+		if (config.isMetrics() && platform.supportsMetrics()) {
+			Metrics metrics = new Metrics(EsToolsBukkit.plugin, bStatsId);
+			metrics.addCustomChart(new SimplePie("vault_enabled", () -> "false"));
+			logger.info("Started bStat metrics");
 		} else {
-			Bukkit.getLogger().info("Metrics are disabled");
+			logger.info("Metrics are disabled");
 		}
 
-		if (majorVersion <= 2) {
-			Bukkit.getLogger().info("Tab completion is not supported for versions 1.2 and below.");
+		if (minecraftVersion.getMinor() <= 2) {
+			logger.info("Tab completion is not supported for versions 1.2 and below.");
 			tabCompleteEnabled = false;
 		}
 
 		// Commands
-		sc("gms", "gamemode.survival", new GameModeCommand("SURVIVAL"));
-		sc("gmc", "gamemode.creative", new GameModeCommand("CREATIVE"));
-		sc("gma", "gamemode.adventure", new GameModeCommand("ADVENTURE"), 3);
-		sc("gmsp", "gamemode.spectator", new GameModeCommand("SPECTATOR"), 8);
+		sc("gms", "gamemode.survival", new GameModeCommand(EsGameMode.Survival, "gms"));
+		sc("gmc", "gamemode.creative", new GameModeCommand(EsGameMode.Creative, "gmc"));
+		sc("gma", "gamemode.adventure", new GameModeCommand(EsGameMode.Adventure, "gma"), 3);
+		sc("gmsp", "gamemode.spectator", new GameModeCommand(EsGameMode.Spectator, "gmsp"), 8);
 		sc("tphere", "tp", new TpHere());
 		sc("tpall", "tp", new TpAll());
 		sc("feed", "feed", new Feed());
@@ -94,7 +104,7 @@ public class Main extends JavaPlugin {
 		sc("setstack", "setstack", new SetStack());
 		sc("ci", "clearinv", new ClearInv());
 		sc("day", "time", new Day());
-		sc("moon", "time", new Night());
+		sc("night", "time", new Night());
 		sc("noon", "time", new Noon());
 		sc("midnight", "time", new Midnight());
 		sc("sun", "weather", new Sun());
@@ -132,7 +142,7 @@ public class Main extends JavaPlugin {
 		sc("buddha", "god", new Buddha(), 1);
 
 		sc("music", "music", new Music(), 9);
-		sc("potion", "potion", new Potion(), 4);
+		sc("potion", "potion", new Potion());
 
 		sc("setpersistentdata", "setpersistentdata", new SetPersistentData(), 14);
 		sc("getpersistentdata", "getpersistentdata", new GetPersistentData(), 14);
@@ -145,139 +155,95 @@ public class Main extends JavaPlugin {
 		sc("dismount", "mount", new Dismount());
 
 		// Load other features
-		if (majorVersion > 0) {  // Enchants and events don't work on 1.0.0
+		if (minecraftVersion.getMinor() > 0) {  // Enchants and events don't work on 1.0.0
 			PowerTool.init();
 			SignMain.init();
 		}
 
 		Give.enable();
 		Updater.checkForUpdate();
+
+		server.startEvents();  // Events will now trigger
 	}
 
-	@Override
-	public void onDisable() { /* Needed for older versions, which require an onDisable method */ }
+	public static void callEvent(EsEvent event) {
+		for (EsEventListener listener : eventListeners) {
+			listener.executeEvent(event);
+		}
+	}
 
+	public static boolean executeCommand(EsCommandSender sender, String cmd, String[] args) {
+		if (!commands.containsKey(cmd)) {
+			logger.severe("&cThe command: '" + cmd + "', does not exist");
+			return false;
+		}
+
+		return commands.get(cmd).execute(sender, args);
+	}
+
+	public static void registerEvents(EsEventListener listener) {
+		eventListeners.add(listener);
+	}
 
 	// Setup Command Overloads
 
-	public PluginCommand sc(String name, EsToolsCommand ce) {
-		PluginCommand cmd = getCommand(name);
-        assert cmd != null;
-        cmd.setExecutor(ce);
+	public void sc(String name, EsToolsCommand ce) {
+		server.registerCommand(name, ce);
+		commands.put(name, ce);
 		ce.onEnable();
-
-		if (tabCompleteEnabled && cmd.getTabCompleter() == null) {
-			ce.register(cmd);
-		}
-		return cmd;
 	}
 
-	public PluginCommand sc(String name, EsToolsCommand ce, int minVer) {
-		if (Main.majorVersion >= minVer) return sc(name, ce);
-		else return sc(name, new WrongVersion(minVer));
-	}
-	
-	public PluginCommand sc(String name, EsToolsCommand ce, EsToolsTabCompleter tc) {
-		PluginCommand cmd = sc(name, ce);
-		if (tabCompleteEnabled) {
-			tc.register(cmd);
-		}
-		return cmd;
-	}
-
-	public PluginCommand sc(String name, String perm, EsToolsCommand ce, EsToolsTabCompleter tc, int minMajor, int minMinor) {
-		String versionName = minMajor + "." + minMinor;
-		if (Main.majorVersion > minMajor || (Main.majorVersion == minMajor && Main.minorVersion >= minMinor)) {
-			if (tc == null) {
-				return sc(name, perm, ce);
-			}
-
-            return sc(name, perm, ce, tc);
-        } else return sc(name, new WrongVersion(versionName), new WrongVersion(versionName));
-	}
-
-	public PluginCommand sc(String name, String perm, EsToolsCommand ce) {
-		PluginCommand cmd = sc(name, ce);
-		cmd.setPermission("estools." + perm);
-
-		if (Main.majorVersion > 0) {  // Permission errors weren't a thing in 1.0
-            //noinspection deprecation, is still useful in pre 1.13 and technically is useful in rare situations post 1.13
-            cmd.setPermissionMessage(EsToolsCommand.translate("&cYou do not have permission to run this command."));
-		}
-
-		if (tabCompleteEnabled && cmd.getTabCompleter() == null) {  // Give every command tab complete if they haven't already registered it
-			ce.register(cmd);
-		}
-		return cmd;
-	}
-
-	public PluginCommand sc(String name, String perm, EsToolsCommand ce, int minVer) {
-		if (Main.majorVersion >= minVer) return sc(name, perm, ce);
-		else return sc(name, perm, new WrongVersion(minVer));
-	}
-	
-	public PluginCommand sc(String name, String perm, EsToolsCommand ce, EsToolsTabCompleter tc) {
-		PluginCommand cmd = sc(name, perm, ce);
-		if (tabCompleteEnabled) {
-			tc.register(cmd);
-		}
-		return cmd;
-	}
-
-	private void getVersion() {  // Parse the minecraft version from the Bukkit version string
-		String versionS = Bukkit.getVersion();
-
-		if (versionS.contains("(MC: ")) {
-			int posOfMC = versionS.indexOf("(MC: ") + 5;
-			versionS = versionS.substring(posOfMC, versionS.indexOf(')', posOfMC));
-		} else {
-			Bukkit.getLogger().warning("Could not detect version from: " + versionS);
+	public void sc(String name, EsToolsCommand ce, int minVer) {
+		if (minecraftVersion.getMinor() >= minVer) {
+            sc(name, ce);
 			return;
+        }
+		sc(name, new WrongVersion(minVer));
+	}
+	
+	public void sc(String name, EsToolsCommand ce, EsToolsTabCompleter tc) {
+		sc(name, ce);
+		if (tabCompleteEnabled) {
+			server.setTabCompleter(name, tc);
 		}
+	}
 
-		for (int i = 0; i < 99; i++) {
-			if (versionS.contains("1." + i)) {
-				majorVersion = i;
+	public void sc(String name, String perm, EsToolsCommand ce, EsToolsTabCompleter tc, int minMajor, int minMinor) {
+		String versionName = minMajor + "." + minMinor;
+		if (minecraftVersion.getMinor() > minMajor || (minecraftVersion.getMinor() == minMajor && minecraftVersion.getPatch() >= minMinor)) {
+			if (tc == null) {
+				sc(name, perm, ce);
+				return;
 			}
-		}
 
-		for (int i = 0; i < 99; i++) {
-			if (versionS.contains("1." + majorVersion + '.' + i)) {
-				minorVersion = i;
-			}
-		}
+            sc(name, perm, ce, tc);
+        } else sc(name, new WrongVersion(versionName), new WrongVersion(versionName));
+	}
 
-		Bukkit.getLogger().info("Version detected as: 1." + majorVersion + '.' + minorVersion + " from: " + versionS);
+	public void sc(String name, String perm, EsToolsCommand ce) {
+		sc(name, ce);
+		server.setCommandPermission(name, "estools." + perm);
+	}
+
+	public void sc(String name, String perm, EsToolsCommand ce, int minVer) {
+		if (minecraftVersion.getMinor() >= minVer) sc(name, perm, ce);
+		else sc(name, perm, new WrongVersion(minVer));
+	}
+	
+	public void sc(String name, String perm, EsToolsCommand ce, EsToolsTabCompleter tc) {
+		sc(name, perm, ce);
+		if (tabCompleteEnabled) {
+			server.setTabCompleter(name, tc);
+		}
 	}
 
 	// Overriding to create more predictable behaviour between versions
-	@Override
-	public FileConfiguration getConfig() {
+	public EsToolsConfig getConfig() {
 		return config;
 	}
 
-	// Overriding because method doesn't exist in very early versions
-    public void saveResource(String res, boolean replace) {
-		InputStream resource = getResource(res);
-		File file = new File(getDataFolder(), res);
-
-		if (file.exists()) {
-			Bukkit.getLogger().info("Tried to copy resource but it already exists: " + res);
-			return;
-		}
-
-		try {
-			Files.createDirectories(file.getParentFile().toPath());
-            asrt(resource != null);
-            Files.copy(resource, file.toPath());
-			Bukkit.getLogger().info("Copied " + res + " to " + file.toPath());
-		} catch (IOException e) {
-			e.printStackTrace();
-			Bukkit.getLogger().severe("Failed to save resource: " + e);
-		}
-	}
-
-	public static void asrt(boolean condition) {
+	@SuppressWarnings("unused")
+    public static void asrt(boolean condition) {
 		asrt(condition, "Condition is false");
 	}
 
@@ -285,12 +251,18 @@ public class Main extends JavaPlugin {
 	public static void asrt(boolean condition, String msg) {
 		assert condition : msg;
 
-		if (condition) {
+		// Asserts aren't enforced most of the time
+        //noinspection ConstantValue
+        if (condition) {
             return;
 		}
 
-		Bukkit.getLogger().severe("Assertion failed: " + msg);
+		logger.severe("Assertion failed: " + msg);
 		throw new AssertionError(msg);
+	}
+
+	public void saveConfig() {
+		ConfigManager.save("config.yml", config);
 	}
 }
 

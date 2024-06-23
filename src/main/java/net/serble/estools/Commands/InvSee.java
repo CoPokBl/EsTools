@@ -1,15 +1,14 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.PlayerCommand;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 public class InvSee extends PlayerCommand {
 	private static final String usage = genUsage("/invsee <player>");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (isNotPlayer(sender)) {
             return false;
         }
@@ -19,13 +18,13 @@ public class InvSee extends PlayerCommand {
 			return false;
 		}
 		
-		Player target = getPlayer(sender, args[0]);
+		EsPlayer target = getPlayer(sender, args[0]);
 		
 		if (target == null) {
             return false;
         }
 
-		((Player) sender).openInventory(target.getInventory());
+		((EsPlayer) sender).openInventory(target.getInventory());
         send(sender, "&aOpened &6%s's &aInventory", target.getName());
 		return true;
 	}

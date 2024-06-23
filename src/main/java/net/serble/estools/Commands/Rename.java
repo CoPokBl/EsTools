@@ -1,33 +1,40 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.MetaHandler;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import net.serble.estools.EsToolsCommand;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 public class Rename extends EsToolsCommand {
 	public static final String usage = genUsage("/rename [name]");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (isNotPlayer(sender)) {
             return false;
         }
 		
-		Player p = (Player)sender;
-		ItemStack is = getMainHand(p);
+		EsPlayer p = (EsPlayer) sender;
+		EsItemStack is = p.getMainHand();
+
+		EsItemMeta meta = is.getItemMeta();
+
+		if (meta == null) {
+			send(sender, "&cYou must be holding an item");
+			return false;
+		}
 
 		if (args.length == 0) {
-			MetaHandler.renameItem(is, "");
+			meta.setDisplayName("");
+			is.setItemMeta(meta);
 			send(sender, "&aRemoved item name");
 			return false;
 		}
 
 		String name = translate("&r" + String.join(" ", args));
-		MetaHandler.renameItem(is, name);
+		meta.setDisplayName(name);
+		is.setItemMeta(meta);
 		send(sender, "&aItem renamed to &6%s", name);
 		return true;
 	}

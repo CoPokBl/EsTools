@@ -1,23 +1,28 @@
 package net.serble.estools.Commands;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
+import net.serble.estools.ServerApi.ServerPlatform;
 import net.serble.estools.Tester;
 import net.serble.estools.Updater;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import net.serble.estools.EsToolsCommand;
-import net.serble.estools.Commands.Give.Give;
 import net.serble.estools.Main;
 
 public class EsTools extends EsToolsCommand {
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	@SuppressWarnings({"resource", "ResultOfMethodCallIgnored"})
+    @Override
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (args.length == 0) {
 			if (checkPerms(sender, "version")) {
 				return false;
@@ -34,15 +39,7 @@ public class EsTools extends EsToolsCommand {
 			
 			send(sender, "&aReloading...");
 			
-			Give.enable();
-			
-			for (Player p : getOnlinePlayers()) {
-				CChest.savePlayer(p);
-			}
-			
-			for (Player p : getOnlinePlayers()) {
-				CChest.loadPlayer(p);
-			}
+			Main.plugin.enable();
 			
 			send(sender, "&aReloaded!");
 		} else if (args[0].equalsIgnoreCase("reset")) {  // Resets all configuration files
@@ -51,14 +48,18 @@ public class EsTools extends EsToolsCommand {
             }
 			
 			if (args.length > 1 && args[1].equalsIgnoreCase("confirm")) {
-				File f = new File(Main.plugin.getDataFolder(), "give.yml");
-				if (!f.delete()) {
+				File f = Main.server.getDataFolder();
+				try {
+					Files.walk(Paths.get(f.getPath()))
+							.sorted(Comparator.reverseOrder())
+							.map(Path::toFile)
+							.forEach(File::delete);
+				} catch (IOException e) {
 					send(sender, "&cFailed to delete data.");
 					return false;
 				}
-				
-				Give.enable();
-				send(sender, "&cAll data deleted!");
+
+				send(sender, "&cAll data has been deleted, &6/estools reload &cto apply changes!");
 				return true;
 			}
 
@@ -68,12 +69,17 @@ public class EsTools extends EsToolsCommand {
 				return false;
 			}
 
-			if (!(sender instanceof Player)) {
+			if (!(sender instanceof EsPlayer)) {
 				send(sender, "&cYou must be a player to use this command.");
 				return false;
 			}
 
-			Player p = (Player) sender;
+			if (Main.platform == ServerPlatform.Folia) {  // TODO: Fix
+				send(sender, "&cDue to scheduler limitations, /estools test is not currently supported on Folia");
+				return false;
+			}
+
+			EsPlayer p = (EsPlayer) sender;
 			Tester tester = Tester.runningTests.get(p.getUniqueId());
 
 			if (tester != null) {
@@ -104,7 +110,7 @@ public class EsTools extends EsToolsCommand {
 				return false;
 			}
 
-			send(sender, "&aDownloading version: &6" + Main.newVersion.getString());
+			send(sender, "&aDownloading version: &6" + Main.newVersion);
 			Updater.downloadNewUpdate(sender);
 		} else if (args[0].equalsIgnoreCase("forceupdate")) {
 			send(sender, "&aForce updating &c(This might downgrade your plugin)");
@@ -117,7 +123,7 @@ public class EsTools extends EsToolsCommand {
 	}
 
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+	public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
 		List<String> tab = new ArrayList<>();
 		
 		if (args.length == 1) {
@@ -134,12 +140,12 @@ public class EsTools extends EsToolsCommand {
 		return tab;
 	}
 
-	private void sendVersion(CommandSender sender) {
+	private void sendVersion(EsCommandSender sender) {
 		if (Main.newVersion == null) {
-			send(sender, "&aEsTools v" + Main.plugin.getDescription().getVersion());
+			send(sender, "&aEsTools v" + Main.server.getPluginVersion().toString());
 		} else {
-			send(sender, "&aEsTools &cv" + Main.plugin.getDescription().getVersion() + ".&c An update is available, use " +
-					"&6/estools update&c to update to &6v" + Main.newVersion.getString());
+			send(sender, "&aEsTools &cv" + Main.server.getPluginVersion().toString() + ".&c An update is available, use " +
+					"&6/estools update&c to update to &6v" + Main.newVersion.toString());
 		}
 	}
 

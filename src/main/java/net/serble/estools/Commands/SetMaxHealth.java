@@ -1,15 +1,14 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EntityCommand;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.LivingEntity;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 
 public class SetMaxHealth extends EntityCommand {
 	private static final String usage = genUsage("/setmaxhealth <amount> [entity]");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (args.length == 0) {
 			send(sender, usage);
 		}
@@ -22,7 +21,7 @@ public class SetMaxHealth extends EntityCommand {
 			return false;
 		}
 
-		LivingEntity entity;
+		EsLivingEntity entity;
 		if (args.length > 1) {
 			entity = getEntity(sender, args[1]);
 			
@@ -30,18 +29,18 @@ public class SetMaxHealth extends EntityCommand {
                 return false;
             }
 			
-			send(sender, "&aSet max health for &6%s&a to &6%s", getEntityName(entity), String.valueOf(health));
+			send(sender, "&aSet max health for &6%s&a to &6%s", entity.getName(), String.valueOf(health));
 		} else {
 			if (isNotEntity(sender)) {
                 return false;
             }
 			
-			entity = (LivingEntity) sender;
+			entity = (EsLivingEntity) sender;
 			
 			send(sender, "&aSet max health to &6%s", String.valueOf(health));
 		}
 
-		setMaxHealth(entity, health);
+		entity.setMaxHealth(health);
 		return true;
 	}
 

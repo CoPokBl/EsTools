@@ -2,24 +2,16 @@ package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
-import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
-import org.bukkit.block.sign.SignSide;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import net.serble.estools.ServerApi.Interfaces.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class EditSign extends EsToolsCommand {
 	private static final String usage = genUsage("/editsign <line number> [line]");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (isNotPlayer(sender)) {
             return false;
         }
@@ -29,16 +21,16 @@ public class EditSign extends EsToolsCommand {
 			return false;
 		}
 		
-		Player p = (Player) sender;
+		EsPlayer p = (EsPlayer) sender;
 		
-		Block signB = getTargetBlock(p);
+		EsBlock signB = p.getTargetBlock();
 
-		if (signB == null || !(signB.getState() instanceof Sign)) {
+		if (!(signB instanceof EsSign)) {
 			send(sender, "&cYou must be looking at a sign!");
 			return false;
 		}
 		
-		Sign sign = (Sign) signB.getState();
+		EsSign sign = (EsSign) signB;
 
 		switch (args[0].toLowerCase()) {
 			case "glow":
@@ -79,11 +71,10 @@ public class EditSign extends EsToolsCommand {
 
 		String lineText = translate(lineTextBuilder.toString()).trim();
 
-		if (Main.majorVersion >= 20) {
-			SignSide side = sign.getTargetSide(p);
+		if (Main.minecraftVersion.getMinor() >= 20) {
+			EsSignSide side = sign.getTargetSide(p);
 			side.setLine(lineNum - 1, lineText);
 		} else {
-            //noinspection deprecation
             sign.setLine(lineNum - 1, lineText);
 		}
 		sign.update();
@@ -98,7 +89,7 @@ public class EditSign extends EsToolsCommand {
 	}
 
 	@Override
-	public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+	public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
 		List<String> tab = new ArrayList<>();
 
         if (args.length == 1) {
@@ -107,7 +98,7 @@ public class EditSign extends EsToolsCommand {
             tab.add("3");
             tab.add("4");
 
-			if (Main.majorVersion >= 17) { // only add glow autocomplete if it exists
+			if (Main.minecraftVersion.getMinor() >= 17) { // only add glow autocomplete if it exists
 				tab.add("glow");
 				tab.add("unglow");
 			}
@@ -116,27 +107,9 @@ public class EditSign extends EsToolsCommand {
 		return tab;
 	}
 
-	public Block getTargetBlock(Player p) {
-		if (Main.majorVersion > 12) {
-			return p.getTargetBlockExact(5);
-		} else if (Main.majorVersion > 7) {
-			return p.getTargetBlock(null, 5);
-		} else {
-			try {
-                //noinspection JavaReflectionMemberAccess
-                return (Block) LivingEntity.class.getMethod("getTargetBlock", HashSet.class, int.class).invoke(p, null, 5);
-			}
-			catch (Exception e) {
-				Bukkit.getLogger().severe(e.toString());
-				return null;
-			}
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-    public boolean setGlow(Sign sign, Player p, boolean glow) {
-		if (Main.majorVersion >= 20) {
-			SignSide side = sign.getTargetSide(p);
+    public boolean setGlow(EsSign sign, EsPlayer p, boolean glow) {
+		if (Main.minecraftVersion.getMinor() >= 20) {
+			EsSignSide side = sign.getTargetSide(p);
 
 			if (side.isGlowingText() == glow) {
 				if (glow) {
@@ -150,7 +123,7 @@ public class EditSign extends EsToolsCommand {
 
 			side.setGlowingText(glow);
 		}
-		else if (Main.majorVersion >= 17) {
+		else if (Main.minecraftVersion.getMinor() >= 17) {
 			if (sign.isGlowingText() == glow) {
 				if (glow) {
 					send(p, "&cThis sign is already &6glowing!");

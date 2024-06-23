@@ -1,11 +1,10 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
-import net.serble.estools.MetaHandler;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +16,7 @@ public class Lore extends EsToolsCommand {
             "/lore <remove> <line number>");
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean execute(EsCommandSender sender, String[] args) {
         if (isNotPlayer(sender)) {
             return false;
         }
@@ -27,15 +26,17 @@ public class Lore extends EsToolsCommand {
             return false;
         }
 
-        Player p = (Player)sender;
-        ItemStack is = getMainHand(p);
+        EsPlayer p = (EsPlayer)sender;
+        EsItemStack is = p.getMainHand();
 
         if (is.getItemMeta() == null) {
             send(sender, "&cThis item cannot have lore!");
             return false;
         }
 
-        List<String> lore = MetaHandler.getLore(is);
+        EsItemMeta meta = is.getItemMeta();
+
+        List<String> lore = meta.getLore();
 
         switch (args[0].toLowerCase()) {
             case "add": {
@@ -82,11 +83,12 @@ public class Lore extends EsToolsCommand {
                 return false;
         }
 
-        MetaHandler.setLore(is, lore);
+        meta.setLore(lore);
+        is.setItemMeta(meta);
         return true;
     }
 
-    private int getLine(CommandSender sender, String num, int limit) {
+    private int getLine(EsCommandSender sender, String num, int limit) {
         try {
             int line = Integer.parseInt(num) - 1;
 
@@ -108,7 +110,7 @@ public class Lore extends EsToolsCommand {
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String[] args, String lArg) {
+    public List<String> tabComplete(EsCommandSender sender, String[] args, String lArg) {
         List<String> tab = new ArrayList<>();
 
         if (args.length == 1) {
@@ -117,13 +119,13 @@ public class Lore extends EsToolsCommand {
             tab.add("insert");
             tab.add("remove");
         } else if (args.length == 2 && equalsOr(args[0].toLowerCase(), "set", "insert", "remove")) {
-            if (!(sender instanceof Player)) {
+            if (!(sender instanceof EsPlayer)) {
                 tab.add("1");
                 return tab;
             }
 
-            ItemStack is = getMainHand((Player)sender);
-            List<String> lore = MetaHandler.getLore(is);
+            EsItemStack is = ((EsPlayer)sender).getMainHand();
+            List<String> lore = is.getItemMeta().getLore();
             for (int i = 1; i <= lore.size(); i++) {
                 tab.add(String.valueOf(i));
             }

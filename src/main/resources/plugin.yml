@@ -1,10 +1,11 @@
-main: net.serble.estools.Main
+main: net.serble.estools.Entrypoints.EsToolsBukkit
 name: EsTools
 description: Simple highly compatible general purpose plugin.
 version: '${project.version}'
-softdepend: [Vault]
+softdepend: []
 authors: [Calcilator, CoPokBl]
 api-version: 1.13
+folia-supported: true
 
 commands:
   estools:

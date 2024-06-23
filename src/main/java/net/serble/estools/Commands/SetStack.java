@@ -1,16 +1,15 @@
 package net.serble.estools.Commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 
 import net.serble.estools.EsToolsCommand;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 public class SetStack extends EsToolsCommand {
 	private static final String usage = genUsage("/setstack <amount>");
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (isNotPlayer(sender)) {
             return false;
         }
@@ -28,7 +27,7 @@ public class SetStack extends EsToolsCommand {
 			return false;
 		}
 
-		getMainHand(((Player)sender)).setAmount(amount);
+		((EsPlayer)sender).getMainHand().setAmount(amount);
 		send(sender, "&aSet stack size to &6%d", amount);
 		return true;
 	}

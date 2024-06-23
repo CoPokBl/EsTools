@@ -1,49 +1,38 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
-import net.serble.estools.ConfigManager;
+import net.serble.estools.Config.ConfigManager;
 import net.serble.estools.Main;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import net.serble.estools.ServerApi.*;
+import net.serble.estools.ServerApi.Events.*;
+import net.serble.estools.ServerApi.Interfaces.*;
 
 import java.util.*;
 
-public class CChest extends EsToolsCommand implements Listener {
+public class CChest extends EsToolsCommand implements EsEventListener {
 
-	public static HashMap<UUID, Inventory> cChests = new HashMap<>();
+	public static HashMap<UUID, EsInventory> cChests = new HashMap<>();
 
 	@Override
 	public void onEnable() {
-		if (Main.majorVersion > 4) {
-			Bukkit.getServer().getPluginManager().registerEvents(this, Main.plugin);
+		if (Main.minecraftVersion.getMinor() > 4) {
+			Main.registerEvents(this);
 		}
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean execute(EsCommandSender sender, String[] args) {
 		if (isNotPlayer(sender)) {
             return false;
         }
 
-		if (Main.majorVersion < 7) {
+		if (Main.minecraftVersion.getMinor() < 7) {
 			send(sender, "&cWarning: CChest doesn't work to full capacity");
 		}
 
-		Player p = (Player)sender;
+		EsPlayer p = (EsPlayer) sender;
 		
-		if (p.getGameMode().equals(GameMode.CREATIVE)) {
+		if (p.getGameMode().equals(EsGameMode.Creative)) {
 			if (checkPerms(sender, "cchest.creative")) {
                 return false;
             }
@@ -54,14 +43,14 @@ public class CChest extends EsToolsCommand implements Listener {
 		}
 
 		UUID uid = p.getUniqueId();
-		Inventory inv = cChests.get(uid);
+		EsInventory inv = cChests.get(uid);
 		
 		if (inv == null) {
-			Inventory loaded = loadPlayer(p);
+			EsInventory loaded = loadPlayer(p);
 			if (loaded != null) {
 				inv = loaded;
 			} else {
-				inv = Bukkit.createInventory(null, 54, translate("&1Creative Chest"));
+				inv = Main.server.createInventory(null, 54, translate("&1Creative Chest"));
 			}
 		}
 		
@@ -71,28 +60,27 @@ public class CChest extends EsToolsCommand implements Listener {
 		cChests.put(uid, inv);
 		return true;
 	}
-	
-	@EventHandler
-	public void inventoryClick(final InventoryClickEvent e) {
-		UUID uid = e.getWhoClicked().getUniqueId();
-		ItemStack currentItem = e.getCurrentItem();
-		
+
+	private void onInventoryClick(final EsInventoryClickEvent e) {
+		UUID uid = e.getPlayer().getUniqueId();
+		EsItemStack currentItem = e.getCurrentItem();
+
 		// Check if inventory is cChest
-        if (!cChests.containsKey(uid) || !cChests.get(uid).equals(e.getInventory()) || e.getClickedInventory() == null) {
+        if (!cChests.containsKey(uid) || !e.getInventory().isEqualTo(cChests.get(uid)) || e.getClickedInventory() == null) {
             return;
         }
 
-        if (e.getAction().equals(InventoryAction.COLLECT_TO_CURSOR)) {
+        if (e.getAction().equals(EsInventoryAction.CollectToCursor)) {
             e.setCancelled(true);
 
-            ItemStack cursor = e.getCursor();
+            EsItemStack cursor = e.getCursor();
 			if (cursor == null) {
 				return;
 			}
 
-			Inventory pInv = e.getWhoClicked().getInventory();
-            for (Map.Entry<Integer, ? extends ItemStack> i : pInv.all(cursor.getType()).entrySet()) {
-				ItemStack item = i.getValue();
+			EsInventory pInv = e.getPlayer().getInventory();
+            for (Map.Entry<Integer, EsItemStack> i : pInv.all(cursor.getType()).entrySet()) {
+				EsItemStack item = i.getValue();
 
 				if (item == null) {
 					continue;
@@ -113,9 +101,9 @@ public class CChest extends EsToolsCommand implements Listener {
         }
 
 		// If player inventory
-        if (!e.getClickedInventory().equals(cChests.get(uid))) {
+        if (!e.getClickedInventory().isEqualTo(cChests.get(uid))) {
 			// Shift click into cChest
-			if (equalsOr(e.getClick(), ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT) && currentItem != null) {
+			if (equalsOr(e.getClick(), EsClickType.ShiftLeft, EsClickType.ShiftRight) && currentItem != null) {
 				e.setCancelled(true);
 
 				e.getInventory().addItem(currentItem.clone());
@@ -125,23 +113,23 @@ public class CChest extends EsToolsCommand implements Listener {
         }
 
 		// Right click in cChest (clear item)
-		if (e.getClick().equals(ClickType.RIGHT) && currentItem != null) {
+		if (e.getClick().equals(EsClickType.Right) && currentItem != null) {
 			e.setCancelled(true);
 			e.getClickedInventory().setItem(e.getSlot(), null);
 			return;
 		}
 
 		// Add to chest
-		if (equalsOr(e.getAction(), InventoryAction.PLACE_ALL, InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME)) {
+		if (equalsOr(e.getAction(), EsInventoryAction.PlaceAll, EsInventoryAction.PlaceOne, EsInventoryAction.PlaceSome)) {
 			e.setCancelled(true);
-			ItemStack item = e.getCursor();
+			EsItemStack item = e.getCursor();
 			if (item == null) {
 				return;
 			}
 
-			ItemStack finalItem = item.clone();
+			EsItemStack finalItem = item.clone();
 
-			if (equalsOr(e.getAction(), InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME)) {
+			if (equalsOr(e.getAction(), EsInventoryAction.PlaceOne, EsInventoryAction.PlaceSome)) {
 				finalItem.setAmount(1);
 			}
 
@@ -150,83 +138,116 @@ public class CChest extends EsToolsCommand implements Listener {
 		}
 
 		// Remove from cChest
-		if (equalsOr(e.getClick(), ClickType.LEFT, ClickType.DROP, ClickType.CONTROL_DROP,
-				ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT) && currentItem != null) {
-			ItemStack item = currentItem.clone();
+		if (equalsOr(e.getClick(), EsClickType.Left, EsClickType.Drop, EsClickType.ControlDrop,
+				EsClickType.ShiftLeft, EsClickType.ShiftRight) && currentItem != null) {
+			EsItemStack item = currentItem.clone();
 			setItemTask(e.getInventory(), e.getSlot(), item);
 		}
     }
 
-	private static void setItemTask(Inventory inv, int slot, ItemStack item) {
-		Bukkit.getScheduler().runTask(Main.plugin, () -> inv.setItem(slot, item));
+	private static void setItemTask(EsInventory inv, int slot, EsItemStack item) {
+		Main.server.runTask(() -> inv.setItem(slot, item));
 	}
 	
 	// Cancel drag if inside cChest
-	@EventHandler
-    public void onInventoryDrag(final InventoryDragEvent e) {
-		Inventory inv = cChests.get(e.getWhoClicked().getUniqueId());
-        if (!e.getInventory().equals(inv)) {
+    private void onInventoryDrag(final EsInventoryDragEvent e) {
+		EsInventory inv = cChests.get(e.getPlayer().getUniqueId());
+        if (!e.getInventory().isEqualTo(inv)) {
             return;
         }
 
         // Check if any of the slots dragged are in the cChest
-        for (int slot : e.getRawSlots()) {
-            if (inv.equals(e.getView().getInventory(slot))) {
+        for (int slot : e.getChangedSlots()) {
+            if (e.getView().getInventory(slot).isEqualTo(inv)) {
                 e.setCancelled(true);
                 return;
             }
         }
     }
 	
-	public static Inventory loadPlayer(Player p) {
+	public static EsInventory loadPlayer(EsPlayer p) {
 		UUID uid = p.getUniqueId();
 		
-		FileConfiguration f = ConfigManager.load("cchests/" + uid + ".yml");
+		@SuppressWarnings("unchecked")
+		List<EsSerialisableItemStack> f = (List<EsSerialisableItemStack>) ConfigManager.load(
+				"cchests/" + uid + ".yml",
+				ArrayList.class,
+				EsSerialisableItemStack.class);
+        EsItemStack[] content = new EsItemStack[f.size()];
+		for (int i = 0; i < content.length; i++) {
+			if (f.get(i) == null) {
+				content[i] = null;
+				continue;
+			}
+			content[i] = f.get(i).toItemStack();
+		}
 
-        if (!f.contains("items")) {
-            return null;
-        }
-
-        @SuppressWarnings("unchecked")
-        ItemStack[] content = ((ArrayList<ItemStack>) Objects.requireNonNull(f.get("items"))).toArray(new ItemStack[0]);
-
-        Inventory inv = Bukkit.createInventory(null, 54, translate("&1Creative Chest"));
+        EsInventory inv = Main.server.createInventory(null, 54, translate("&1Creative Chest"));
         inv.setContents(content);
         cChests.put(uid, inv);
 
         return inv;
     }
-	
-	public static void savePlayer(Player p) {
+
+	public static void savePlayer(EsPlayer p) {
 		UUID uid = p.getUniqueId();
 		
 		if (!cChests.containsKey(uid)) {
 			return;
 		}
-		
-		FileConfiguration f = new YamlConfiguration();
-		f.set("items", cChests.get(uid).getContents());
-		ConfigManager.save("cchests/" + uid + ".yml", f);
+
+		EsInventory inv = cChests.get(uid);
+		EsSerialisableItemStack[] contents = new EsSerialisableItemStack[inv.getContents().length];
+		for (int i = 0; i < inv.getContents().length; i++) {
+			EsItemStack stack = inv.getContents()[i];
+			contents[i] = stack == null ? null : EsSerialisableItemStack.generate(stack);
+		}
+
+		ConfigManager.save("cchests/" + uid + ".yml", contents);
 	}
 
-	@EventHandler
-	public void onClose(InventoryCloseEvent e) {
+	private void onClose(EsInventoryCloseEvent e) {
 		UUID uid = e.getPlayer().getUniqueId();
 
-		if (e.getInventory().equals(cChests.get(uid))) {
-			savePlayer((Player)e.getPlayer());
+		if (e.getInventory().isEqualTo(cChests.get(uid))) {
+			savePlayer(e.getPlayer());
 		}
 	}
 
-	@EventHandler
-	public void onQuit(PlayerQuitEvent e) {
+	private void onQuit(EsPlayerQuitEvent e) {
 		savePlayer(e.getPlayer());
 		cChests.remove(e.getPlayer().getUniqueId());
 	}
-	
-	@EventHandler
-	public void onKick(PlayerKickEvent e) {
+
+	private void onKick(EsPlayerKickEvent e) {
 		savePlayer(e.getPlayer());
 		cChests.remove(e.getPlayer().getUniqueId());
+	}
+
+	@Override
+	public void executeEvent(EsEvent event) {
+		if (event instanceof EsPlayerQuitEvent) {
+			onQuit((EsPlayerQuitEvent) event);
+			return;
+		}
+
+		if (event instanceof EsPlayerKickEvent) {
+			onKick((EsPlayerKickEvent) event);
+			return;
+		}
+
+		if (event instanceof EsInventoryClickEvent) {
+			onInventoryClick((EsInventoryClickEvent) event);
+			return;
+		}
+
+		if (event instanceof EsInventoryCloseEvent) {
+			onClose((EsInventoryCloseEvent) event);
+			return;
+		}
+
+		if (event instanceof EsInventoryDragEvent) {
+			onInventoryDrag((EsInventoryDragEvent) event);
+		}
 	}
 }

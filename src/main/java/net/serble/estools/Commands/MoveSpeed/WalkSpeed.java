@@ -1,9 +1,8 @@
 package net.serble.estools.Commands.MoveSpeed;
 
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import net.serble.estools.Tuple;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -16,14 +15,14 @@ public class WalkSpeed extends MoveSpeed {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Tuple<List<Player>, Float> result = getTargets(sender, args);
+    public boolean execute(EsCommandSender sender, String[] args) {
+        Tuple<List<EsPlayer>, Float> result = getTargets(sender, args);
 
         if (result == null) {
             return false;
         }
 
-        for (Player p : result.a()) {
+        for (EsPlayer p : result.a()) {
             p.setWalkSpeed(result.b());
         }
 
