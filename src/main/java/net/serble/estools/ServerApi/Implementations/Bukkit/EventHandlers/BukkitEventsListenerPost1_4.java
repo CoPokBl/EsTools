@@ -14,7 +14,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 
 import java.util.Set;
 
-public class BukkitEventsListenerPost1_4 extends BukkitEventsListener {
+public class BukkitEventsListenerPost1_4 extends BukkitEventsListenerPost1_1 {
 
     @EventHandler
     public void onDrag(InventoryDragEvent e) {

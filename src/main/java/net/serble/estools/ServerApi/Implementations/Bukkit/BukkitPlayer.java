@@ -177,7 +177,18 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
 
     @Override
     public void sendMessage(String... args) {
-        bukkitPlayer.sendMessage(args);
+        if (Main.minecraftVersion.isAtLeast(1, 2, 0)) {
+            bukkitPlayer.sendMessage(args);
+            return;
+        }
+
+        // The sendMessage(String[]) method doesn't exist
+        // So combine the args into one String
+        StringBuilder sb = new StringBuilder();
+        for (String s : args) {
+            sb.append(s);
+        }
+        bukkitPlayer.sendMessage(sb.toString());
     }
 
     @Override

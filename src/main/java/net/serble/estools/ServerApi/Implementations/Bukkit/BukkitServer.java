@@ -4,6 +4,7 @@ import net.serble.estools.*;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.*;
 import net.serble.estools.ServerApi.Implementations.Bukkit.EventHandlers.BukkitEventsListener;
+import net.serble.estools.ServerApi.Implementations.Bukkit.EventHandlers.BukkitEventsListenerPost1_1;
 import net.serble.estools.ServerApi.Implementations.Bukkit.EventHandlers.BukkitEventsListenerPost1_4;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.*;
 import net.serble.estools.ServerApi.Interfaces.*;
@@ -11,7 +12,6 @@ import org.bukkit.*;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.Potion;
@@ -29,8 +29,12 @@ public class BukkitServer implements EsServer {
 
     public BukkitServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
-        if (getVersion().isAtLeast(1, 5, 0)) {
+
+        SemanticVersion mcVer = getVersion();
+        if (mcVer.isAtLeast(1, 5, 0)) {
             listener = new BukkitEventsListenerPost1_4();
+        } else if (mcVer.isAtLeast(1, 2, 0)) {
+            listener = new BukkitEventsListenerPost1_1();
         } else {
             listener = new BukkitEventsListener();
         }
@@ -206,8 +210,13 @@ public class BukkitServer implements EsServer {
 
     @Override
     public EsInventory createInventory(EsPlayer owner, int size, String title) {
-        InventoryHolder holder = owner == null ? null : ((BukkitPlayer) owner).getBukkitPlayer();
-        return new BukkitInventory(Bukkit.createInventory(holder, size, title));
+        if (!Main.minecraftVersion.isAtLeast(1, 2, 0)) {
+            // Creating inventories was not a feature in this version
+            // InventoryHolder also didn't exist, hence why we must use
+            // a helper class
+            throw new UnsupportedOperationException("Creating inventories is not supported in this version");
+        }
+        return BukkitInventoryHelper.createInventory(owner, size, title);
     }
 
     @Override
