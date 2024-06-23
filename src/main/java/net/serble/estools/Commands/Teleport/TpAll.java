@@ -20,14 +20,15 @@ public class TpAll extends EntityCommand {
             }
         } else {
             p = getEntity(sender, args[0]);
+            if (p == null) {
+                return false;
+            }
         }
 
         for (EsLivingEntity t : Main.server.getOnlinePlayers()) {
-            assert p != null;
             t.teleport(p.getLocation());
         }
 
-        assert p != null;
         send(sender, "&aTeleported all players to &6%s", p.getName());
         return true;
     }
