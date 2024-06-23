@@ -7,10 +7,8 @@ import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.serble.estools.*;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.*;
-import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPotion;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitTabCompleteGenerator;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEffectHelper;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
 import org.bukkit.command.PluginCommand;
@@ -20,8 +18,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.Potion;
-import org.bukkit.potion.PotionType;
 
 import java.io.File;
 import java.util.*;
@@ -151,55 +147,30 @@ public class FoliaServer implements EsServer {
         return new FoliaItemStack(material, amount);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public EsPotion createPotion(EsPotType potType, EsPotionEffect effect, int amount) {
-        if (Main.minecraftVersion.getMinor() >= 9) {
-            String type = potType == EsPotType.drink ?
-                    "POTION" :
-                    potType.toString().toUpperCase() + "_POTION";
-            ItemStack pot = new ItemStack(Material.valueOf(type), amount);
+        String type = potType == EsPotType.drink ?
+                "POTION" :
+                potType.toString().toUpperCase() + "_POTION";
+        ItemStack pot = new ItemStack(Material.valueOf(type), amount);
 
-            PotionMeta meta = (PotionMeta) pot.getItemMeta();
-            assert meta != null;
-            meta.addCustomEffect(BukkitHelper.toBukkitPotionEffect(effect), true);
-            pot.setItemMeta(meta);
+        PotionMeta meta = (PotionMeta) pot.getItemMeta();
+        assert meta != null;
+        meta.addCustomEffect(FoliaHelper.toBukkitPotionEffect(effect), true);
+        pot.setItemMeta(meta);
 
-            return new BukkitPotion(pot);
-        } else if (Main.minecraftVersion.getMinor() >= 4) {
-            PotionType type = BukkitEffectHelper.getPotionFromEffectType(effect.getType());
-            if (type == null) { // This can fail if the effect doesn't have a potion for it
-                return null;
-            }
-
-            Potion potion = new Potion(type, effect.getAmp());
-            potion.setSplash(potType == EsPotType.splash);
-
-            return new BukkitPotion(potion.toItemStack(amount));
-        } else {  // This isn't possible to get to because this class won't load on 1.3 and below
-            return null;
-        }
+        return new FoliaPotion(pot);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public EsPotion createPotion(EsPotType potType) {
-        if (Main.minecraftVersion.getMinor() >= 9) {
-            String type = potType == EsPotType.drink ?
-                    "POTION" :
-                    potType.toString().toUpperCase() + "_POTION";
+        String type = potType == EsPotType.drink ?
+                "POTION" :
+                potType.toString().toUpperCase() + "_POTION";
 
-            ItemStack pot = new ItemStack(Material.valueOf(type), 1);
+        ItemStack pot = new ItemStack(Material.valueOf(type), 1);
 
-            return new BukkitPotion(pot);
-        } else if (Main.minecraftVersion.getMinor() >= 4) {
-            Potion potion = Potion.fromItemStack(new ItemStack(Material.valueOf("POTION")));
-            potion.setSplash(potType == EsPotType.splash);
-
-            return new BukkitPotion(potion.toItemStack(1));
-        } else {  // This isn't possible to get to because this class won't load on 1.3 and below
-            return null;
-        }
+        return new FoliaPotion(pot);
     }
 
     @Override
