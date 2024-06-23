@@ -1,7 +1,12 @@
 package net.serble.estools.Commands;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
@@ -11,12 +16,12 @@ import net.serble.estools.Tester;
 import net.serble.estools.Updater;
 
 import net.serble.estools.EsToolsCommand;
-import net.serble.estools.Commands.Give.Give;
 import net.serble.estools.Main;
 
 public class EsTools extends EsToolsCommand {
 
-	@Override
+	@SuppressWarnings({"resource", "ResultOfMethodCallIgnored"})
+    @Override
 	public boolean execute(EsCommandSender sender, String[] args) {
 		if (args.length == 0) {
 			if (checkPerms(sender, "version")) {
@@ -34,15 +39,7 @@ public class EsTools extends EsToolsCommand {
 			
 			send(sender, "&aReloading...");
 			
-			Give.enable();
-			
-			for (EsPlayer p : Main.server.getOnlinePlayers()) {
-				CChest.savePlayer(p);
-			}
-			
-			for (EsPlayer p : Main.server.getOnlinePlayers()) {
-				CChest.loadPlayer(p);
-			}
+			Main.plugin.enable();
 			
 			send(sender, "&aReloaded!");
 		} else if (args[0].equalsIgnoreCase("reset")) {  // Resets all configuration files
@@ -51,14 +48,18 @@ public class EsTools extends EsToolsCommand {
             }
 			
 			if (args.length > 1 && args[1].equalsIgnoreCase("confirm")) {
-				File f = new File(Main.server.getDataFolder(), "give.yml");
-				if (!f.delete()) {
+				File f = Main.server.getDataFolder();
+				try {
+					Files.walk(Paths.get(f.getPath()))
+							.sorted(Comparator.reverseOrder())
+							.map(Path::toFile)
+							.forEach(File::delete);
+				} catch (IOException e) {
 					send(sender, "&cFailed to delete data.");
 					return false;
 				}
-				
-				Give.enable();
-				send(sender, "&cAll data deleted!");
+
+				send(sender, "&cAll data has been deleted, &6/estools reload &cto apply changes!");
 				return true;
 			}
 
