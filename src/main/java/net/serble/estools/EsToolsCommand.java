@@ -4,7 +4,8 @@ import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class EsToolsCommand implements EsToolsTabCompleter {
 

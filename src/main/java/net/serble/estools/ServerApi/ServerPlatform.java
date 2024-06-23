@@ -6,7 +6,12 @@ import net.serble.estools.ServerApi.Interfaces.EsServer;
 
 public enum ServerPlatform {
     Bukkit(true),  // Includes all derivatives
-    Folia(true);
+    Folia(true),
+
+    /**
+     * This is a special platform where the plugin expects the platform to set Main.server themselves.
+     */
+    Injected(false);
 
     final boolean hasMetrics;
 

@@ -1,12 +1,14 @@
 package net.serble.estools.Commands;
 
+import net.serble.estools.Main;
+import net.serble.estools.PlayerCommand;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsItemStack;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
+import net.serble.estools.ServerApi.Interfaces.EsPlayerInventory;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import net.serble.estools.Main;
-import net.serble.estools.ServerApi.Interfaces.*;
-
-import net.serble.estools.PlayerCommand;
 
 public class Fix extends PlayerCommand {
 	private static final String usage = genUsage("/fix [hand/offhand/helmet/chestplate/leggings/boots/all] [player]");

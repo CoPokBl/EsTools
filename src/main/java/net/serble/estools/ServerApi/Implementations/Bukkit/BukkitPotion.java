@@ -7,7 +7,7 @@ import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEffectH
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsPotion;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.PotionMeta;  // TODO: pre 1.9 errors because no PotionMeta and pre 1.4 errors
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;

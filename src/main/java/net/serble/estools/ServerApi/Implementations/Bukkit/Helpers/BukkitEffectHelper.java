@@ -6,7 +6,9 @@ import org.bukkit.Registry;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class BukkitEffectHelper {
     private static final Map<EsPotionEffectType, PotionType> OLD_POTIONS = new HashMap<>();

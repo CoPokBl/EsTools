@@ -1,8 +1,7 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
-
 import net.serble.estools.EsToolsCommand;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 public class SetStack extends EsToolsCommand {

@@ -1,5 +1,13 @@
 package net.serble.estools.Commands;
 
+import net.serble.estools.EsToolsCommand;
+import net.serble.estools.Main;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsPlayer;
+import net.serble.estools.ServerApi.ServerPlatform;
+import net.serble.estools.Tester;
+import net.serble.estools.Updater;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,15 +16,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
-import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
-import net.serble.estools.ServerApi.Interfaces.EsPlayer;
-import net.serble.estools.ServerApi.ServerPlatform;
-import net.serble.estools.Tester;
-import net.serble.estools.Updater;
-
-import net.serble.estools.EsToolsCommand;
-import net.serble.estools.Main;
 
 public class EsTools extends EsToolsCommand {
 

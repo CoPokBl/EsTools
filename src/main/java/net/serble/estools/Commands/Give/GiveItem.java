@@ -1,9 +1,8 @@
 package net.serble.estools.Commands.Give;
 
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
-
-import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
 public class GiveItem extends EsToolsCommand {

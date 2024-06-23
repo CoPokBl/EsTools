@@ -1,7 +1,7 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
-import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.EsEntity;
 import org.bukkit.entity.Entity;

@@ -1,13 +1,16 @@
 package net.serble.estools;
 
+import net.serble.estools.Commands.*;
 import net.serble.estools.Commands.Give.Give;
 import net.serble.estools.Commands.Give.GiveItem;
 import net.serble.estools.Commands.Give.SetHandItem;
 import net.serble.estools.Commands.MoveSpeed.FlySpeed;
 import net.serble.estools.Commands.MoveSpeed.WalkSpeed;
 import net.serble.estools.Commands.PowerPick.*;
-import net.serble.estools.Commands.Teleport.*;
-import net.serble.estools.Commands.Warps.*;
+import net.serble.estools.Commands.Teleport.TpAll;
+import net.serble.estools.Commands.Teleport.TpHere;
+import net.serble.estools.Commands.Warps.Warp;
+import net.serble.estools.Commands.Warps.WarpManager;
 import net.serble.estools.Config.ConfigManager;
 import net.serble.estools.Config.Schemas.GeneralConfig.EsToolsConfig;
 import net.serble.estools.Entrypoints.EsToolsBukkit;
@@ -22,8 +25,6 @@ import net.serble.estools.ServerApi.ServerPlatform;
 import net.serble.estools.Signs.SignMain;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
-
-import net.serble.estools.Commands.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +55,10 @@ public class Main {
 
 	public void enable() {
 		plugin = this;
-		server = platform.getServerInstance(context);
+
+		if (platform != ServerPlatform.Injected) {
+			server = platform.getServerInstance(context);
+		}
 		logger = server.getLogger();
 
 		minecraftVersion = server.getVersion();
