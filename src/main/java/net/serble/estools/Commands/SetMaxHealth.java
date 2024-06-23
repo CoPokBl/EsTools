@@ -11,6 +11,7 @@ public class SetMaxHealth extends EntityCommand {
 	public boolean execute(EsCommandSender sender, String[] args) {
 		if (args.length == 0) {
 			send(sender, usage);
+			return false;
 		}
 
 		double health;
