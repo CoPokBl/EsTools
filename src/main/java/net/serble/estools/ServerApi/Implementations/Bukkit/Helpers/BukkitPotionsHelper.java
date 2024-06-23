@@ -25,7 +25,7 @@ public class BukkitPotionsHelper {
 
         // in 1.7 and below potions start at amplifier 1, and can only be 1 or 2, after that it starts at 0
         int amplifier = effect.getAmp();
-        if (Main.minecraftVersion.getMinor() <= 7) {
+        if (Main.minecraftVersion.getMinor() <= 8) {
             amplifier++;
             if (amplifier < 1 || amplifier > 2) {
                 return null;
