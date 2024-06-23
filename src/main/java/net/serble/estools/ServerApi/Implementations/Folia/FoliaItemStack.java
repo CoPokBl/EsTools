@@ -55,7 +55,7 @@ public class FoliaItemStack implements EsItemStack {
 
     @Override
     public EsItemMeta getItemMeta() {
-        return new FoliaItemMeta(bukkitItem.getItemMeta());
+        return FoliaHelper.fromBukkitItemMeta(bukkitItem.getItemMeta());
     }
 
     @Override

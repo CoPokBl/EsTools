@@ -28,6 +28,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 
 import java.lang.reflect.InvocationTargetException;
@@ -445,5 +446,13 @@ public class FoliaHelper extends BukkitHelper {
             default:
                 throw new IllegalArgumentException("Invalid EquipmentSlot");
         }
+    }
+
+    public static EsItemMeta fromBukkitItemMeta(ItemMeta meta) {
+        if (meta == null) {
+            return null;
+        }
+
+        return new FoliaItemMeta(meta);
     }
 }

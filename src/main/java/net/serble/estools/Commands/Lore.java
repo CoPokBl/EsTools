@@ -1,8 +1,8 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsCommand;
-import net.serble.estools.MetaHandler;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
+import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
@@ -34,7 +34,9 @@ public class Lore extends EsToolsCommand {
             return false;
         }
 
-        List<String> lore = MetaHandler.getLore(is);
+        EsItemMeta meta = is.getItemMeta();
+
+        List<String> lore = meta.getLore();
 
         switch (args[0].toLowerCase()) {
             case "add": {
@@ -81,7 +83,8 @@ public class Lore extends EsToolsCommand {
                 return false;
         }
 
-        MetaHandler.setLore(is, lore);
+        meta.setLore(lore);
+        is.setItemMeta(meta);
         return true;
     }
 
@@ -122,7 +125,7 @@ public class Lore extends EsToolsCommand {
             }
 
             EsItemStack is = ((EsPlayer)sender).getMainHand();
-            List<String> lore = MetaHandler.getLore(is);
+            List<String> lore = is.getItemMeta().getLore();
             for (int i = 1; i <= lore.size(); i++) {
                 tab.add(String.valueOf(i));
             }

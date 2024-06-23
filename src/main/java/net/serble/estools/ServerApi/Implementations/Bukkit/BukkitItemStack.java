@@ -5,6 +5,7 @@ import net.serble.estools.ServerApi.EsEnchantment;
 import net.serble.estools.ServerApi.EsMaterial;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEnchantmentHelper;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitMetaHelper;
 import net.serble.estools.ServerApi.Interfaces.EsItemMeta;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -65,7 +66,7 @@ public class BukkitItemStack implements EsItemStack {
 
     @Override
     public EsItemMeta getItemMeta() {
-        return new BukkitItemMeta(bukkitItem.getItemMeta());
+        return BukkitMetaHelper.fromBukkitItemMeta(bukkitItem.getItemMeta());
     }
 
     @Override

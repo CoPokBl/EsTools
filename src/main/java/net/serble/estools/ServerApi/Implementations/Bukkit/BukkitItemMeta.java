@@ -15,6 +15,9 @@ public class BukkitItemMeta implements EsItemMeta {
     private final ItemMeta bukkitMeta;
 
     public BukkitItemMeta(ItemMeta meta) {
+        if (meta == null) {
+            throw new NullPointerException("Meta is null");
+        }
         bukkitMeta = meta;
     }
 
