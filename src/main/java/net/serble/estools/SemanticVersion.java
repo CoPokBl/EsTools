@@ -1,5 +1,6 @@
 package net.serble.estools;
 
+@SuppressWarnings("unused")  // Future-proof, it's a util class why not
 public class SemanticVersion {
     private final int major;
     private final int minor;
@@ -57,7 +58,6 @@ public class SemanticVersion {
         return getPatch() < patch;
     }
 
-    @SuppressWarnings("unused")  // Future-proof
     public boolean isAtLeast(SemanticVersion other) {
         return isAtLeast(other.major, other.minor, other.patch);
     }
@@ -76,5 +76,25 @@ public class SemanticVersion {
         }
 
         return getPatch() >= patch;
+    }
+
+    public boolean isMoreThan(int major, int minor, int patch) {
+        if (getMajor() > major) {
+            return true;
+        } else if (getMajor() < major) {
+            return false;
+        }
+
+        if (getMinor() > minor) {
+            return true;
+        } else if (getMinor() < minor) {
+            return false;
+        }
+
+        return getPatch() > patch;
+    }
+
+    public boolean isMoreThan(SemanticVersion other) {
+        return isMoreThan(other.major, other.minor, other.patch);
     }
 }

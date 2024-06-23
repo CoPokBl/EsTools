@@ -5,6 +5,7 @@ import net.serble.estools.ServerApi.EsAction;
 import net.serble.estools.ServerApi.EsClickType;
 import net.serble.estools.ServerApi.EsInventoryAction;
 import net.serble.estools.ServerApi.Events.*;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEnums1_1Plus;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -70,7 +71,7 @@ public class FoliaEventsListener implements Listener, CommandExecutor {
     public void onTeleport(PlayerTeleportEvent e) {
         EsPlayerTeleportEvent ee = new EsPlayerTeleportEvent(
                 new FoliaPlayer(e.getPlayer()),
-                FoliaHelper.fromBukkitTeleportCause(e.getCause()),
+                BukkitEnums1_1Plus.fromBukkitTeleportCause(e.getCause()),
                 FoliaHelper.fromBukkitLocation(Objects.requireNonNull(e.getTo())));
         ee.setCancelled(e.isCancelled());
         Main.callEvent(ee);

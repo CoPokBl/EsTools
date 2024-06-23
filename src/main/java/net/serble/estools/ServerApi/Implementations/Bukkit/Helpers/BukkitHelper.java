@@ -17,7 +17,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -28,6 +27,15 @@ import org.bukkit.util.Vector;
 
 // DO NOT IMPORT THE FOLLOWING BECAUSE THEY BREAK OLDER VERSIONS BECAUSE THEY DON'T EXIST
 // org.bukkit.inventory.EquipmentSlot
+// org.bukkit.event.player.PlayerTeleportEvent
+// org.bukkit.potion.Potion
+// org.bukkit.potion.PotionType
+// org.bukkit.inventory.InventoryHolder
+// org.bukkit.inventory.meta.PotionMeta
+// org.bukkit.inventory.meta.ItemMeta
+// org.bukkit.Sound
+// org.bukkit.event.inventory.ClickType
+// org.bukkit.event.inventory.InventoryAction
 
 /**
  * Min version: 1.0
@@ -170,64 +178,6 @@ public class BukkitHelper {
         throw new RuntimeException("Invalid GameMode");
     }
 
-    public static PlayerTeleportEvent.TeleportCause toBukkitTeleportCause(EsTeleportCause esCause) {
-        switch (esCause) {
-            case EnderPearl:
-                return PlayerTeleportEvent.TeleportCause.ENDER_PEARL;
-            case Command:
-                return PlayerTeleportEvent.TeleportCause.COMMAND;
-            case Plugin:
-                return PlayerTeleportEvent.TeleportCause.PLUGIN;
-            case NetherPortal:
-                return PlayerTeleportEvent.TeleportCause.NETHER_PORTAL;
-            case EndPortal:
-                return PlayerTeleportEvent.TeleportCause.END_PORTAL;
-            case Spectate:
-                return PlayerTeleportEvent.TeleportCause.SPECTATE;
-            case EndGateway:
-                return PlayerTeleportEvent.TeleportCause.END_GATEWAY;
-            case ChorusFruit:
-                return PlayerTeleportEvent.TeleportCause.CHORUS_FRUIT;
-            case Dismount:
-                return PlayerTeleportEvent.TeleportCause.DISMOUNT;
-            case ExitBed:
-                return PlayerTeleportEvent.TeleportCause.EXIT_BED;
-            case Unknown:
-                return PlayerTeleportEvent.TeleportCause.UNKNOWN;
-            default:
-                throw new IllegalArgumentException("Unknown EsTeleportCause: " + esCause);
-        }
-    }
-
-    public static EsTeleportCause fromBukkitTeleportCause(PlayerTeleportEvent.TeleportCause bukkitCause) {
-        switch (bukkitCause) {
-            case ENDER_PEARL:
-                return EsTeleportCause.EnderPearl;
-            case COMMAND:
-                return EsTeleportCause.Command;
-            case PLUGIN:
-                return EsTeleportCause.Plugin;
-            case NETHER_PORTAL:
-                return EsTeleportCause.NetherPortal;
-            case END_PORTAL:
-                return EsTeleportCause.EndPortal;
-            case SPECTATE:
-                return EsTeleportCause.Spectate;
-            case END_GATEWAY:
-                return EsTeleportCause.EndGateway;
-            case CHORUS_FRUIT:
-                return EsTeleportCause.ChorusFruit;
-            case DISMOUNT:
-                return EsTeleportCause.Dismount;
-            case EXIT_BED:
-                return EsTeleportCause.ExitBed;
-            case UNKNOWN:
-                return EsTeleportCause.Unknown;
-            default:
-                throw new IllegalArgumentException("Invalid TeleportCause");
-        }
-    }
-
     public static EsBlock fromBukkitBlock(Block block) {
         if (block == null) {
             return null;
@@ -314,7 +264,11 @@ public class BukkitHelper {
 
             return new BukkitItemStack(item);
         } else {
-            return new BukkitItemStack(item);  // Not a potion
+            if (item.getType().name().endsWith("POTION")) {
+                return new BukkitPotionVeryOld(item);  // The Potion and PotionMeta classes don't exist
+            }
+
+            return new BukkitItemStack(item);
         }
     }
 

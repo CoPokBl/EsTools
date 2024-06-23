@@ -14,8 +14,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.Potion;
-import org.bukkit.potion.PotionType;
 
 import java.io.File;
 import java.util.*;
@@ -164,30 +162,17 @@ public class BukkitServer implements EsServer {
 
             return new BukkitPotion(pot);
         } else if (Main.minecraftVersion.getMinor() >= 4) {
-            PotionType type = BukkitEffectHelper.getPotionFromEffectType(effect.getType());
-            if (type == null) { // This can fail if the effect doesn't have a potion for it
-                return null;
+            return BukkitPotionsHelper.createPotion1_4(potType, effect, amount);
+        } else {
+            short potionDat = BukkitPotionsHelper1_3.getPotionIdFromEffectType(effect.getType());
+            if (potType == EsPotType.splash || potType == EsPotType.lingering) {
+                potionDat += 16384;
             }
-
-            // in 1.7 and below potions start at amplifier 1, and can only be 1 or 2, after that it starts at 0
-            int amplifier = effect.getAmp();
-            if (Main.minecraftVersion.getMinor() <= 7) {
-                amplifier++;
-                if (amplifier < 1 || amplifier > 2) {
-                    return null;
-                }
-            }
-
-            Potion potion = new Potion(type, amplifier);
-            potion.setSplash(potType == EsPotType.splash);
-
-            return new BukkitPotion(potion.toItemStack(amount));
-        } else {  // This isn't possible to get to because this class won't load on 1.3 and below
-            return null;
+            ItemStack stack = new ItemStack(Material.POTION, 1, potionDat);
+            return new BukkitPotionVeryOld(stack);
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public EsPotion createPotion(EsPotType potType) {
         if (Main.minecraftVersion.getMinor() >= 9) {
@@ -199,12 +184,11 @@ public class BukkitServer implements EsServer {
 
             return new BukkitPotion(pot);
         } else if (Main.minecraftVersion.getMinor() >= 4) {
-            Potion potion = Potion.fromItemStack(new ItemStack(Material.valueOf("POTION")));
-            potion.setSplash(potType == EsPotType.splash);
-
-            return new BukkitPotion(potion.toItemStack(1));
-        } else {  // This isn't possible to get to because this class won't load on 1.3 and below
-            return null;
+            return BukkitPotionsHelper.createPotion1_4(potType);
+        } else {
+            // This method isn't called pre 1.4 because CChest doesn't work
+            // With the way this works it wouldn't work in pre 1.4.
+            throw new UnsupportedOperationException("Proper support in this version has not been implemented.");
         }
     }
 
@@ -221,11 +205,17 @@ public class BukkitServer implements EsServer {
 
     @Override
     public Set<EsPotionEffectType> getPotionEffectTypes() {
+        if (Main.minecraftVersion.isLowerThan(1, 1, 0)) {
+            return BukkitPotionsHelper1_3.getPotionList();
+        }
         return BukkitEffectHelper.getEffectList();
     }
 
     @Override
     public Set<EsPotionEffectType> getOldPotionTypes() {
+        if (Main.minecraftVersion.isLowerThan(1, 1, 0)) {
+            return BukkitPotionsHelper1_3.getPotionList();
+        }
         return BukkitEffectHelper.getPotionList();
     }
 
@@ -286,7 +276,11 @@ public class BukkitServer implements EsServer {
 
     @Override
     public void startEvents() {
-        Bukkit.getPluginManager().registerEvents(listener, EsToolsBukkit.plugin);
+        if (Main.minecraftVersion.isMoreThan(1, 0, 0)) {  // Events work differently in 1.0
+            Bukkit.getPluginManager().registerEvents(listener, EsToolsBukkit.plugin);
+        }
+
+        // TODO: 1.0 events
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.serble.estools.Entrypoints;
 
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEffectHelper;
 import net.serble.estools.ServerApi.ServerPlatform;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,6 +21,15 @@ public class EsToolsBukkit extends JavaPlugin {
 
         Main main = new Main(platform, this);
         main.enable();
+
+        // Init any Bukkit helpers that need it.
+        // It's best to do it here because Folia and Bukkit
+        // need it.
+        // This must come after Main.enable() so that mcVersion is set.
+        // It also only works on 1.1+
+        if (Main.minecraftVersion.isAtLeast(1, 1, 0)) {
+            BukkitEffectHelper.load();
+        }
     }
 
     @Override

@@ -1,6 +1,5 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
-import io.papermc.lib.PaperLib;
 import net.serble.estools.ServerApi.EsLocation;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
@@ -27,12 +26,19 @@ public class BukkitEntity implements EsEntity {
 
     @Override
     public void teleport(EsLocation loc) {
-        PaperLib.teleportAsync(bukkitEntity, BukkitHelper.toBukkitLocation(loc));
+        // This was moved from PaperLib.teleport() because the PaperLib class imports
+        // things that don't exist in Bukkit 1.0 and therefore can't load.
+        bukkitEntity.teleport(BukkitHelper.toBukkitLocation(loc));
     }
 
     @Override
     public String getType() {
-        return bukkitEntity.getType().name();
+        if (Main.minecraftVersion.isAtLeast(1, 1, 0)) {
+            return bukkitEntity.getType().name();
+        }
+
+        // getType() doesn't exist
+        return "ID " + bukkitEntity.getEntityId();
     }
 
     @Override

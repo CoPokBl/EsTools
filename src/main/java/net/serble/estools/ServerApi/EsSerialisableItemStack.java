@@ -6,8 +6,9 @@ import net.serble.estools.ServerApi.Interfaces.EsPotion;
 
 import java.util.Map;
 
-
-// TODO: NBT
+/**
+ * This class is entirely platform independent and replies on the ability to export ItemMeta is a string.
+ */
 @SuppressWarnings("unused")  // Needs the methods for YAML serialiser
 public class EsSerialisableItemStack {
     private EsMaterial material;

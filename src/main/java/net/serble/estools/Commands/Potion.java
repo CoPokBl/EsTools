@@ -86,11 +86,6 @@ public class Potion extends EntityCommand {
             }
         }
 
-        if (Main.minecraftVersion.getMinor() <= 3) {
-            send(sender, "&cPotions are not yet supported in this version, they may be in the future.");
-            return false;
-        }
-
         EsItemStack pot = Main.server.createPotion(potType, new EsPotionEffect(type, amp, duration), amount);
         if (pot == null) {
             send(sender, "&cInvalid potion effect!");

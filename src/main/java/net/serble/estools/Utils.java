@@ -1,5 +1,8 @@
 package net.serble.estools;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 public class Utils {
     public static String keyToDisplayName(String key) {
         StringBuilder name = new StringBuilder(key);
@@ -16,5 +19,12 @@ public class Utils {
         }
 
         return name.toString();
+    }
+
+    public static String getStacktrace(Exception e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        return sw.toString();
     }
 }

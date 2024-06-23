@@ -4,8 +4,6 @@ import net.serble.estools.Commands.SafeTp;
 import net.serble.estools.ServerApi.Interfaces.EsEntity;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -87,7 +85,7 @@ public class Tester {
             new TestCommand("noon", 1),
             new TestCommand("midnight", 1),
             new TestCommand("day", 1),
-            new TestCommand("potion speed", 2, new SemanticVersion(1, 4, 0)),
+            new TestCommand("potion speed", 2),
             new TestCommand("rename &6This dirt is special", 4, new SemanticVersion(1, 4, 6)),
             new TestCommand("setmaxhealth 30", 2, new SemanticVersion(1, 4, 0)),
             new TestCommand("setstack 127", 2),
@@ -195,10 +193,7 @@ public class Tester {
             EsToolsCommand.send(player, "&cFailed to execute the following command: " + cmd);
 
             // Print the full stacktrace not just the message
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            e.printStackTrace(pw);
-            String stackTrace = sw.toString();
+            String stackTrace = Utils.getStacktrace(e);
 
             EsToolsCommand.send(player, "&c" + stackTrace);
             Main.logger.severe(stackTrace);

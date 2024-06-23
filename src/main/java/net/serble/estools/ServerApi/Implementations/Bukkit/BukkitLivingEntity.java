@@ -112,6 +112,10 @@ public class BukkitLivingEntity extends BukkitEntity implements EsLivingEntity {
 
     @Override
     public List<EsPotionEffect> getActivePotionEffects() {
+        if (Main.minecraftVersion.isLowerThan(1, 1, 0)) {
+            return new ArrayList<>();
+        }
+
         Collection<PotionEffect> bukkitEffects = bukkitEntity.getActivePotionEffects();
         List<EsPotionEffect> out = new ArrayList<>(bukkitEffects.size());
         for (PotionEffect eff : bukkitEffects) {

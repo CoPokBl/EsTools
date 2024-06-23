@@ -14,7 +14,6 @@ import net.serble.estools.Entrypoints.EsToolsBukkit;
 import net.serble.estools.ServerApi.EsEventListener;
 import net.serble.estools.ServerApi.EsGameMode;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitConfigMigrator;
-import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEffectHelper;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsLogger;
@@ -61,8 +60,6 @@ public class Main {
 		minecraftVersion = server.getVersion();
 		server.initialise();
 		logger.info("Starting EsTools on platform: " + platform.name() + " (MC: " + minecraftVersion.getString() + ")");
-
-		BukkitEffectHelper.load();
 
 		if (platform == ServerPlatform.Bukkit) {
 			// We have to support old configs
@@ -145,7 +142,7 @@ public class Main {
 		sc("buddha", "god", new Buddha(), 1);
 
 		sc("music", "music", new Music(), 9);
-		sc("potion", "potion", new Potion(), 4);
+		sc("potion", "potion", new Potion());
 
 		sc("setpersistentdata", "setpersistentdata", new SetPersistentData(), 14);
 		sc("getpersistentdata", "getpersistentdata", new GetPersistentData(), 14);

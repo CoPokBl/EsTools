@@ -5,6 +5,7 @@ import net.serble.estools.ServerApi.EsAction;
 import net.serble.estools.ServerApi.EsEquipmentSlot;
 import net.serble.estools.ServerApi.Events.*;
 import net.serble.estools.ServerApi.Implementations.Bukkit.BukkitPlayer;
+import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEnums1_1Plus;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEquipmentSlotHelper;
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import net.serble.estools.ServerApi.Interfaces.*;
@@ -73,7 +74,7 @@ public class BukkitEventsListener implements Listener, CommandExecutor {
     public void onTeleport(PlayerTeleportEvent e) {
         EsPlayerTeleportEvent ee = new EsPlayerTeleportEvent(
                 new BukkitPlayer(e.getPlayer()),
-                BukkitHelper.fromBukkitTeleportCause(e.getCause()),
+                BukkitEnums1_1Plus.fromBukkitTeleportCause(e.getCause()),
                 BukkitHelper.fromBukkitLocation(Objects.requireNonNull(e.getTo())));
         ee.setCancelled(e.isCancelled());
         Main.callEvent(ee);
