@@ -7,21 +7,20 @@ import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BukkitInventory implements EsInventory {
-    private final org.bukkit.inventory.Inventory bukkitInv;
+    private final @NotNull Inventory bukkitInv;
 
-    public BukkitInventory(Inventory inv) {
+    @SuppressWarnings("ConstantValue")
+    public BukkitInventory(@NotNull Inventory inv) {
         bukkitInv = inv;
         if (inv == null) {
             throw new NullPointerException("inv");
         }
-    }
-
-    public BukkitInventory() {
-        bukkitInv = null;
     }
 
     @Override
@@ -94,7 +93,6 @@ public class BukkitInventory implements EsInventory {
         Material mat = BukkitHelper.toBukkitMaterial(material);
         Map<Integer, EsItemStack> out = new HashMap<>();
 
-        assert bukkitInv != null;
         for (Map.Entry<Integer, ? extends ItemStack> entry : bukkitInv.all(mat).entrySet()) {
             out.put(entry.getKey(), BukkitHelper.fromBukkitItem(entry.getValue()));
         }

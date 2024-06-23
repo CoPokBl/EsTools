@@ -1,8 +1,8 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit.Helpers;
 
 import net.serble.estools.Entrypoints.EsToolsBukkit;
-import net.serble.estools.ServerApi.*;
 import net.serble.estools.Main;
+import net.serble.estools.ServerApi.*;
 import net.serble.estools.ServerApi.Implementations.Bukkit.*;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;

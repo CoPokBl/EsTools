@@ -1,9 +1,6 @@
 package net.serble.estools.Commands;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsEnchantment;
 import net.serble.estools.ServerApi.EsMaterial;
@@ -11,7 +8,9 @@ import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 
-import net.serble.estools.EsToolsCommand;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class Ench extends EsToolsCommand {
 	private static final String usage = genUsage("/ench <enchantment> [level] [player]");

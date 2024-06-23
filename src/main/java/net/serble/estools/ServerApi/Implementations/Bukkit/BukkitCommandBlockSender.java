@@ -1,7 +1,6 @@
 package net.serble.estools.ServerApi.Implementations.Bukkit;
 
 import net.serble.estools.ServerApi.Interfaces.EsCommandBlockSender;
-import net.serble.estools.ServerApi.Interfaces.EsConsoleSender;
 import org.bukkit.command.BlockCommandSender;
 
 public class BukkitCommandBlockSender implements EsCommandBlockSender {

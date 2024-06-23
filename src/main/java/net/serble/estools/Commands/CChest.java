@@ -1,7 +1,7 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Config.ConfigManager;
+import net.serble.estools.EsToolsCommand;
 import net.serble.estools.Main;
 import net.serble.estools.ServerApi.*;
 import net.serble.estools.ServerApi.Events.*;
@@ -46,13 +46,8 @@ public class CChest extends EsToolsCommand implements EsEventListener {
 		EsInventory inv = cChests.get(uid);
 		
 		if (inv == null) {
-			EsInventory loaded = loadPlayer(p);
-			if (loaded != null) {
-				inv = loaded;
-			} else {
-				inv = Main.server.createInventory(null, 54, translate("&1Creative Chest"));
-			}
-		}
+            inv = loadPlayer(p);
+        }
 		
 		p.closeInventory();
 		p.openInventory(inv);

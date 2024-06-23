@@ -17,10 +17,6 @@ public class BukkitPlayerInventory extends BukkitInventory implements EsPlayerIn
         bukkitInv = inv;
     }
 
-    public BukkitPlayerInventory() {
-        bukkitInv = null;
-    }
-
     @Override
     public PlayerInventory getBukkitInventory() {
         return bukkitInv;

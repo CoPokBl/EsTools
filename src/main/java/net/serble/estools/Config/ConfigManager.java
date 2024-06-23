@@ -1,14 +1,14 @@
 package net.serble.estools.Config;
 
-import java.io.*;
-import java.util.Arrays;
-
 import net.serble.estools.Main;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.inspector.TagInspector;
+
+import java.io.*;
+import java.util.Arrays;
 
 public class ConfigManager {
 

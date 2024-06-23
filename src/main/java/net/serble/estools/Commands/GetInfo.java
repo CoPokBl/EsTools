@@ -1,11 +1,10 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.ServerApi.EsPotionEffect;
-import net.serble.estools.ServerApi.EsLocation;
-import net.serble.estools.Main;
-import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
-
 import net.serble.estools.EntityCommand;
+import net.serble.estools.Main;
+import net.serble.estools.ServerApi.EsLocation;
+import net.serble.estools.ServerApi.EsPotionEffect;
+import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsEntity;
 import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;

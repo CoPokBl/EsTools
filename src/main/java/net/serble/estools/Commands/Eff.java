@@ -1,9 +1,9 @@
 package net.serble.estools.Commands;
 
-import net.serble.estools.ServerApi.EsPotionEffect;
-import net.serble.estools.ServerApi.EsPotionEffectType;
 import net.serble.estools.Main;
 import net.serble.estools.MultiPlayerCommand;
+import net.serble.estools.ServerApi.EsPotionEffect;
+import net.serble.estools.ServerApi.EsPotionEffectType;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 

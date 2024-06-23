@@ -7,7 +7,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.Objects;
 
-import static net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper.*;
+import static net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper.getNamespacedKey;
 
 @SuppressWarnings("unchecked")  // Trust me bro
 public class BukkitPersistentDataContainer implements EsPersistentDataContainer {

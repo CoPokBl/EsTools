@@ -1,20 +1,19 @@
 package net.serble.estools.Commands;
 
-import java.util.HashMap;
-import java.util.UUID;
-
+import net.serble.estools.EsToolsCommand;
+import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsEventListener;
 import net.serble.estools.ServerApi.EsLocation;
-import net.serble.estools.Main;
 import net.serble.estools.ServerApi.EsTeleportCause;
 import net.serble.estools.ServerApi.Events.EsPlayerDeathEvent;
 import net.serble.estools.ServerApi.Events.EsPlayerTeleportEvent;
 import net.serble.estools.ServerApi.Interfaces.EsCommandSender;
 import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
-
-import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ServerApi.ServerPlatform;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class Back extends EsToolsCommand implements EsEventListener {
 	private static final HashMap<UUID, EsLocation> prevLocations = new HashMap<>();
