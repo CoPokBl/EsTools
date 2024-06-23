@@ -23,7 +23,7 @@ public class BukkitEventsListenerPost1_1 implements Listener {
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
         EsInventory clInv;
-        if (Main.minecraftVersion.isAtLeast(1, 6, 0)) {
+        if (Main.minecraftVersion.isAtLeast(1, 8, 0)) {
             clInv = BukkitHelper.fromBukkitInventory(e.getClickedInventory());
         } else {
             clInv = BukkitHelper.fromBukkitInventory(e.getInventory());  // Get clicked inv doesn't exist
