@@ -9,9 +9,11 @@ import net.serble.estools.ServerApi.Implementations.Bukkit.EventHandlers.BukkitE
 import net.serble.estools.ServerApi.Implementations.Bukkit.Helpers.*;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.bukkit.*;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,7 +22,8 @@ import java.util.*;
 
 public class BukkitServer implements EsServer {
     private final JavaPlugin plugin;
-    private final BukkitEventsListener listener;
+    private final List<Listener> listeners;
+    private final CommandExecutor cmdExecutor;
     private static final Set<EsMaterial> materials = new HashSet<>();
     private static final Set<EsMaterial> itemMaterials = new HashSet<>();
     private static Set<EsSound> sounds = new HashSet<>();
@@ -28,14 +31,19 @@ public class BukkitServer implements EsServer {
     public BukkitServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
 
+        listeners = new ArrayList<>();
+
         SemanticVersion mcVer = getVersion();
         if (mcVer.isAtLeast(1, 5, 0)) {
-            listener = new BukkitEventsListenerPost1_4();
-        } else if (mcVer.isAtLeast(1, 2, 0)) {
-            listener = new BukkitEventsListenerPost1_1();
-        } else {
-            listener = new BukkitEventsListener();
+            listeners.add(new BukkitEventsListenerPost1_4());
         }
+        if (mcVer.isAtLeast(1, 2, 0)) {
+            listeners.add(new BukkitEventsListenerPost1_1());
+        }
+
+        BukkitEventsListener bel = new BukkitEventsListener();
+        listeners.add(bel);
+        cmdExecutor = bel;
     }
 
     @Override
@@ -277,17 +285,21 @@ public class BukkitServer implements EsServer {
     @Override
     public void startEvents() {
         if (Main.minecraftVersion.isMoreThan(1, 0, 0)) {  // Events work differently in 1.0
-            Bukkit.getPluginManager().registerEvents(listener, EsToolsBukkit.plugin);
+            for (Listener l : listeners) {
+                Bukkit.getPluginManager().registerEvents(l, EsToolsBukkit.plugin);
+            }
+            return;
         }
 
         // TODO: 1.0 events
+        Main.logger.warning("Events are not currently functional in Minecraft 1.0.0 and below");
     }
 
     @Override
     public void registerCommand(String cmd, EsToolsTabCompleter tab) {
         PluginCommand command = Objects.requireNonNull(Bukkit.getPluginCommand(cmd));
         if (!Main.tabCompleteEnabled || command.getTabCompleter() == null) {
-            command.setExecutor(listener);
+            command.setExecutor(cmdExecutor);
         }
         if (Main.tabCompleteEnabled) {
             command.setTabCompleter(BukkitTabCompleteGenerator.generate(tab));

@@ -13,10 +13,12 @@ import net.serble.estools.ServerApi.Interfaces.EsItemStack;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
-public class BukkitEventsListenerPost1_1 extends BukkitEventsListener {
+// Apparently inheriting BukkitEventsListener stops the events from working in BukkitEventsListener
+public class BukkitEventsListenerPost1_1 implements Listener {
 
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
@@ -49,8 +51,11 @@ public class BukkitEventsListenerPost1_1 extends BukkitEventsListener {
         int sl = e.getSlot();
         EsInventoryClickEvent ee = new EsInventoryClickEvent(cl, sl, cu, inv, clInv, ci, ac, ct);
         ee.setCancelled(e.isCancelled());
+        boolean wasCancelled = e.isCancelled();
         Main.callEvent(ee);
-        e.setCancelled(ee.isCancelled());
+        if (wasCancelled != ee.isCancelled()) {  // Fix bug where it cancels
+            e.setCancelled(ee.isCancelled());
+        }
     }
 
     @EventHandler

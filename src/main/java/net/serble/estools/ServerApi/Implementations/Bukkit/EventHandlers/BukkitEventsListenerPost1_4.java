@@ -10,11 +10,13 @@ import net.serble.estools.ServerApi.Interfaces.EsInventoryView;
 import net.serble.estools.ServerApi.Interfaces.EsPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryDragEvent;
 
 import java.util.Set;
 
-public class BukkitEventsListenerPost1_4 extends BukkitEventsListenerPost1_1 {
+// Apparently inheriting BukkitEventsListener stops the events from working in BukkitEventsListener
+public class BukkitEventsListenerPost1_4 implements Listener {
 
     @EventHandler
     public void onDrag(InventoryDragEvent e) {
