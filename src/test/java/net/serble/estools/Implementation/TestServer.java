@@ -10,18 +10,16 @@ import java.io.File;
 import java.util.*;
 
 public class TestServer implements EsServer {
-    private final EsToolsUnitTest test;
     private final TestLogger logger;
 
-    public TestServer(EsToolsUnitTest test) {
-        this.test = test;
-        logger = new TestLogger(test);
+    public TestServer() {
+        logger = new TestLogger();
     }
 
     @Override
     public EsPlayer getPlayer(String name) {
-        if (Objects.equals(test.player.getName(), name)) {
-            return test.player;
+        if (Objects.equals(EsToolsUnitTest.player.getName(), name)) {
+            return EsToolsUnitTest.player;
         }
 
         return null;
@@ -29,8 +27,8 @@ public class TestServer implements EsServer {
 
     @Override
     public EsEntity getEntity(UUID uuid) {
-        if (Objects.equals(test.player.getUniqueId(), uuid)) {
-            return test.player;
+        if (Objects.equals(EsToolsUnitTest.player.getUniqueId(), uuid)) {
+            return EsToolsUnitTest.player;
         }
 
         return null;
@@ -38,12 +36,12 @@ public class TestServer implements EsServer {
 
     @Override
     public SemanticVersion getVersion() {
-        return test.minecraftVersion;
+        return EsToolsUnitTest.minecraftVersion;
     }
 
     @Override
     public Collection<? extends EsPlayer> getOnlinePlayers() {
-        return Collections.singletonList(test.player);
+        return Collections.singletonList(EsToolsUnitTest.player);
     }
 
     @Override
@@ -108,12 +106,12 @@ public class TestServer implements EsServer {
 
     @Override
     public EsCommandSender getConsoleSender() {
-        return test.player;
+        return EsToolsUnitTest.player;
     }
 
     @Override
     public SemanticVersion getPluginVersion() {
-        return test.pluginVersion;
+        return EsToolsUnitTest.pluginVersion;
     }
 
     @Override
@@ -164,8 +162,8 @@ public class TestServer implements EsServer {
 
     @Override
     public void broadcast(String msg, String perm) {
-        if (test.player.hasPermission(perm)) {
-            test.player.sendMessage(msg);
+        if (EsToolsUnitTest.player.hasPermission(perm)) {
+            EsToolsUnitTest.player.sendMessage(msg);
         }
         logger.info(msg);
     }
@@ -173,13 +171,13 @@ public class TestServer implements EsServer {
     @Override
     public void broadcast(String msg) {
         logger.info(msg);
-        test.player.sendMessage(msg);
+        EsToolsUnitTest.player.sendMessage(msg);
     }
 
     @Override
     public EsWorld getWorld(String name) {
-        if (test.world.getName().equals(name)) {
-            return test.world;
+        if (EsToolsUnitTest.world.getName().equals(name)) {
+            return EsToolsUnitTest.world;
         }
 
         return null;
