@@ -175,6 +175,9 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
         return bukkitPlayer.hasPermission(node);
     }
 
+    // I know that this overrides the BukkitEntity.sendMessage method
+    // It has to because Entity.sendMessage() doesn't exist in old versions
+    // so Player.sendMessage() needs to be used where possible.
     @Override
     public void sendMessage(String... args) {
         if (Main.minecraftVersion.isAtLeast(1, 2, 0)) {

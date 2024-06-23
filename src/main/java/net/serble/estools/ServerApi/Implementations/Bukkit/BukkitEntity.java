@@ -73,7 +73,18 @@ public class BukkitEntity implements EsEntity {
 
     @Override
     public void sendMessage(String... msg) {
-        bukkitEntity.sendMessage(msg);
+        if (Main.minecraftVersion.isAtLeast(1, 2, 0)) {
+            bukkitEntity.sendMessage(msg);
+            return;
+        }
+
+        // The sendMessage(String[]) method doesn't exist
+        // So combine the args into one String
+        StringBuilder sb = new StringBuilder();
+        for (String s : msg) {
+            sb.append(s);
+        }
+        bukkitEntity.sendMessage(sb.toString());
     }
 
     @Override
