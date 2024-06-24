@@ -18,7 +18,7 @@ public class Rename extends EsToolsCommand {
 		EsPlayer p = (EsPlayer) sender;
 		EsItemStack is = p.getMainHand();
 
-		EsItemMeta meta = is.getItemMeta();
+		EsItemMeta meta = is == null ? null : is.getItemMeta();
 
 		if (meta == null) {
 			send(sender, "&cYou must be holding an item");
