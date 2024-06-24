@@ -4,7 +4,6 @@ import net.serble.estools.EsToolsCommand;
 import net.serble.estools.ServerApi.EsPersistentDataType;
 import net.serble.estools.ServerApi.Interfaces.*;
 import net.serble.estools.Tuple;
-import org.apache.commons.lang.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,30 +120,30 @@ public class GetPersistentData extends EsToolsCommand {
                 }
 
                 case "byte_array": {
-                    byte[] value = (byte[]) data.get(key, EsPersistentDataType.ByteArray);
+                    Byte[] value = (Byte[]) data.get(key, EsPersistentDataType.ByteArray);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }
 
-                    return new Tuple<>(0, buildString(ArrayUtils.toObject(value)).toString());
+                    return new Tuple<>(0, buildString(value).toString());
                 }
 
                 case "int_array": {
-                    int[] value = (int[]) data.get(key, EsPersistentDataType.IntArray);
+                    Integer[] value = (Integer[]) data.get(key, EsPersistentDataType.IntArray);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }
 
-                    return new Tuple<>(0, buildString(ArrayUtils.toObject(value)).toString());
+                    return new Tuple<>(0, buildString(value).toString());
                 }
 
                 case "long_array": {
-                    long[] value = (long[]) data.get(key, EsPersistentDataType.LongArray);
+                    Long[] value = (Long[]) data.get(key, EsPersistentDataType.LongArray);
                     if (value == null) {
                         return new Tuple<>(3, null);
                     }
 
-                    return new Tuple<>(0, buildString(ArrayUtils.toObject(value)).toString());
+                    return new Tuple<>(0, buildString(value).toString());
                 }
             }
         } catch (IllegalArgumentException e) {
