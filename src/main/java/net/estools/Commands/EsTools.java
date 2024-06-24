@@ -1,26 +1,17 @@
 package net.estools.Commands;
 
-import net.estools.EsToolsCommand;
-import net.estools.Main;
+import net.estools.*;
 import net.estools.ServerApi.Interfaces.EsCommandSender;
 import net.estools.ServerApi.Interfaces.EsPlayer;
 import net.estools.ServerApi.ServerPlatform;
-import net.estools.Tester;
-import net.estools.Updater;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class EsTools extends EsToolsCommand {
 
-	@SuppressWarnings({"resource", "ResultOfMethodCallIgnored"})
-    @Override
+	@Override
 	public boolean execute(EsCommandSender sender, String[] args) {
 		if (args.length == 0) {
 			if (checkPerms(sender, "version")) {
@@ -48,12 +39,7 @@ public class EsTools extends EsToolsCommand {
 			
 			if (args.length > 1 && args[1].equalsIgnoreCase("confirm")) {
 				File f = Main.server.getDataFolder();
-				try {
-					Files.walk(Paths.get(f.getPath()))
-							.sorted(Comparator.reverseOrder())
-							.map(Path::toFile)
-							.forEach(File::delete);
-				} catch (IOException e) {
+				if (!Utils.deleteFolder(f)) {
 					send(sender, "&cFailed to delete data.");
 					return false;
 				}

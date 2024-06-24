@@ -1,7 +1,13 @@
 package net.estools;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Comparator;
 
 public class Utils {
     public static String keyToDisplayName(String key) {
@@ -26,5 +32,18 @@ public class Utils {
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
         return sw.toString();
+    }
+
+    @SuppressWarnings({"ResultOfMethodCallIgnored", "resource"})
+    public static boolean deleteFolder(File folder) {
+        try {
+            Files.walk(Paths.get(folder.getPath()))
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
     }
 }
