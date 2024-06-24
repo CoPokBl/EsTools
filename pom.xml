@@ -58,6 +58,19 @@
                         <exclude>META-INF/*.DSA</exclude>
                         <exclude>META-INF/*.RSA</exclude>
                         <exclude>META-INF/MANIFEST.MF</exclude>
+                        <exclude>META-INF/versions/9/module-info.class</exclude>
+
+                        <exclude>META-INF/maven/com.google.code.gson/gson/pom.properties</exclude>
+                        <exclude>META-INF/maven/com.google.code.gson/gson/pom.xml</exclude>
+                        <exclude>META-INF/proguard/gson.pro</exclude>
+                        <exclude>META-INF/maven/com.google.errorprone/error_prone_annotations/pom.properties</exclude>
+                        <exclude>META-INF/maven/com.google.errorprone/error_prone_annotations/pom.xml</exclude>
+                        <exclude>META-INF/maven/co.aikar/taskchain-bukkit/pom.properties</exclude>
+                        <exclude>META-INF/maven/co.aikar/taskchain-bukkit/pom.xml</exclude>
+                        <exclude>META-INF/maven/co.aikar/taskchain-core/pom.properties</exclude>
+                        <exclude>META-INF/maven/co.aikar/taskchain-core/pom.xml</exclude>
+                        <exclude>META-INF/maven/org.yaml/snakeyaml/pom.properties</exclude>
+                        <exclude>META-INF/maven/org.yaml/snakeyaml/pom.xml</exclude>
                     </excludes>
                 </filter>
             </filters>
