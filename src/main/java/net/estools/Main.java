@@ -185,7 +185,8 @@ public class Main {
 			return false;
 		}
 
-		return commands.get(cmd).execute(sender, args);
+		commands.get(cmd).execute(sender, args);
+		return true;
 	}
 
 	public static void registerEvents(EsEventListener listener) {
