@@ -1,8 +1,10 @@
 package net.serble.estools;
 
+import net.serble.estools.Implementation.TestItemStack;
 import net.serble.estools.Implementation.TestPlayer;
 import net.serble.estools.Implementation.TestServer;
 import net.serble.estools.Implementation.TestWorld;
+import net.serble.estools.ServerApi.EsMaterial;
 import net.serble.estools.ServerApi.Interfaces.EsEvent;
 import net.serble.estools.ServerApi.ServerPlatform;
 import org.jetbrains.annotations.NotNull;
@@ -44,13 +46,28 @@ public class EsToolsUnitTest {
         return executeCommand(parts[0], parts.length > 1 ? parts[1].split(" ") : new String[0]);
     }
 
+    /**
+     * Execute the specific command and assert that the command will send an error message,
+     * which is the last message sent by the player.
+     * <p>
+     * A Java exception will be counted as a bug, not an intended error.
+     * Errors are counted as messages starting with "§c" (Red).
+     *
+     * @param line The command to execute
+     */
     public void executeAssertError(String line) {
-        assertError(executeCommand(line));
+        assertError(executeCommand(line), true);
     }
 
-    public void assertError(String[] feedback) {
+    public void executeAssertSuccess(String line) {
+        assertError(executeCommand(line), false);
+    }
+
+    public void assertError(String[] feedback, boolean shouldError) {
         Assertions.assertNotEquals(0, feedback.length);
-        Assertions.assertTrue(stripReset(feedback[feedback.length-1]).startsWith("§c"), "Expected error message, got: " + feedback[feedback.length-1]);
+        boolean errored = stripReset(feedback[feedback.length-1]).startsWith("§c");
+        String msg = "Expected error message, got: " + feedback[feedback.length-1];
+        Assertions.assertEquals(shouldError, errored, msg);
     }
 
     @BeforeAll
@@ -100,5 +117,9 @@ public class EsToolsUnitTest {
             runnable.run();
         }
         waitingTasks.clear();
+    }
+
+    public TestItemStack genTestItem() {
+        return new TestItemStack(EsMaterial.createUnchecked("STONE"), 1);
     }
 }

@@ -13,11 +13,12 @@ public class TestItemStack implements EsItemStack {
     private int amount;
     private int damage = 0;
     private final Map<EsEnchantment, Integer> enchantments = new HashMap<>();
-    private TestItemMeta meta = new TestItemMeta();
+    private TestItemMeta meta;
 
     public TestItemStack(EsMaterial type, int amount) {
         this.type = type;
         this.amount = amount;
+        meta = new TestItemMeta();
     }
 
     @Override

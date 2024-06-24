@@ -1,9 +1,6 @@
 package net.serble.estools.Implementation;
 
-import net.serble.estools.ServerApi.EsGameMode;
-import net.serble.estools.ServerApi.EsLocation;
-import net.serble.estools.ServerApi.EsSound;
-import net.serble.estools.ServerApi.EsSoundCategory;
+import net.serble.estools.ServerApi.*;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,10 +15,13 @@ public class TestPlayer extends TestLivingEntity implements EsPlayer {
     private boolean allowFlight = false;
     private static final boolean flying = false;
     private EsSound playingSound = null;
+    private final TestPlayerInventory inventory;
+    private EsInventory openInventory;
 
     public TestPlayer(EsWorld world, String name) {
         super(world);
         this.name = name;
+        inventory = new TestPlayerInventory(this);
     }
 
     @Override
@@ -45,6 +45,10 @@ public class TestPlayer extends TestLivingEntity implements EsPlayer {
 
     public float getWalkSpeed() {
         return walkSpeed;
+    }
+
+    public EsInventory getOpenInventory() {
+        return openInventory;
     }
 
     // IMPLEMENTATION METHODS
@@ -71,27 +75,27 @@ public class TestPlayer extends TestLivingEntity implements EsPlayer {
 
     @Override
     public EsItemStack getMainHand() {
-        return null;
+        return inventory.getMainHand();
     }
 
     @Override
     public void setMainHand(EsItemStack item) {
-
+        inventory.setItem(EsEquipmentSlot.Hand, item);
     }
 
     @Override
     public void openInventory(EsInventory inv) {
-
+        openInventory = inv;
     }
 
     @Override
     public void closeInventory() {
-
+        openInventory = null;
     }
 
     @Override
     public EsPlayerInventory getInventory() {
-        return null;
+        return inventory;
     }
 
     @Override
@@ -141,7 +145,7 @@ public class TestPlayer extends TestLivingEntity implements EsPlayer {
 
     @Override
     public void updateInventory() {
-
+        // We don't have bugs like Bukkit does
     }
 
     @Override

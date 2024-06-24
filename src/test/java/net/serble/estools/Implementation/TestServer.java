@@ -84,7 +84,9 @@ public class TestServer implements EsServer {
 
     @Override
     public Set<EsEnchantment> getEnchantments() {
-        return Collections.emptySet();
+        Set<EsEnchantment> enchs = new HashSet<>();
+        enchs.add(EsEnchantment.createUnchecked("sharpness"));
+        return enchs;
     }
 
     @Override
