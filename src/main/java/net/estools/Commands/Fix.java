@@ -63,6 +63,11 @@ public class Fix extends PlayerCommand {
 				case "all":
 					all = true;
 					break;
+
+				default:
+					send(sender, "&cInvalid slot.");
+					send(sender, usage);
+					return false;
 			}
 		}
 
