@@ -10,132 +10,192 @@ folia-supported: true
 commands:
   estools:
     description: View plugin information, including the version.
+    usage: /estools [reload/reset/update/forceupdate/test/throw]
   gms:
     description: Change gamemode to survival.
+    usage: /gms [player]
   gmc:
     description: Change gamemode to creative.
+    usage: /gmc [player]
   gma:
     description: Change gamemode to adventure.
+    usage: /gma [player]
   gmsp:
     description: Change gamemode to spectator.
     aliases: spec
+    usage: /gmsp [player]
   tphere:
     description: Teleport a player to you.
+    usage: /tphere <entity1> [entity2] [entity3]...
   tpall:
     description: Teleport all players to you.
+    usage: /tpall [entity]
   feed:
     description: Fill saturation and hunger.
+    usage: /feed [player]
   heal:
     description: Heal a player.
+    usage: /heal [entity]
   sudo:
     description: Run a command as another player.
+    usage: /sudo <player> <command>
   fly:
     description: Toggle flight.
+    usage: /fly [player]
   suicide:
     description: End your own life.
+    usage: /suicide
   smite:
     description: Strike player with lightning.
+    usage: /smite <entity1> [entity2] [entity3]...
   sethealth:
     description: Set a player's health.
+    usage: /sethealth <amount> [entity]
   setmaxhealth:
     description: Set a player's max health.
+    usage: /setmaxhealth <amount> [entity]
   invsee:
     description: Open the inventory of another player.
+    usage: /invsee <player>
   i:
     description: Give yourself an item.
+    usage: /i <item> [amount]
   h:
     description: Put an item in your currently selected slot.
+    usage: /h <item> [amount]
   ench:
     description: Enchant your currently held item.
+    usage: /ench <enchantment> [level] [player]
   fix:
     description: Fully repair held item.
+    usage: /fix [hand/offhand/helmet/chestplate/leggings/boots/all] [player]
   getinfo:
     description: Get information about an entity.
+    usage: /getinfo <entity>
   editsign:
     description: Modify the text on a sign.
+    usage: "/editsign <line> [text] or /editsign glow/unglow"
   god:
     description: Toggle god mode.
+    usage: /god [entity] [time]
   music:
     description: Play a music disc.
+    usage: /music [song]
   cchest:
     description: Open an ender chest like secondary inventory.
+    usage: /cchest
   rename:
     description: Change the name held item.
+    usage: /rename [text]
   back:
     description: Go to your location before you teleported/died.
+    usage: /back
   setstack:
     description: Change the size of the held item stack.
     aliases: stack
+    usage: /setstack <amount>
   ci:
     description: Clear your inventory.
+    usage: /ci [player]
   powerpick:
     description: Give yourself an op pickaxe.
     aliases: pp
+    usage: /pp
   poweraxe:
     description: Give yourself an op axe.
     aliases: pa
+    usage: /pa
   powersword:
     description: Give yourself an op sword.
     aliases: ps
+    usage: /ps
   powershovel:
     description: Give yourself an op shovel.
     aliases: psh
+    usage: /psh
   powerhoe:
     description: Give yourself an op hoe.
     aliases: ph
+    usage: /ph
   day:
     description: Set the time to day.
+    usage: /day
   night:
     description: Set the time to night.
     aliases: moon
+    usage: /night
   noon:
     description: Set the time to noon.
+    usage: /noon
   midnight:
     description: Set the time to midnight.
+    usage: /midnight
   rain:
     description: Set the weather to rain.
+    usage: /rain
   sun:
     description: Set the weather to clear.
+    usage: /rain
   thunder:
     description: Set the weather to thunderstorm.
+    usage: /thunder
   walkspeed:
     description: Set your walk speed.
+    usage: /walkspeed <speed> [players]
   flyspeed:
     description: Set your fly speed.
+    usage: /flyspeed <speed> [players]
   setunbreakable:
     description: Toggle whether or not your held item is unbreakable.
+    usage: /setunbreakable
   hideflags:
     description: Toggle whether or not your held item's flags are hidden.
+    usage: /hideflags
   eff:
     description: Give a player a potion effect.
+    usage: /eff <effect> [amplifier] [duration] [players]
   safetp:
     description: Toggle whether or not fall damage/distance should be kept when being teleported with commands.
+    usage: /safetp
   infinite:
     description: Toggle whether or not you run out of items when placing blocks.
+    usage: /infinite
   sethunger:
     description: Set a player's hunger level.
+    usage: /sethunger <level> [player]
   setsaturation:
     description: Set a player's saturation level.
+    usage: /setsaturation <level> [player]
   potion:
     description: Give a player a potion.
+    usage: /potion <effect> [amplifier] [duration] [amount] [drink/splash/lingering] [player]
   setpersistentdata:
     description: Set persistent nbt tags on items.
+    usage: /setpersistentdata <key> <type> <value>
   getpersistentdata:
     description: Get persistent nbt tags on items.
+    usage: /getpersistentdata <key> <type>
   removepersistentdata:
     description: Remove persistent nbt tags on items.
+    usage: /removepersistentdata <key>
   warp:
     description: Warp to saved locations.
+    usage: /warp <warpname>
   warps:
     description: Create, Add, or Modify warps.
+    usage: /warps <add/set> <warpname> [LOCAL/global] [x] [y] [z] [yaw] [pitch]
   lore:
     description: Add, Change, or Remove lore from items.
+    usage: /lore add <text>, /lore set <line> <text>, /lore insert <line> <text>, /lore remove <line>
   mount:
     description: Make entities ride another entity.
+    usage: /mount <ridee> [rider1] [rider2]...
   dismount:
     description: Make entities dismount other entities.
+    usage: /dismount [rider1] [rider2]...
   buddha:
     description: Stop entities from dying from damage, their health will overflow back to full.
+    usage: /buddha [entity] [time]
 
 permissions:
   estools.update:
