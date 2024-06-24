@@ -67,4 +67,24 @@ public class GameModeCommandsTest extends EsToolsUnitTest {
         executeCommand("gmsp", p2.getName());
         Assertions.assertSame(p2.getGameMode(), EsGameMode.Spectator);
     }
+
+    @Test
+    public void survivalInvalid() {
+        executeAssertError("gms invalid");
+    }
+
+    @Test
+    public void creativeInvalid() {
+        executeAssertError("gmc invalid");
+    }
+
+    @Test
+    public void adventureInvalid() {
+        executeAssertError("gma invalid");
+    }
+
+    @Test
+    public void spectatorInvalid() {
+        executeAssertError("gmsp invalid");
+    }
 }
