@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>net.serble.EsTools</groupId>
+  <groupId>net.estools</groupId>
   <artifactId>EsTools</artifactId>
-  <version>5.0.1</version>
+  <version>5.0.2</version>
   <packaging>jar</packaging>
 
   <name>EsTools</name>
@@ -35,19 +35,23 @@
             <relocations>
                 <relocation>
                     <pattern>org.bstats</pattern>
-                    <shadedPattern>net.serble.estools</shadedPattern>
+                    <shadedPattern>net.estools.libs.bstats</shadedPattern>
                 </relocation>
                 <relocation>
                     <pattern>co.aikar.taskchain</pattern>
-                    <shadedPattern>net.serble.taskchain</shadedPattern>
+                    <shadedPattern>net.estools.libs.taskchain</shadedPattern>
                 </relocation>
                 <relocation>
                     <pattern>org.yaml.snakeyaml</pattern>
-                    <shadedPattern>net.serble.snakeyaml</shadedPattern>
+                    <shadedPattern>net.estools.libs.snakeyaml</shadedPattern>
                 </relocation>
                 <relocation>
                     <pattern>com.google.gson</pattern>
-                    <shadedPattern>net.serble.gson</shadedPattern>
+                    <shadedPattern>net.estools.libs.gson</shadedPattern>
+                </relocation>
+                <relocation>
+                    <pattern>io.papermc.lib</pattern>
+                    <shadedPattern>net.estools.libs.paperlib</shadedPattern>
                 </relocation>
             </relocations>
             <filters>
