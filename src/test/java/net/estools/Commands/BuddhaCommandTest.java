@@ -30,7 +30,7 @@ public class BuddhaCommandTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("buddha invalid");
+        executeAssertOneError("buddha invalid");
     }
 
     @Test

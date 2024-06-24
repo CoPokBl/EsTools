@@ -23,12 +23,12 @@ public class SetHealthCommandTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("sethealth 5 invalid");
+        executeAssertOneError("sethealth 5 invalid");
     }
 
     @Test
     public void invalidNumber() {
-        executeAssertError("sethealth invalid");
+        executeAssertOneError("sethealth invalid");
     }
 
     @Test

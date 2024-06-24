@@ -43,6 +43,6 @@ public class TpAllCommandTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("tpall invalid");
+        executeAssertOneError("tpall invalid");
     }
 }

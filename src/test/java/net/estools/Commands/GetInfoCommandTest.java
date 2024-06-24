@@ -7,12 +7,12 @@ public class GetInfoCommandTest extends EsToolsUnitTest {
 
     @Test
     public void noArgs() {
-        executeAssertError("getinfo");
+        executeAssertOneError("getinfo");
     }
 
     @Test
     public void invalidTarget() {
-        executeAssertError("getinfo invalid");
+        executeAssertOneError("getinfo invalid");
     }
 
     @Test

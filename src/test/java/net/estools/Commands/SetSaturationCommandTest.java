@@ -23,12 +23,12 @@ public class SetSaturationCommandTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("setsaturation 5 invalid");
+        executeAssertOneError("setsaturation 5 invalid");
     }
 
     @Test
     public void invalidNumber() {
-        executeAssertError("setsaturation invalid");
+        executeAssertOneError("setsaturation invalid");
     }
 
     @Test

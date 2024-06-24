@@ -24,7 +24,7 @@ public class HealCommandTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("heal invalid");
+        executeAssertOneError("heal invalid");
     }
 
     @Test

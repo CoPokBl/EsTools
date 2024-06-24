@@ -23,12 +23,12 @@ public class SetMaxHealthCommandTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("setmaxhealth 5 invalid");
+        executeAssertOneError("setmaxhealth 5 invalid");
     }
 
     @Test
     public void invalidNumber() {
-        executeAssertError("setmaxhealth invalid");
+        executeAssertOneError("setmaxhealth invalid");
     }
 
     @Test

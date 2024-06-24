@@ -4,6 +4,7 @@ import net.estools.Implementation.TestItemStack;
 import net.estools.Implementation.TestPlayer;
 import net.estools.Implementation.TestServer;
 import net.estools.Implementation.TestWorld;
+import net.estools.ServerApi.EsLocation;
 import net.estools.ServerApi.EsMaterial;
 import net.estools.ServerApi.Interfaces.EsEvent;
 import net.estools.ServerApi.ServerPlatform;
@@ -11,10 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unused")  // Future proof
+@SuppressWarnings("unused")  // Future-proof
 public class EsToolsUnitTest {
     public static TestPlayer player;
     public static TestWorld world;
@@ -48,13 +50,19 @@ public class EsToolsUnitTest {
 
     /**
      * Execute the specific command and assert that the command will send an error message,
-     * which is the last message sent by the player.
+     * which is the last message sent by the player. There should only be 1 error.
      * <p>
      * A Java exception will be counted as a bug, not an intended error.
      * Errors are counted as messages starting with "§c" (Red).
      *
      * @param line The command to execute
      */
+    public void executeAssertOneError(String line) {
+        String[] feedback = executeCommand(line);
+        assertError(feedback, true);
+        Assertions.assertEquals(1, feedback.length);
+    }
+
     public void executeAssertError(String line) {
         assertError(executeCommand(line), true);
     }
@@ -72,6 +80,10 @@ public class EsToolsUnitTest {
 
     @BeforeAll
     public static void initEnvironment() {
+        // Delete temp folder so we have no data
+        File tempFolder = new File(System.getProperty("java.io.tmpdir"), "EsTools");
+        Utils.deleteFolder(tempFolder);
+
         Main.server = new TestServer();  // Inject the server platform directly
         Main.disableUpdater = true;  // Otherwise we will get rate limited
         Main main = new Main(ServerPlatform.Injected, null);
@@ -120,6 +132,14 @@ public class EsToolsUnitTest {
     }
 
     public TestItemStack genTestItem() {
-        return new TestItemStack(EsMaterial.createUnchecked("STONE"), 1);
+        return new TestItemStack(EsMaterial.fromKey("stone"), 1);
+    }
+
+    public EsLocation loc(double x, double y, double z) {
+        return new EsLocation(world, x, y, z);
+    }
+
+    public void go(double x, double y, double z) {
+        player.teleport(loc(x, y, z));
     }
 }

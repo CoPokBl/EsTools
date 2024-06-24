@@ -9,7 +9,7 @@ public class SmiteCommandTest extends EsToolsUnitTest {
 
     @Test
     public void noArgs() {
-        executeAssertError("smite");
+        executeAssertOneError("smite");
     }
 
     @Test
@@ -29,6 +29,6 @@ public class SmiteCommandTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("smite invalid");
+        executeAssertOneError("smite invalid");
     }
 }

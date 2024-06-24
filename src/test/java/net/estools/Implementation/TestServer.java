@@ -11,6 +11,33 @@ import java.util.*;
 
 public class TestServer implements EsServer {
     private final TestLogger logger;
+    private static final Set<EsMaterial> materials;
+    private static final Set<EsEnchantment> enchantments;
+    private static final Set<EsSound> sounds;
+
+    static {
+        materials = new HashSet<>();
+        materials.add(EsMaterial.createUnchecked("dirt"));
+        materials.add(EsMaterial.createUnchecked("stone"));
+        materials.add(EsMaterial.createUnchecked("NETHERITE_AXE"));
+        materials.add(EsMaterial.createUnchecked("DIAMOND_AXE"));
+        materials.add(EsMaterial.createUnchecked("NETHERITE_PICKAXE"));
+        materials.add(EsMaterial.createUnchecked("DIAMOND_PICKAXE"));
+        materials.add(EsMaterial.createUnchecked("NETHERITE_HOE"));
+        materials.add(EsMaterial.createUnchecked("DIAMOND_HOE"));
+        materials.add(EsMaterial.createUnchecked("NETHERITE_SHOVEL"));
+        materials.add(EsMaterial.createUnchecked("DIAMOND_SHOVEL"));
+        materials.add(EsMaterial.createUnchecked("NETHERITE_SWORD"));
+        materials.add(EsMaterial.createUnchecked("DIAMOND_SWORD"));
+        materials.add(EsMaterial.createUnchecked("SALMON"));
+
+        enchantments = new HashSet<>();
+        enchantments.add(EsEnchantment.createUnchecked("sharpness"));
+        enchantments.add(EsEnchantment.createUnchecked("knockback"));
+
+        sounds = new HashSet<>();
+        sounds.add(EsSound.createUnchecked("music_disc.cat"));
+    }
 
     public TestServer() {
         logger = new TestLogger();
@@ -84,15 +111,11 @@ public class TestServer implements EsServer {
 
     @Override
     public Set<EsEnchantment> getEnchantments() {
-        Set<EsEnchantment> enchs = new HashSet<>();
-        enchs.add(EsEnchantment.createUnchecked("sharpness"));
-        return enchs;
+        return enchantments;
     }
 
     @Override
     public Set<EsSound> getSounds() {
-        HashSet<EsSound> sounds = new HashSet<>();
-        sounds.add(EsSound.createUnchecked("music_disc.cat"));
         return sounds;
     }
 
@@ -103,7 +126,7 @@ public class TestServer implements EsServer {
 
     @Override
     public Set<EsMaterial> getMaterials(boolean onlyItems) {
-        return Collections.emptySet();
+        return materials;
     }
 
     @Override

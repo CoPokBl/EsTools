@@ -30,11 +30,11 @@ public class WalkSpeedTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("walkspeed 5 invalid");
+        executeAssertOneError("walkspeed 5 invalid");
     }
 
     @Test
     public void invalidNumber() {
-        executeAssertError("walkspeed invalid");
+        executeAssertOneError("walkspeed invalid");
     }
 }

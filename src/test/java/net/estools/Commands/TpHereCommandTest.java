@@ -32,6 +32,6 @@ public class TpHereCommandTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("tphere invalid");
+        executeAssertOneError("tphere invalid");
     }
 }

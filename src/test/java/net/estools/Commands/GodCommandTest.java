@@ -30,7 +30,7 @@ public class GodCommandTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("god invalid");
+        executeAssertOneError("god invalid");
     }
 
     @Test

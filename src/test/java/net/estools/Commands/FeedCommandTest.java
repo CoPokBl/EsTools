@@ -24,7 +24,7 @@ public class FeedCommandTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("feed invalid");
+        executeAssertOneError("feed invalid");
     }
 
     @Test

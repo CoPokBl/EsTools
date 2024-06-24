@@ -11,7 +11,7 @@ public class EnchCommandTest extends EsToolsUnitTest {
     @Test
     public void noItem() {
         player.setMainHand(null);
-        executeAssertError("ench");
+        executeAssertOneError("ench");
     }
 
     @Test
@@ -26,7 +26,7 @@ public class EnchCommandTest extends EsToolsUnitTest {
     public void invalidEnchant() {
         TestItemStack item = genTestItem();
         player.setMainHand(item);
-        executeAssertError("ench invalid");
+        executeAssertOneError("ench invalid");
         Assertions.assertNull(item.getEnchantments().get(EsEnchantment.createUnchecked("invalid")));
     }
 
@@ -34,7 +34,7 @@ public class EnchCommandTest extends EsToolsUnitTest {
     public void invalidLevel() {
         TestItemStack item = genTestItem();
         player.setMainHand(item);
-        executeAssertError("ench sharpness invalid");
+        executeAssertOneError("ench sharpness invalid");
         Assertions.assertNull(item.getEnchantments().get(EsEnchantment.createUnchecked("sharpness")));
     }
 }

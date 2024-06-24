@@ -22,12 +22,12 @@ public class FlySpeedTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("flyspeed 5 invalid");
+        executeAssertOneError("flyspeed 5 invalid");
     }
 
     @Test
     public void invalidNumber() {
-        executeAssertError("flyspeed invalid");
+        executeAssertOneError("flyspeed invalid");
     }
 
     @Test

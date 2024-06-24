@@ -23,12 +23,12 @@ public class SetHungerCommandTest extends EsToolsUnitTest {
 
     @Test
     public void invalidTarget() {
-        executeAssertError("sethunger 5 invalid");
+        executeAssertOneError("sethunger 5 invalid");
     }
 
     @Test
     public void invalidNumber() {
-        executeAssertError("sethunger invalid");
+        executeAssertOneError("sethunger invalid");
     }
 
     @Test

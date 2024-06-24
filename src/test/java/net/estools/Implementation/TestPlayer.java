@@ -51,6 +51,10 @@ public class TestPlayer extends TestLivingEntity implements EsPlayer {
         return openInventory;
     }
 
+    public void setSelectedSlot(int s) {
+        inventory.setSelectedSlot(s);
+    }
+
     // IMPLEMENTATION METHODS
 
     @Override

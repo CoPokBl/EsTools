@@ -10,7 +10,7 @@ public class RenameCommandTest extends EsToolsUnitTest {
     @Test
     public void noItem() {
         player.setMainHand(null);
-        executeAssertError("rename");
+        executeAssertOneError("rename");
     }
 
     @Test

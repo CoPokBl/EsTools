@@ -70,21 +70,21 @@ public class GameModeCommandsTest extends EsToolsUnitTest {
 
     @Test
     public void survivalInvalid() {
-        executeAssertError("gms invalid");
+        executeAssertOneError("gms invalid");
     }
 
     @Test
     public void creativeInvalid() {
-        executeAssertError("gmc invalid");
+        executeAssertOneError("gmc invalid");
     }
 
     @Test
     public void adventureInvalid() {
-        executeAssertError("gma invalid");
+        executeAssertOneError("gma invalid");
     }
 
     @Test
     public void spectatorInvalid() {
-        executeAssertError("gmsp invalid");
+        executeAssertOneError("gmsp invalid");
     }
 }

@@ -91,6 +91,6 @@ public class FixCommandTest extends EsToolsUnitTest {
 
     @Test
     public void invalidSlot() {
-        executeAssertError("fix invalid");
+        executeAssertError("fix invalid");  // Displays error and usage
     }
 }
