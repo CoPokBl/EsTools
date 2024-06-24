@@ -1,7 +1,8 @@
 package net.serble.estools.Implementation;
 
-import net.serble.estools.ServerApi.*;
-import net.serble.estools.ServerApi.Interfaces.*;
+import net.serble.estools.ServerApi.EsLocation;
+import net.serble.estools.ServerApi.Interfaces.EsEntity;
+import net.serble.estools.ServerApi.Interfaces.EsWorld;
 
 import java.util.*;
 

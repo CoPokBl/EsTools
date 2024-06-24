@@ -36,6 +36,7 @@ public class Main {
 	public static Main plugin;
 	public static ServerPlatform platform;
 	public static SemanticVersion minecraftVersion;
+	public static boolean disableUpdater = false;  // Don't get rate limited by GitHub
 	public static boolean tabCompleteEnabled = true;
 	private static EsToolsConfig config;  // Get with overriden getConfig() method
 	public static SemanticVersion newVersion = null;  // The version available to download
@@ -165,7 +166,9 @@ public class Main {
 		}
 
 		Give.enable();
-		Updater.checkForUpdate();
+		if (!disableUpdater) {
+			Updater.checkForUpdate();
+		}
 
 		server.startEvents();  // Events will now trigger
 	}

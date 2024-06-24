@@ -1,6 +1,7 @@
 package net.serble.estools.Commands;
 
 import net.serble.estools.EsToolsUnitTest;
+import net.serble.estools.Implementation.TestPlayer;
 import net.serble.estools.ServerApi.EsGameMode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,5 +34,37 @@ public class GameModeCommandsTest extends EsToolsUnitTest {
         player.setGameMode(EsGameMode.Survival);
         executeCommand("gmsp");
         Assertions.assertSame(player.getGameMode(), EsGameMode.Spectator);
+    }
+
+    @Test
+    public void survivalOther() {
+        TestPlayer p2 = createPlayer();
+        p2.setGameMode(EsGameMode.Creative);
+        executeCommand("gms", p2.getName());
+        Assertions.assertSame(p2.getGameMode(), EsGameMode.Survival);
+    }
+
+    @Test
+    public void creativeOther() {
+        TestPlayer p2 = createPlayer();
+        p2.setGameMode(EsGameMode.Survival);
+        executeCommand("gmc", p2.getName());
+        Assertions.assertSame(p2.getGameMode(), EsGameMode.Creative);
+    }
+
+    @Test
+    public void adventureOther() {
+        TestPlayer p2 = createPlayer();
+        p2.setGameMode(EsGameMode.Survival);
+        executeCommand("gma", p2.getName());
+        Assertions.assertSame(p2.getGameMode(), EsGameMode.Adventure);
+    }
+
+    @Test
+    public void spectatorOther() {
+        TestPlayer p2 = createPlayer();
+        p2.setGameMode(EsGameMode.Survival);
+        executeCommand("gmsp", p2.getName());
+        Assertions.assertSame(p2.getGameMode(), EsGameMode.Spectator);
     }
 }

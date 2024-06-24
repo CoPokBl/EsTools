@@ -89,7 +89,9 @@ public class TestServer implements EsServer {
 
     @Override
     public Set<EsSound> getSounds() {
-        return Collections.emptySet();
+        HashSet<EsSound> sounds = new HashSet<>();
+        sounds.add(EsSound.createUnchecked("music_disc.cat"));
+        return sounds;
     }
 
     @Override
@@ -129,8 +131,8 @@ public class TestServer implements EsServer {
 
     @Override
     public int runTaskLater(Runnable task, long ticks) {
-        task.run();
-        return 0;
+        EsToolsUnitTest.waitingTasks.add(task);  // Run it later
+        return EsToolsUnitTest.waitingTasks.size() - 1;  // Maybe I'll use this later
     }
 
     @Override
@@ -140,7 +142,7 @@ public class TestServer implements EsServer {
 
     @Override
     public void cancelTask(int id) {
-        // No lol
+        // Not needed
     }
 
     @Override

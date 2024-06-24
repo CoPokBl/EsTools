@@ -5,10 +5,10 @@ import net.serble.estools.Implementation.TestPlayer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class TeleportCommandsTest extends EsToolsUnitTest {
+public class TpHereCommandTest extends EsToolsUnitTest {
 
     @Test
-    public void tpHere() {
+    public void tpHereMulti() {
         TestPlayer p1 = createPlayer();
         TestPlayer p2 = createPlayer();
         TestPlayer p3 = createPlayer();
@@ -25,20 +25,13 @@ public class TeleportCommandsTest extends EsToolsUnitTest {
     }
 
     @Test
-    public void tpAll() {
-        TestPlayer p1 = createPlayer();
-        TestPlayer p2 = createPlayer();
-        TestPlayer p3 = createPlayer();
+    public void noArgs() {
+        String[] feedback = executeCommand("tphere");
+        Assertions.assertEquals(1, feedback.length);
+    }
 
-        p1.teleportRandom();
-        p2.teleportRandom();
-        p3.teleportRandom();
-
-        executeCommand("tpall", p1.getName());
-
-        // Is everyone at p1?
-        Assertions.assertEquals(player.getLocation(), p1.getLocation());
-        Assertions.assertEquals(p2.getLocation(), p1.getLocation());
-        Assertions.assertEquals(p3.getLocation(), p1.getLocation());
+    @Test
+    public void invalidTarget() {
+        executeAssertError("tphere invalid");
     }
 }

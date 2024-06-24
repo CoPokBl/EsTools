@@ -1,6 +1,9 @@
 package net.serble.estools.Implementation;
 
-import net.serble.estools.ServerApi.*;
+import net.serble.estools.ServerApi.EsGameMode;
+import net.serble.estools.ServerApi.EsLocation;
+import net.serble.estools.ServerApi.EsSound;
+import net.serble.estools.ServerApi.EsSoundCategory;
 import net.serble.estools.ServerApi.Interfaces.*;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +33,10 @@ public class TestPlayer extends TestLivingEntity implements EsPlayer {
 
     public @Nullable EsSound getPlayingSound() {
         return playingSound;
+    }
+
+    public void resetPlayingSound() {
+        playingSound = null;
     }
 
     public float getFlySpeed() {

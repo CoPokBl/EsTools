@@ -1,9 +1,12 @@
 package net.serble.estools.Implementation;
 
-import net.serble.estools.ServerApi.*;
-import net.serble.estools.ServerApi.Interfaces.*;
+import net.serble.estools.ServerApi.EsPotionEffect;
+import net.serble.estools.ServerApi.EsPotionEffectType;
+import net.serble.estools.ServerApi.Interfaces.EsLivingEntity;
+import net.serble.estools.ServerApi.Interfaces.EsWorld;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestLivingEntity extends TestEntity implements EsLivingEntity {
     private double maxHealth = 20;
