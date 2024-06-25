@@ -52,7 +52,7 @@ public class TestItemStack implements EsItemStack {
     }
 
     @Override
-    public EsItemMeta getItemMeta() {
+    public TestItemMeta getItemMeta() {
         return meta.clone();
     }
 
@@ -83,7 +83,7 @@ public class TestItemStack implements EsItemStack {
 
     @SuppressWarnings("MethodDoesntCallSuperMethod")  // Not implemented yet
     @Override
-    public EsItemStack clone() {
+    public TestItemStack clone() {
         return this;  // Who cares
     }
 

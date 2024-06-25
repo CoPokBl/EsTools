@@ -2,7 +2,6 @@ package net.estools.Implementation;
 
 import net.estools.ServerApi.EsItemFlag;
 import net.estools.ServerApi.Interfaces.EsItemMeta;
-import net.estools.ServerApi.Interfaces.EsPersistentDataContainer;
 
 import java.util.*;
 
@@ -11,6 +10,7 @@ public class TestItemMeta implements EsItemMeta {
     private final Set<EsItemFlag> flags = new HashSet<>();
     private String displayName = "";
     private List<String> lore = new ArrayList<>();
+    private final TestPersistentDataContainer data = new TestPersistentDataContainer();
 
     @Override
     public void setUnbreakable(boolean val) {
@@ -58,8 +58,8 @@ public class TestItemMeta implements EsItemMeta {
     }
 
     @Override
-    public EsPersistentDataContainer getPersistentDataContainer() {
-        return null;
+    public TestPersistentDataContainer getPersistentDataContainer() {
+        return data;
     }
 
     @SuppressWarnings("MethodDoesntCallSuperMethod")  // Why would it?

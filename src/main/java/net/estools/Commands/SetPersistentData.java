@@ -42,7 +42,7 @@ public class SetPersistentData extends EsToolsCommand {
 //            return false;
 //        }
 
-        EsItemMeta meta = item.getItemMeta();
+        EsItemMeta meta = item == null ? null : item.getItemMeta();
         if (meta == null) {
             send(sender, "&cItem does not have nbt tags!");
             return false;
