@@ -14,6 +14,7 @@ public class TestServer implements EsServer {
     private static final Set<EsMaterial> materials;
     private static final Set<EsEnchantment> enchantments;
     private static final Set<EsSound> sounds;
+    private static final Set<EsPotionEffectType> effects;
 
     static {
         materials = new HashSet<>();
@@ -37,6 +38,9 @@ public class TestServer implements EsServer {
 
         sounds = new HashSet<>();
         sounds.add(EsSound.createUnchecked("music_disc.cat"));
+
+        effects = new HashSet<>();
+        effects.add(EsPotionEffectType.createUnchecked("speed"));
     }
 
     public TestServer() {
@@ -96,12 +100,12 @@ public class TestServer implements EsServer {
 
     @Override
     public EsInventory createInventory(EsPlayer owner, int size, String title) {
-        return null;
+        return new TestInventory(size, title);
     }
 
     @Override
     public Set<EsPotionEffectType> getPotionEffectTypes() {
-        return Collections.emptySet();
+        return effects;
     }
 
     @Override

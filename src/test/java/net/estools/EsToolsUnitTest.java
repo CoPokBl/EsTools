@@ -73,8 +73,8 @@ public class EsToolsUnitTest {
 
     public void assertError(String[] feedback, boolean shouldError) {
         Assertions.assertNotEquals(0, feedback.length);
-        boolean errored = stripReset(feedback[feedback.length-1]).startsWith("§c");
-        String msg = "Expected error message, got: " + feedback[feedback.length-1];
+        boolean errored = stripReset(feedback[feedback.length-1]).trim().startsWith("§c");
+        String msg = "Expected error message, got: " + stripReset(feedback[feedback.length-1]).trim();
         Assertions.assertEquals(shouldError, errored, msg);
     }
 
