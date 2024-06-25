@@ -17,6 +17,8 @@ public class TestPlayer extends TestLivingEntity implements EsPlayer {
     private EsSound playingSound = null;
     private final TestPlayerInventory inventory;
     private EsInventory openInventory;
+    private TestBlock targetBlock = null;
+    private TestSignSide targetSignSide = null;
 
     public TestPlayer(EsWorld world, String name) {
         super(world);
@@ -27,6 +29,18 @@ public class TestPlayer extends TestLivingEntity implements EsPlayer {
     @Override
     public String toString() {
         return getName();
+    }
+
+    public void setTargetBlock(TestBlock block) {
+        targetBlock = block;
+    }
+
+    public TestSignSide getTargetSignSide() {
+        return targetSignSide;
+    }
+
+    public void setTargetSignSide(TestSignSide targetSignSide) {
+        this.targetSignSide = targetSignSide;
     }
 
     // TESTING METHODS
@@ -124,7 +138,7 @@ public class TestPlayer extends TestLivingEntity implements EsPlayer {
 
     @Override
     public EsBlock getTargetBlock() {
-        return null;
+        return targetBlock;
     }
 
     @Override

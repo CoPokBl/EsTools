@@ -9,12 +9,24 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class TestInventory implements EsInventory {
-    private EsItemStack[] items;
+    private final EsItemStack[] items;
+    private int size = 54;
+    private String name;
 
     // TEST METHODS
 
     public TestInventory() {
-        items = new EsItemStack[54];
+        items = new EsItemStack[size];
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public TestInventory(int size, String name) {
+        items = new EsItemStack[size];
+        this.size = size;
+        this.name = name;
     }
 
     // IMPLEMENTATION METHODS
@@ -44,7 +56,12 @@ public class TestInventory implements EsInventory {
 
     @Override
     public void setContents(EsItemStack[] items) {
-        this.items = items;
+        if (items.length > size) {
+            throw new IllegalArgumentException("Inventory size is " + size + " but " + items.length + " items were provided.");
+        }
+
+        clear();
+        System.arraycopy(items, 0, this.items, 0, items.length);
     }
 
     @Override
@@ -59,7 +76,10 @@ public class TestInventory implements EsInventory {
 
     @Override
     public boolean isEqualTo(EsInventory inv) {
-        return false;
+        if (!(inv instanceof TestInventory)) {
+            return false;
+        }
+        return name.equals(((TestInventory) inv).getName());
     }
 
     @Override

@@ -13,8 +13,14 @@ public class TestLivingEntity extends TestEntity implements EsLivingEntity {
     private double health = 20;
     private final List<EsPotionEffect> effects = new ArrayList<>();
 
+    // TEST METHODS
+
     public TestLivingEntity(EsWorld world) {
         super(world);
+    }
+
+    public void clearPotionEffects() {
+        effects.clear();
     }
 
     // IMPLEMENTATION METHODS
