@@ -29,7 +29,7 @@ public class Lore extends EsToolsCommand {
         EsPlayer p = (EsPlayer)sender;
         EsItemStack is = p.getMainHand();
 
-        if (is.getItemMeta() == null) {
+        if (is == null || is.getItemMeta() == null) {
             send(sender, "&cThis item cannot have lore!");
             return false;
         }
