@@ -12,7 +12,7 @@ public class TestItemStack implements EsItemStack {
     private EsMaterial type;
     private int amount;
     private int damage = 0;
-    private final Map<EsEnchantment, Integer> enchantments = new HashMap<>();
+    private Map<EsEnchantment, Integer> enchantments = new HashMap<>();
     private TestItemMeta meta;
 
     public TestItemStack(EsMaterial type, int amount) {
@@ -81,14 +81,21 @@ public class TestItemStack implements EsItemStack {
         return damage;
     }
 
-    @SuppressWarnings("MethodDoesntCallSuperMethod")  // Not implemented yet
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public TestItemStack clone() {
-        return this;  // Who cares
+        TestItemStack stack = new TestItemStack(type, amount);
+        stack.enchantments = enchantments;
+        stack.damage = damage;
+        stack.meta = meta.clone();
+        return stack;
     }
 
     @Override
     public boolean isSimilar(EsItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         return type.equals(stack.getType());
     }
 

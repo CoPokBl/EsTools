@@ -36,8 +36,10 @@ public class CChestCommandTest extends EsToolsUnitTest {
 
         Assertions.assertNotNull(player.getOpenInventory());
 
-        // Check if the test item is in the slot
-        Assertions.assertEquals(item, player.getOpenInventory().getItem(5));
+        tickTime();  // It does runTask to modify inv at some point
+
+        // Check if the test item is in the slot, the item is cloned so use isSimilar
+        Assertions.assertTrue(item.isSimilar(player.getOpenInventory().getItem(5)));
 
         // Check if the item is removed
         clickEvent = new EsInventoryClickEvent(

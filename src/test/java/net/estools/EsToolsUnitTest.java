@@ -6,6 +6,7 @@ import net.estools.Implementation.TestServer;
 import net.estools.Implementation.TestWorld;
 import net.estools.ServerApi.EsLocation;
 import net.estools.ServerApi.EsMaterial;
+import net.estools.ServerApi.Interfaces.EsCommandSender;
 import net.estools.ServerApi.Interfaces.EsEvent;
 import net.estools.ServerApi.ServerPlatform;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("unused")  // Future-proof
 public class EsToolsUnitTest {
@@ -26,6 +26,7 @@ public class EsToolsUnitTest {
     private static final List<String> console = new ArrayList<>();
     public static final List<TestPlayer> players = new ArrayList<>();
     public static final List<Runnable> waitingTasks = new ArrayList<>();
+    public static final Map<EsCommandSender, String> pendingCommands = new HashMap<>();
 
     public @NotNull String[] executeCommand(String label, String... args) {
         int initialPlayerChatIndex = player.getChatMessages().size();

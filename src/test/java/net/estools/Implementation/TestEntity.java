@@ -16,6 +16,8 @@ public class TestEntity implements EsEntity {
     private EsLocation location;
     private int onFireTicks = 0;
     private float fallDistance = 0;
+    private final List<EsEntity> passengers = new ArrayList<>();
+    private EsEntity vehicle = null;
 
     // TESTING METHODS
 
@@ -111,12 +113,14 @@ public class TestEntity implements EsEntity {
 
     @Override
     public boolean leaveVehicle() {
+        vehicle.getPassengers().remove(this);
+        vehicle = null;
         return true;
     }
 
     @Override
     public List<EsEntity> getPassengers() {
-        return Collections.emptyList();
+        return passengers;
     }
 
     @Override
@@ -141,7 +145,8 @@ public class TestEntity implements EsEntity {
 
     @Override
     public void addPassenger(EsEntity entity) {
-
+        passengers.add(entity);
+        ((TestEntity) entity).vehicle = this;
     }
 
     @Override

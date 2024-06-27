@@ -140,7 +140,7 @@ public class TestServer implements EsServer {
 
     @Override
     public void dispatchCommand(EsCommandSender sender, String cmd) {
-
+        EsToolsUnitTest.pendingCommands.put(sender, cmd);
     }
 
     @Override
@@ -166,7 +166,7 @@ public class TestServer implements EsServer {
 
     @Override
     public void runTask(Runnable task) {
-        task.run();
+        EsToolsUnitTest.waitingTasks.add(task);  // Run it later
     }
 
     @Override
