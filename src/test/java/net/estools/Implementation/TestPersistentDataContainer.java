@@ -16,6 +16,14 @@ public class TestPersistentDataContainer implements EsPersistentDataContainer {
         return values;
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    @Override
+    public TestPersistentDataContainer clone() {
+        TestPersistentDataContainer clone = new TestPersistentDataContainer();
+        clone.values.putAll(values);
+        return clone;
+    }
+
     // IMPLEMENTATION METHODS
 
     @Override

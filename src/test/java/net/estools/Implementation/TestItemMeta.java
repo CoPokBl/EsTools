@@ -10,7 +10,7 @@ public class TestItemMeta implements EsItemMeta {
     private final Set<EsItemFlag> flags = new HashSet<>();
     private String displayName = "";
     private List<String> lore = new ArrayList<>();
-    private final TestPersistentDataContainer data = new TestPersistentDataContainer();
+    private TestPersistentDataContainer data = new TestPersistentDataContainer();
 
     @Override
     public void setUnbreakable(boolean val) {
@@ -69,6 +69,7 @@ public class TestItemMeta implements EsItemMeta {
         clone.flags.addAll(flags);
         clone.displayName = displayName;
         clone.lore.addAll(lore);
+        clone.data = data.clone();
         return clone;
     }
 }

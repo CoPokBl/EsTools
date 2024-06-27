@@ -2,6 +2,8 @@ package net.estools.Commands;
 
 import net.estools.EsToolsUnitTest;
 import net.estools.Implementation.TestItemStack;
+import net.estools.Implementation.TestPersistentDataContainer;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 // /setpersistentdata <key> <type> <value>
@@ -43,12 +45,21 @@ public class SetPersistentDataCommandTest extends EsToolsUnitTest {
         executeAssertOneError("setpersistentdata somekey integer invalid");
     }
 
-//    @Test  TODO: Fix
-//    public void setString() {
-//        TestItemStack item = setupItem();
-//        executeAssertSuccess("setpersistentdata somekey string sometext");
-//        TestPersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-//        Assertions.assertEquals(1, data.getValues().size());
-//        Assertions.assertEquals("sometext", data.get("somekey", null));
-//    }
+    @Test
+    public void setString() {
+        TestItemStack item = setupItem();
+        executeAssertSuccess("setpersistentdata somekey string sometext");
+        TestPersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
+        Assertions.assertEquals(1, data.getValues().size());
+        Assertions.assertEquals("sometext", data.get("somekey", null));
+    }
+
+    @Test
+    public void setInteger() {
+        TestItemStack item = setupItem();
+        executeAssertSuccess("setpersistentdata somekey integer 123");
+        TestPersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
+        Assertions.assertEquals(1, data.getValues().size());
+        Assertions.assertEquals(123, data.get("somekey", null));
+    }
 }

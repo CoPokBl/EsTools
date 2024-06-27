@@ -67,8 +67,10 @@ public class EsToolsUnitTest {
         assertError(executeCommand(line), true);
     }
 
-    public void executeAssertSuccess(String line) {
-        assertError(executeCommand(line), false);
+    public String[] executeAssertSuccess(String line) {
+        String[] feedback = executeCommand(line);
+        assertError(feedback, false);
+        return feedback;
     }
 
     public void assertError(String[] feedback, boolean shouldError) {
