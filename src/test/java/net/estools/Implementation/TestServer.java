@@ -31,6 +31,7 @@ public class TestServer implements EsServer {
         materials.add(EsMaterial.createUnchecked("NETHERITE_SWORD"));
         materials.add(EsMaterial.createUnchecked("DIAMOND_SWORD"));
         materials.add(EsMaterial.createUnchecked("SALMON"));
+        materials.add(EsMaterial.createUnchecked("POTION"));
 
         enchantments = new HashSet<>();
         enchantments.add(EsEnchantment.createUnchecked("sharpness"));
@@ -90,7 +91,7 @@ public class TestServer implements EsServer {
 
     @Override
     public EsPotion createPotion(EsPotType potType, EsPotionEffect effect, int amount) {
-        return null;
+        return new TestPotion(amount, potType, effect);
     }
 
     @Override

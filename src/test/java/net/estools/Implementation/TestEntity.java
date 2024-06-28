@@ -113,6 +113,9 @@ public class TestEntity implements EsEntity {
 
     @Override
     public boolean leaveVehicle() {
+        if (vehicle == null) {
+            return false;
+        }
         vehicle.getPassengers().remove(this);
         vehicle = null;
         return true;
