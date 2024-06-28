@@ -24,7 +24,7 @@ public class Potion extends EntityCommand {
 
         EsPotionEffectType type = EsPotionEffectType.fromKey(args[0]);
         if (type == null) {
-            send(sender, "Potion type does not exist!");
+            send(sender, "&cPotion type does not exist!");
             return false;
         }
 
