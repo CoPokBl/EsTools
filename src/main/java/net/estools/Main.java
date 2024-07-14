@@ -124,6 +124,7 @@ public class Main {
 		sc("infinite", "infinite", new Infinite(), 1);
 		sc("sethunger", "sethunger", new SetHunger());
 		sc("setsaturation", "setsaturation", new SetSaturation());
+		sc("disposal", "disposal", new Disposal(), 1, 2);
 
 		sc("powerpick", "powerpick", new PowerPick(), 1);
 		sc("poweraxe", "powerpick", new PowerAxe(), 1);
@@ -236,6 +237,12 @@ public class Main {
 	public void sc(String name, String perm, EsToolsCommand ce, int minVer) {
 		if (minecraftVersion.getMinor() >= minVer) sc(name, perm, ce);
 		else sc(name, perm, new WrongVersion(minVer));
+	}
+
+	public void sc(String name, String perm, EsToolsCommand ce, int minMinor, int minPatch) {
+		String versionName = minMinor + "." + minPatch;
+		if (minecraftVersion.isAtLeast(1, minMinor, minPatch)) sc(name, perm, ce);
+		else sc(name, perm, new WrongVersion(versionName));
 	}
 	
 	public void sc(String name, String perm, EsToolsCommand ce, EsToolsTabCompleter tc) {

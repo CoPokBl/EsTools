@@ -196,6 +196,9 @@ commands:
   buddha:
     description: Stop entities from dying from damage, their health will overflow back to full.
     usage: /buddha [entity] [time]
+  disposal:
+    description: Open an inventory that isn't saved so that you can place items and easily get rid of them.
+    usage: /disposal
 
 permissions:
   estools.update:
@@ -416,4 +419,8 @@ permissions:
 
   estools.mount:
     description: Allows the player to make entities ride other entities
+    default: op
+
+  estools.disposal:
+    description: Allows the player to open the disposal menu
     default: op
