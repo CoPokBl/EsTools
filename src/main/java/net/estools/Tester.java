@@ -42,6 +42,8 @@ public class Tester {
             new TestCommand("tp {player} 0 512 0", 1, new SemanticVersion(1, 1, 0)),
             new TestCommand("back", 1, new SemanticVersion(1, 1, 0)),
             new TestCommand("cchest", -1, new SemanticVersion(1, 7, 0)),
+            new TestCommand("i apple 64", 0.1, new SemanticVersion(1, 1, 2)),
+            new TestCommand("disposal", -1, new SemanticVersion(1, 1, 2)),
             new TestCommand("ci", 1),
             new TestCommand("h sign", 0.1),
             new TestCommand("msg Place and look at the sign (leave it empty)", -1),
