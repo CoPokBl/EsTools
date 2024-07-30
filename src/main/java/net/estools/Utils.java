@@ -7,9 +7,14 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 
 public class Utils {
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
     public static String keyToDisplayName(String key) {
         StringBuilder name = new StringBuilder(key);
         name.setCharAt(0, Character.toUpperCase(name.charAt(0)));
@@ -45,5 +50,13 @@ public class Utils {
             return false;
         }
         return true;
+    }
+
+    public static String stringifyTimestamp(long timestamp) {
+        if (timestamp == 0) {
+            return "Never";
+        }
+        Date date = new Date(timestamp);
+        return dateFormat.format(date);
     }
 }

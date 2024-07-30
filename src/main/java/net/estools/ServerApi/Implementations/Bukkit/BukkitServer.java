@@ -13,6 +13,7 @@ import net.estools.ServerApi.Implementations.Bukkit.Helpers.*;
 import net.estools.ServerApi.Interfaces.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -80,6 +81,19 @@ public class BukkitServer implements EsServer {
             return null;
         }
         return new BukkitPlayer(p);
+    }
+
+    @SuppressWarnings("deprecation")  // Did I stutter?
+    @Override
+    public EsOfflinePlayer getOfflinePlayer(String name) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(name);
+        return BukkitHelper.fromBukkitOfflinePlayer(player);
+    }
+
+    @Override
+    public EsOfflinePlayer getOfflinePlayer(UUID uuid) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+        return BukkitHelper.fromBukkitOfflinePlayer(player);
     }
 
     @Override

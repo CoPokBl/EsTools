@@ -50,6 +50,10 @@ public class BukkitHelper {
     }
 
     public static EsLocation fromBukkitLocation(Location loc) {
+        if (loc == null) {
+            return null;
+        }
+
         return new EsLocation(
                 new BukkitWorld(loc.getWorld()),
                 fromVector(loc.getDirection()),
@@ -438,5 +442,43 @@ public class BukkitHelper {
             default:
                 throw new IllegalArgumentException("Invalid EsEventResult");
         }
+    }
+
+    @SuppressWarnings("deprecation")  // Old versions bla bla bla
+    public static EsOfflinePlayer fromBukkitOfflinePlayer(OfflinePlayer player) {
+        if (player == null) {
+            return null;
+        }
+
+        EsOfflinePlayer p = new EsOfflinePlayer();
+        p.setName(player.getName());
+        p.setBanned(player.isBanned());
+
+        if (Main.minecraftVersion.isLowerThan(1, 1, 0)) return p;
+
+        p.setFirstPlayed(player.getFirstPlayed());
+        p.setLastPlayed(player.getLastPlayed());
+        p.setPlayedBefore(player.hasPlayedBefore());
+
+        if (Main.minecraftVersion.isLowerThan(1, 2, 0)) return p;
+
+        p.setRespawnLocation(fromBukkitLocation(player.getBedSpawnLocation()));
+
+        if (Main.minecraftVersion.isLowerThan(1, 7, 5)) return p;
+
+        // For some reason this is added in 1.7.5, I didn't check 1.7.3 or 1.7.4 because
+        // HelpChat doesn't have those docs, but it's not in 1.7.2.
+        // https://helpch.at/docs/1.7.5/ - Exists
+        // https://helpch.at/docs/1.7.2/ - Doesn't exist
+        p.setUuid(player.getUniqueId());
+
+        if (Main.minecraftVersion.isLowerThan(1, 19, 0)) return p;
+
+        p.setLastDeathLocation(fromBukkitLocation(player.getLastDeathLocation()));
+
+        if (Main.minecraftVersion.isLowerThan(1, 21, 0)) return p;
+
+        p.setRespawnLocation(fromBukkitLocation(player.getRespawnLocation()));
+        return p;
     }
 }

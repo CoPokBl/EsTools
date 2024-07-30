@@ -70,6 +70,19 @@ public class FoliaServer implements EsServer {
         return new FoliaPlayer(p);
     }
 
+    @SuppressWarnings("deprecation")  // Did I stutter?
+    @Override
+    public EsOfflinePlayer getOfflinePlayer(String name) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(name);
+        return FoliaHelper.fromBukkitOfflinePlayer(player);
+    }
+
+    @Override
+    public EsOfflinePlayer getOfflinePlayer(UUID uuid) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+        return FoliaHelper.fromBukkitOfflinePlayer(player);
+    }
+
     @Override
     public EsEntity getEntity(UUID uuid) {
         if (Main.minecraftVersion.getMinor() > 11) {

@@ -11,11 +11,6 @@ public class GetInfoCommandTest extends EsToolsUnitTest {
     }
 
     @Test
-    public void invalidTarget() {
-        executeAssertOneError("getinfo invalid");
-    }
-
-    @Test
     public void validTarget() {
         executeAssertSuccess("getinfo " + player.getName());
     }

@@ -12,6 +12,8 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public interface EsServer {
     EsPlayer getPlayer(String name);
+    EsOfflinePlayer getOfflinePlayer(String name);
+    EsOfflinePlayer getOfflinePlayer(UUID uuid);
     EsEntity getEntity(UUID uuid);
     SemanticVersion getVersion();
     Collection<? extends EsPlayer> getOnlinePlayers();

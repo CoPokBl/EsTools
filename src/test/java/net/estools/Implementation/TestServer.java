@@ -7,6 +7,7 @@ import net.estools.ServerApi.*;
 import net.estools.ServerApi.Interfaces.*;
 
 import java.io.File;
+import java.time.Instant;
 import java.util.*;
 
 public class TestServer implements EsServer {
@@ -59,6 +60,44 @@ public class TestServer implements EsServer {
                 .filter(e -> e instanceof TestPlayer && Objects.equals(e.getName(), name))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public EsPlayer getPlayer(UUID uuid) {
+        if (Objects.equals(EsToolsUnitTest.player.getUniqueId(), uuid)) {
+            return EsToolsUnitTest.player;
+        }
+
+        return (EsPlayer) EsToolsUnitTest.world.getEntities()
+                .stream()
+                .filter(e -> e instanceof TestPlayer && Objects.equals(e.getUniqueId(), uuid))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private EsOfflinePlayer getOfflinePlayer(EsPlayer p) {
+        EsOfflinePlayer op = new EsOfflinePlayer();
+        op.setName(p.getName());
+        op.setUuid(p.getUniqueId());
+        op.setPlayedBefore(true);
+        op.setLocation(p.getLocation());
+        op.setRespawnLocation(null);
+        op.setBanned(false);
+        op.setFirstPlayed(Instant.now().toEpochMilli());
+        op.setLastPlayed(Instant.now().toEpochMilli());
+        op.setLastDeathLocation(null);
+        return op;
+    }
+
+    @Override
+    public EsOfflinePlayer getOfflinePlayer(String name) {
+        EsPlayer p = getPlayer(name);
+        return getOfflinePlayer(p);
+    }
+
+    @Override
+    public EsOfflinePlayer getOfflinePlayer(UUID uuid) {
+        EsPlayer p = getPlayer(uuid);
+        return getOfflinePlayer(p);
     }
 
     @Override

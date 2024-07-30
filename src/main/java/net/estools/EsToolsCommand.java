@@ -293,4 +293,16 @@ public abstract class EsToolsCommand implements EsToolsTabCompleter {
 	public static String locationToString(EsLocation loc) {
 		return String.format("%d %d %d", Math.round(loc.getX()), Math.round(loc.getY()), Math.round(loc.getZ()));
 	}
+
+	/**
+	 * Convert an {@link EsLocation} to a human-readable {@link String}. It will be in the
+	 * format <code>X Y Z (WORLD)</code>.
+	 *
+	 * @param loc The location to stringify.
+	 *
+	 * @return The resulting {@link String}.
+	 */
+	public static String worldLocationToString(EsLocation loc) {
+		return String.format("%d %d %d (%s)", Math.round(loc.getX()), Math.round(loc.getY()), Math.round(loc.getZ()), loc.getWorld().getName());
+	}
 }
