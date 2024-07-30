@@ -217,6 +217,42 @@ public class BukkitHelper {
         throw new RuntimeException("Unsupported data type");
     }
 
+    public static EsPersistentDataType fromBukkitPersistentDataType(PersistentDataType<?,?> type) {
+        // this is an else if chain because PersistentDataType is not an enum
+        if (type.equals(PersistentDataType.BYTE)) {
+            return EsPersistentDataType.Byte;
+        } else if (type.equals(PersistentDataType.LONG)) {
+            return EsPersistentDataType.Long;
+        } else if (type.equals(PersistentDataType.FLOAT)) {
+            return EsPersistentDataType.Float;
+        } else if (type.equals(PersistentDataType.SHORT)) {
+            return EsPersistentDataType.Short;
+        } else if (type.equals(PersistentDataType.DOUBLE)) {
+            return EsPersistentDataType.Double;
+        } else if (type.equals(PersistentDataType.STRING)) {
+            return EsPersistentDataType.String;
+        } else if (type.equals(PersistentDataType.INTEGER)) {
+            return EsPersistentDataType.Integer;
+        } else if (type.equals(PersistentDataType.INTEGER_ARRAY)) {
+            return EsPersistentDataType.IntArray;
+        } else if (type.equals(PersistentDataType.BYTE_ARRAY)) {
+            return EsPersistentDataType.ByteArray;
+        } else if (type.equals(PersistentDataType.LONG_ARRAY)) {
+            return EsPersistentDataType.LongArray;
+        } else if (type.equals(PersistentDataType.TAG_CONTAINER)) {
+            return EsPersistentDataType.TagContainer;
+        }
+
+        // This is at the end because it doesn't exist in old versions.
+        // if the code reaches here in older versions it will error, but that should not happen since all other
+        // cases are accounted for.
+        else if (type.equals(PersistentDataType.BOOLEAN)) {
+            return EsPersistentDataType.Boolean;
+        }
+
+        throw new RuntimeException("Unsupported data type");
+    }
+
     @SuppressWarnings("UnstableApiUsage")
     public static NamespacedKey getNamespacedKey(String keyString) {
         if (Main.minecraftVersion.getMinor() >= 17) {

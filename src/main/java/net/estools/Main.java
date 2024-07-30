@@ -150,9 +150,7 @@ public class Main {
 		sc("music", "music", new Music(), 9);
 		sc("potion", "potion", new Potion());
 
-		sc("setpersistentdata", "setpersistentdata", new SetPersistentData(), 14);
-		sc("getpersistentdata", "getpersistentdata", new GetPersistentData(), 14);
-		sc("removepersistentdata", "removepersistentdata", new RemovePersistentData(), 14);
+		sc("bukkitdata", "bukkitdata", new BukkitData(), 14);
 
 		sc("warp", "warps.use", new Warp());
 		sc("warps", "warps.manage", new WarpManager());

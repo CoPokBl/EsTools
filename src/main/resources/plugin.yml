@@ -169,15 +169,9 @@ commands:
   potion:
     description: Give a player a potion.
     usage: /potion <effect> [amplifier] [duration] [amount] [drink/splash/lingering] [player]
-  setpersistentdata:
-    description: Set persistent nbt tags on items.
-    usage: /setpersistentdata <key> <type> <value>
-  getpersistentdata:
-    description: Get persistent nbt tags on items.
-    usage: /getpersistentdata <key> <type>
-  removepersistentdata:
-    description: Remove persistent nbt tags on items.
-    usage: /removepersistentdata <key>
+  bukkitdata:
+    description: Set, get, and remove bukkit persistent nbt tags on items.
+    usage: /bukkitdata <get/set/remove> <key> <type> <value>
   warp:
     description: Warp to saved locations.
     usage: /warp <warpname>
@@ -378,15 +372,7 @@ permissions:
     default: op
 
   estools.setpersistentdata:
-    description: Lets players set persistent nbt tags on items
-    default: op
-
-  estools.getpersistentdata:
-    description: Lets players get persistent nbt tags on items
-    default: op
-
-  estools.removepersistentdata:
-    description: Lets players remove persistent nbt tags on items
+    description: Lets players set, get, and remove bukkit persistent nbt tags on items.
     default: op
 
   estools.warps.use:
