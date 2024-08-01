@@ -371,8 +371,8 @@ permissions:
     description: Lets players give themselves and others potions
     default: op
 
-  estools.setpersistentdata:
-    description: Lets players set, get, and remove bukkit persistent nbt tags on items.
+  estools.bukkitdata:
+    description: Lets players set, get and remove bukkit persistent nbt tags on items.
     default: op
 
   estools.warps.use:
