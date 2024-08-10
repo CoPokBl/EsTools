@@ -5,6 +5,7 @@ import net.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class MultiPlayerCommand extends EsToolsCommand {
 
@@ -33,13 +34,7 @@ public abstract class MultiPlayerCommand extends EsToolsCommand {
         ArrayList<EsPlayer> players = new ArrayList<>();
 
         for (String name : names) {
-            EsPlayer p = Main.server.getPlayer(name);
-
-            if (p == null) {
-                send(sender, "&cPlayer &6%s&c not found.", name);
-            } else {
-                players.add(p);
-            }
+            getPlayer(sender, name, players);
         }
 
         return players;
@@ -52,14 +47,31 @@ public abstract class MultiPlayerCommand extends EsToolsCommand {
 
         ArrayList<EsPlayer> players = new ArrayList<>();
 
-        EsPlayer p = Main.server.getPlayer(name);
+        getPlayer(sender, name, players);
+
+        return players;
+    }
+
+    /**
+     * Gets a player from an input (username or UUID) and adds it to a list. Sends an error if one of the
+     * players is invalid.
+     * @param sender The person to complain to.
+     * @param name The input (username or UUID).
+     * @param players The array to append players to.
+     */
+    private static void getPlayer(EsCommandSender sender, String name, ArrayList<EsPlayer> players) {
+        EsPlayer p;
+        try {
+            UUID uuid = UUID.fromString(name);
+            p = Main.server.getPlayer(uuid);
+        } catch (IllegalArgumentException unused) {
+            p = Main.server.getPlayer(name);
+        }
 
         if (p == null) {
             send(sender, "&cPlayer &6%s&c not found.", name);
         } else {
             players.add(p);
         }
-
-        return players;
     }
 }

@@ -70,6 +70,15 @@ public class FoliaServer implements EsServer {
         return new FoliaPlayer(p);
     }
 
+    @Override
+    public EsPlayer getPlayer(UUID uuid) {
+        Player p = Bukkit.getPlayer(uuid);
+        if (p == null) {
+            return null;
+        }
+        return new FoliaPlayer(p);
+    }
+
     @SuppressWarnings("deprecation")  // Did I stutter?
     @Override
     public EsOfflinePlayer getOfflinePlayer(String name) {

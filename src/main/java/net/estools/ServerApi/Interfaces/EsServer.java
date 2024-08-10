@@ -12,6 +12,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public interface EsServer {
     EsPlayer getPlayer(String name);
+    EsPlayer getPlayer(UUID uuid);
     EsOfflinePlayer getOfflinePlayer(String name);
     EsOfflinePlayer getOfflinePlayer(UUID uuid);
     EsEntity getEntity(UUID uuid);

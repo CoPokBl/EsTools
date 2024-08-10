@@ -6,6 +6,7 @@ import net.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class EsToolsCommand implements EsToolsTabCompleter {
 
@@ -195,7 +196,7 @@ public abstract class EsToolsCommand implements EsToolsTabCompleter {
 	}
 
 	/**
-	 * Get a player from their name and send an error if one could not be found.
+	 * Get a player from their name or UUID and send an error if one could not be found.
 	 *
 	 * @param name The name of the player
 	 * @param sender The person to complain to if the player was not found.
@@ -203,7 +204,13 @@ public abstract class EsToolsCommand implements EsToolsTabCompleter {
 	 * @return The found {@link EsPlayer} or null if they could not be found.
 	 */
 	public static EsPlayer getPlayer(EsCommandSender sender, String name) {
-		EsPlayer p = Main.server.getPlayer(name);
+		EsPlayer p;
+		try {
+			UUID uuid = UUID.fromString(name);
+			p = Main.server.getPlayer(uuid);
+		} catch (IllegalArgumentException unused) {
+			p = Main.server.getPlayer(name);
+		}
 		
 		if (p == null) {
 			send(sender, "&cPlayer not found.");

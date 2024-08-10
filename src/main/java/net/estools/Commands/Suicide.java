@@ -1,10 +1,10 @@
 package net.estools.Commands;
 
-import net.estools.PlayerCommand;
+import net.estools.EsToolsCommand;
 import net.estools.ServerApi.Interfaces.EsCommandSender;
 import net.estools.ServerApi.Interfaces.EsLivingEntity;
 
-public class Suicide extends PlayerCommand {
+public class Suicide extends EsToolsCommand {
 
 	@Override
 	public boolean execute(EsCommandSender sender, String[] args) {

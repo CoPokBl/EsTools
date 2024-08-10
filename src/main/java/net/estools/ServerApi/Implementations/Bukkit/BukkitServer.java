@@ -83,6 +83,15 @@ public class BukkitServer implements EsServer {
         return new BukkitPlayer(p);
     }
 
+    @Override
+    public EsPlayer getPlayer(UUID uuid) {
+        Player p = Bukkit.getPlayer(uuid);
+        if (p == null) {
+            return null;
+        }
+        return new BukkitPlayer(p);
+    }
+
     @SuppressWarnings("deprecation")  // Did I stutter?
     @Override
     public EsOfflinePlayer getOfflinePlayer(String name) {
