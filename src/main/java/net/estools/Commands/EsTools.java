@@ -80,6 +80,11 @@ public class EsTools extends EsToolsCommand {
 				return false;
 			}
 			throw new RuntimeException("Test exception");
+		} else if (args[0].equalsIgnoreCase("throwunimplemented")) {
+			if (checkPerms(sender, "throw")) {
+				return false;
+			}
+			throw new NotImplementedException("Test exception");
 		} else if (args[0].equalsIgnoreCase("update")) {
 			if (checkPerms(sender, "update")) {
 				return false;

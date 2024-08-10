@@ -178,13 +178,25 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Handle the execution of a plugin command, should be called by a server implementation.
+	 * @param sender The entity executing the command.
+	 * @param cmd The command being run.
+	 * @param args The arguments the command is being executed with.
+	 * @return True if command usage should be printed, otherwise false.
+	 */
 	public static boolean executeCommand(EsCommandSender sender, String cmd, String[] args) {
 		if (!commands.containsKey(cmd)) {
-			logger.severe("&cThe command: '" + cmd + "', does not exist");
+			logger.severe("&cThe command: '" + cmd + "', does not exist but was executed");
+			EsToolsCommand.send(sender, "&cThis command doesn't exist, this is a bug");
 			return false;
 		}
 
-		commands.get(cmd).execute(sender, args);
+		try {
+			commands.get(cmd).execute(sender, args);  // Don't return result, we handle usage messages ourself.
+		} catch (NotImplementedException unused) {
+			EsToolsCommand.send(sender, "&cThis command has not been implemented yet ¯\\_(ツ)_/¯ sorry");
+		}
 		return true;
 	}
 

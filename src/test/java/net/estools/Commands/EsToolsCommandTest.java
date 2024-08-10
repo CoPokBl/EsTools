@@ -12,4 +12,9 @@ public class EsToolsCommandTest extends EsToolsUnitTest {
         Assertions.assertTrue(result.length != 0);
         Assertions.assertTrue(stripColour(result[result.length-1]).startsWith("EsTools v"));
     }
+
+    @Test
+    public void throwException() {
+        executeAssertOneError("estools throwunimplemented");
+    }
 }

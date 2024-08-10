@@ -171,7 +171,8 @@ public abstract class EsToolsCommand implements EsToolsTabCompleter {
 	 * @param sender The {@link EsCommandSender} to check the permission of.
 	 * @param perm The permission node to check for.
 	 *
-	 * @return Whether the {@link EsCommandSender} has the permission node estools.PERM.
+	 * @return Whether the {@link EsCommandSender} DOES NOT have the permission node estools.PERM.
+	 * In other words it returns true if a no permission message was displayed.
 	 */
 	public static boolean checkPerms(EsCommandSender sender, String perm) {
 		if (!sender.hasPermission("estools." + perm)) {
