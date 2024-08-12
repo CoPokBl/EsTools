@@ -1,6 +1,5 @@
 package net.estools.ServerApi.Implementations.Bukkit;
 
-import net.estools.Main;
 import net.estools.ServerApi.EsItemFlag;
 import net.estools.ServerApi.Interfaces.EsItemMeta;
 import net.estools.ServerApi.Interfaces.EsPersistentDataContainer;
