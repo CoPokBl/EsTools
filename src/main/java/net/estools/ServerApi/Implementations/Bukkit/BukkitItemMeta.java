@@ -55,11 +55,10 @@ public class BukkitItemMeta implements EsItemMeta {
     private ItemFlag[] convertFlags(EsItemFlag[] flags) {
         List<ItemFlag> bukkitFlags = new ArrayList<>(flags.length);
         for (EsItemFlag flag : flags) {
+            // try catches if flag doesn't exist in this version
             try {
                 bukkitFlags.add(ItemFlag.valueOf(flag.name()));
-            } catch (IllegalArgumentException ignored) {
-                Main.server.broadcast("This doesn't exist: " + flag.name());
-            } // doesnt exist, dont add
+            } catch (IllegalArgumentException ignored) {}
         }
 
         return bukkitFlags.toArray(new ItemFlag[0]);
