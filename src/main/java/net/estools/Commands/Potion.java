@@ -38,7 +38,7 @@ public class Potion extends EntityCommand {
             // amp 0 is level 1, so subtract 1 from player input
             amp = tryParseInt(args[1], 1) - 1;
 
-            if (Main.minecraftVersion.getMinor() <= 7 && amp < 0 || amp > 1) {
+            if (Main.minecraftVersion.getMinor() <= 7 && (amp < 0 || amp > 1)) {
                 send(sender, "&cAmplifier must be 1 or 2!");
                 return false;
             }
