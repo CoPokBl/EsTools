@@ -343,7 +343,12 @@ public class BukkitServer implements EsServer {
 
     @Override
     public void setTabCompleter(String cmd, EsToolsTabCompleter tab) {
-        PluginCommand command = Objects.requireNonNull(Bukkit.getPluginCommand(cmd));
+        PluginCommand command = Bukkit.getPluginCommand(cmd);
+
+        if (command == null) {
+            return;
+        }
+
         if (Main.tabCompleteEnabled) {
             command.setTabCompleter(BukkitTabCompleteGenerator.generate(tab));
         }
@@ -351,7 +356,12 @@ public class BukkitServer implements EsServer {
 
     @Override
     public void setCommandPermission(String cmd, String perm) {
-        PluginCommand command = Objects.requireNonNull(Bukkit.getPluginCommand(cmd));
+        PluginCommand command = Bukkit.getPluginCommand(cmd);
+
+        if (command == null) {
+            return;  // We can't do anything about this
+        }
+
         command.setPermission(perm);
 
         if (Main.minecraftVersion.getMinor() > 0) {
