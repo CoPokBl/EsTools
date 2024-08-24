@@ -306,11 +306,10 @@ public class FoliaServer implements EsServer {
 
     @Override
     public void registerCommand(String cmd, EsToolsTabCompleter tab) {
-        PluginCommand command = Bukkit.getPluginCommand(cmd);
+        PluginCommand command = EsToolsBukkit.plugin.getCommand(cmd);
 
         if (command == null) {
             Main.logger.severe("Could not register command: " + cmd + ", the server didn't let us");
-            Main.logger.severe("We think this is an issue with PaperMC so Folia probably inherited it");
             return;
         }
 
@@ -335,7 +334,7 @@ public class FoliaServer implements EsServer {
 
     @Override
     public void setCommandPermission(String cmd, String perm) {
-        PluginCommand command = Bukkit.getPluginCommand(cmd);
+        PluginCommand command = EsToolsBukkit.plugin.getCommand(cmd);
 
         if (command == null) {
             return;

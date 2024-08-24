@@ -325,7 +325,7 @@ public class BukkitServer implements EsServer {
 
     @Override
     public void registerCommand(String cmd, EsToolsTabCompleter tab) {
-        PluginCommand command = Bukkit.getPluginCommand(cmd);
+        PluginCommand command = EsToolsBukkit.plugin.getCommand(cmd);
 
         if (command == null) {
             Main.logger.severe("Could not register command: " + cmd + ", the server didn't let us");
@@ -343,7 +343,7 @@ public class BukkitServer implements EsServer {
 
     @Override
     public void setTabCompleter(String cmd, EsToolsTabCompleter tab) {
-        PluginCommand command = Bukkit.getPluginCommand(cmd);
+        PluginCommand command = EsToolsBukkit.plugin.getCommand(cmd);
 
         if (command == null) {
             return;
@@ -356,7 +356,7 @@ public class BukkitServer implements EsServer {
 
     @Override
     public void setCommandPermission(String cmd, String perm) {
-        PluginCommand command = Bukkit.getPluginCommand(cmd);
+        PluginCommand command = EsToolsBukkit.plugin.getCommand(cmd);
 
         if (command == null) {
             return;  // We can't do anything about this
