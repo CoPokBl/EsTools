@@ -325,7 +325,14 @@ public class BukkitServer implements EsServer {
 
     @Override
     public void registerCommand(String cmd, EsToolsTabCompleter tab) {
-        PluginCommand command = Objects.requireNonNull(Bukkit.getPluginCommand(cmd));
+        PluginCommand command = Bukkit.getPluginCommand(cmd);
+
+        if (command == null) {
+            Main.logger.severe("Could not register command: " + cmd + ", the server didn't let us");
+            Main.logger.severe("We think this is an issue with PaperMC, consider using Spigot");
+            return;
+        }
+
         if (!Main.tabCompleteEnabled || command.getTabCompleter() == null) {
             command.setExecutor(cmdExecutor);
         }
