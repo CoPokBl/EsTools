@@ -7,6 +7,7 @@ import net.estools.ServerApi.Interfaces.EsServer;
 public enum ServerPlatform {
     Bukkit(true),  // Includes all derivatives
     Folia(true),
+    Minestom(false),
 
     /**
      * This is a special platform where the plugin expects the platform to set Main.server themselves.
@@ -30,6 +31,9 @@ public enum ServerPlatform {
 
             case Folia:
                 return new FoliaServer(context);
+
+            case Minestom:
+                return null;
 
             default:
                 throw new IllegalArgumentException("Unsupported server software");

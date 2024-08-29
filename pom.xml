@@ -169,5 +169,11 @@
           <version>5.9.1</version>
           <scope>test</scope>
       </dependency>
+      <dependency>
+          <groupId>net.minestom</groupId>
+          <artifactId>minestom-snapshots</artifactId>
+          <version>dd96c907d9</version>
+          <scope>provided</scope>
+      </dependency>
   </dependencies>
 </project>
