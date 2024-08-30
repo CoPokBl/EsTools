@@ -1,27 +1,30 @@
 package net.estools.ServerApi.Implementations.Minestom;
 
 import net.estools.EsToolsTabCompleter;
+import net.estools.NotImplementedException;
 import net.estools.SemanticVersion;
 import net.estools.ServerApi.*;
+import net.estools.ServerApi.Implementations.Minestom.Helpers.MinestomHelper;
 import net.estools.ServerApi.Interfaces.*;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.item.enchant.Enchantment;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class MinestomServer implements EsServer {
 
     @Override
     public EsPlayer getPlayer(String name) {
-        return MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(name);
+        return MinestomHelper.getPlayer(MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(name));
     }
 
     @Override
     public EsPlayer getPlayer(UUID uuid) {
-        return null;
+        return MinestomHelper.getPlayer(MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(uuid));
     }
 
     @Override
@@ -36,22 +39,33 @@ public class MinestomServer implements EsServer {
 
     @Override
     public EsEntity getEntity(UUID uuid) {
+        for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
+            for (Entity entity : instance.getEntities()) {
+                if (entity.getUuid().equals(uuid)) {
+                    return MinestomHelper.toEntity(entity);
+                }
+            }
+        }
         return null;
     }
 
     @Override
     public SemanticVersion getVersion() {
-        return null;
+        return new SemanticVersion(MinecraftServer.VERSION_NAME);
     }
 
     @Override
     public Collection<? extends EsPlayer> getOnlinePlayers() {
-        return List.of();
+        List<EsPlayer> players = new ArrayList<>();
+        for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            players.add(MinestomHelper.getPlayer(player));
+        }
+        return players;
     }
 
     @Override
     public EsItemStack createItemStack(EsMaterial material, int amount) {
-        return null;
+        return MinestomHelper.toItem(null);
     }
 
     @Override
@@ -71,52 +85,56 @@ public class MinestomServer implements EsServer {
 
     @Override
     public Set<EsPotionEffectType> getPotionEffectTypes() {
-        return Set.of();
+        return new HashSet<>();
     }
 
     @Override
     public Set<EsPotionEffectType> getOldPotionTypes() {
-        return Set.of();
+        throw new UnsupportedOperationException("This platform does not support old Minecraft versions");
     }
 
     @Override
     public Set<EsEnchantment> getEnchantments() {
-        return Set.of();
+        Set<EsEnchantment> enchantments = new HashSet<>();
+        for (Enchantment ench : MinecraftServer.getEnchantmentRegistry().values()) {
+            enchantments.add(EsEnchantment.createUnchecked(ench.registry().namespace().asString()));
+        }
+        return enchantments;
     }
 
     @Override
     public Set<EsSound> getSounds() {
-        return Set.of();
+        throw new NotImplementedException();
     }
 
     @Override
     public void initialise() {
-
+        // Do nothing
     }
 
     @Override
     public Set<EsMaterial> getMaterials(boolean onlyItems) {
-        return Set.of();
+        return new HashSet<>();
     }
 
     @Override
     public File getDataFolder() {
-        return null;
+        return new File("data");
     }
 
     @Override
     public void dispatchCommand(EsCommandSender sender, String cmd) {
-
+        MinecraftServer.getCommandManager().execute(MinestomHelper.getUnderlyingSender(sender), cmd);
     }
 
     @Override
     public EsCommandSender getConsoleSender() {
-        return null;
+        return new MinestomConsoleSender();
     }
 
     @Override
     public SemanticVersion getPluginVersion() {
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override

@@ -11,7 +11,7 @@ public class SemanticVersion {
         String[] parts = str.split("\\.");
         major = Integer.parseInt(parts[0]);
         minor = Integer.parseInt(parts[1]);
-        patch = Integer.parseInt(parts[2]);
+        patch = Integer.parseInt(parts.length > 2 ? parts[2] : "0");
         string = str;
     }
 

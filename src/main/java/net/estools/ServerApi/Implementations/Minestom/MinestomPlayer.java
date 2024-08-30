@@ -16,6 +16,10 @@ public class MinestomPlayer extends MinestomLivingEntity implements EsPlayer {
         this.entity = entity;
     }
 
+    public Player getInternal() {
+        return entity;
+    }
+
     @Override
     public int getFoodLevel() {
         return entity.getFood();

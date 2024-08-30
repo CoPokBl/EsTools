@@ -21,6 +21,10 @@ public class MinestomItemStack implements EsItemStack {
         this.stack = stack;
     }
 
+    public ItemStack internal() {
+        return stack;
+    }
+
     @Override
     public EsMaterial getType() {
         return EsMaterial.createUnchecked(stack.material().registry().namespace().asString());

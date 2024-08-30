@@ -1,12 +1,12 @@
 package net.estools.ServerApi.Implementations.Minestom.Helpers;
 
 import net.estools.ServerApi.EsLocation;
-import net.estools.ServerApi.Implementations.Minestom.MinestomEntity;
-import net.estools.ServerApi.Implementations.Minestom.MinestomItemStack;
-import net.estools.ServerApi.Implementations.Minestom.MinestomLivingEntity;
-import net.estools.ServerApi.Implementations.Minestom.MinestomWorld;
+import net.estools.ServerApi.Implementations.Minestom.*;
+import net.estools.ServerApi.Interfaces.EsCommandSender;
 import net.estools.ServerApi.Interfaces.EsPlayer;
 import net.estools.ServerApi.Position;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -64,5 +64,15 @@ public class MinestomHelper {
 
     public static MinestomItemStack toItem(ItemStack item) {
         return new MinestomItemStack(item);
+    }
+
+    public static CommandSender getUnderlyingSender(EsCommandSender sender) {
+        if (sender instanceof MinestomPlayer) {
+            return ((MinestomPlayer) sender).getInternal();
+        }
+        if (sender instanceof MinestomConsoleSender) {
+            return MinecraftServer.getCommandManager().getConsoleSender();
+        }
+        throw new UnsupportedOperationException("Unsupported sender type: " + sender.getClass().getName());
     }
 }
