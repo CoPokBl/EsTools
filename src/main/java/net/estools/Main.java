@@ -112,7 +112,7 @@ public class Main {
 		sc("night", "time", new Night());
 		sc("noon", "time", new Noon());
 		sc("midnight", "time", new Midnight());
-		sc("sun", "weather", new Sun());
+//		sc("sun", "weather", new Sun());
 		sc("rain", "weather", new Rain());
 		sc("thunder", "weather", new Thunder());
 		sc("walkspeed", "walkspeed", new WalkSpeed(), 4);
@@ -157,6 +157,10 @@ public class Main {
 
 		sc("mount", "mount", new Mount());
 		sc("dismount", "mount", new Dismount());
+
+		new Sun().register();
+
+		server.getCommandManager().start();
 
 		// Load other features
 		if (minecraftVersion.getMinor() > 0) {  // Enchants and events don't work on 1.0.0

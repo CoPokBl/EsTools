@@ -1,14 +1,21 @@
 package net.estools.Entrypoints;
 
 import net.estools.Main;
+import net.estools.ServerApi.Implementations.Bukkit.BukkitCommandManager;
 import net.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEffectHelper;
 import net.estools.ServerApi.ServerPlatform;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /** This will be called for Bukkit and Folia platforms */
 public class EsToolsBukkit extends JavaPlugin {
     /** Will be null if plugin is not Bukkit */
     public static EsToolsBukkit plugin;
+    private BukkitCommandManager commandManager;
 
     @Override
     public void onEnable() {
@@ -22,6 +29,8 @@ public class EsToolsBukkit extends JavaPlugin {
         Main main = new Main(platform, this);
         main.enable();
 
+        commandManager = (BukkitCommandManager) Main.server.getCommandManager();
+
         // Init any Bukkit helpers that need it.
         // It's best to do it here because Folia and Bukkit
         // need it.
@@ -34,6 +43,17 @@ public class EsToolsBukkit extends JavaPlugin {
 
     @Override
     public void onDisable() { /* Needed for older versions, which require an onDisable method */ }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        commandManager.onCommand(sender, command, label, args);
+        return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        return commandManager.onTabComplete(sender, command.getLabel(), args);
+    }
 
     private static boolean isFolia() {
         try {

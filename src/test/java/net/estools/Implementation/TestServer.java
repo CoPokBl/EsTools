@@ -4,6 +4,7 @@ import net.estools.EsToolsTabCompleter;
 import net.estools.EsToolsUnitTest;
 import net.estools.SemanticVersion;
 import net.estools.ServerApi.*;
+import net.estools.ServerApi.EsCommand.EsCommandManager;
 import net.estools.ServerApi.Interfaces.*;
 
 import java.io.File;
@@ -16,6 +17,7 @@ public class TestServer implements EsServer {
     private static final Set<EsEnchantment> enchantments;
     private static final Set<EsSound> sounds;
     private static final Set<EsPotionEffectType> effects;
+    private static final EsCommandManager commandManager;
 
     static {
         materials = new HashSet<>();
@@ -43,10 +45,17 @@ public class TestServer implements EsServer {
 
         effects = new HashSet<>();
         effects.add(EsPotionEffectType.createUnchecked("speed"));
+
+        commandManager = new TestCommandManager();
     }
 
     public TestServer() {
         logger = new TestLogger();
+    }
+
+    @Override
+    public EsCommandManager getCommandManager() {
+        return commandManager;
     }
 
     @Override

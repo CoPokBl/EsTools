@@ -10,6 +10,7 @@ import net.estools.EsToolsTabCompleter;
 import net.estools.Main;
 import net.estools.SemanticVersion;
 import net.estools.ServerApi.*;
+import net.estools.ServerApi.EsCommand.EsCommandManager;
 import net.estools.ServerApi.Implementations.Bukkit.BukkitTabCompleteGenerator;
 import net.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitEffectHelper;
 import net.estools.ServerApi.Interfaces.*;
@@ -33,11 +34,13 @@ public class FoliaServer implements EsServer {
     private static final Set<EsMaterial> materials = new HashSet<>();
     private static final Set<EsMaterial> itemMaterials = new HashSet<>();
     private static final Set<EsSound> sounds = new HashSet<>();
+    private final EsCommandManager commandManager;
 
     public FoliaServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
         taskChainFactory = BukkitTaskChainFactory.create(plugin);
         listener = new FoliaEventsListener();
+        commandManager = new FoliaCommandManager();
     }
 
     @Override
@@ -59,6 +62,11 @@ public class FoliaServer implements EsServer {
 
     public static <T> TaskChain<T> newChain() {
         return taskChainFactory.newChain();
+    }
+
+    @Override
+    public EsCommandManager getCommandManager() {
+        return commandManager;
     }
 
     @Override

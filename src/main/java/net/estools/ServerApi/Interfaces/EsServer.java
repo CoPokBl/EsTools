@@ -3,6 +3,7 @@ package net.estools.ServerApi.Interfaces;
 import net.estools.EsToolsTabCompleter;
 import net.estools.SemanticVersion;
 import net.estools.ServerApi.*;
+import net.estools.ServerApi.EsCommand.EsCommandManager;
 
 import java.io.File;
 import java.util.Collection;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @SuppressWarnings("unused")
 public interface EsServer {
+    EsCommandManager getCommandManager();
     EsPlayer getPlayer(String name);
     EsPlayer getPlayer(UUID uuid);
     EsOfflinePlayer getOfflinePlayer(String name);

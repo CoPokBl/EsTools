@@ -6,6 +6,7 @@ import net.estools.EsToolsTabCompleter;
 import net.estools.Main;
 import net.estools.SemanticVersion;
 import net.estools.ServerApi.*;
+import net.estools.ServerApi.EsCommand.EsCommandManager;
 import net.estools.ServerApi.Implementations.Bukkit.EventHandlers.BukkitEventsListener;
 import net.estools.ServerApi.Implementations.Bukkit.EventHandlers.BukkitEventsListenerPost1_1;
 import net.estools.ServerApi.Implementations.Bukkit.EventHandlers.BukkitEventsListenerPost1_4;
@@ -33,6 +34,7 @@ public class BukkitServer implements EsServer {
     private static final Set<EsMaterial> materials = new HashSet<>();
     private static final Set<EsMaterial> itemMaterials = new HashSet<>();
     private static Set<EsSound> sounds = new HashSet<>();
+    private static BukkitCommandManager commandManager;
 
     public BukkitServer(Object pluginObj) {
         plugin = (JavaPlugin) pluginObj;
@@ -50,6 +52,8 @@ public class BukkitServer implements EsServer {
         BukkitEventsListener bel = new BukkitEventsListener();
         listeners.add(bel);
         cmdExecutor = bel;
+
+        commandManager = new BukkitCommandManager();
     }
 
     @Override
@@ -72,6 +76,11 @@ public class BukkitServer implements EsServer {
         }
 
         sounds = BukkitSoundHelper.getSounds();
+    }
+
+    @Override
+    public EsCommandManager getCommandManager() {
+        return commandManager;
     }
 
     @Override
