@@ -46,7 +46,7 @@ public class EsToolsBukkit extends JavaPlugin {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        commandManager.onCommand(sender, command, label, args);
+        commandManager.onCommand(sender, command.getLabel(), args);
         return true;
     }
 

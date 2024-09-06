@@ -4,12 +4,17 @@ import net.estools.ServerApi.EsCommand.EsCommandBuilder;
 import net.estools.ServerApi.EsCommand.EsCommandContext;
 import net.estools.EsToolsCommand;
 import net.estools.ServerApi.EsCommand.EsCondition;
+import net.estools.ServerApi.EsGameMode;
 import net.estools.ServerApi.Interfaces.EsCommandSender;
 import net.estools.ServerApi.Interfaces.EsPlayer;
 import net.estools.ServerApi.Interfaces.EsWorld;
 
+import static net.estools.ServerApi.EsCommand.Nodes.EsEnumArgument.enumArg;
+import static net.estools.ServerApi.EsCommand.Nodes.EsFloatNode.doubleArg;
+import static net.estools.ServerApi.EsCommand.Nodes.EsIntegerNode.integerArg;
 import static net.estools.ServerApi.EsCommand.Nodes.EsLiteralNode.literal;
 import static net.estools.ServerApi.EsCommand.Nodes.EsStringNode.stringArg;
+import static net.estools.ServerApi.EsCommand.Nodes.EsWordArgument.wordArg;
 
 public class Sun extends EsToolsCommand {
     public void register() {
@@ -18,7 +23,12 @@ public class Sun extends EsToolsCommand {
                         .then(literal("soup").execute(context -> send(context.sender(), "Hello"))
                                 .then(stringArg("epic").execute(this::execute)))
                         .then(literal("poup")
-                                .then(literal("cipe")))
+                                .then(doubleArg("cipe")
+                                        .then(integerArg("asdf").execute(this::execute2))))
+                        .then(literal("words")
+                                .then(wordArg("words", "super", "epic", "gamer", "123").execute(this::execute3)))
+                        .then(literal("enum")
+                                .then(enumArg("enum", EsGameMode.class).execute(this::execute4)))
         ).register();
     }
 
@@ -28,6 +38,18 @@ public class Sun extends EsToolsCommand {
         world.setThundering(false);
 
         send(context.sender(), "&aSet weather to &6clear" + context.<String>getArgument("epic"));
+    }
+
+    private void execute2(EsCommandContext context) {
+        send(context.sender(), "N1: %f, N2: %d", context.<Double>getArgument("cipe"), context.<Integer>getArgument("asdf"));
+    }
+
+    private void execute3(EsCommandContext context) {
+        send(context.sender(), "N1: %s", context.<String>getArgument("words"));
+    }
+
+    private void execute4(EsCommandContext context) {
+        send(context.sender(), "N1: %s", context.<EsGameMode>getArgument("enum"));
     }
 
     @Override
