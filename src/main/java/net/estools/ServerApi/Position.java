@@ -15,6 +15,10 @@ public class Position {
         this.z = z;
     }
 
+    public Position copy() {
+        return new Position(x, y, z);
+    }
+
     public double getX() {
         return x;
     }
@@ -47,8 +51,36 @@ public class Position {
         return Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2) + Math.pow(z - other.z, 2);
     }
 
-    public Position subtract(Position other) {
+    public Position add(Position other) {
+        return new Position(x + other.x, y + other.y, z + other.z);
+    }
+
+    public Position sub(Position other) {
         return new Position(x - other.x, y - other.y, z - other.z);
+    }
+
+    public Position mul(Position other) {
+        return new Position(x * other.x, y * other.y, z * other.z);
+    }
+
+    public Position div(Position other) {
+        return new Position(x / other.x, y / other.y, z / other.z);
+    }
+
+    public Position add(int scalar) {
+        return new Position(x + scalar, y + scalar, z + scalar);
+    }
+
+    public Position sub(int scalar) {
+        return new Position(x - scalar, y - scalar, z - scalar);
+    }
+
+    public Position mul(int scalar) {
+        return new Position(x * scalar, y * scalar, z * scalar);
+    }
+
+    public Position div(int scalar) {
+        return new Position(x / scalar, y / scalar, z / scalar);
     }
 
     public Position normalise() {

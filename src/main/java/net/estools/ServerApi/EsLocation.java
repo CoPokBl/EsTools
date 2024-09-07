@@ -22,7 +22,7 @@ public class EsLocation extends Position {
     public EsLocation(EsWorld world, Position dir, double x, double y, double z) {
         this.world = world;
         this.worldName = world.getName();
-        direction = dir;
+        setDirection(dir);
         setX(x);
         setY(y);
         setZ(z);
@@ -37,6 +37,18 @@ public class EsLocation extends Position {
         setX(x);
         setY(y);
         setZ(z);
+    }
+
+    public EsLocation(EsWorld world, Position position) {
+        this(world, position.getX(), position.getY(), position.getZ());
+    }
+
+    public EsLocation(EsWorld world, Position dir, Position position) {
+        this(world, dir, position.getX(), position.getY(), position.getZ());
+    }
+
+    public EsLocation(EsWorld world, Position dir, Position position, double yaw, double pitch) {
+        this(world, dir, position.getX(), position.getY(), position.getZ(), yaw, pitch);
     }
 
     /** You probably shouldn't use this, it's here for SnakeYAML */
@@ -63,10 +75,6 @@ public class EsLocation extends Position {
         return direction;
     }
 
-    public void setDirection(Position direction) {
-        this.direction = direction;
-    }
-
     public double getPitch() {
         return pitch;
     }
@@ -75,12 +83,53 @@ public class EsLocation extends Position {
         return yaw;
     }
 
+    public void setDirection(Position direction) {
+        this.direction = direction;
+        updateYawPitchFromDirection();
+    }
+
     public void setPitch(double pitch) {
         this.pitch = pitch;
+        updateDirectionFromYawPitch();
     }
 
     public void setYaw(double yaw) {
         this.yaw = yaw;
+        updateDirectionFromYawPitch();
+    }
+
+    private void updateDirectionFromYawPitch() {
+        // Convert yaw and pitch to radians
+        double yawRad = Math.toRadians(yaw);
+        double pitchRad = Math.toRadians(pitch);
+
+        // Compute the direction vector based on yaw and pitch
+        double cosPitch = Math.cos(pitchRad);
+        double sinPitch = Math.sin(pitchRad);
+        double cosYaw = Math.cos(yawRad);
+        double sinYaw = Math.sin(yawRad);
+
+        this.direction = new Position(
+                -cosPitch * sinYaw,  // X direction
+                sinPitch,            // Y direction
+                cosPitch * cosYaw    // Z direction
+        );
+    }
+
+    private void updateYawPitchFromDirection() {
+        if (direction == null) return;
+
+        double x = direction.getX();
+        double y = direction.getY();
+        double z = direction.getZ();
+
+        double hypotenuse = Math.sqrt(x * x + z * z);
+
+        // Compute pitch as the angle from the horizontal plane
+        this.pitch = Math.toDegrees(-Math.atan2(y, hypotenuse));
+
+        // Compute yaw as the angle around the vertical axis
+        this.yaw = Math.toDegrees(Math.atan2(-x, z));  // Adjust signs as needed
     }
 
     public int getBlockX() {

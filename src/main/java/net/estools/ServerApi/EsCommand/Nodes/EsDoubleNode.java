@@ -5,7 +5,7 @@ public class EsDoubleNode extends EsArgumentNode {
         super(id);
     }
 
-    public static EsDoubleNode floatArg(String id) {
+    public static EsDoubleNode doubleArg(String id) {
         return new EsDoubleNode(id);
     }
 }

@@ -4,6 +4,7 @@ import net.estools.EsToolsCommand;
 import net.estools.ServerApi.EsCommand.EsCommandContext;
 import net.estools.ServerApi.EsCommand.EsCommandManager;
 import net.estools.ServerApi.EsCommand.EsCommandNode;
+import net.estools.ServerApi.EsCommand.EsRelativePosition;
 import net.estools.ServerApi.EsCommand.Nodes.*;
 import net.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import org.bukkit.command.CommandSender;
@@ -29,6 +30,7 @@ public class BukkitCommandManager extends EsCommandManager {
         registerNumberRunner(EsLongNode.class, Long::parseLong);
         registerNodeRunner(EsWordArgument.class, this::processWord, this::tabWord);
         registerNodeRunner(EsEnumArgument.class, this::processEnum, this::tabEnum);
+        registerNodeRunner(EsCoordinateNode.class, this::processCoordinate, this::tabCoordinate);
     }
 
     private <T extends EsArgumentNode, N extends Number> void registerNumberRunner(Class<T> clazz, NumberParser<N> parser) {
@@ -234,6 +236,105 @@ public class BukkitCommandManager extends EsCommandManager {
 
         tbc.complete.addAll(node.getNames());
         return false;
+    }
+
+    private boolean processCoordinate(EsCommandContext context, EsCoordinateNode node, StringBuilder args) {
+        EsRelativePosition pos = new BukkitRelativePosition();
+        StringBuilder newArgs = new StringBuilder(args);
+        boolean hasLookRelative = false;
+
+        for (int i = 0; i < 3; i++) {
+            if (newArgs.length() == 0) {
+                return false;
+            }
+
+            int index = newArgs.indexOf(" ");
+            if (index == -1) {
+                index = newArgs.length();
+            }
+
+            // get if relative position
+            if (newArgs.charAt(0) == '^') { // relative to senders position and look direction
+                pos.setRelativeType(i, EsRelativePosition.RelativeType.SENDER_LOOK);
+                newArgs.deleteCharAt(0);
+                index--;
+                hasLookRelative = true;
+            } else {
+                if (hasLookRelative) {
+                    return false;
+                }
+
+                if (newArgs.charAt(0) == '~') { // relative to senders position
+                    pos.setRelativeType(i, EsRelativePosition.RelativeType.SENDER);
+                    newArgs.deleteCharAt(0);
+                    index--;
+                }
+            }
+
+            String valueStr = newArgs.substring(0, index);
+            if (valueStr.isEmpty()) {
+                pos.setPos(i, 0);
+            } else {
+                try {
+                    pos.setPos(i, Double.parseDouble(valueStr));
+                } catch (NumberFormatException ignored) {
+                    return false;
+                }
+            }
+
+            newArgs.delete(0, index + 1);
+        }
+
+        context.addArgument(node.id(), pos);
+
+        args.delete(0, args.length());
+        args.append(newArgs);
+        return true;
+    }
+
+    private boolean tabCoordinate(EsCommandContext context, EsCoordinateNode node, TabCompleteContext tbc) {
+        boolean result = processCoordinate(context, node, tbc.args);
+        if (result) {
+            return true;
+        }
+
+        String[] spl = tbc.args.toString().split(" ", 4);
+
+        for (int i = 0; i < Math.min(3, spl.length); i++) {
+            if (!stringOnlyContains(spl[i], "~^-.1234567890")) {
+                return false;
+            }
+        }
+
+        String lastArg = spl[spl.length-1];
+        StringBuilder tab = new StringBuilder();
+        int size = spl.length;
+        if (lastArg.endsWith(" ")) {
+            size--;
+        }
+        else if (!lastArg.isEmpty()) {
+            tab.append(lastArg).append(' ');
+            size++;
+        }
+
+        for (int i = 0; i < 4 - size; i++) {
+            tab.append("~ ");
+        }
+
+        tab.delete(tab.length()-1, tab.length());
+        tbc.complete.add(tab.toString());
+
+        return false;
+    }
+
+    private boolean stringOnlyContains(String string, String contains) {
+        for (int i = 0; i < string.length(); i++) {
+            if (!contains.contains(String.valueOf(string.charAt(i)))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @FunctionalInterface
