@@ -5,6 +5,7 @@ import net.estools.ServerApi.EsCommand.EsCommandContext;
 import net.estools.EsToolsCommand;
 import net.estools.ServerApi.EsCommand.EsCondition;
 import net.estools.ServerApi.EsCommand.EsRelativePosition;
+import net.estools.ServerApi.EsCommand.Nodes.EsNumberArgument;
 import net.estools.ServerApi.EsGameMode;
 import net.estools.ServerApi.EsLocation;
 import net.estools.ServerApi.EsMaterial;
@@ -29,8 +30,8 @@ public class Sun extends EsToolsCommand {
                         .then(literal("soup").execute(context -> send(context.sender(), "Hello"))
                                 .then(stringArg("epic").execute(this::execute)))
                         .then(literal("poup")
-                                .then(doubleArg("cipe")
-                                        .then(integerArg("asdf").execute(this::execute2))))
+                                .then(doubleArg("cipe", 0, 5)
+                                        .then(integerArg("asdf", (context) -> new EsNumberArgument.MinMax((int)(double)context.<Double>getArgument("cipe"), 12)).execute(this::execute2))))
                         .then(literal("words")
                                 .then(wordArg("words", "super", "epic", "gamer", "123").execute(this::execute3)))
                         .then(literal("enum")
