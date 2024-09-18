@@ -5,13 +5,14 @@ import net.estools.ServerApi.Interfaces.EsCommandSender;
 import net.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Feed extends MultiPlayerCommand {
 	private static final String usage = genUsage("/feed <Player>");
 
 	@Override
 	public boolean execute(EsCommandSender sender, String[] args) {
-		ArrayList<EsPlayer> players = new ArrayList<>();
+		List<EsPlayer> players = new ArrayList<>();
 		
 		if (args.length == 0) {
 			if (isNotPlayer(sender, usage)) {

@@ -5,6 +5,7 @@ import net.estools.ServerApi.Interfaces.EsCommandSender;
 import net.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Fly extends MultiPlayerCommand {
@@ -12,7 +13,7 @@ public class Fly extends MultiPlayerCommand {
 
 	@Override
 	public boolean execute(EsCommandSender sender, String[] args) {
-		ArrayList<EsPlayer> players = new ArrayList<>();
+		List<EsPlayer> players = new ArrayList<>();
 		
 		if (args.length == 0) {
 			if (isNotPlayer(sender, usage)) {

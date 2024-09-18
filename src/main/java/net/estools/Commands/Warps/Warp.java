@@ -1,63 +1,77 @@
 package net.estools.Commands.Warps;
 
-import net.estools.EsToolsCommand;
+import net.estools.MultiPlayerCommand;
 import net.estools.ServerApi.Interfaces.EsCommandSender;
 import net.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class Warp extends EsToolsCommand {
-    private static final String usage = genUsage("/warp <warp>");
+public class Warp extends MultiPlayerCommand {
+    private static final String usage = genUsage("/warp <warp> [player] [player2] [player3]");
+    private static final String consoleUsage = genUsage("/warp <warp> <player> [player2] [player3]");
 
     @Override
     public boolean execute(EsCommandSender sender, String[] args) {
-        if (isNotPlayer(sender)) {
+        if (args.length == 0) {
+            send(sender, sender instanceof EsPlayer ? usage : consoleUsage);
             return false;
         }
 
-        EsPlayer p = (EsPlayer) sender;
+        List<EsPlayer> players;
+        if (args.length >= 2) {
+            players = getPlayers(sender, removeArgs(args, 1));
 
-        if (args.length == 0) {
-            send(p, usage);
-            return false;
+            if (players.isEmpty()) {
+                return false;
+            }
+        } else {
+            if (isNotPlayer(sender)) {
+                return false;
+            }
+
+            players = Collections.singletonList((EsPlayer) sender);
         }
 
         String warpName = args[0].toLowerCase();
         WarpLocation warp = WarpManager.warps.get(warpName);
 
-        if (args.length != 1) {
-            send(p, usage);
+        if (!canUseWarp(sender, warp)) {
+            send(sender, "&cWarp &6%s&c does not exist.", warpName);
             return false;
         }
 
-        if (!canUseWarp(p, warp)) {
-            send(p, "&cWarp &6%s&c does not exist.", warpName);
-            return false;
+        for (EsPlayer player : players) {
+            player.teleport(warp.getLocation());
         }
 
-        p.teleport(warp.getLocation());
-        send(p, "&aTeleported to warp &6%s&a.", warpName);
+        send(sender, "&aTeleported to warp &6%s&a.", warpName);
         return true;
     }
 
-    private static boolean canUseWarp(EsPlayer p, WarpLocation warp) {
+    private static boolean canUseWarp(EsCommandSender sender, WarpLocation warp) {
         if (warp == null) {
             return false;
         }
 
-        boolean hasManage = p.hasPermission("estools.warps.manage");
-        boolean hasDefault = p.hasPermission("estools.warps.default");
+        boolean hasManage = sender.hasPermission("estools.warps.manage");
+        boolean hasDefault = sender.hasPermission("estools.warps.default");
         String warpPermission = "estools.warp." + warp.getName();
 
+        boolean sameWorld = true;
+        if (sender instanceof EsPlayer) {
+            sameWorld = ((EsPlayer)sender).getWorld().equals(warp.getLocation().getWorld());
+        }
+
         // you can only use global warps if you are in the same world, or have manage permission
-        if (!warp.isGlobal() && !hasManage && !p.getWorld().equals(warp.getLocation().getWorld())) {
+        if (!warp.isGlobal() && !hasManage && sameWorld) {
             return false;
         }
 
         // If you don't have a warp specific permission, you need the default permission
-        return (!p.isPermissionSet(warpPermission) && hasDefault) ||
-                (p.isPermissionSet(warpPermission) && p.hasPermission(warpPermission));
+        return (!sender.isPermissionSet(warpPermission) && hasDefault) ||
+                (sender.isPermissionSet(warpPermission) && sender.hasPermission(warpPermission));
     }
 
     @Override
@@ -74,6 +88,8 @@ public class Warp extends EsToolsCommand {
                     tab.add(warp.getName());
                 }
             }
+        } else {
+            return super.tabComplete(sender, args, lArg);
         }
 
         return tab;
