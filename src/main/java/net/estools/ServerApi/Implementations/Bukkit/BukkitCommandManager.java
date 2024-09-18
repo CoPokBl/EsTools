@@ -35,7 +35,7 @@ public class BukkitCommandManager extends EsCommandManager {
         registerNodeRunner(EsMaterialArgument.class, this::processMaterial, this::tabMaterial);
     }
 
-    private <T extends EsArgumentNode, N extends Number> void registerNumberRunner(Class<T> clazz, NumberParser<N> parser) {
+    private <T extends EsNumberArgument, N extends Number> void registerNumberRunner(Class<T> clazz, NumberParser<N> parser) {
         registerNodeRunner(clazz,
                 (context, node, args) -> processNumber(context, node, (StringBuilder) args, parser),
                 (context, node, tbc) -> processNumber(context, node, ((TabCompleteContext)tbc).args, parser)
@@ -170,7 +170,7 @@ public class BukkitCommandManager extends EsCommandManager {
         return processString(context, node, tbc.args);
     }
 
-    private <T extends Number> boolean processNumber(EsCommandContext context, EsArgumentNode node, StringBuilder args, NumberParser<T> func) {
+    private <T extends Number> boolean processNumber(EsCommandContext context, EsNumberArgument node, StringBuilder args, NumberParser<T> func) {
         int index = args.indexOf(" ");
         if (index == -1) {
             index = args.length();
@@ -180,6 +180,14 @@ public class BukkitCommandManager extends EsCommandManager {
         try {
             value = func.create(args.substring(0, index));
         } catch (NumberFormatException ignored) {
+            return false;
+        }
+
+        EsNumberArgument.MinMax minMax = node.getMinMax(context);
+        @SuppressWarnings("unchecked") Comparable<Number> valCompare = (Comparable<Number>) value;
+
+        // if value > max || value < min
+        if (valCompare.compareTo(minMax.max()) > 0 || valCompare.compareTo(minMax.min()) < 0) {
             return false;
         }
 
