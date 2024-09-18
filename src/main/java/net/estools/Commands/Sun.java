@@ -7,6 +7,7 @@ import net.estools.ServerApi.EsCommand.EsCondition;
 import net.estools.ServerApi.EsCommand.EsRelativePosition;
 import net.estools.ServerApi.EsGameMode;
 import net.estools.ServerApi.EsLocation;
+import net.estools.ServerApi.EsMaterial;
 import net.estools.ServerApi.Interfaces.EsCommandSender;
 import net.estools.ServerApi.Interfaces.EsPlayer;
 import net.estools.ServerApi.Interfaces.EsWorld;
@@ -17,6 +18,7 @@ import static net.estools.ServerApi.EsCommand.Nodes.EsDoubleNode.doubleArg;
 import static net.estools.ServerApi.EsCommand.Nodes.EsEnumArgument.enumArg;
 import static net.estools.ServerApi.EsCommand.Nodes.EsIntegerNode.integerArg;
 import static net.estools.ServerApi.EsCommand.Nodes.EsLiteralNode.literal;
+import static net.estools.ServerApi.EsCommand.Nodes.EsMaterialArgument.materialArg;
 import static net.estools.ServerApi.EsCommand.Nodes.EsStringNode.stringArg;
 import static net.estools.ServerApi.EsCommand.Nodes.EsWordArgument.wordArg;
 
@@ -35,6 +37,8 @@ public class Sun extends EsToolsCommand {
                                 .then(enumArg("enum", EsGameMode.class).execute(this::execute4)))
                         .then(literal("tp")
                                 .then(coordinateArg("pos").execute(this::execute5)))
+                        .then(literal("mat")
+                                .then(materialArg("mat").execute(context -> send(context.sender(), "mat: " + context.<EsMaterial>getArgument("mat")))))
         ).register();
     }
 

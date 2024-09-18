@@ -8,12 +8,18 @@ import net.estools.Main;
 import net.estools.ServerApi.EsMaterial;
 import net.estools.ServerApi.Interfaces.EsCommandSender;
 import net.estools.ServerApi.Interfaces.EsItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.Map.Entry;
 
 public class Give implements EsToolsTabCompleter {
-	private static HashMap<String, EsMaterial> materialNames;
+	private static Map<String, EsMaterial> materialNames;
+	private static SortedSet<String> tabComplete;
+
+	public static @Nullable EsMaterial getMaterial(String name) {
+        return materialNames.get(name.toLowerCase());
+	}
 
     public static EsItemStack getItem(String name, int amount) {
 		name = name.toLowerCase();
@@ -31,16 +37,16 @@ public class Give implements EsToolsTabCompleter {
 		List<String> tab = new ArrayList<>();
 		
 		if (args.length == 1) {
-			for (String mat : materialNames.keySet()) {
-				tab.add(mat.toLowerCase());
-			}
-			
-			Collections.sort(tab);
+			tab = new ArrayList<>(tabComplete);
 		} else if (args.length == 2) {
 			tab.add("64");
 		}
 	
 		return EsToolsCommand.fixTabComplete(tab, args[args.length - 1]);
+	}
+
+	public static SortedSet<String> getTabComplete() {
+		return tabComplete;
 	}
 
     public static void enable() {
@@ -86,6 +92,9 @@ public class Give implements EsToolsTabCompleter {
 
 			materialNames.put(s.getKey().toLowerCase(), material);
 		}
+
+		materialNames = Collections.unmodifiableMap(materialNames);
+		tabComplete = Collections.unmodifiableSortedSet(new TreeSet<>(materialNames.keySet()));
 	}
 
 	public static EsItemStack parseArgs(String[] args) {

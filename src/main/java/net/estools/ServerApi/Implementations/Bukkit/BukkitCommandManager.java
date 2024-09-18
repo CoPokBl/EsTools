@@ -1,5 +1,6 @@
 package net.estools.ServerApi.Implementations.Bukkit;
 
+import net.estools.Commands.Give.Give;
 import net.estools.EsToolsCommand;
 import net.estools.ServerApi.EsCommand.EsCommandContext;
 import net.estools.ServerApi.EsCommand.EsCommandManager;
@@ -31,6 +32,7 @@ public class BukkitCommandManager extends EsCommandManager {
         registerNodeRunner(EsWordArgument.class, this::processWord, this::tabWord);
         registerNodeRunner(EsEnumArgument.class, this::processEnum, this::tabEnum);
         registerNodeRunner(EsCoordinateNode.class, this::processCoordinate, this::tabCoordinate);
+        registerNodeRunner(EsMaterialArgument.class, this::processMaterial, this::tabMaterial);
     }
 
     private <T extends EsArgumentNode, N extends Number> void registerNumberRunner(Class<T> clazz, NumberParser<N> parser) {
@@ -193,7 +195,7 @@ public class BukkitCommandManager extends EsCommandManager {
         }
 
         String word = args.substring(0, index);
-        if (!node.isValidWord(word)) {
+        if (!node.isValidWord(word, context)) {
             return false;
         }
 
@@ -208,7 +210,7 @@ public class BukkitCommandManager extends EsCommandManager {
             return true;
         }
 
-        tbc.complete.addAll(node.getWords());
+        tbc.complete.addAll(node.getWords(context));
         return false;
     }
 
@@ -324,6 +326,32 @@ public class BukkitCommandManager extends EsCommandManager {
         tab.delete(tab.length()-1, tab.length());
         tbc.complete.add(tab.toString());
 
+        return false;
+    }
+
+    private boolean processMaterial(EsCommandContext context, EsMaterialArgument node, StringBuilder args) {
+        int index = args.indexOf(" ");
+        if (index == -1) {
+            index = args.length();
+        }
+
+        String name = args.substring(0, index);
+        if (!Give.getTabComplete().contains(name)) {
+            return false;
+        }
+
+        context.addArgument(node.id(), Give.getMaterial(name));
+        args.delete(0, index + 1);
+        return true;
+    }
+
+    private boolean tabMaterial(EsCommandContext context, EsMaterialArgument node, TabCompleteContext tbc) {
+        boolean result = processMaterial(context, node, tbc.args);
+        if (result) {
+            return true;
+        }
+
+        tbc.complete.addAll(Give.getTabComplete());
         return false;
     }
 
