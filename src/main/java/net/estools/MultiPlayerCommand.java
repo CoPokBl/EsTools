@@ -22,7 +22,7 @@ public abstract class MultiPlayerCommand extends EsToolsCommand {
         return tab;
     }
 
-    public static ArrayList<EsPlayer> getPlayers(EsCommandSender sender, String[] names) {
+    public static List<EsPlayer> getPlayers(EsCommandSender sender, String[] names) {
         if (names.length == 0) {
             return new ArrayList<>();
         }
@@ -40,7 +40,7 @@ public abstract class MultiPlayerCommand extends EsToolsCommand {
         return players;
     }
 
-    public static ArrayList<EsPlayer> getPlayers(EsCommandSender sender, String name) {
+    public static List<EsPlayer> getPlayers(EsCommandSender sender, String name) {
         if (name.equals("*")) {
             return new ArrayList<>(Main.server.getOnlinePlayers());
         }

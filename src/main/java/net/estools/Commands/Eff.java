@@ -58,7 +58,7 @@ public class Eff extends MultiPlayerCommand {
             }
         }
 
-        ArrayList<EsPlayer> players = new ArrayList<>();
+        List<EsPlayer> players = new ArrayList<>();
 
         if (args.length < 4) {
             if (isNotPlayer(sender, usage)) {

@@ -6,6 +6,7 @@ import net.estools.ServerApi.Interfaces.EsCommandSender;
 import net.estools.ServerApi.Interfaces.EsPlayer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GameModeCommand extends MultiPlayerCommand {
     private final EsGameMode gameMode;
@@ -18,7 +19,7 @@ public class GameModeCommand extends MultiPlayerCommand {
 
     @Override
     public boolean execute(EsCommandSender sender, String[] args) {
-        ArrayList<EsPlayer> ps = new ArrayList<>();
+        List<EsPlayer> ps = new ArrayList<>();
 
         if (args.length == 0) {
             if (isNotPlayer(sender, genUsage("/%s [player]"), cmd)) {

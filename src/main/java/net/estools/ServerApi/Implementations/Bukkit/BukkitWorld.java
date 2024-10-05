@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class BukkitWorld implements EsWorld {
@@ -23,6 +24,11 @@ public class BukkitWorld implements EsWorld {
     @Override
     public String getName() {
         return bukkitWorld.getName();
+    }
+
+    @Override
+    public UUID getUuid() {
+        return bukkitWorld.getUID();
     }
 
     @Override
@@ -75,5 +81,19 @@ public class BukkitWorld implements EsWorld {
     @Override
     public void strikeLightning(EsLocation loc) {
         bukkitWorld.strikeLightning(BukkitHelper.toBukkitLocation(loc));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof EsWorld) {
+            return ((EsWorld)obj).getUuid().equals(getUuid());
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return getUuid().hashCode();
     }
 }

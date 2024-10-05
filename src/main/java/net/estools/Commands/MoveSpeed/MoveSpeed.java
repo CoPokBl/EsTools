@@ -17,7 +17,7 @@ public abstract class MoveSpeed extends MultiPlayerCommand {
             return null;
         }
 
-        ArrayList<EsPlayer> players = new ArrayList<>();
+        List<EsPlayer> players = new ArrayList<>();
 
         if (args.length == 1) {
             if (isNotPlayer(sender, getUsage())) {

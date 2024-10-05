@@ -6,11 +6,13 @@ import net.estools.ServerApi.Interfaces.EsWorld;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @SuppressWarnings("unused")  // For future
 public class TestWorld implements EsWorld {
     private final List<EsEntity> entities = new ArrayList<>();
     private final String name;
+    private final UUID uuid;
     private long time;
     private boolean storming = false;
     private boolean thundering = false;
@@ -20,6 +22,7 @@ public class TestWorld implements EsWorld {
 
     public TestWorld(String name) {
         this.name = name;
+        uuid = UUID.randomUUID();
     }
 
     public boolean isStorming() {
@@ -47,6 +50,11 @@ public class TestWorld implements EsWorld {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public UUID getUuid() {
+        return uuid;
     }
 
     @Override
@@ -86,5 +94,19 @@ public class TestWorld implements EsWorld {
     @Override
     public void strikeLightning(EsLocation loc) {
         lightningBolts.add(loc);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof EsWorld) {
+            return ((EsWorld)obj).getUuid().equals(getUuid());
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return getUuid().hashCode();
     }
 }
