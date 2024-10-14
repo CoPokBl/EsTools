@@ -11,8 +11,7 @@ Commands:
 
 ## Installing
 Download the latest .jar from our [releases page](https://github.com/CoPokBl/EsTools/releases/). Place
-the file in the plugins folder of your server and start it. 
-For optional Vault support install [Vault from SpigotMC](https://www.spigotmc.org/resources/vault.34315/).
+the file in the plugins folder of your server and start it.
 
 ## Support
 The plugin is designed to work on every public spigot build. Any issues found on legacy versions
