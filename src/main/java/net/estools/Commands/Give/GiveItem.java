@@ -1,14 +1,23 @@
 package net.estools.Commands.Give;
 
 import net.estools.EsToolsCommand;
+import net.estools.Main;
 import net.estools.ServerApi.Interfaces.EsCommandSender;
 import net.estools.ServerApi.Interfaces.EsItemStack;
 import net.estools.ServerApi.Interfaces.EsPlayer;
 
 public class GiveItem extends EsToolsCommand {
-	private static final String usage = genUsage("/i <item> [amount]");
+	private final boolean isSetHandItem;
+	private final String usage;
+	private final String usage12;
 
-	@Override
+    public GiveItem(boolean isSetHandItem) {
+        this.isSetHandItem = isSetHandItem;
+		usage = genUsage("/" + (isSetHandItem ? 'h' : 'i') + " <item> [amount] [damage]");
+		usage12 = genUsage("/" + (isSetHandItem ? 'h' : 'i') + " <item> [amount] [damage/variant]");
+    }
+
+    @Override
 	public boolean execute(EsCommandSender sender, String[] args) {
 		if (isNotPlayer(sender)) {
 			return false;
@@ -18,14 +27,18 @@ public class GiveItem extends EsToolsCommand {
 		try {
 			item = Give.parseArgs(args);
 		} catch (IllegalArgumentException e) {
-			send(sender, usage);
+			send(sender, Main.minecraftVersion.getMinor() > 12 ? usage : usage12);
 			return false;
 		}
 
 		EsPlayer p = (EsPlayer) sender;
 		
 		if (item != null) {
-            p.getInventory().addItem(item);
+			if (isSetHandItem) {
+				p.setMainHand(item);
+			} else {
+				p.getInventory().addItem(item);
+			}
 			send(sender, "&aGave &6%s", item.getType());
         } else {
             send(sender, "&cItem &6%s&c not found", args[0]);

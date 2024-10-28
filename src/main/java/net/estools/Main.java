@@ -3,7 +3,6 @@ package net.estools;
 import net.estools.Commands.*;
 import net.estools.Commands.Give.Give;
 import net.estools.Commands.Give.GiveItem;
-import net.estools.Commands.Give.SetHandItem;
 import net.estools.Commands.MoveSpeed.FlySpeed;
 import net.estools.Commands.MoveSpeed.WalkSpeed;
 import net.estools.Commands.PowerPick.*;
@@ -99,8 +98,8 @@ public class Main {
 		sc("fly", "fly", new Fly(), 2);
 		sc("smite", "smite", new Smite());
 		sc("invsee", "invsee", new InvSee(), 2);
-		sc("i", "give", new GiveItem(), new Give());
-		sc("h", "give", new SetHandItem(), new Give());
+		sc("i", "give", new GiveItem(false), new Give());
+		sc("h", "give", new GiveItem(true), new Give());
 		sc("estools", new EsTools());
 		sc("ench", "ench", new Ench(), 1);
 		sc("fix", "fix", new Fix());

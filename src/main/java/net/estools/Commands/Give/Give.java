@@ -94,14 +94,26 @@ public class Give implements EsToolsTabCompleter {
 		}
 
 		int amount = 1;
+		int damage = 0;
+
 		if (args.length > 1) {
 			try {
 				amount = Integer.parseInt(args[1]);
+
+				if (args.length > 2) {
+					damage = Integer.parseInt(args[2]);
+				}
 			} catch (Exception e) {
 				throw new IllegalArgumentException();
 			}
 		}
 
-		return getItem(args[0], amount);
+		EsItemStack item = getItem(args[0], amount);
+		if (item == null) {
+			return null;
+		}
+
+		item.setDamage(damage);
+		return item;
 	}
 }
