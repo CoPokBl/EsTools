@@ -28,6 +28,10 @@ public class EsLocation extends Position {
         setZ(z);
     }
 
+    public EsLocation(EsWorld world, Position dir, Position pos) {
+        this(world, dir, pos.getX(), pos.getY(), pos.getZ());
+    }
+
     public EsLocation(EsWorld world, Position dir, double x, double y, double z, double yaw, double pitch) {
         this.world = world;
         this.worldName = world.getName();
@@ -37,6 +41,10 @@ public class EsLocation extends Position {
         setX(x);
         setY(y);
         setZ(z);
+    }
+
+    public EsLocation(EsWorld world, Position pos) {
+        this(world, pos.getX(), pos.getY(), pos.getZ());
     }
 
     /** You probably shouldn't use this, it's here for SnakeYAML */
@@ -84,15 +92,15 @@ public class EsLocation extends Position {
     }
 
     public int getBlockX() {
-        return (int) Math.round(getX());
+        return (int) Math.floor(getX());
     }
 
     public int getBlockY() {
-        return (int) Math.round(getY());
+        return (int) Math.floor(getY());
     }
 
     public int getBlockZ() {
-        return (int) Math.round(getZ());
+        return (int) Math.floor(getZ());
     }
 
     public EsLocation add(Position other) {

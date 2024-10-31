@@ -81,6 +81,10 @@ public class EsToolsUnitTest {
         Assertions.assertEquals(shouldError, errored, msg);
     }
 
+    public void resetWorld() {
+        world = new TestWorld("testingworld");
+    }
+
     @BeforeAll
     public static void initEnvironment() {
         // Delete temp folder so we have no data
