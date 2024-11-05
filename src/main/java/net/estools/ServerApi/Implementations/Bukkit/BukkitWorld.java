@@ -3,6 +3,7 @@ package net.estools.ServerApi.Implementations.Bukkit;
 import net.estools.Main;
 import net.estools.ServerApi.EsLocation;
 import net.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
+import net.estools.ServerApi.Interfaces.EsBlock;
 import net.estools.ServerApi.Interfaces.EsEntity;
 import net.estools.ServerApi.Interfaces.EsWorld;
 import org.bukkit.World;
@@ -61,6 +62,11 @@ public class BukkitWorld implements EsWorld {
             entities.add(BukkitHelper.fromBukkitEntity(bEntity));
         }
         return entities;
+    }
+
+    @Override
+    public EsBlock getHighestBlockAt(int x, int z) {
+        return BukkitHelper.fromBukkitBlock(bukkitWorld.getHighestBlockAt(x, z));
     }
 
     @Override

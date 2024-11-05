@@ -1,16 +1,20 @@
 package net.estools.Implementation;
 
 import net.estools.ServerApi.EsLocation;
+import net.estools.ServerApi.Interfaces.EsBlock;
 import net.estools.ServerApi.Interfaces.EsEntity;
 import net.estools.ServerApi.Interfaces.EsWorld;
+import net.estools.ServerApi.Position;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("unused")  // For future
 public class TestWorld implements EsWorld {
     private final List<EsEntity> entities = new ArrayList<>();
+    private final List<Position> blocks = new ArrayList<>();
     private final String name;
     private final UUID uuid;
     private long time;
@@ -45,6 +49,10 @@ public class TestWorld implements EsWorld {
         entities.add(entity);
     }
 
+    public void addBlock(int x, int y, int z) {
+        blocks.add(new Position(x, y, z));
+    }
+
     // IMPLEMENTATIONS
 
     @Override
@@ -74,6 +82,20 @@ public class TestWorld implements EsWorld {
             }
         }
         return nearby;
+    }
+
+    @Override
+    public EsBlock getHighestBlockAt(int x, int z) {
+        Position highest = blocks
+                .stream()
+                .filter(b -> b.getX() == x && b.getZ() == z)
+                .max(Comparator.comparingInt(p -> (int) p.getY()))
+                .orElse(null);
+        if (highest == null) {
+            return null;
+        }
+
+        return new TestBlock("stone", (int) highest.getX(), (int) highest.getY(), (int) highest.getZ());
     }
 
     @Override

@@ -51,6 +51,14 @@ public class Position {
         return new Position(x - other.x, y - other.y, z - other.z);
     }
 
+    public Position add(Position other) {
+        return new Position(x + other.x, y + other.y, z + other.z);
+    }
+
+    public Position add(double x, double y, double z) {
+        return add(new Position(x, y, z));
+    }
+
     public Position normalise() {
         double length = length();
         return new Position(x / length, y / length, z / length);
@@ -74,5 +82,10 @@ public class Position {
 
     public Position toPosition() {
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return getX() + ", " + getY() + ", " + getZ();
     }
 }

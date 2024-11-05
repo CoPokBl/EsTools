@@ -193,6 +193,9 @@ commands:
   disposal:
     description: Open an inventory that isn't saved so that you can place items and easily get rid of them.
     usage: /disposal
+  top:
+    description: Teleports the player to the highest block at their coordinates.
+    usage: /top
 
 permissions:
   estools.update:
@@ -409,4 +412,7 @@ permissions:
 
   estools.disposal:
     description: Allows the player to open the disposal menu
+    default: op
+  estools.top:
+    description: Lets players teleport to the highest block at their coordinates
     default: op

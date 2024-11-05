@@ -2,6 +2,7 @@ package net.estools.ServerApi.Implementations.Folia;
 
 import net.estools.ServerApi.EsLocation;
 import net.estools.ServerApi.Implementations.Bukkit.BukkitWorld;
+import net.estools.ServerApi.Interfaces.EsBlock;
 import net.estools.ServerApi.Interfaces.EsEntity;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -36,6 +37,11 @@ public class FoliaWorld extends BukkitWorld {
             entities.add(FoliaHelper.fromBukkitEntity(bEntity));
         }
         return entities;
+    }
+
+    @Override
+    public EsBlock getHighestBlockAt(int x, int z) {
+        return FoliaHelper.fromBukkitBlock(bukkitWorld.getHighestBlockAt(x, z));
     }
 
     @Override

@@ -157,6 +157,8 @@ public class Main {
 		sc("mount", "mount", new Mount());
 		sc("dismount", "mount", new Dismount());
 
+		sc("top", "top", new Top());
+
 		// Load other features
 		if (minecraftVersion.getMinor() > 0) {  // Enchants and events don't work on 1.0.0
 			PowerTool.init();
@@ -289,4 +291,3 @@ public class Main {
 		ConfigManager.save("config.yml", config);
 	}
 }
-
