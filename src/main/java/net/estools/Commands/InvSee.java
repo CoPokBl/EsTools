@@ -24,6 +24,11 @@ public class InvSee extends PlayerCommand {
             return false;
         }
 
+		if (target.getUniqueId().equals(((EsPlayer) sender).getUniqueId())) {
+			send(sender, "&cYou cannot open your own inventory!");
+			return false;
+		}
+
 		((EsPlayer) sender).openInventory(target.getInventory());
         send(sender, "&aOpened &6%s's &aInventory", target.getName());
 		return true;
