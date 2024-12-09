@@ -17,6 +17,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -42,6 +43,14 @@ import org.bukkit.util.Vector;
  */
 @SuppressWarnings("unused")
 public class BukkitHelper {
+    public static InventoryType toBukkitInventoryType(EsInventoryType type) {
+        try {
+            return InventoryType.valueOf(type.name());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
     public static Location toBukkitLocation(EsLocation loc) {
         Location bLoc = new Location(Bukkit.getWorld(loc.getWorld().getName()), loc.getX(), loc.getY(), loc.getZ());
         bLoc.setPitch((float) loc.getPitch());

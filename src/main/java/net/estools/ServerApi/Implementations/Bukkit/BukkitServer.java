@@ -20,6 +20,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -237,6 +238,22 @@ public class BukkitServer implements EsServer {
             throw new UnsupportedOperationException("Creating inventories is not supported in this version");
         }
         return BukkitInventoryHelper.createInventory(owner, size, title);
+    }
+
+    @Override
+    public EsInventory createInventory(EsPlayer owner, EsInventoryType type) {
+        if (!Main.minecraftVersion.isAtLeast(1, 2, 0)) {
+            // Creating inventories was not a feature in this version
+            // InventoryHolder also didn't exist, hence why we must use
+            // a helper class
+            throw new UnsupportedOperationException("Creating inventories is not supported in this version");
+        }
+        return BukkitInventoryHelper.createInventory(owner, type);
+    }
+
+    @Override
+    public boolean inventoryTypeExists(EsInventoryType type) {
+        return Arrays.stream(InventoryType.values()).anyMatch(a -> a.name().equals(type.name()));
     }
 
     @Override

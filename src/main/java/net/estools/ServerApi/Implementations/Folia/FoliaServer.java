@@ -17,6 +17,7 @@ import org.bukkit.*;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -202,6 +203,22 @@ public class FoliaServer implements EsServer {
     public EsInventory createInventory(EsPlayer owner, int size, String title) {
         InventoryHolder holder = owner == null ? null : ((FoliaPlayer) owner).getBukkitPlayer();
         return new FoliaInventory(Bukkit.createInventory(holder, size, title));
+    }
+
+    @Override
+    public EsInventory createInventory(EsPlayer owner, EsInventoryType type) {
+        InventoryHolder holder = owner == null ? null : ((FoliaPlayer) owner).getBukkitPlayer();
+        InventoryType bukkitType = FoliaHelper.toBukkitInventoryType(type);
+        if (bukkitType == null) {
+            return null;
+        }
+
+        return FoliaHelper.fromBukkitInventory(Bukkit.createInventory(holder, bukkitType));
+    }
+
+    @Override
+    public boolean inventoryTypeExists(EsInventoryType type) {
+        return Arrays.stream(InventoryType.values()).anyMatch(a -> a.name().equals(type.name()));
     }
 
     @Override

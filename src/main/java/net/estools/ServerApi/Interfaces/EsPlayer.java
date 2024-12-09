@@ -1,9 +1,6 @@
 package net.estools.ServerApi.Interfaces;
 
-import net.estools.ServerApi.EsGameMode;
-import net.estools.ServerApi.EsLocation;
-import net.estools.ServerApi.EsSound;
-import net.estools.ServerApi.EsSoundCategory;
+import net.estools.ServerApi.*;
 
 @SuppressWarnings("unused")
 public interface EsPlayer extends EsLivingEntity {
@@ -29,4 +26,5 @@ public interface EsPlayer extends EsLivingEntity {
     boolean hasPermission(String node);
     boolean isPermissionSet(String node);
     void sendMessage(String... args);
+    EsInventory getEnderChest();
 }

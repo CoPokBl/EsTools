@@ -133,6 +133,11 @@ public class FoliaPlayer extends FoliaLivingEntity implements EsPlayer {
         bukkitPlayer.updateInventory();
     }
 
+    @Override
+    public EsInventory getEnderChest() {
+        return FoliaHelper.fromBukkitInventory(bukkitPlayer.getEnderChest());
+    }
+
     private Block bukkitGetTargetBlock() {
         if (Main.minecraftVersion.getMinor() > 12) {
             return bukkitPlayer.getTargetBlockExact(5);

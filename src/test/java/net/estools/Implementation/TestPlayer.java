@@ -167,6 +167,11 @@ public class TestPlayer extends TestLivingEntity implements EsPlayer {
     }
 
     @Override
+    public EsInventory getEnderChest() {
+        return new TestInventory(27, "Ender Chest");
+    }
+
+    @Override
     public EsWorld getWorld() {
         return getLocation().getWorld();
     }

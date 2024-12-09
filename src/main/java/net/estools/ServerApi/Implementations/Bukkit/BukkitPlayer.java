@@ -10,6 +10,7 @@ import net.estools.ServerApi.Interfaces.*;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,6 +64,11 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
 
     @Override
     public void openInventory(EsInventory inv) {
+        if (((BukkitInventory) inv).getBukkitInventory().getType() == InventoryType.WORKBENCH) {
+            bukkitPlayer.openWorkbench(null, true);
+            return;
+        }
+
         bukkitPlayer.openInventory(((BukkitInventory) inv).getBukkitInventory());
     }
 
@@ -192,6 +198,11 @@ public class BukkitPlayer extends BukkitLivingEntity implements EsPlayer {
             sb.append(s);
         }
         bukkitPlayer.sendMessage(sb.toString());
+    }
+
+    @Override
+    public EsInventory getEnderChest() {
+        return BukkitHelper.fromBukkitInventory(bukkitPlayer.getEnderChest());
     }
 
     @Override

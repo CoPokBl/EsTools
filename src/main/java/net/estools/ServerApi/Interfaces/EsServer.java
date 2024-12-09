@@ -22,6 +22,8 @@ public interface EsServer {
     EsPotion createPotion(EsPotType potType, EsPotionEffect effect, int amount);
     EsPotion createPotion(EsPotType potType);
     EsInventory createInventory(EsPlayer owner, int size, String title);
+    EsInventory createInventory(EsPlayer owner, EsInventoryType type);
+    boolean inventoryTypeExists(EsInventoryType type);
     Set<EsPotionEffectType> getPotionEffectTypes();
     Set<EsPotionEffectType> getOldPotionTypes();
     Set<EsEnchantment> getEnchantments();

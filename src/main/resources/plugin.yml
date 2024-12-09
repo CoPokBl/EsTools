@@ -196,6 +196,9 @@ commands:
   top:
     description: Teleports the player to the highest block at their coordinates.
     usage: /top
+  open:
+    description: Opens inventories of any type
+    usage: /open <inventory type> [player]
 
 permissions:
   estools.update:
@@ -413,6 +416,11 @@ permissions:
   estools.disposal:
     description: Allows the player to open the disposal menu
     default: op
+
   estools.top:
     description: Lets players teleport to the highest block at their coordinates
+    default: op
+
+  estools.open:
+    description: Lets players open inventories such as furnaces, smithing tables and crafting tables
     default: op

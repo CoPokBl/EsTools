@@ -144,6 +144,16 @@ public class TestServer implements EsServer {
     }
 
     @Override
+    public EsInventory createInventory(EsPlayer owner, EsInventoryType type) {
+        return new TestInventory(27, type.name());
+    }
+
+    @Override
+    public boolean inventoryTypeExists(EsInventoryType type) {
+        return true;
+    }
+
+    @Override
     public Set<EsPotionEffectType> getPotionEffectTypes() {
         return effects;
     }

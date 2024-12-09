@@ -158,6 +158,7 @@ public class Main {
 		sc("dismount", "mount", new Dismount());
 
 		sc("top", "top", new Top());
+		sc("open", "open", new Open());
 
 		// Load other features
 		if (minecraftVersion.getMinor() > 0) {  // Enchants and events don't work on 1.0.0
