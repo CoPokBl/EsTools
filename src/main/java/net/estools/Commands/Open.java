@@ -17,6 +17,11 @@ public class Open extends PlayerCommand {
 
     @Override
     public boolean execute(EsCommandSender sender, String[] args) {
+        if (args.length == 0) {
+            send(sender, "&cUsage: /open <inventory> [player]");
+            return false;
+        }
+
         EsPlayer target;
         if (args.length >= 2) {
             target = getPlayer(sender, args[1]);
