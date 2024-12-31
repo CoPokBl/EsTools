@@ -18,7 +18,7 @@ public class Open extends PlayerCommand {
     @Override
     public boolean execute(EsCommandSender sender, String[] args) {
         if (args.length == 0) {
-            send(sender, "&cUsage: /open <inventory> [player]");
+            send(sender, genUsage("/open <inventory> [player]"));
             return false;
         }
 
