@@ -2,6 +2,7 @@ Folia:
 1.20.4 Failing (/estools test)
 
 Bukkit:
+1.21.4
 1.21
 1.20.6
 1.19.4

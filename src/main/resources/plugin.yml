@@ -199,6 +199,12 @@ commands:
   open:
     description: Opens inventories of any type
     usage: /open <inventory type> [player]
+  burn:
+    description: Set a player on fire.
+    usage: /burn <entity> [time]
+  extinguish:
+    description: Extinguish a player.
+    usage: /extinguish [entity]
 
 permissions:
   estools.update:
@@ -423,4 +429,12 @@ permissions:
 
   estools.open:
     description: Lets players open inventories such as furnaces, smithing tables and crafting tables
+    default: op
+
+  estools.burn:
+    description: Lets players set an entity on fire
+    default: op
+
+  estools.extinguish:
+    description: Lets players extinguish an entity
     default: op

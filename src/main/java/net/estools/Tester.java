@@ -108,6 +108,9 @@ public class Tester {
             new TestCommand("dismount {entity}", 1),
             new TestCommand("sethealth 1", 0.1),
             new TestCommand("buddha", -1, new SemanticVersion(1, 1, 0)),
+            new TestCommand("open anvil", -1),
+            new TestCommand("burn {player} 40", 2),
+            new TestCommand("extinguish {player}", 1),
             new TestCommand("suicide", 1),
     };
 

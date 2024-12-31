@@ -159,6 +159,8 @@ public class Main {
 
 		sc("top", "top", new Top());
 		sc("open", "open", new Open());
+		sc("burn", "burn", new Burn());
+		sc("extinguish", "extinguish", new Extinguish());
 
 		// Load other features
 		if (minecraftVersion.getMinor() > 0) {  // Enchants and events don't work on 1.0.0
