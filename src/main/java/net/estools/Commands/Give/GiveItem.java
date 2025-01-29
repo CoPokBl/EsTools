@@ -37,7 +37,7 @@ public class GiveItem extends EsToolsCommand {
 			if (isSetHandItem) {
 				p.setMainHand(item);
 			} else {
-				p.getInventory().addItem(item);
+				p.getInventory().addItemOrDrop(item, p.getLocation().add(-p.getWidth(), 0.0, -p.getWidth()));
 			}
 			send(sender, "&aGave &6%s", item.getType());
         } else {

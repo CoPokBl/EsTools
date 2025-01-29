@@ -1,5 +1,6 @@
 package net.estools.ServerApi.Interfaces;
 
+import net.estools.ServerApi.EsLocation;
 import net.estools.ServerApi.EsMaterial;
 
 import java.util.Map;
@@ -8,6 +9,7 @@ public interface EsInventory {
     void setItem(int slot, EsItemStack item);
     EsItemStack getItem(int slot);
     void addItem(EsItemStack stack);
+    void addItemOrDrop(EsItemStack stack, EsLocation location);
     void setContents(EsItemStack[] items);
     EsItemStack[] getContents();
     void clear();

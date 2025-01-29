@@ -1,16 +1,20 @@
 package net.estools.ServerApi.Implementations.Bukkit;
 
+import net.estools.ServerApi.EsLocation;
 import net.estools.ServerApi.EsMaterial;
 import net.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import net.estools.ServerApi.Interfaces.EsInventory;
 import net.estools.ServerApi.Interfaces.EsItemStack;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class BukkitInventory implements EsInventory {
     private final @NotNull Inventory bukkitInv;
@@ -37,6 +41,18 @@ public class BukkitInventory implements EsInventory {
     @Override
     public void addItem(EsItemStack stack) {
         bukkitInv.addItem(((BukkitItemStack) stack).getBukkitItem());
+    }
+
+    @Override
+    public void addItemOrDrop(EsItemStack stack, EsLocation location) {
+        HashMap<Integer, ItemStack> failed = bukkitInv.addItem(((BukkitItemStack) stack).getBukkitItem());
+
+        Location loc = BukkitHelper.toBukkitLocation(location);
+        World world = Objects.requireNonNull(loc.getWorld());
+
+        for (ItemStack item : failed.values()) {
+            world.dropItemNaturally(loc, item);
+        }
     }
 
     @Override

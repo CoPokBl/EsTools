@@ -1,10 +1,13 @@
 package net.estools.ServerApi.Implementations.Folia;
 
+import net.estools.ServerApi.EsLocation;
 import net.estools.ServerApi.EsMaterial;
+import net.estools.ServerApi.Implementations.Bukkit.BukkitItemStack;
 import net.estools.ServerApi.Implementations.Bukkit.Helpers.BukkitHelper;
 import net.estools.ServerApi.Interfaces.EsInventory;
 import net.estools.ServerApi.Interfaces.EsItemStack;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -88,6 +91,14 @@ public class FoliaInventory implements EsInventory {
     @Override
     public void addItem(EsItemStack stack) {
         bukkitInv.addItem(((FoliaItemStack) stack).getBukkitItem());
+    }
+
+    @Override
+    public void addItemOrDrop(EsItemStack stack, EsLocation location) {
+        HashMap<Integer, ItemStack> failed = bukkitInv.addItem(((BukkitItemStack) stack).getBukkitItem());
+        for (ItemStack item : failed.values()) {
+            ((World) location.getWorld()).dropItemNaturally(BukkitHelper.toBukkitLocation(location), item);
+        }
     }
 
     @Override

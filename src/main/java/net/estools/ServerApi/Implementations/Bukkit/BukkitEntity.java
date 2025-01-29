@@ -99,6 +99,16 @@ public class BukkitEntity implements EsEntity {
     }
 
     @Override
+    public double getWidth() {
+        return bukkitEntity.getWidth();
+    }
+
+    @Override
+    public double getHeight() {
+        return bukkitEntity.getHeight();
+    }
+
+    @Override
     public boolean leaveVehicle() {
         if (bukkitEntity instanceof LivingEntity) {
             // Not redundant for below 1.3

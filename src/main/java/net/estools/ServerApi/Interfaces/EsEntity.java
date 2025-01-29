@@ -13,6 +13,8 @@ public interface EsEntity extends EsCommandSender {
     UUID getUniqueId();
     void teleport(EsLocation loc);
     EsLocation getLocation();
+    double getWidth();
+    double getHeight();
     boolean leaveVehicle();
     List<EsEntity> getPassengers();
     Set<String> getScoreboardTags();

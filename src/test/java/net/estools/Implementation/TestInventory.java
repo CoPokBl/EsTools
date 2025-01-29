@@ -1,6 +1,7 @@
 package net.estools.Implementation;
 
 import net.estools.NotImplementedException;
+import net.estools.ServerApi.EsLocation;
 import net.estools.ServerApi.EsMaterial;
 import net.estools.ServerApi.Interfaces.EsInventory;
 import net.estools.ServerApi.Interfaces.EsItemStack;
@@ -44,13 +45,30 @@ public class TestInventory implements EsInventory {
     /**
      * Adds item to first null slot.
      */
-    @Override
-    public void addItem(EsItemStack stack) {
+    public boolean addItemInternal(EsItemStack stack) {
         for (int i = 0; i < items.length; i++) {
             if (items[i] == null) {
                 items[i] = stack;
-                return;
+                return true;
             }
+        }
+
+        return false;
+    }
+
+    @Override
+    public void addItem(EsItemStack stack) {
+        addItemInternal(stack);
+    }
+
+    @Override
+    public void addItemOrDrop(EsItemStack stack, EsLocation location) {
+        if (!addItemInternal(stack)) {
+            TestWorld world = (TestWorld) location.getWorld();
+
+            TestEntity entity = new TestEntity(world, "ITEM");
+            entity.teleport(location);
+            world.addEntity(entity);
         }
     }
 

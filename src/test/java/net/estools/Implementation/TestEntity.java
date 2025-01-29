@@ -112,6 +112,16 @@ public class TestEntity implements EsEntity {
     }
 
     @Override
+    public double getWidth() {
+        return 0.3;
+    }
+
+    @Override
+    public double getHeight() {
+        return 0.3;
+    }
+
+    @Override
     public boolean leaveVehicle() {
         if (vehicle == null) {
             return false;
